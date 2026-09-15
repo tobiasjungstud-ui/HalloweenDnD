@@ -73,16 +73,22 @@ input{font:inherit;color:inherit}
 .legende{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:10px}
 .legende span::before{content:"";display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:-1px}
 .legende .g::before{background:var(--gold)}.legende .s::before{background:var(--moss)}.legende .d::before{background:var(--line-hi)}.legende .k::before{background:var(--blood)}
-/* ---- Zweite Ebene: Gelegenheiten für einzelne Figuren — rechts in der Heldenkarte, bewusst leise ---- */
-.chancen-held:empty{display:none}
-.chancen-held{border-top:1px dashed var(--line-hi);margin-top:3px;padding-top:5px}
-.chance summary{cursor:pointer;list-style:none;font-size:12.5px;line-height:1.45;color:var(--ash);padding:3px 0;display:block}
-.chance summary::-webkit-details-marker{display:none}
-.chance summary .opt{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);border:1px dashed var(--line-hi);padding:1px 5px;margin-right:7px;vertical-align:2px}
-.chance summary b{font-weight:400;color:var(--bone)}
-.chance summary:hover{color:var(--bone)}
-.chance[open] summary .opt{border-style:solid;color:var(--gold-dim);border-color:var(--gold-dim)}
-.chance p{margin:4px 0 6px;font-size:12.5px;line-height:1.45;color:var(--ash);border-left:1px solid var(--line-hi);padding-left:9px}
+/* ---- Zweite Ebene: Stärken der Figuren — eigener Abschnitt rechts, auf jeder Seite ---- */
+.labelzusatz{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:none;color:var(--dim)}
+.staerke{border:1px dashed var(--line-hi);padding:7px 10px;margin-bottom:6px;font-size:13px;line-height:1.45}
+.staerke b{font-weight:400;color:var(--bone);display:block;font-size:13px}
+.staerke span{display:block;color:var(--ash)}
+.staerke.leer{border-color:var(--line);opacity:.55}
+.staerke.leer span{font-style:italic;color:var(--dim)}
+.staerke span.cue{font-style:italic;color:var(--gold);font-size:12.5px}
+.staerke p b{display:inline;color:var(--bone)}
+.staerke summary{cursor:pointer;list-style:none;display:block}
+.staerke summary::-webkit-details-marker{display:none}
+.staerke summary b::before{content:"▸ ";color:var(--gold-dim);font-family:var(--mono);font-size:11px}
+.staerke[open] summary b::before{content:"▾ "}
+.staerke[open]{border-style:solid;border-color:var(--gold-dim);background:rgba(217,164,65,.05)}
+.staerke p{margin:6px 0 2px;color:var(--ash);border-left:2px solid var(--gold-dim);padding-left:9px;font-size:12.5px}
+.staerken-hinweis{margin:2px 0 0;font-size:11.5px;color:var(--dim);line-height:1.4}
 .tasten{font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:.06em;text-align:right;margin:10px 0 0}
 .vonhand summary{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);cursor:pointer;list-style:none;padding:6px 0 2px}
 .vonhand summary::-webkit-details-marker{display:none}
@@ -332,6 +338,12 @@ input{font:inherit;color:inherit}
       </div>
     </section>
 
+    <section class="fach" id="staerken-fach">
+      <span class="label">Stärken der Figuren <span class="labelzusatz">diese Szene · optional</span></span>
+      <div id="staerken"></div>
+      <p class="staerken-hinweis">Jede steht als Satz im gelben Text — lies ihn und warte. Ob ein Spieler darauf eingeht, ist seine Sache. Anklicken zeigt die Folge.</p>
+    </section>
+
     <section class="fach">
       <span class="label">Die Gruppe <button id="vollheilung">nach dem Kampf: alle voll</button></span>
       <div id="gruppe"></div>
@@ -361,6 +373,8 @@ input{font:inherit;color:inherit}
 
 /* ====================== FESTE DATEN ====================== */
 const GRUPPE_VORLAGE = [{rolle:"Arcanist", max:18},{rolle:"Blade", max:30},{rolle:"Lightbearer", max:24}];
+/* Das Talent jeder Figur ausserhalb des Kampfs — steht so auch auf ihrem Blatt */
+const TALENTE = {Arcanist:"Magic Hand", Blade:"Strength", Lightbearer:"Healing Touch"};
 
 /* Wissen: k = Schlüssel, braucht = Flagge, ohne die es nicht erreichbar ist */
 const WISSEN = [
@@ -403,7 +417,7 @@ const KAPITEL = [
  {t:"regie", titel:"Wer die Gruppe ist", text:`Das ist vorgegeben, das müssen die Schüler nicht erfinden: <b>Sie sind Vampirjäger.</b> Nicht berühmt, noch nicht. Ein Gerücht hat sie hergeführt — in diesen Bergen liege ein Tal, in dem Menschen nach Plan verschwinden. Sie wollen wissen, ob es stimmt.
  <p>Erfinden dürfen sie: Namen, Herkunft, wie sie sich kennen, was sie können. Der Auftrag steht fest.</p>`},
  {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`<b>Gelb</b> heisst: wörtlich vorlesen — Erzähltext und die Sätze der Figuren stehen in einer Karte. <b>Grün</b> heisst: das sagst du den Schülern, ebenfalls wörtlich — es ist ihre Aufgabe. <b>Grau</b> heisst: nur für dich, und steht als Hintergrund oben. <b>Rot</b> heisst: Kampf. Ganz unten steht immer, <b>wann es weitergeht</b>.
- <p>Rechts, <b>in der Karte der Figur</b>, steht manchmal eine gestrichelte Zeile <b>Optional</b>: eine Gelegenheit für genau diese Figur — Magic Hand, Strength, Healing Touch. Anklicken zeigt die Folge. Das sind keine Aufgaben und keine Lösungen: Sie sagen dir nur, was du zulassen kannst, falls der Spieler von selbst darauf kommt. Jede Szene funktioniert auch ohne.</p>
+ <p>Rechts unter dem Barometer steht <b>Stärken der Figuren</b>: je Figur eine Zeile mit ihrem Talent — Magic Hand, Strength, Healing Touch — und, wenn die Szene eine Gelegenheit dafür hat, der Satz aus dem gelben Text, der sie ankündigt (Tam hält die verbrannte Hand an die Brust; Marek hat die Hand verbunden). Du liest den Satz vor und wartest. Anklicken zeigt die Folge. Das sind keine Aufgaben und keine Lösungen: Die Zeile sagt dir nur, was du zulassen kannst, falls der Spieler von selbst darauf kommt. Jede Szene funktioniert auch ohne.</p>
  <p>Unter dem Titel jeder Seite steht die <b>Lage</b>: wo die Gruppe ist, was sie gewählt hat, was sie weiss. Auf der Seite steht immer nur, was zu diesem Weg gehört — das andere siehst du gar nicht erst. Und eine Entscheidung lässt sich erst anklicken, wenn die davor getroffen ist.</p>`},
  {t:"sagen", text:["You always have to speak English. If you don’t — who knows what consequences it might have… (evil laugh)","If you don’t know a word, ask me. In English. Nobody laughs."]},
  {t:"regie", titel:"Hintergrund zur Regel", text:`Du kannst den Grafen <b>deutschempfindlich</b> machen: Er hört jeden ganzen deutschen Satz, der am Tisch fällt — für ihn ein Geräusch im Haus. Folge: Die Gefahr steigt um 1 (Knopf rechts), oder er schickt einen Diener los — dafür einen <b>Thrall</b> in den Kampf laden. Hier darfst du improvisieren; die Drohung wirkt meist schon allein.
@@ -414,7 +428,7 @@ const KAPITEL = [
    ["Sie fragen etwas, das nicht auf der Seite steht","Ist es harmlos: sag Ja und erfinde eine Kleinigkeit. Sprengt es die Szene: „That doesn’t work.“ Fertig."],
    ["Sie finden einen Hinweis nicht","Auf jeder Personenkarte steht eine Zeile <b>Notfalls</b>. Nimm sie und geh weiter. Nichts darf hängenbleiben."],
    ["Sie streiten über eine Entscheidung","„You have one minute. Then we vote.“"],
-   ["Ein Spieler will sein Talent einsetzen (Magic Hand, Strength, Healing Touch)","Steht rechts in seiner Karte eine <b>Optional</b>-Zeile dazu: nimm sie. Steht keine: Ist es harmlos, sag Ja und erfinde eine Kleinigkeit. Ein Talent ersetzt nie ein Gespräch — wer verhandeln soll, verhandelt."],
+   ["Ein Spieler will sein Talent einsetzen (Magic Hand, Strength, Healing Touch)","Steht rechts unter <b>Stärken der Figuren</b> etwas dazu: nimm es. Steht keine: Ist es harmlos, sag Ja und erfinde eine Kleinigkeit. Ein Talent ersetzt nie ein Gespräch — wer verhandeln soll, verhandelt."],
    ["Eine Figur fällt auf 0 Lebenspunkte","Sie ist bewusstlos, nicht tot. Zwei Wege zurück: der eigene <b>Heiltrank</b> (jede Figur hat genau einen, Knopf auf dem Blatt: +10 HP oder wieder auf die Beine) — oder sie liegt, bis der Kampf vorbei ist; <b>nach dem Kampf heilt die Lightbearer alle umsonst</b> (ihr Knopf, und rechts „alle voll“). Auf dem Blatt erscheint ausserdem <b>„Roll your fate“</b>: eine 20 macht sie stärker, eine 1 macht ihren Schaden unberechenbar, alles dazwischen gibt eine Narbe."],
    ["Der DM will einfach einen Wurf","Jedes Blatt hat den Knopf <b>„Just roll a d20“</b>. Sag vorher, ab welcher Zahl es klappt — meistens 10."],
    ["Die Gefahr wird orange (4–7)","Die Kämpfe bleiben, wie sie sind — aber jeder Kampfblock zeigt dir einen Knopf <b>„+1 … dazu — deine Entscheidung“</b>. Nimm ihn, wenn die Gruppe laut oder leichtsinnig war."],
@@ -428,7 +442,7 @@ const KAPITEL = [
 
 /* ===== 1 ===== */
 {n:"Prolog", chancen:[
-  {wer:"Lightbearer", talent:"Healing Touch", text:"Marek hält die Zügel nur mit der linken Hand — die rechte ist verbunden.", folge:"Das darfst du beiläufig einstreuen. Wer ihm die Hand heilt, bekommt einen Satz mehr als alle anderen: „Whatever you do up there — don’t take the coach.“ Mehr erklärt er nicht."}],
+  {wer:"Lightbearer", talent:"Healing Touch", cue:"wrapped in a dirty bandage", text:"Mareks rechte Hand ist verbunden.", folge:"Fragt die Heilerin danach oder greift sie zu, bekommt sie einen Satz mehr als alle anderen: „Whatever you do up there — don’t take the coach.“ Mehr erklärt er nicht. Sagt niemand etwas: Er fährt einfach los."}],
  titel:"The Carriage", art:"szene", ort:ORT.strasse, nach:ORT.vorWirtshaus, bloecke:[
  {t:"ziel", text:"Die Gruppe stellt sich vor, erfährt ihren Auftrag und steigt vor dem Wirtshaus aus.", zeit:"15 Min."},
  {t:"regie", titel:"Hintergrund", text:"Sechs Stunden Kutschfahrt bergauf. Der Fahrer heisst <b>Marek</b>: grimmig, wortkarg — er stellt die erste Frage des Abends. <b>Wichtig:</b> Jede Figur antwortet ihm mit mindestens zwei bis drei Sätzen; die Vorstellung ist die erste Sprechübung. Danach liest du vor, warum die Gruppe hier ist, und die Szene endet vor dem Wirtshaus."},
@@ -451,7 +465,7 @@ const KAPITEL = [
   `And nobody in Dornwald is looking for her. Nobody. That is the part that should worry you.`,
   `Above the village, they say, there is a castle. And whatever takes them lives up there.`]},
  {t:"vorlesen", titel:"Die Ankunft", text:[
-  `The carriage stops. Marek does not get down and he does not open the door — you do that yourselves.`,
+  `The carriage stops. Marek does not get down and he does not open the door — you do that yourselves. His right hand, on the reins, is wrapped in a dirty bandage.`,
   `The village is twenty dark houses and a bell tower with no bell in it. There is exactly one building with light in the windows: a tavern, with a black goat painted on the sign.`,
   `Your bags land in the mud beside you. By the time you turn round, the carriage is already moving, and Marek is driving downhill faster than he ever drove up.`,
   `High above the village, on bare rock, stands a castle. One window is lit.`,
@@ -460,13 +474,13 @@ const KAPITEL = [
 
 /* ===== 2 ===== */
 {n:"Kapitel I", chancen:[
-  {wer:"Blade", talent:"Strength", text:"Das Namensbrett über dem Kamin ist schwer und hängt an zwei Haken.", folge:"Wer es allein abhebt und umdreht, findet auf der Rückseite mehr Namen — keine Dorfnamen, fremde. Zwölf. Greta sagt nur: „Hunters. Put it back.“ Eine deutlichere Warnung gibt es an diesem Abend nicht."}],
+  {wer:"Blade", talent:"Strength", cue:"on two iron hooks", text:"Das Namensbrett ist schwer und hängt an zwei Haken.", folge:"Wer es allein abhebt und umdreht, findet hinten mehr Namen — keine Dorfnamen, fremde. Zwölf. Greta sagt nur: „Hunters. Put it back.“ Eine deutlichere Warnung gibt es an diesem Abend nicht."}],
  titel:"The Inn", art:"szene", ort:ORT.vorWirtshaus, nach:ORT.wirtshaus, bloecke:[
  {t:"ziel", text:"Die Gruppe spricht mit drei Menschen, erfährt zwei Dinge und bekommt am Ende die Karte.", zeit:"25 Min."},
  {t:"regie", titel:"Hintergrund", text:"Im Wirtshaus sitzen elf Menschen. <b>Drei sind ansprechbar:</b> Greta (Wirtin, drei Finger), Old Pieter (Totengräber, betrunken) und Tobias (Junge an der Tür). Die anderen acht antworten nicht — spricht jemand sie an: „They look into their drinks and say nothing.“ Jeder Satz der drei ist nur <b>einmal</b> zu haben (abhaken); wer alle drei verbraucht hat, schweigt und beachtet die Gruppe nicht mehr. <b>Wichtig:</b> Der Name <b>Anneke</b> muss fallen; notfalls ruft Pieter ihn von selbst. Anneke Koll war Gretas jüngere Schwester — darum fragt sie in der Kapelle „Is Greta still alive?“. Am Ende der Szene liegt die Karte mit den drei Wegen auf dem Tisch."},
  {t:"vorlesen", titel:"Der Raum", text:[
   `You push the door open. Inside it is warm and far too quiet. Eleven people are sitting in a room built for forty, and every one of them stops talking.`,
-  `Above the fireplace hangs a long wooden board with names carved into it. The last one is fresh — you can still see the pale wood inside the letters. It says: MIRELA VANCE.`]},
+  `Above the fireplace hangs a long, heavy board of oak, on two iron hooks, with names carved into it. The last one is fresh — you can still see the pale wood inside the letters. It says: MIRELA VANCE.`]},
  {t:"vorlesen", titel:"Die drei, die euch ansehen", text:[
   `Behind the bar stands a woman of about fifty with three fingers on her left hand. She is filling a cup that is already full.`,
   `By the fire sits an old man with a bottle between his boots. He is the only person in the room who is grinning.`,
@@ -523,24 +537,24 @@ const KAPITEL = [
 
 /* ===== 4 ===== */
 {n:"Aufstieg", chancen:[
-  {wer:"Lightbearer", talent:"Healing Touch", nur:"weg_a", text:"Der kleinere Wolf zieht ein Hinterbein nach — ein altes Fangeisen.", folge:"Wer sich ihm langsam nähert und das Eisen löst, hat einen Wolf weniger: Er humpelt in den Nebel. Es dauert — der andere Wolf greift währenddessen einmal an (drück seine Attacke). Dann Kampf gegen einen."},
-  {wer:"Blade", talent:"Strength", nur:"weg_a", text:"Der Sumpf zieht an den Stiefeln.", folge:"Wer feststeckt und den Blade neben sich hat, verliert den Punkt nicht — Blade zieht ihn heraus. Gilt für einen Fehlwurf je Figur, und nur, wenn der Blade-Spieler es sagt."},
-  {wer:"Arcanist", talent:"Magic Hand", nur:"weg_a", text:"Die Wachen sehen in den Nebel — und auf ihre Lampe.", folge:"Kippt Magic Hand eine der Lampen um, sehen beide Wachen zur Lampe statt in den Nebel: Jeder, dem der Schleichwurf misslingt, darf einmal nachwürfeln. Der Spieler drückt Magic Hand auf seinem Blatt; misslingt der Zauber, passiert nichts."},
-  {wer:"Lightbearer", talent:"Healing Touch", nur:"weg_b", text:"Der Mann mit der Lampe hustet — seit Wochen, hört man.", folge:"Wer ihm den Husten nimmt, bevor die Gruppe ihre Sätze sagt, bekommt ungefragt einen Rat: „The kitchen stair is the quiet way up. The boy down there is all right.“ Glauben tut er trotzdem nur, wer redet."},
-  {wer:"Arcanist", talent:"Magic Hand", nur:"weg_b", text:"Hinter einem Eisengitter im Keller: ein Regal mit kleinen Flaschen, eine davon mit blassem Licht darin.", folge:"Magic Hand holt sie durch die Stäbe — ein zweiter Heiltrank für die Gruppe, einer, nicht drei. Wer ihn trinkt, sagt es; du gibst rechts +10. Misslingt der Zauber auf dem Blatt, klirrt Glas: Gefahr +1."},
-  {wer:"Lightbearer", talent:"Healing Touch", nur:"weg_c", text:"Corvins Hände sind kalt, und er reibt sie nie.", folge:"Wer sie anfasst, um zu helfen, merkt es sofort: kein Puls. Corvin lächelt: „Kind of you.“ Die Gruppe weiss jetzt, wem die Kutsche gehört — an der Gefahr ändert das nichts, die ist schon eingetragen."}],
+  {wer:"Lightbearer", talent:"Healing Touch", nur:"weg_a", cue:"an old iron trap still on it", text:"Der kleinere Wolf hat ein Fangeisen am Hinterbein.", folge:"Wer sich ihm langsam nähert und das Eisen löst, hat einen Wolf weniger: Er humpelt in den Nebel. Es dauert — der andere Wolf greift währenddessen einmal an (drück seine Attacke). Dann Kampf gegen einen."},
+  {wer:"Blade", talent:"Strength", nur:"weg_a", cue:"takes real strength", text:"Der Sumpf gibt Stiefel nur mit Kraft wieder her.", folge:"Wer feststeckt und den Blade neben sich hat, verliert den Punkt nicht — Blade zieht ihn heraus. Gilt für einen Fehlwurf je Figur, und nur, wenn der Blade-Spieler es sagt."},
+  {wer:"Arcanist", talent:"Magic Hand", nur:"weg_a", cue:"Their lamps hang on the wall next to them", text:"Die Lampen der Wachen hängen an der Wand, nicht in ihren Händen.", folge:"Kippt Magic Hand eine der Lampen, sehen beide Wachen zur Lampe statt in den Nebel: Jeder, dem der Schleichwurf misslingt, darf einmal nachwürfeln. Der Spieler drückt Magic Hand auf seinem Blatt; misslingt der Zauber, passiert nichts."},
+  {wer:"Lightbearer", talent:"Healing Touch", nur:"weg_b", cue:"a cough that has clearly been going on for weeks", text:"Der Mann mit der Lampe hustet seit Wochen.", folge:"Wer ihm den Husten nimmt, bevor die Gruppe ihre Sätze sagt, bekommt ungefragt einen Rat: „The kitchen stair is the quiet way up. The boy down there is all right.“ Glauben tut er trotzdem nur, wer redet."},
+  {wer:"Arcanist", talent:"Magic Hand", nur:"weg_b", cue:"behind an iron grille", text:"Hinter dem Gitter: eine Flasche mit blassem Licht.", folge:"Magic Hand holt sie durch die Stäbe — ein zweiter Heiltrank für die Gruppe, einer, nicht drei. Wer ihn trinkt, sagt es; du gibst rechts +10. Misslingt der Zauber auf dem Blatt, klirrt Glas: Gefahr +1."},
+  {wer:"Lightbearer", talent:"Healing Touch", nur:"weg_c", cue:"a hand as cold as the door handle", text:"Corvins Hand ist kalt wie Eisen.", folge:"Wer sie festhält, um zu helfen, merkt es sofort: kein Puls. Corvin lächelt: „Kind of you.“ Die Gruppe weiss jetzt, wem die Kutsche gehört — an der Gefahr ändert das nichts, die ist schon eingetragen."}],
  titel:"Up the Mountain", art:"szene", braucht:"e1", ort:ORT.wirtshaus, nach:ORT.hof, bloecke:[
  {t:"ziel", text:"Die Gruppe steigt auf ihrem Weg zum Schloss hinauf — mit dem, was der Weg kostet (Kampf, schlechte Luft, Wachen) — und steht am Ende im Hof.", zeit:"20–30 Min."},
  {t:"regie", nur:"weg_a", titel:"Hintergrund · Strasse", text:"Drei Stationen: <b>Wölfe</b> am Galgen (erster Kampf des Abends — langsam: jeder sagt auf Englisch, was er tut, drückt seinen Knopf, liest seinen gelben Satz vor; fällt ein Wolf, läuft der andere), der <b>Sumpf</b> (jeder würfelt dreimal, unter 10 = −1 HP) und die <b>Wachen am Tor</b> — Leute des Hauses, nicht freundlich: Die Gruppe schleicht (jeder würfelt einmal; alle ≥ 10 → vorbei) oder greift an. Misslingt das Schleichen oder greift jemand an: Knopf unten, Kampf mit beiden Wachen, Gefahr +1."},
  {t:"vorlesen", nur:"weg_a", titel:"Der Wald und der Galgen", text:[
   `You leave the tavern by the back door. The road climbs through the forest, and the fog is so thick that you walk into the gallows before you see it. The wood is grey and the rope is long gone.`,
-  `Two wolves the size of ponies are sitting underneath it, side by side, watching you come. They are not barking. They are waiting for you to get closer.`]},
+  `Two wolves the size of ponies are sitting underneath it, side by side, watching you come. The smaller one holds a back leg off the ground; there is an old iron trap still on it. They are not barking. They are waiting for you to get closer.`]},
  {t:"kampf", nur:"weg_a", titel:"The wolves", text:"Zwei Wölfe, je 14 Lebenspunkte.", gegner:["wolf","wolf"], extra:"wolf"},
  {t:"vorlesen", nur:"weg_a", titel:"Der Sumpf", text:[
-  `Above the gallows the road simply stops. In front of you: black water, white mist, and a path that is only there if you find it. Every step, the ground pulls at your boots.`]},
+  `Above the gallows the road simply stops. In front of you: black water, white mist, and a path that is only there if you find it. Every step, the ground pulls at your boots — and once it has one, it takes real strength to get it back.`]},
  {t:"aufgabe", nur:"weg_a", sag:"Three steps each through the black water — roll a d20 for every step. Under ten, the bog has your boot: minus one hit point. And shout, or nobody will hear you sink.", hinweis:"Schaden rechts eintragen.", blatt:"Helfer-Blatt · Teil 4"},
  {t:"vorlesen", nur:"weg_a", titel:"Die Wachen am Tor", text:[
-  `On the far side of the bog the gate of Nachtfels stands open. Two men in old grey livery stand beside it with lamps. They do not move. They do not talk. They are looking at the fog.`]},
+  `On the far side of the bog the gate of Nachtfels stands open. Two men in old grey livery stand beside it. Their lamps hang on the wall next to them — the only light for a mile. They do not move. They do not talk. They are looking at the fog.`]},
  {t:"aufgabe", nur:"weg_a", sag:"Two guards. They belong to the house, and they are not here to welcome anyone. You can try to get past them in the fog — one roll each, ten or more. Or you go straight at them. Decide together. Quietly.", hinweis:"Alle ≥ 10 → weiter unten bei „Im Hof“. Einer darunter, oder sie greifen an → Knopf.", blatt:"Helfer-Blatt · Teil 4"},
  {t:"tun", id:"tor_kampf", nur:"weg_a", text:"Das Anschleichen ist misslungen — die beiden Wachen haben sie gesehen.", knopf:{art:"laden", gegner:["wache","wache"], gefahr:1, extra:"wache"}, beschriftung:"Kampf mit zwei Wachen, Gefahr +1"},
  {t:"vorlesen", nur:"weg_a", titel:"Im Hof", text:[
@@ -553,8 +567,8 @@ const KAPITEL = [
   `After three, you find what is left of the Kessler family: tools, a child’s shoe, and a lamp that somebody put down neatly before they stopped needing it.`]},
  {t:"tun", id:"stollen_luft", nur:"weg_b", text:"Die schlechte Luft anwenden — dann stimmen die Werte rechts.", knopf:{art:"schaden", v:2}, beschriftung:"−2 HP für alle"},
  {t:"vorlesen", nur:"weg_b", titel:"Der Keller", text:[
-  `The tunnel ends at a rotten wooden door. Behind it: a cellar full of barrels, a smell of wine and wet stone, and a stair going up.`,
-  `At the top of the stair stands a man with a lamp. He has heard the door. He comes down, slowly, and holds the lamp up to your faces.`]},
+  `The tunnel ends at a rotten wooden door. Behind it: a cellar full of barrels, a smell of wine and wet stone, and a stair going up. In the corner, behind an iron grille, a shelf of small bottles — and one of them gives off a faint, pale light.`,
+  `At the top of the stair stands a man with a lamp. He has heard the door. He comes down, slowly, coughing — a cough that has clearly been going on for weeks — and holds the lamp up to your faces.`]},
  {t:"sagen", nur:"weg_b", text:["Nobody comes in through the cellar. Who are you, and who let you in?"]},
  {t:"aufgabe", nur:"weg_b", sag:"He wants an answer, and he wants it now. Guests — say it like you mean it, one sentence each, and give him a reason. No weapons, no dice. Just talk.", hinweis:"Jeder ein ganzer Satz, keine Drohung → er glaubt ihnen: „Guests. Of course. Nobody tells me anything. Up the stair, wait in the courtyard — somebody will come for you.“ (Niemand kommt.) Sonst der Knopf unten.", blatt:"Helfer-Blatt · Teil 4"},
  {t:"tun", id:"keller_kampf", nur:"weg_b", text:"Die Wache glaubt ihnen nicht.", knopf:{art:"laden", gegner:["wache"], gefahr:1, extra:"wache"}, beschriftung:"Kampf mit der Wache, Gefahr +1"},
@@ -564,7 +578,7 @@ const KAPITEL = [
  {t:"regie", nur:"weg_c", titel:"Hintergrund · Kutsche", text:`Zwei Stunden mit <b>Corvin Ash</b>, dem Kutscher des Grafen: sehr freundlich, fährt ohne Lampe, sieht nie auf die Strasse. Spiel ihn freundlich und stell den Spielern <b>seine</b> Fragen: „And what are your names?“ — „And what do you want up there?“ — „You’re not from the village, are you?“ Drei Dinge dürfen sie merken: Er sagt nie Mirelas Namen, seine Hände sind kalt, im Fenster spiegelt sich alles ausser ihm. Merkt es niemand — kein Problem, die Gefahr (+4) ist schon eingetragen. Er bringt sie bis in den Hof.`},
  {t:"vorlesen", nur:"weg_c", titel:"Die Kutsche", text:[
   `The coach is waiting at the edge of the village at midnight, exactly as the map said. The driver is a thin man in a good coat who introduces himself as Corvin Ash, and who is very, very friendly.`,
-  `He drives without a lamp. He never looks at the road. And in two hours he asks you more questions than you ask him.`]},
+  `He helps you up with a hand as cold as the door handle. He drives without a lamp. He never looks at the road. And in two hours he asks you more questions than you ask him.`]},
  {t:"vorlesen", nur:"weg_c", titel:"Am Tor", text:[
   `At the gate Corvin stops the coach and says four words to the two guards with lamps: “I have three guests.” Somewhere above you, a window lights up. Then another.`,
   `The coach rolls on through the gate — it stands open; it always does — into a square courtyard of black stone. Corvin starts unloading boxes as if you were not there at all, and you climb down.`]},
@@ -572,7 +586,7 @@ const KAPITEL = [
 
 /* ===== 5 ===== */
 {n:"Kapitel II", chancen:[
-  {wer:"Arcanist", talent:"Magic Hand", text:"Der Rabe sitzt auf dem Brunnenrand und rührt sich nicht.", folge:"Hebt Magic Hand ihn hoch, sagt er den Namen noch einmal — und dann einen zweiten, den niemand am Tisch gesagt hat: „Vaskir.“ So fällt der Name des Grafen früher als geplant. Das ist in Ordnung; Mirela erklärt ihn oben."}],
+  {wer:"Arcanist", talent:"Magic Hand", cue:"not even when you come close", text:"Der Rabe rührt sich nicht.", folge:"Hebt Magic Hand ihn hoch, sagt er den Namen noch einmal — und dann einen zweiten, den niemand am Tisch gesagt hat: „Vaskir.“ So fällt der Name des Grafen früher als geplant. Das ist in Ordnung; Mirela erklärt ihn oben."}],
  titel:"The Courtyard", art:"szene", braucht:"e1", ort:ORT.hof, nach:ORT.hof, bloecke:[
  {t:"ziel", text:"Die Gruppe sieht drei Türen, redet mit dem Raben und entscheidet sich danach für eine Tür.", zeit:"15 Min."},
  {t:"regie", titel:"Hintergrund", text:"Der Hof: ein gefrorener Brunnen, drei Türen (Kapelle links, Bibliotheksfenster geradeaus, Küchentreppe rechts) und ein <b>Rabe</b>, der nachspricht, was er hört — er gehört dem Bibliothekar, mehr kann er nicht. <b>Wichtig:</b> Wenn der Rabe spricht, sag den <b>echten Figurennamen</b> einer Spielerin, wie er rechts in der Gruppe steht. Nichts erschreckt zuverlässiger. Nur eine Tür ist möglich — sag das vorher."},
@@ -582,7 +596,7 @@ const KAPITEL = [
   `The cold in here is a different kind of cold: the cold of a room where a window has been open since 1804.`,
   `In the middle of the courtyard a fountain has frozen in mid-fall, and the ice is not white — it is the colour of weak tea.`]},
  {t:"vorlesen", titel:"Der Rabe", text:[
-  `On the edge of the fountain sits a raven. It looks at you for a long moment.`,
+  `On the edge of the fountain sits a raven. It looks at you for a long moment and does not move — not even when you come close.`,
   `Then it says one word, and the word is your name.`]},
  {t:"aufgabe", sag:"It’s listening. Say something — one whole sentence, slow and clear. Mumble, and it will mumble back.", blatt:"Helfer-Blatt · Teil 5"},
  {t:"vorlesen", titel:"Drei Türen", text:[
@@ -619,48 +633,51 @@ const KAPITEL = [
 
 /* ===== 7 ===== */
 {n:"Hinter der Tür", chancen:[
-  {wer:"Arcanist", talent:"Magic Hand", nur:"bibliothek", text:"Bellamy will ein Buch ins oberste Regal zurückstellen, und die Leiter wackelt.", folge:"Stellt Magic Hand es für ihn hinauf, nennt er das die erste Höflichkeit seit 1912 — und sagt einen Satz mehr: „His book lies one floor under her room. Everything he is, is written in it.“ Das ist die Vorlage für Karte B der letzten Entscheidung."},
-  {wer:"Arcanist", talent:"Magic Hand", nur:"kapelle", nicht:"anneke", text:"Hunderte Kerzen, alle heruntergebrannt — ein Rest Docht in jeder.", folge:"Zündet Magic Hand sie alle auf einmal, hält Anneke sich die Augen zu: Ihr erster Angriff im Kampf geht ins Leere (drück ihn nicht). Danach kämpft sie wie sonst."},
-  {wer:"Lightbearer", talent:"Healing Touch", nur:"kapelle", text:"Annekes Hände sind am Steinbecken aufgerissen — seit zwanzig Jahren.", folge:"Wer sich ihr langsam nähert und sie schliesst — nach dem Kampf, oder statt der letzten Schläge —, hört den Satz, den sie für Greta hat: „Tell her I am not angry.“ Merk ihn dir für den Epilog."},
-  {wer:"Lightbearer", talent:"Healing Touch", nur:"kueche", text:"Tams linke Hand ist verbrannt, vom Topf.", folge:"Wer sie heilt, hat sein Vertrauen vor jedem Versprechen: „Nobody here ever did that.“ Er führt euch trotzdem erst, wenn ihr seine Frage beantwortet — aber er sagt vorher, was oben wartet: „She has tea with him. Every night. Two cups.“"}],
+  {wer:"Arcanist", talent:"Magic Hand", nur:"bibliothek", cue:"not quite reaching it", text:"Bellamy kommt mit dem Buch nicht ans oberste Regal.", folge:"Stellt Magic Hand es für ihn hinauf, nennt er das die erste Höflichkeit seit 1912 — und sagt einen Satz mehr: „His book lies one floor under her room. Everything he is, is written in it.“ Das ist die Vorlage für Karte B der letzten Entscheidung."},
+  {wer:"Arcanist", talent:"Magic Hand", nur:"kapelle", nicht:"anneke", cue:"a thread of wick left in every one", text:"In jeder Kerze steckt noch ein Rest Docht.", folge:"Zündet Magic Hand sie alle auf einmal, hält Anneke sich die Augen zu: Ihr erster Angriff im Kampf geht ins Leere (drück ihn nicht). Danach kämpft sie wie sonst."},
+  {wer:"Lightbearer", talent:"Healing Touch", nur:"kapelle", cue:"are torn open", text:"Annekes Hände sind am Steinbecken aufgerissen.", folge:"Wer sich ihr langsam nähert und sie schliesst — nach dem Kampf, oder statt der letzten Schläge —, hört den Satz, den sie für Greta hat: „Tell her I am not angry.“ Merk ihn dir für den Epilog."},
+  {wer:"Lightbearer", talent:"Healing Touch", nur:"kueche", cue:"the left one he holds against his chest", text:"Tam hält die verbrannte linke Hand an die Brust — und wartet.", folge:"Wer sie heilt, hat sein Vertrauen vor jedem Versprechen: „Nobody here ever did that.“ Er führt euch trotzdem erst, wenn ihr seine Frage beantwortet — aber er sagt vorher, was oben wartet: „She has tea with him. Every night. Two cups.“ Geht niemand darauf ein: Er stellt seine Frage trotzdem."}],
  titel:"What You Find", art:"szene", braucht:"e2", ort:ORT.hof, nach:ORT.spiegel, bloecke:[
  {t:"ziel", text:"Die Gruppe geht durch ihre Tür, erlebt, was dahinter wartet (Bellamy, Anneke oder Tam), und steht am Ende hinter der Spiegeltür am Ende des Westgangs.", zeit:"20 Min."},
- {t:"regie", nur:"bibliothek", text:"Bellamy ist <b>nicht gefährlich</b>, solange man höflich bleibt. Er will drei wahre Sätze von jeder Figur — er hört nicht auf den Inhalt, sondern auf die Stimme, und Lügen merkt er. <p>Danach führt er sie selbst zum Spiegel — und bittet um einen Gefallen (steht im Text): einen Brief mit ins Dorf zu nehmen. Merk dir, ob sie Ja sagen; im Epilog zählt es.</p>"},
+ {t:"regie", nur:"bibliothek", text:"Bellamy ist <b>nicht gefährlich</b>, solange man höflich bleibt. Er will drei wahre Sätze von jeder Figur — er hört nicht auf den Inhalt, sondern auf die Stimme, und Lügen merkt er. Wer lügt oder ihn beleidigt, bekommt weder Führung noch Brief: Er steigt auf seine Leiter zurück — „The west corridor. Find it yourselves.“ — und die Gruppe sucht den Weg selbst (Block <b>Ohne Führung</b> unten). <p>Sonst führt er sie selbst zum Spiegel — und bittet um einen Gefallen (steht im Text): einen Brief mit ins Dorf zu nehmen. Merk dir, ob sie Ja sagen; im Epilog zählt es.</p>"},
  {t:"vorlesen", nur:"bibliothek", titel:"Die Bibliothek", text:[
-  `You cross the courtyard and open the door under the warm window. Bookshelves up to the ceiling, and a very thin man in a very good suit standing on a ladder, putting a book back.`,
+  `You cross the courtyard and open the door under the warm window. Bookshelves up to the ceiling, and a very thin man in a very good suit on a wobbling ladder, trying to put a book back on the top shelf — and not quite reaching it.`,
   `He says, without turning round: “Nobody has spoken to me since 1912. Say something. Anything — as long as it is true.”`,
   `Then he climbs down, and you see his hands, and his teeth, and you understand what he is. He offers you a chair anyway.`]},
  {t:"aufgabe", nur:"bibliothek", sag:"Three true things about yourself. He can wait — he’s been waiting since 1912. Take thirty seconds, then talk.", hinweis:"Er hört auf die Stimme, nicht auf den Inhalt — Lügen merkt er.", blatt:"Helfer-Blatt · Teil 6"},
- {t:"vorlesen", nur:"bibliothek", titel:"Der Weg zur Spiegeltür", text:[
+ {t:"vorlesen", nur:"bibliothek", titel:"Der Weg zum Spiegel — Bellamy führt euch", text:[
   `Bellamy walks you out of the library and along a corridor with no windows — the west corridor — and stops at the end of it, in front of a tall mirror. “The tower has no stair,” he says. “It has this. Walk backwards through it, and don’t look.”`,
   `Then he takes a letter out of his coat. “Would you carry this down to the village for me? The house is still there. Say yes or no — I will know which one you mean.”`,
   `He does not come with you. “He forbade it in 1804, and I find I still care what he thinks. Isn’t that the saddest thing you have ever heard?”`]},
  {t:"regie", nur:"kapelle", nicht:"anneke", text:"Die Gruppe kennt ihren Namen <b>nicht</b> — im Wirtshaus ist er nicht gefallen. Also sagt Anneke einen Satz (gelb unten) und greift an. Bei 8 Lebenspunkten hört Anneke von selbst auf und fragt „Is Greta still alive?“ — lass den Kampf dort enden, nicht bei null. Sie bleibt in der Kapelle zurück."},
  {t:"vorlesen", nur:"kapelle", titel:"Die Kapelle", text:[
-  `You cross the courtyard and step through the broken door. Candles, hundreds of them, all burnt down to nothing. The saint above the altar has no face left.`,
-  `Something sits up in the stone font. It is a girl of about nineteen, in a dress that was white twenty years ago. She looks at you without any anger at all, and that is worse.`]},
+  `You cross the courtyard and step through the broken door. Candles, hundreds of them, all burnt down to stubs — a thread of wick left in every one. The saint above the altar has no face left.`,
+  `Something sits up in the stone font. It is a girl of about nineteen, in a dress that was white twenty years ago. Her hands, on the rim of the font, are torn open and have been for a long time. She looks at you without any anger at all, and that is worse.`]},
  {t:"sagen", nur:"kapelle", nicht:"anneke", text:["Twenty years. And nobody came. Why now?"]},
  {t:"kampf", nur:"kapelle", nicht:"anneke", titel:"Anneke", text:"22 Lebenspunkte. Sie kämpft ohne Wut, was schlimmer ist.", gegner:["anneke"], extra:"thrall"},
  {t:"wenn", nur:"kapelle", alle:["anneke"], titel:"Sie kennen ihren Namen — kein Kampf", text:`Ruft jemand <b>„Anneke!“</b>, hält sie mitten in der Bewegung an und setzt sich zurück ins Becken. Dann fragt sie: „Is Greta still alive?“
  <p>Sie erzählt, was vor zwanzig Jahren geschah, und zeigt der Gruppe die Treppe hinter dem Altar. Die Gefahr ist dafür schon richtig eingetragen — +1 statt +2. Sag laut, woran das lag: <em>„Because you listened to the old man in the tavern, this fight never happens.“</em></p>`},
- {t:"vorlesen", nur:"kapelle", titel:"Der Weg zur Spiegeltür", text:[
+ {t:"vorlesen", nur:"kapelle", titel:"Der Weg zum Spiegel — die Treppe hinter dem Altar", text:[
   `Behind the altar a narrow stair goes up inside the wall and comes out in a corridor with no windows — the west corridor. At the end of it stands a tall mirror instead of a door. Written on the frame, in chalk, in a child’s handwriting: walk backwards.`]},
- {t:"regie", nur:"kueche", text:"Tam ist seit sechs Jahren hier und kennt jeden Gang. Er führt sie hinauf, wenn sie freundlich sind — er fragt <b>einmal</b> (gelb unten), und er will eine echte Antwort. <p>Lass die Spieler wirklich antworten, und merk dir, was sie sagen. Im Epilog zählt es. Wer ihn anfährt oder an ihm vorbeigeht: Er schreit, und du nimmst rechts <b>+3 Gefahr</b>.</p>"},
+ {t:"regie", nur:"kueche", text:"Tam ist seit sechs Jahren hier und kennt jeden Gang. Er hält die verbrannte Hand an die Brust und wartet — ob jemand etwas dazu sagt, ist ihre Sache (rechts: Stärken). Dann fragt er <b>einmal</b> (gelb unten), und er will eine echte Antwort. <p>Antworten sie ehrlich — auch ein ehrliches Nein —, führt er sie hinauf. Merk dir, was sie sagen; im Epilog zählt es. Lügen sie oder fahren ihn an: Er stellt den Topf ab — „Find it yourselves.“ — und die Gruppe sucht den Weg selbst (Block <b>Ohne Führung</b> unten). Wer ihn bedroht oder wegstösst: Er schreit, und du nimmst rechts <b>+3 Gefahr</b>.</p>"},
  {t:"vorlesen", nur:"kueche", titel:"Die Küche", text:[
   `You go down the low stair on the right. A boy of about fourteen is cooking for nobody. There is enough food on that table for twenty people, and there has not been anybody to eat it for years.`,
-  `He sees you. He does not scream. He puts the knife down very slowly and says: “You’re here for the new one. The one in the tower.”`]},
+  `He sees you. He does not scream. He puts the knife down very slowly — with his right hand; the left one he holds against his chest, red from the pot — and says: “You’re here for the new one. The one in the tower.”`]},
  {t:"sagen", nur:"kueche", text:["Will you take me with you? When you go. Say it. Promise."]},
  {t:"aufgabe", nur:"kueche", sag:"He asked you a question. He’s fourteen, and he’ll know if you lie. Yes or no — and why.", blatt:"Helfer-Blatt · Teil 6"},
- {t:"vorlesen", nur:"kueche", titel:"Der Weg zur Spiegeltür", text:[
+ {t:"vorlesen", nur:"kueche", titel:"Der Weg zum Spiegel — Tam führt euch", text:[
   `Tam takes corridors that do not look like corridors. Twice he stops, puts up a hand, and you all wait forty seconds in the dark without knowing what for.`,
   `Then he points down a corridor with no windows — the west corridor — at a tall mirror at the end of it. “That’s the door. You have to walk backwards. Don’t look at it.” And then, quietly: “I’ll wait here.”`]},
+ {t:"regie", nur:["bibliothek","kueche"], titel:"Ohne Führung — wenn niemand euch bringt", text:"Nur, wenn Bellamy oder Tam die Gruppe hat stehen lassen. Dann: jeder würfelt einmal (<b>Just roll a d20</b>). Mindestens eine 10 → sie finden den Westgang leise (gelb unten). Keine 10 → sie finden ihn auch, aber nach zwei falschen Türen: <b>Gefahr +1</b> rechts. Die Geschichte bleibt nie stehen."},
+ {t:"vorlesen", nur:["bibliothek","kueche"], titel:"Ohne Führung — der Weg zum Spiegel", text:[
+  `Corridors that all look the same, and nobody to ask. Twice you open a door and close it again, very quietly. Then a corridor with no windows — the west corridor — and at the end of it a tall mirror instead of a door. On the frame, in chalk, in a child’s handwriting: walk backwards.`]},
  {t:"regie", titel:"Wenn sie fragen, was beim Hinsehen passiert", text:"„Nobody who looked has ever told anyone.“ Mehr nicht — und wer trotzdem hinsieht, sieht sich selbst, nur älter. Kein Schaden, keine Gefahr."},
  {t:"weiter", text:"Wenn die Gruppe rückwärts durch den Spiegel gegangen ist."}]},
 
 /* ===== 8 ===== */
 {n:"Kapitel III", chancen:[
-  {wer:"Arcanist", talent:"Magic Hand", text:"Zwei Tassen auf dem Tisch. Eine ist Mirelas.", folge:"Hebt Magic Hand die zweite, ist sie warm. Jemand hat vor Minuten daraus getrunken. Mirela sieht zu und sagt nichts."},
-  {wer:"Lightbearer", talent:"Healing Touch", text:"Mirela züchtet Medizin in ihrem Garten — und ihre Tasche steht neben dem Sessel.", folge:"Wer als Heilerin danach fragt, bekommt eine Flasche: „Take it. I won’t need it after sunrise.“ Ein zweiter Heiltrank für die Gruppe — einer. Wer ihn trinkt, sagt es; du gibst rechts +10."}],
+  {wer:"Arcanist", talent:"Magic Hand", cue:"the other on the far side of the table", text:"Die zweite Tasse steht ausser Reichweite.", folge:"Hebt Magic Hand sie, ist sie warm. Jemand hat vor Minuten daraus getrunken. Mirela sieht zu und sagt nichts."},
+  {wer:"Lightbearer", talent:"Healing Touch", cue:"with green stems sticking out of the top", text:"In Mirelas Tasche stecken Kräuter — ihre Medizin.", folge:"Wer als Heilerin danach fragt, bekommt eine Flasche: „Take it. I won’t need it after sunrise.“ Ein zweiter Heiltrank für die Gruppe — einer. Wer ihn trinkt, sagt es; du gibst rechts +10."}],
  titel:"The Tower Room", art:"szene", braucht:"e2", ort:ORT.spiegel, nach:ORT.turm, bloecke:[
  {t:"ziel", text:"Die Gruppe erfährt die Wahrheit und redet mit Mirela. Hier wird am meisten gesprochen — nimm dir Zeit.", zeit:"25 Min."},
  {t:"regie", nur:"weg_c", text:"Sie <b>haben</b> die Kutsche genommen. Lass sie das Mirela sagen — sie ist einen Moment lang wirklich überrascht: „Then Corvin has become slow.“"},
@@ -668,8 +685,8 @@ const KAPITEL = [
  {t:"vorlesen", titel:"Die Treppe", text:[
   `Behind the mirror there is a narrow stair, and it goes up for a long time. Nobody says anything. At the top there is a door with light under it.`]},
  {t:"vorlesen", titel:"Das Turmzimmer", text:[
-  `The room at the top is warm. There is a fire, and a pot of tea, and two cups.`,
-  `Mirela Vance sits in an armchair with a book on her knees. She is not tied up. She is not hurt. She is not even pale.`,
+  `The room at the top is warm. There is a fire, and a pot of tea, and two cups — one at her elbow, the other on the far side of the table.`,
+  `Mirela Vance sits in an armchair with a book on her knees. She is not tied up. She is not hurt. She is not even pale. Beside the chair stands a small bag, packed, with green stems sticking out of the top.`,
   `She looks up and says: “You’re late. The coach comes at midnight — you could have taken the coach.”`]},
  {t:"vorlesen", titel:"Was sie euch erzählt", text:[
   `She closes the book. “Sit down. You came a long way, so you can hear it once, properly.”`,
@@ -710,11 +727,11 @@ const KAPITEL = [
 
 /* ===== 10 ===== */
 {n:"Finale", chancen:[
-  {wer:"Blade", talent:"Strength", text:"Ein Blade stellt sich zwischen ihn und die anderen.", folge:"Sagt der Spieler das laut, gehen die Klauen auf Blade — du wählst Blade als Ziel, statt frei zu entscheiden, wen es trifft. Bis Blade zurücktritt oder fällt."},
-  {wer:"Arcanist", talent:"Magic Hand", nur:"e3_pakt", text:"Die Teekanne steht zwischen euch, und sie ist heiss.", folge:"Kippt Magic Hand ihm den Tee ins Gesicht: kein Schaden, aber sein nächster Angriff ist vertan — er wischt sich das Gesicht und lacht: „Manners.“"},
-  {wer:"Arcanist", talent:"Magic Hand", nur:"e3_buch", text:"Die Asche des Buches hängt noch in der Luft.", folge:"Wirft Magic Hand sie ihm in die Augen: kein Schaden, aber sein nächster Angriff ist vertan."},
-  {wer:"Arcanist", talent:"Magic Hand", nur:"e3_raus", text:"Über ihm brennt die einzige Lampe im Gang.", folge:"Reisst Magic Hand sie herunter: einen Moment Dunkelheit — sein nächster Angriff ist vertan."},
-  {wer:"Lightbearer", talent:"Healing Touch", gefahrVon:4, gefahrBis:10, nicht:"e3_buch", text:"Die beiden Thralls sind Menschen aus dem Tal — unter Vertrag.", folge:"Wer einen von ihnen berührt, statt ihn zu schlagen, weckt ihn: Er setzt sich an die Wand und schläft. Ein Thrall weniger (rechts ×). Der zweite bleibt, und Vaskir bleibt."}],
+  {wer:"Blade", talent:"Strength", cue:"standing furthest back", text:"Der Graf sucht sich den aus, der hinten steht.", folge:"Stellt der Blade sich dazwischen und sagt es laut, gehen die Klauen auf ihn — du wählst Blade als Ziel, statt frei zu entscheiden, wen es trifft. Bis Blade zurücktritt oder fällt."},
+  {wer:"Arcanist", talent:"Magic Hand", nur:"e3_pakt", cue:"still steaming", text:"Die Teekanne dampft noch.", folge:"Kippt Magic Hand ihm den Tee ins Gesicht: kein Schaden, aber sein nächster Angriff ist vertan — er wischt sich das Gesicht und lacht: „Manners.“"},
+  {wer:"Arcanist", talent:"Magic Hand", nur:"e3_buch", cue:"hangs in the air", text:"Die Asche des Buches schwebt noch.", folge:"Wirft Magic Hand sie ihm in die Augen: kein Schaden, aber sein nächster Angriff ist vertan."},
+  {wer:"Arcanist", talent:"Magic Hand", nur:"e3_raus", cue:"the only light there is", text:"Die Lampe über ihm ist das einzige Licht im Gang.", folge:"Reisst Magic Hand sie herunter: einen Moment Dunkelheit — sein nächster Angriff ist vertan."},
+  {wer:"Lightbearer", talent:"Healing Touch", gefahrVon:4, gefahrBis:10, nicht:"e3_buch", cue:"Their eyes are open and see nothing", text:"Die beiden Thralls sind Menschen aus dem Tal — unter Vertrag.", folge:"Wer einen von ihnen berührt, statt ihn zu schlagen, weckt ihn: Er setzt sich an die Wand und schläft. Ein Thrall weniger (rechts ×). Der zweite bleibt, und Vaskir bleibt."}],
  titel:"Count Vaskir", art:"kampf", braucht:"e3", ort:{e3_raus:ORT.treppe, e3_buch:ORT.studie, e3_pakt:ORT.turm}, nach:ORT.graf, bloecke:[
  {t:"ziel", text:"Die Begegnung mit dem Grafen — Verhandlung, Kampf oder beides. Am Ende trägst du unten ein, wie es ausging.", zeit:"30 Min."},
  {t:"regie", titel:"Hintergrund", text:`Der Graf sieht aus wie ein müder Mann von fünfzig. Wie er auftritt, hängt an eurer Wahl (Übergang) und am Barometer (Lebenspunkte, Thralls) — es steht nur der Fall da, der bei euch gilt. <b>Unter 15 Lebenspunkten hört er auf zu kämpfen und redet:</b> Dann kann die Gruppe noch einmal wählen — töten, Vertrag, oder ihn gehen lassen. Fällt eine Figur auf 0, ist sie bewusstlos, nicht tot — Trank, oder sie liegt bis nach dem Kampf. <b>Am Ende trägst du unten ein, wie es ausging.</b>`},
@@ -722,22 +739,25 @@ const KAPITEL = [
  <p>Lass die Gruppe laut überlegen, was sie geben könnte. Nimmt er an: unten „Ein neuer Vertrag“ anklicken, kein Kampf. Droht die Gruppe oder beleidigt ihn: Knopf „Verhandlung gescheitert“ — dann Kampf.</p>`},
  {t:"vorlesen", nur:"e3_raus", von:ORT.treppe, titel:"Der Weg hinunter", text:[
   `Mirela does not fight you. She screams — once, very loud — and then she goes quiet and lets herself be carried. Down the long stair, backwards through the mirror, into the west corridor.`,
-  `At the far end of the corridor a lamp is burning, and a man is standing under it. He has clearly been waiting for a while.`]},
+  `At the far end of the corridor a single lamp is burning — the only light there is — and a man is standing under it. He has clearly been waiting for a while.`]},
  {t:"vorlesen", nur:"e3_buch", von:ORT.studie, titel:"Das Arbeitszimmer", text:[
-  `The study is one floor down: a desk, a lamp, and the book — open, four hundred years of signatures. It burns faster than paper should, and the room goes cold while it burns. Mirela has followed you down. She says nothing.`,
+  `The study is one floor down: a desk, a lamp, and the book — open, four hundred years of signatures. It burns faster than paper should, and the room goes cold while it burns. The ash does not settle; it hangs in the air like snow that has forgotten to fall. Mirela has followed you down. She says nothing.`,
   `When you turn round, a man is standing in the doorway. He does not look angry. He looks tired.`]},
  {t:"vorlesen", nur:"e3_pakt", von:ORT.turm, titel:"Der Ruf", text:[
   `You call his name down the stairwell. Nothing happens for a long minute.`,
-  `Then the door opens, and he is simply sitting in the second chair, with the second cup of tea, which was never meant for Mirela.`]},
+  `Then the door opens, and he is simply sitting in the second chair, with the second cup of tea, which was never meant for Mirela. The pot is still steaming on the table between you.`]},
  {t:"vorlesen", titel:"Der Graf", text:[
   `He is not tall. He is not pale. He looks like a tired man of fifty who has been doing the same job for far too long, and that is the frightening part.`,
-  `“Four hundred years,” he says, “and I never took a single one of them. They were brought to me. Every twenty years, up that road, with a bag packed. Ask her who packed hers.”`]},
+  `“Four hundred years,” he says, “and I never took a single one of them. They were brought to me. Every twenty years, up that road, with a bag packed. Ask her who packed hers.”`,
+  `Then he looks at the three of you, one after the other — and his eyes stop on the one who is standing furthest back.`]},
+ {t:"vorlesen", gefahrVon:4, gefahrBis:10, nicht:"e3_buch", titel:"Seine Leute", text:[
+  `Two of his people stand by the door. Villagers, by their coats. Their eyes are open and see nothing.`]},
  {t:"aufgabe", sag:"He hears everything you say — so say something. Before every attack, one sentence to him. He always answers.", blatt:"Helfer-Blatt · Teil 8"},
  {t:"tun", id:"pakt_scheitert", nur:"e3_pakt", text:"Die Verhandlung ist gescheitert — eine Drohung, eine Beleidigung, ein „we’ll kill you anyway“.", knopf:{art:"gefahr", v:4}, beschriftung:"Gefahr +4, es wird gekämpft"},
  {t:"wenn", gefahrVon:0, gefahrBis:3, titel:"Gefahr 0–3 · Er ist beeindruckt", text:`„You came up my mountain without waking a single one of my people. Do you know how long it has been since anyone did that?“ — Er ist allein und lässt bis zuletzt mit sich reden. Der Knopf unten lädt ihn <b>mit 40 statt 55 Lebenspunkten</b>, und die Gruppe darf einmal angreifen, bevor er reagiert.`},
  {t:"wenn", gefahrVon:4, gefahrBis:7, titel:"Gefahr 4–7 · Er hat gewartet", text:`Er weiss seit Stunden, dass sie da sind, und wollte sehen, wie weit sie kommen. Volle 55 Lebenspunkte.`},
  {t:"wenn", gefahrVon:8, gefahrBis:10, titel:"Gefahr 8–10 · Das Haus ist wach", text:`Jede Lampe brennt. Volle 55 Lebenspunkte. Sag der Gruppe vorher, woran das liegt — sie haben es sich verdient und wissen es.`},
- {t:"wenn", gefahrVon:4, gefahrBis:10, nicht:"e3_buch", titel:"Zwei Thralls kommen dazu", text:`Zwei Diener des Hauses stehen mit im Raum, je 9 Lebenspunkte. Der Knopf unten lädt sie mit.`},
+ {t:"wenn", gefahrVon:4, gefahrBis:10, nicht:"e3_buch", titel:"Zwei Thralls kommen dazu", text:`Zwei Diener des Hauses stehen mit im Raum, je 9 Lebenspunkte — gelb oben: „Seine Leute“. Der Knopf unten lädt sie mit.`},
  {t:"wenn", gefahrVon:4, gefahrBis:10, nur:"e3_buch", titel:"Keine Thralls", text:`Das Buch hat die Diener befreit — sie liegen irgendwo im Haus und schlafen zum ersten Mal seit Jahren. <b>Vaskir kommt allein.</b>`},
  {t:"tun", id:"finale_laden", wiederholbar:true, text:"Lade den Kampf — die Seite nimmt die richtigen Gegner nach Barometer und eurer Wahl. Bei geglückter Verhandlung brauchst du das nicht.", knopf:{art:"finale"}, beschriftung:"Kampf laden"},
  {t:"kampf", titel:"Count Vaskir", ohneKnopf:true, text:"Geladen wird mit dem Knopf darüber. Trag den Schaden der Spieler rechts in seine Leiste ein. Für seinen Zug drückst du auf eine seiner Attacken — die Seite würfelt und du klickst an, wen es trifft.", gegner:["vaskir"], zusatz:["thrall"]},
@@ -757,8 +777,8 @@ const KAPITEL = [
  {t:"wenn", nur:"ausgang_flucht", titel:"Er ist entkommen", text:`Nebel durchs Fenster, mehr nicht. Mirela geht mit euch hinunter, und niemand hat unterschrieben. In zwanzig Jahren, oder früher, wird jemand oben ein Licht sehen.`},
  {t:"wenn", alle:["e3_raus","ausgang_flucht"], titel:"Mirela auf dem Weg hinunter", text:`Sie spricht auf dem ganzen Weg kein Wort. Im Dorf öffnet sich keine einzige Tür. Erst Tobias kommt gelaufen — und Mirela sagt den Satz, der hängenbleibt: „So who is going instead of me?“`},
  {t:"wenn", nur:"e3_buch", titel:"Das Blutbuch brannte", text:`Im ganzen Haus wachen Menschen auf, die nicht wissen, welches Jahr ist. Einer davon ist Corvin Ash. Er fragt, welches Jahr wir haben, und setzt sich auf die Treppe.`},
- {t:"wenn", nur:"kueche", titel:"Tam", text:`Er steht am Tor mit einem Sack, in dem drei Töpfe und ein Messer sind. Haben sie ihm Wort gehalten, kocht er ab heute im Wirtshaus, und Greta hat zum ersten Mal seit zwanzig Jahren jemanden im Haus, der redet. Haben sie es gebrochen: sag es beiläufig, ohne Vorwurf. Das wirkt stärker.`},
- {t:"wenn", nur:"bibliothek", titel:"Bellamys Brief", text:`Die Adressatin ist seit 180 Jahren tot, ihr Haus steht noch. Wer den Brief dort durch den Schlitz wirft, hat Wort gehalten — und findet zwei Wochen später eine Antwort im eigenen Gepäck, in einer Handschrift von 1844.`},
+ {t:"wenn", nur:"kueche", titel:"Tam", text:`Er steht am Tor mit einem Sack, in dem drei Töpfe und ein Messer sind — auch, wenn er sie nicht geführt hat; er hatte sich entschieden, bevor sie es taten. Haben sie ihm Wort gehalten, kocht er ab heute im Wirtshaus, und Greta hat zum ersten Mal seit zwanzig Jahren jemanden im Haus, der redet. Haben sie es gebrochen: sag es beiläufig, ohne Vorwurf. Das wirkt stärker.`},
+ {t:"wenn", nur:"bibliothek", titel:"Bellamys Brief", text:`Nur, wenn sie den Brief bekommen haben. Die Adressatin ist seit 180 Jahren tot, ihr Haus steht noch. Wer den Brief dort durch den Schlitz wirft, hat Wort gehalten — und findet zwei Wochen später eine Antwort im eigenen Gepäck, in einer Handschrift von 1844.`},
  {t:"wenn", alle:["kapelle","anneke"], nicht:"e3_buch", titel:"Anneke — sie kennt euch", text:`Sie steht in der Kapellentür, als ihr vorbeigeht, und sagt zum ersten Mal seit zwanzig Jahren ihren eigenen Namen laut. Dann fragt sie, ob jemand Greta etwas ausrichten kann.`},
  {t:"wenn", nur:"kapelle", nicht:["anneke","e3_buch"], titel:"Anneke — ihr habt gekämpft", text:`Sie sitzt im Taufbecken, wo ihr sie gelassen habt, und sieht euch nach. Sie hat nach Greta gefragt, und niemand hat geantwortet. Lass das so stehen.`},
  {t:"wenn", nur:"e3_buch", titel:"Anneke — frei", text:`Aus der Kapelle, an der ihr vorbeigeht, kommt ein Mädchen von etwa neunzehn in einem Kleid, das vor zwanzig Jahren weiss war — Anneke, ohne Vertrag. Wer in der Kapelle war, kennt sie; die anderen sehen sie zum ersten Mal. Sie sieht in die Sonne, als hätte sie sie noch nie gesehen, und fragt, ob jemand Greta etwas ausrichten kann.`},
@@ -842,9 +862,8 @@ function zeichneGruppe(){
      '<div class="hpzeile"><span class="hpwert"><b>'+h.hp+'</b>/'+h.max+'</span><span class="bar"><i style="width:'+p+'%"></i></span></div>'+
      '<div class="steuer"><input type="number" id="hpin'+i+'" value="5" min="1" max="99" aria-label="Punkte">'+
      '<button class="minus" data-hpin="'+i+'" data-r="-1">Schaden</button>'+
-     '<button class="plus" data-hpin="'+i+'" data-r="1">Heilung</button></div>'+
-     '<div class="chancen-held" id="ch'+i+'">'+chancenLeisteHTML(h.rolle)+'</div></div>';}).join("");
-  zeichneChancen();
+     '<button class="plus" data-hpin="'+i+'" data-r="1">Heilung</button></div></div>';}).join("");
+  zeichneStaerken();
 }
 function aendereHP(i,d,grund){
   const h=Z.gruppe[i], alt=h.hp;
@@ -869,13 +888,13 @@ function ladeKampf(gegner, extra){
 
 /* ---- Zwischenakt: die Patrouille ---- */
 const PATROUILLE = {n:"Zwischenakt", titel:"The Patrol", art:"kampf", chancen:[
-  {wer:"Blade", talent:"Strength", text:"Der Hund kommt an einer Kette — und die Kette ist lang.", folge:"Fängt Blade die Kette, hängt der Hund eine Runde fest: kein Biss. Die Wachen müssen zu euch kommen."},
-  {wer:"Arcanist", talent:"Magic Hand", text:"Die einzige Lampe hält der vorderste Mann.", folge:"Löscht Magic Hand sie, stehen drei Wachen im Dunkeln — eine davon läuft davon. Zwei bleiben (rechts eine ×)."}],
+  {wer:"Blade", talent:"Strength", cue:"on a long chain", text:"Der Hund hängt an einer langen Kette.", folge:"Fängt Blade die Kette, hängt der Hund eine Runde fest: kein Biss. Die Wachen müssen zu euch kommen."},
+  {wer:"Arcanist", talent:"Magic Hand", cue:"One lamp — only one —", text:"Die Patrouille hat eine einzige Lampe.", folge:"Löscht Magic Hand sie, stehen drei Wachen im Dunkeln — eine davon läuft davon. Zwei bleiben (rechts eine ×)."}],
  bloecke:[
  {t:"ziel", text:"Das Haus hat genug gehört. Eine Patrouille stellt die Gruppe — drei Wachen und ein Hund. Zu schaffen, aber es kostet.", zeit:"15 Min."},
  {t:"regie", titel:"Hintergrund", text:"Dieser Zwischenakt kommt nur, wenn das Barometer <b>8 oder mehr</b> erreicht — einmal pro Abend, vor dem nächsten Akt. Drei Wachen (je 9 HP) und ein Wachhund (14 HP): zusammen 41 Lebenspunkte gegen eure 72. <b>Gerade noch zu schaffen:</b> Ist der Hund gefallen und stehen die Wachen bei der Hälfte, ziehen sie sich zurück — „They don’t want to die for him.“ Die Tränke sind für genau diesen Kampf da; danach heilt die Lightbearer alle. Reden hilft hier nicht — die Wachen antworten nicht, sie haben Befehle. Danach geht die Geschichte weiter, wo sie war."},
  {t:"vorlesen", titel:"Schritte", text:[
-  `Boots. Somewhere close, and getting closer — three pairs, in step. A lamp swings round the corner, and behind it comes something on a chain that is too big to be a dog and too quiet to be a wolf.`,
+  `Boots. Somewhere close, and getting closer — three pairs, in step. One lamp — only one — swings round the corner, and behind it comes something on a long chain that is too big to be a dog and too quiet to be a wolf.`,
   `The man with the lamp does not ask who you are. He already knows. “There you are,” he says — and lets go of the chain.`]},
  {t:"aufgabe", sag:"No talking your way out of this one. But talk to each other: who takes the hound? Who covers the healer?", blatt:"Helfer-Blatt · Teil 8"},
  {t:"kampf", titel:"The patrol", text:"Drei Wachen und der Hund — der Knopf lädt alle vier.", gegner:["wache","wache","wache","hund"]},
@@ -1095,13 +1114,16 @@ function sichtbareChancen(k){
   if(k.braucht && entscheidungOffen(k.braucht)) return [];
   return (k.chancen||[]).filter(gilt);
 }
-/* Sie stehen rechts bei der Figur, der sie gehören — sichtbar ohne Scrollen, aber leise */
+/* Sie stehen rechts im Abschnitt „Stärken der Figuren“ — auf jeder Seite, je Figur eine Zeile */
 function aktuelleSzene(){ return Z.imZwischenakt ? PATROUILLE : KAPITEL[Z.schritt]; }
-function chancenLeisteHTML(rolle){
-  return sichtbareChancen(aktuelleSzene()).filter(c=>c.wer===rolle).map(c=>
-    '<details class="chance"><summary><span class="opt">Optional</span><b>'+c.talent+'</b> — '+c.text+'</summary><p>'+c.folge+'</p></details>').join("");
+function zeichneStaerken(){
+  const cs=sichtbareChancen(aktuelleSzene());
+  $("staerken").innerHTML=Z.gruppe.map(h=>{
+    const name=(h.name||h.rolle), meine=cs.filter(c=>c.wer===h.rolle);
+    if(!meine.length) return '<div class="staerke leer"><b>'+name+' · '+TALENTE[h.rolle]+'</b><span>hier nichts Vorbereitetes</span></div>';
+    return meine.map(c=>'<details class="staerke"><summary><b>'+name+' · '+c.talent+'</b><span class="cue">Vorgelesen: “'+c.cue+'”</span></summary><p><b>'+c.text+'</b> '+c.folge+'</p></details>').join("");
+  }).join("");
 }
-function zeichneChancen(){ Z.gruppe.forEach((h,i)=>{ const e=$("ch"+i); if(e) e.innerHTML=chancenLeisteHTML(h.rolle); }); }
 function zeichneSzene(){
   const k = Z.imZwischenakt ? PATROUILLE : KAPITEL[Z.schritt];
   $("s-n").textContent=k.n; $("s-titel").textContent=k.titel;
@@ -1114,7 +1136,7 @@ function zeichneSzene(){
   }
   html+=k.bloecke.filter(b=>b.t==="weiter").map(b=>blockHTML(b,0)).join("");
   $("bloecke").innerHTML=html;
-  zeichneChancen();
+  zeichneStaerken();
   if(Z.imZwischenakt){
     $("kschritt").textContent="Zwischenakt";
     $("zurueck").disabled=false; $("vor").disabled=false;
@@ -1196,12 +1218,16 @@ function pruefeStory(){
     (k.chancen||[]).forEach((c,j)=>{
       if(!c.wer||!c.talent||!c.text||!c.folge) p.push(`Schritt ${i} Gelegenheit ${j}: Feld fehlt`);
       if(!GRUPPE_VORLAGE.some(g=>g.rolle===c.wer)) p.push(`Schritt ${i} Gelegenheit ${j}: unbekannte Figur ${c.wer}`);
+      else if(TALENTE[c.wer]!==c.talent) p.push(`Schritt ${i} Gelegenheit ${j}: ${c.wer} hat das Talent ${TALENTE[c.wer]}, nicht ${c.talent}`);
+      if(typeof c.cue!=="string" || c.cue.length<8) p.push(`Schritt ${i} Gelegenheit ${j}: ohne Ankündigung (cue)`);
+      else if(!k.bloecke.some(b=>(b.t==="vorlesen"||b.t==="sagen") && b.text.some(t=>t.includes(c.cue)))) p.push(`Schritt ${i} Gelegenheit ${j}: Ankündigung „${c.cue}“ steht in keinem gelben Text`);
       liste(c.nur).concat(liste(c.alle),liste(c.nicht)).forEach(f=>{ gelesen.add(f); if(!bekannt(f)) p.push(`Schritt ${i} Gelegenheit ${j}: unbekannte Flagge ${f}`); });
       if(c.gefahrVon!==undefined && !(c.gefahrVon>=0&&c.gefahrBis<=10&&c.gefahrVon<=c.gefahrBis)) p.push(`Schritt ${i} Gelegenheit ${j}: Gefahrenbereich ungültig`);
     });
     if(k.art==="ent" && (k.chancen||[]).length) p.push(`Schritt ${i}: Entscheidungsseite trägt Gelegenheiten — die gehören in Szenen`);
   });
-  (PATROUILLE.chancen||[]).forEach((c,j)=>{ if(!c.wer||!c.talent||!c.text||!c.folge) p.push(`Patrouille Gelegenheit ${j}: Feld fehlt`); });
+  (PATROUILLE.chancen||[]).forEach((c,j)=>{ if(!c.wer||!c.talent||!c.text||!c.folge||!c.cue) p.push(`Patrouille Gelegenheit ${j}: Feld fehlt`);
+    else if(!PATROUILLE.bloecke.some(b=>b.t==="vorlesen" && b.text.some(t=>t.includes(c.cue)))) p.push(`Patrouille Gelegenheit ${j}: Ankündigung fehlt im Text`); });
   Object.keys(ENTSCHEIDUNGEN).forEach(id=>{ if(!entIds.has(id)) p.push(`Entscheidung ${id} hat keinen Optionen-Block`); });
   PATROUILLE.bloecke.forEach(b=>{ if(b.t==="kampf") b.gegner.forEach(g=>{ if(!BESTIARIUM[g]) p.push(`Patrouille: unbekannter Gegner ${g}`); }); });
   if(PATROUILLE.bloecke.filter(b=>b.t==="ziel").length!==1 || PATROUILLE.bloecke.filter(b=>b.t==="weiter").length!==1) p.push("Patrouille: Ziel/Weiter fehlt");
@@ -1232,7 +1258,7 @@ document.addEventListener("keydown", e=>{
   const tag=(e.target&&e.target.tagName)||""; if(tag==="INPUT"||tag==="TEXTAREA"||e.altKey||e.ctrlKey||e.metaKey) return;
   if(e.key==="ArrowRight"){ $("vor").click(); e.preventDefault(); } else if(e.key==="ArrowLeft"){ $("zurueck").click(); e.preventDefault(); }
 });
-document.addEventListener("input", e=>{ if(e.target.dataset&&e.target.dataset.nm!==undefined){ Z.gruppe[+e.target.dataset.nm].name=e.target.value; sichern(); } });
+document.addEventListener("input", e=>{ if(e.target.dataset&&e.target.dataset.nm!==undefined){ Z.gruppe[+e.target.dataset.nm].name=e.target.value; zeichneStaerken(); sichern(); } });
 $("vor").onclick=()=>{ if(Z.imZwischenakt) patrouilleFertig(); else geheZu(Z.schritt+1); };
 $("zurueck").onclick=()=>{ if(Z.imZwischenakt){ Z.imZwischenakt=false; Z.zwischenaktZiel=null; zeichneSzene(); sichern(); } else geheZu(Z.schritt-1); };
 $("vollheilung").onclick=()=>{ Z.gruppe.forEach(h=>h.hp=h.max); notiere("<b>Alle auf volle Lebenspunkte</b>"); zeichneGruppe(); sichern(); };

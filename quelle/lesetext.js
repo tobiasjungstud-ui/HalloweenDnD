@@ -135,7 +135,7 @@ T.KAPITEL.forEach((k,i)=>{
   if(!schueler && (k.chancen||[]).length){
     kinder.push(...kasten([[...etikett("OPTIONAL · GELEGENHEITEN FÜR EINZELNE FIGUREN (NUR DM) — nur, falls ein Spieler von selbst darauf kommt","555555")],
       ...k.chancen.map(c=>[new TextRun({text:c.wer+" · "+c.talent+"  ",font:"Georgia",size:17,bold:true,color:"333333"}),
-        new TextRun({text:(bedingung(c)?bedingung(c).replace("▸ ","")+" — ":"")+c.text+"  → "+c.folge,font:"Georgia",size:17,color:"333333"})])],grau,"BFBFBF"));
+        new TextRun({text:(bedingung(c)?bedingung(c).replace("▸ ","")+" — ":"")+"vorgelesen: “"+c.cue+"” — "+c.text+"  → "+c.folge,font:"Georgia",size:17,color:"333333"})])],grau,"BFBFBF"));
   }
 });
 

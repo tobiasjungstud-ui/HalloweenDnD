@@ -92,13 +92,22 @@ fragt. Das Spiel kann nicht hängenbleiben.
 Gruppe sieht, wen sie ansprechen kann, was zu tun ist. Rechts, in der Karte der Figur und
 deutlich leiser, eine gestrichelte Zeile **Optional**: eine Gelegenheit für *diese* Figur —
 der Arcanist mit *Magic Hand*, der Blade mit *Strength*, die Lightbearer mit *Healing Touch*. Sie sind als Möglichkeit
-formuliert, nie als Lösung (*„Magic Hand könnte den Raben heben“*), und jede Szene funktioniert
-ohne sie: Wer den Küchenjungen heilt, bekommt sein Vertrauen und einen Satz mehr — wer es
-nicht tut, kommt trotzdem weiter. Die Spieler sollen selbst auf die Idee kommen; die Zeile
-sagt der Spielleitung nur, was sie zulassen kann. Aufgeklappt zeigt jede Gelegenheit ihre
-Folge. Der Prüfstand kontrolliert, dass keine auf einer Entscheidungsseite steht, nie mehr
-als drei zugleich sichtbar sind, keine an eine spätere Entscheidung hängt und jede auf
-mindestens einem Pfad erreichbar ist.
+formuliert, nie als Lösung, und jede Szene funktioniert ohne sie.
+
+Was die Schüler nicht hören, können sie nicht nutzen. Deshalb ist **jede Gelegenheit im
+gelben Vorlesetext angekündigt** — ein Satz, den die Spielleitung liest und dann wartet:
+Tam hält die verbrannte Hand an die Brust; Marek hat die rechte Hand verbunden; der kleinere
+Wolf hat ein Fangeisen am Bein; die zweite Tasse steht ausser Reichweite. Die Zeile rechts
+zeigt genau diesen Satz und, aufgeklappt, die Folge. Ob ein Spieler darauf eingeht, ist seine
+Sache: Wer den Küchenjungen heilt, bekommt sein Vertrauen und einen Satz mehr — wer es nicht
+tut, bekommt trotzdem Tams Frage. Und wer es verdirbt (Tam anlügt, Bellamy beleidigt), hat
+keinen Führer mehr und sucht den Spiegel selbst: ein Wurf, schlimmstenfalls Gefahr +1. Die
+Geschichte bleibt nie stehen.
+
+Der Prüfstand kontrolliert, dass jede Ankündigung auf jedem Pfad, auf dem die Gelegenheit
+gilt, wirklich im vorgelesenen Text steht, dass das Talent zur Figur passt, dass keine
+Gelegenheit auf einer Entscheidungsseite steht, nie mehr als drei zugleich sichtbar sind,
+keine an einer späteren Entscheidung hängt und jede auf mindestens einem Pfad erreichbar ist.
 
 **Der Abend passt sich an.** Erreicht das Gefahrenbarometer 8, lädt jeder Kampfknopf einen
 Gegner mehr, und die Konsole schiebt einmal einen Zwischenakt vor den nächsten Akt: eine

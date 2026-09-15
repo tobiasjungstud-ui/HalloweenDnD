@@ -95,17 +95,18 @@ function spiele(p, protokoll){
     pruefe(k.art!=="ent" || chancen.length===0, wo+": Gelegenheiten auf einer Entscheidungsseite");
     pruefe(chancen.length<=3, wo+`: ${chancen.length} Gelegenheiten sichtbar — mehr als drei lenken ab`);
     pruefe(chancen.length<=sichtbar.length, wo+": mehr Gelegenheiten als Szenenblöcke");
-    const leiste=T.Z().gruppe.map((_,n)=>el("ch"+n).innerHTML);
-    pruefe(leiste.join("").includes("Optional")===(chancen.length>0), wo+": Optional-Zeile rechts sichtbar/unsichtbar falsch");
-    pruefe(!text().includes('class="chance"'), wo+": Gelegenheiten stehen noch in der Hauptspalte");
-    chancen.forEach(c=>{ const n=T.Z().gruppe.findIndex(hh=>hh.rolle===c.wer);
-      pruefe(n>=0 && leiste[n].includes(c.talent) && leiste[n].includes(c.text), wo+": Gelegenheit steht nicht in der Karte von "+c.wer); });
-    T.Z().gruppe.forEach((hh,n)=>{ const fremd=chancen.filter(c=>c.wer!==hh.rolle && leiste[n].includes(c.text)).length;
-      pruefe(fremd===0, wo+": Karte von "+hh.rolle+" zeigt eine Gelegenheit einer anderen Figur"); });
-    for(const gruppe of [WEGE,TUEREN,WAHLEN,AUSGAENGE]){
-      const flags=new Set(); chancen.forEach(c=>T.liste(c.nur).concat(T.liste(c.alle)).forEach(f=>{ if(gruppe.includes(f)) flags.add(f); }));
-      pruefe(flags.size<=1, wo+": Gelegenheiten aus verschiedenen Zweigen gleichzeitig sichtbar: "+[...flags]);
-    }
+    const st=el("staerken").innerHTML;
+    pruefe(!text().includes('class="staerke'), wo+": Gelegenheiten stehen noch in der Hauptspalte");
+    pruefe(["Magic Hand","Strength","Healing Touch"].every(t=>st.includes(t)), wo+": Stärken-Abschnitt nennt nicht alle drei Talente");
+    chancen.forEach(c=>pruefe(st.includes(c.text) && st.includes(c.folge) && st.includes(c.cue), wo+": Gelegenheit fehlt rechts: "+c.wer+" · "+c.talent));
+    const gelb=sichtbar.filter(b=>b.t==="vorlesen"||b.t==="sagen").flatMap(b=>b.text);
+    chancen.forEach(c=>pruefe(gelb.some(t=>t.includes(c.cue)), wo+": Ankündigung „"+c.cue+"“ wird auf diesem Pfad nicht vorgelesen"));
+    const leerZeilen=(st.match(/staerke leer/g)||[]).length, belegt=new Set(chancen.map(c=>c.wer)).size;
+    pruefe(leerZeilen===3-belegt, wo+`: ${leerZeilen} leere Stärken-Zeilen bei ${belegt} belegten Figuren`);
+    for(const gruppe of [WEGE,TUEREN,WAHLEN,AUSGAENGE]) chancen.forEach(c=>{
+      const nur=T.liste(c.nur).filter(f=>gruppe.includes(f));
+      pruefe(nur.length===0 || nur.some(T.hat), wo+": Gelegenheit "+c.wer+" sichtbar, obwohl ihr Zweig ("+nur+") nicht gewählt ist");
+    });
     if(i===10){ const heilerin=chancen.some(c=>c.wer==="Lightbearer");
       pruefe(heilerin===(T.Z().gefahr>=4 && p.wahl!=="e3_buch"), wo+": Thrall-Gelegenheit widerspricht dem Thrall-Lader"); }
 
@@ -125,10 +126,13 @@ function spiele(p, protokoll){
       pruefe(sv.length===1, wo+`: ${sv.length} Übergangsblöcke sichtbar statt 1`);
       if(sv.length===1) pruefe(sv[0].von===T.ortAufloesen(k.ort), wo+": Übergangsblock beschreibt einen anderen Ort als den Eintrittsort"); }
     /* Ausschliesslichkeit je Entscheidungsgruppe */
-    for(const gruppe of [WEGE,TUEREN,WAHLEN,AUSGAENGE]){
-      const flags=new Set(); sichtbar.forEach(b=>T.liste(b.nur).concat(T.liste(b.alle)).forEach(f=>{ if(gruppe.includes(f)) flags.add(f); }));
-      pruefe(flags.size<=1, wo+": Blöcke aus verschiedenen Zweigen gleichzeitig sichtbar: "+[...flags]);
-    }
+    /* Ein sichtbarer Block, der an einen Zweig gebunden ist, muss den gewählten Zweig einschliessen
+       (nur: mindestens einer gesetzt; alle: jeder gesetzt). Ein Block darf für zwei Türen gelten. */
+    for(const gruppe of [WEGE,TUEREN,WAHLEN,AUSGAENGE]) sichtbar.forEach(b=>{
+      const nur=T.liste(b.nur).filter(f=>gruppe.includes(f)), alle=T.liste(b.alle).filter(f=>gruppe.includes(f));
+      pruefe(nur.length===0 || nur.some(T.hat), wo+": Block „"+(b.titel||b.t)+"“ sichtbar, obwohl sein Zweig ("+nur+") nicht gewählt ist");
+      pruefe(alle.every(T.hat), wo+": Block „"+(b.titel||b.t)+"“ sichtbar, obwohl nicht alle Flaggen gesetzt sind");
+    });
     /* Gefahrenbänder: genau eins */
     const baender=sichtbar.filter(b=>b.t==="wenn"&&b.gefahrVon!==undefined&&b.nur===undefined&&b.nicht===undefined);
     const alleBaender=k.bloecke.filter(b=>b.t==="wenn"&&b.gefahrVon!==undefined&&b.nur===undefined&&b.nicht===undefined);
