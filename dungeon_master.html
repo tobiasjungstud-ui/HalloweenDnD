@@ -383,7 +383,8 @@ const KAPITEL = [
  {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`<b>Gelb</b> heisst: wörtlich vorlesen — Erzähltext und die Sätze der Figuren stehen in einer Karte. <b>Grün</b> heisst: das sagst du den Schülern, ebenfalls wörtlich — es ist ihre Aufgabe. <b>Grau</b> heisst: nur für dich, und steht als Hintergrund oben. Ganz unten steht immer, <b>wann es weitergeht</b>.
  <p>Unter dem Titel jeder Seite steht die <b>Lage</b>: wo die Gruppe ist, was sie gewählt hat, was sie weiss. Auf der Seite steht immer nur, was zu diesem Weg gehört — das andere siehst du gar nicht erst. Und eine Entscheidung lässt sich erst anklicken, wenn die davor getroffen ist.</p>`},
  {t:"sagen", text:["You always have to speak English. If you don’t — who knows what consequences it might have… (evil laugh)","If you don’t know a word, ask me. In English. Nobody laughs."]},
- {t:"regie", titel:"Hintergrund zur Regel", text:"Du kannst den Grafen <b>deutschempfindlich</b> machen: Er hört jeden ganzen deutschen Satz, der am Tisch fällt — für ihn ein Geräusch im Haus. Folge: Er schickt einen Diener los, der die Gruppe sucht. Lade dafür rechts einen <b>Thrall</b> in den Kampf, oder lass ihn nur an der Tür vorbeigehen und die Gefahr um 1 steigen. Hier darfst du improvisieren — die Drohung wirkt meist schon allein."},
+ {t:"regie", titel:"Hintergrund zur Regel", text:`Du kannst den Grafen <b>deutschempfindlich</b> machen: Er hört jeden ganzen deutschen Satz, der am Tisch fällt — für ihn ein Geräusch im Haus. Folge: Die Gefahr steigt um 1 (Knopf rechts), oder er schickt einen Diener los — dafür einen <b>Thrall</b> in den Kampf laden. Hier darfst du improvisieren; die Drohung wirkt meist schon allein.
+ <p>Das Barometer hat drei Stufen. <b>Blau (0–3):</b> nichts passiert. <b>Orange (4–7):</b> du entscheidest selbst, ob du in einem Kampf einen Gegner hinzufügst — jeder Kampfblock bietet dir dafür einen Knopf an. <b>Rot (8–10):</b> Sobald die dritte Stufe erreicht ist, beginnt als Zwischenakt eine <b>Patrouille</b> (drei Wachen, ein Hund) vor dem nächsten Akt, und jeder Kampf bekommt von selbst einen Gegner mehr.</p>`},
  {t:"fa", titel:"Wenn etwas klemmt", paare:[
    ["Niemand sagt etwas","„Let’s go around. [Name], what does your character do?“ — reihum, jeder einmal."],
    ["Einer sagt nur ein Wort","„Give me two more sentences.“ Jede Figur soll pro Szene <b>mindestens zwei bis drei Sätze</b> sagen. Das ist die Messlatte."],
@@ -392,7 +393,8 @@ const KAPITEL = [
    ["Sie streiten über eine Entscheidung","„You have one minute. Then we vote.“"],
    ["Eine Figur fällt auf 0 Lebenspunkte","Sie ist bewusstlos, nicht tot. Auf ihrem Blatt erscheint <b>„Roll your fate“</b>: eine 20 macht sie stärker, eine 1 macht ihren Schaden unberechenbar, alles dazwischen gibt eine Narbe. Danach heilt sie der Lightbearer wie üblich."],
    ["Der DM will einfach einen Wurf","Jedes Blatt hat den Knopf <b>„Just roll a d20“</b>. Sag vorher, ab welcher Zahl es klappt — meistens 10."],
-   ["Die Gefahr erreicht 8","Das Haus ist wach: Ab jetzt lädt jeder Kampfknopf <b>einen Gegner mehr</b>, und die Seite schiebt <b>einmal</b> einen Zwischenakt vor den nächsten Akt — eine Patrouille, drei Wachen und ein Hund. Du musst nichts tun; oben in der Leiste erscheint „⚠ Zwischenakt“, und beim Weiterklicken kommt er von selbst. Sinkt die Gefahr vorher wieder unter 8, wird er abgeblasen."],
+   ["Die Gefahr wird orange (4–7)","Die Kämpfe bleiben, wie sie sind — aber jeder Kampfblock zeigt dir einen Knopf <b>„+1 … dazu — deine Entscheidung“</b>. Nimm ihn, wenn die Gruppe laut oder leichtsinnig war."],
+   ["Die Gefahr wird rot (8–10)","Das Haus ist wach: Ab jetzt lädt jeder Kampfknopf <b>einen Gegner mehr</b>, und die Seite schiebt <b>einmal</b> einen Zwischenakt vor den nächsten Akt — eine Patrouille, drei Wachen und ein Hund. Du musst nichts tun; oben in der Leiste erscheint „⚠ Zwischenakt“, und beim Weiterklicken kommt er von selbst. Sinkt die Gefahr vorher wieder unter 8, wird er abgeblasen."],
    ["Du hast dich verklickt","Jede Entscheidung lässt sich umwählen — die Seite nimmt Gefahr, Lebenspunkte und Wissen der alten Wahl selbst zurück."]]},
  {t:"regie", titel:"Ein Kampf in drei Handgriffen", text:`<b>1.</b> Der Spieler liest seinen gelben Satz vor: „I hit for 9 damage.“
  <p><b>2.</b> Du tippst die 9 in die Karte des Monsters und drückst <em>Schaden</em>.</p>
@@ -984,8 +986,9 @@ function blockHTML(b, idx){
     case "wenn": innen='<div class="wenn"><span class="tat">▸ das gilt bei euch</span><h4>'+b.titel+'</h4><p>'+b.text+'</p></div>'; break;
     case "kampf": innen='<div class="kampfblock"><span class="tat">Kampf</span><h4>'+b.titel+'</h4><p>'+b.text+'</p>'+
       b.gegner.map(k=>{const v=BESTIARIUM[k]; return '<div class="statblock"><b>'+v.name+'</b> — '+v.hp+' Lebenspunkte · '+v.att.map(a=>a.n+" "+a.d).join(", ")+'</div>';}).join("")+
-      (b.extra?'<div class="statblock" style="color:var(--blood-hi)">Bei Gefahr 8–10 kommt <b>+1 '+BESTIARIUM[b.extra].name+'</b> dazu'+(Z.gefahr>=8?" — jetzt der Fall":"")+'.</div>':'')+
+      (b.extra?'<div class="statblock" style="color:var(--blood-hi)">'+(Z.gefahr>=8?'Gefahr rot: <b>+1 '+BESTIARIUM[b.extra].name+'</b> kommt von selbst dazu.':Z.gefahr>=4?'Gefahr orange: <b>+1 '+BESTIARIUM[b.extra].name+'</b> ist deine Entscheidung — Knopf unten.':'Bei Gefahr 8–10 käme +1 '+BESTIARIUM[b.extra].name+' dazu; bei Orange nach deiner Wahl.')+'</div>':'')+
       '<button class="laden" data-laden="'+b.gegner.join(",")+'" data-extra="'+(b.extra||"")+'">In den Kampf laden</button>'+
+      (b.extra&&Z.gefahr>=4&&Z.gefahr<=7?'<div class="zufuegen"><button data-laden="'+b.extra+'">+1 '+BESTIARIUM[b.extra].name+' dazu — deine Entscheidung</button></div>':'')+
       (b.zusatz?'<div class="zufuegen">'+b.zusatz.map(k=>'<button data-laden="'+k+'">+ '+BESTIARIUM[k].name+'</button>').join("")+'</div>':'')+'</div>'; break;
     case "optionen": {
       const fehlt=voraussetzungFehlt(b.id);
