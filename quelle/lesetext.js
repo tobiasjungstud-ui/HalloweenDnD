@@ -13,7 +13,7 @@ const el=()=>({innerHTML:"",textContent:"",className:"",hidden:false,disabled:fa
 global.document={getElementById:el,addEventListener(){}}; global.window={scrollTo(){}}; global.confirm=()=>true; console.warn=()=>{};
 const html=fs.readFileSync(path.join(__dirname,"..","dungeon_master.html"),"utf8");
 vm.runInThisContext(/<script>([\s\S]*)<\/script>/.exec(html)[1]);
-vm.runInThisContext("globalThis.T={KAPITEL,ENTSCHEIDUNGEN,WISSEN,BESTIARIUM,liste}");
+vm.runInThisContext("globalThis.T={KAPITEL:KAPITEL.concat([PATROUILLE]),ENTSCHEIDUNGEN,WISSEN,BESTIARIUM,liste}");
 
 const schueler=process.argv.includes("--schueler");
 

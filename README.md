@@ -84,6 +84,12 @@ Jeder Hinweis, den die Gruppe finden kann, ist an einen Satz gebunden, den eine 
 wirklich ausspricht — und jede Person trägt eine Zeile **„Notfalls“**, falls niemand danach
 fragt. Das Spiel kann nicht hängenbleiben.
 
+**Der Abend passt sich an.** Erreicht das Gefahrenbarometer 8, lädt jeder Kampfknopf einen
+Gegner mehr, und die Konsole schiebt einmal einen Zwischenakt vor den nächsten Akt: eine
+Patrouille aus drei Wachen und einem Wachhund — gerade noch zu schaffen, mit Rückzugsregel.
+Sinkt die Gefahr vorher wieder unter 8, wird die Patrouille abgeblasen. Die Spielleitung muss
+dafür nichts tun; der Prüfstand testet beides auf allen Pfaden.
+
 ## Die Spielerblätter ändern
 
 Die drei Blätter werden aus einer gemeinsamen Vorlage erzeugt, damit sie nicht auseinanderlaufen:

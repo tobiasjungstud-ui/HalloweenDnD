@@ -21,8 +21,9 @@ const warnungen = []; const echtWarn = console.warn; console.warn = (...a)=>warn
 const html = fs.readFileSync(path.join(__dirname, "..", "dungeon_master.html"), "utf8");
 const js = /<script>([\s\S]*)<\/script>/.exec(html)[1];
 vm.runInThisContext(js, {filename:"dungeon_master.html"});
-vm.runInThisContext(`globalThis.T = { Z:()=>Z, setZ:z=>{Z=z;}, KAPITEL, ENTSCHEIDUNGEN, WISSEN, BESTIARIUM, ORT,
-  frischerZustand, waehle, setzeWissen, tunAusfuehren, geheZu, gilt, hat, ortAufloesen, sichtbareBloecke, pruefeStory, finaleLaden, liste, alles }`);
+vm.runInThisContext(`globalThis.T = { Z:()=>Z, setZ:z=>{Z=z;}, KAPITEL, ENTSCHEIDUNGEN, WISSEN, BESTIARIUM, ORT, PATROUILLE,
+  frischerZustand, waehle, setzeWissen, tunAusfuehren, geheZu, gilt, hat, ortAufloesen, sichtbareBloecke, pruefeStory, finaleLaden, liste, alles,
+  ladeKampf, patrouilleFertig, setzeGefahr }`);
 console.warn = echtWarn;
 
 /* ---------- Hilfen ---------- */
@@ -59,7 +60,7 @@ function erwarteteGefahr(p){
 function spiele(p, protokoll){
   frisch();
   const Z=T.Z();
-  const spur=[];
+  const spur=[]; let patrouilleErlebt=false;
   for(let i=0;i<K.length;i++){
     T.geheZu(i);
     const k=K[i];
@@ -74,6 +75,15 @@ function spiele(p, protokoll){
     if(i===9) T.waehle("e3", optIdx("e3",p.wahl));
     if(i===10){ if(p.scheitert) T.tunAusfuehren("pakt_scheitert"); T.tunAusfuehren("finale_laden"); T.waehle("e4", optIdx("e4",p.ausgang)); }
     T.geheZu(i); /* neu zeichnen nach Handlungen */
+    if(T.Z().imZwischenakt){
+      const Zp=T.Z(), wo0=`Pfad ${JSON.stringify(p)} Schritt ${i}`;
+      pruefe(Zp.gefahr>=8 && Zp.patrouille.status==="steht_bevor" && Zp.patrouille.vor<=i, wo0+": Zwischenakt ohne Grund");
+      pruefe(text().includes("The Patrol")||text().includes("Boots."), wo0+": Zwischenakt zeigt nicht die Patrouille");
+      const vorher=Zp.gegner.length; T.ladeKampf(["wache","wache","wache","hund"], null);
+      pruefe(Zp.gegner.filter(g=>g.k==="wache").length>=3 && Zp.gegner.some(g=>g.k==="hund"), wo0+": Patrouille lädt nicht 3 Wachen + Hund");
+      T.patrouilleFertig(); patrouilleErlebt=true;
+      pruefe(!T.Z().imZwischenakt && T.Z().patrouille.status==="erledigt" && T.Z().schritt===i, wo0+": nach der Patrouille nicht am Ziel");
+    }
     const sichtbar=T.sichtbareBloecke(k);
     sichtbar.forEach(b=>{ const j=k.bloecke.indexOf(b); gesehen.set(i+"/"+j, gesehen.get(i+"/"+j)+1); });
     const wo=`Pfad ${JSON.stringify(p)} Schritt ${i} (${k.titel})`;
@@ -108,6 +118,8 @@ function spiele(p, protokoll){
   }
   /* Endzustand */
   const Zend=T.Z(), wo=`Pfad ${JSON.stringify(p)}`;
+  const gefahrNachE3 = Math.min(10, GEFAHR[p.weg]+(p.wache?1:0)+(p.tuer==="kapelle"&&p.anneke?1:GEFAHR[p.tuer])+GEFAHR[p.wahl]);
+  pruefe(patrouilleErlebt===(gefahrNachE3>=8), wo+`: Patrouille ${patrouilleErlebt?"kam":"kam nicht"}, Gefahr nach E3 war ${gefahrNachE3}`);
   pruefe(Zend.gefahr===erwarteteGefahr(p), wo+`: Gefahr ${Zend.gefahr}, erwartet ${erwarteteGefahr(p)}`);
   const hpSoll = p.weg==="weg_b" ? T.KAPITEL && [16,28,22] : [18,30,24];
   pruefe(Zend.gruppe.map(h=>h.hp).join()===hpSoll.join(), wo+`: HP ${Zend.gruppe.map(h=>h.hp)} statt ${hpSoll}`);
@@ -179,6 +191,28 @@ frisch(); T.waehle("e1",optIdx("e1","weg_b")); T.tunAusfuehren("keller_kampf");
 pruefe(T.Z().gefahr===1 && T.Z().gegner.length===1, "keller_kampf lädt nicht richtig");
 T.waehle("e1",optIdx("e1","weg_c"));
 pruefe(T.Z().gefahr===4 && T.Z().gegner.length===0 && !T.Z().getan.keller_kampf, "Umwahl B→C nahm die Wache nicht zurück: "+JSON.stringify({g:T.Z().gefahr,n:T.Z().gegner.length}));
+
+/* ---------- 6b · Patrouille und Verstärkung ---------- */
+frisch(); T.geheZu(5); T.setzeGefahr(8,"Test");
+pruefe(T.Z().patrouille.status==="steht_bevor" && T.Z().patrouille.vor===7, "Patrouille nicht vor dem nächsten Akt (7) angesetzt: "+JSON.stringify(T.Z().patrouille));
+T.geheZu(6); pruefe(!T.Z().imZwischenakt && T.Z().schritt===6, "Zwischenakt kam vor der Entscheidung statt vor dem Akt");
+T.geheZu(7); pruefe(T.Z().imZwischenakt && T.Z().schritt===6, "Zwischenakt kam nicht vor Schritt 7");
+pruefe(text().includes("hinweisfehlt")===false, "Zwischenakt zeigt einen Vorentscheidungs-Hinweis");
+el("zurueck").onclick(); pruefe(!T.Z().imZwischenakt && T.Z().schritt===6 && T.Z().patrouille.status==="steht_bevor", "Zurück aus dem Zwischenakt verliert die Patrouille");
+T.geheZu(7); el("vor").onclick(); pruefe(T.Z().schritt===7 && T.Z().patrouille.status==="erledigt" && !T.Z().imZwischenakt, "Weiter aus dem Zwischenakt landet nicht in Schritt 7");
+T.geheZu(8); pruefe(!T.Z().imZwischenakt, "Patrouille kam ein zweites Mal");
+T.setzeGefahr(2,"Test"); pruefe(T.Z().patrouille.status==="erledigt", "Erledigte Patrouille wurde neu angesetzt");
+frisch(); T.geheZu(5); T.setzeGefahr(8,"Test"); T.setzeGefahr(-1,"Test");
+pruefe(T.Z().patrouille.status==="keine", "Patrouille nicht abgeblasen, als Gefahr unter 8 fiel");
+T.geheZu(7); pruefe(!T.Z().imZwischenakt, "abgeblasene Patrouille kam trotzdem");
+frisch(); T.geheZu(10); T.setzeGefahr(9,"Test"); pruefe(T.Z().patrouille.status==="keine", "Patrouille im Finale angesetzt (vor dem Epilog)");
+frisch(); T.setzeGefahr(8,"Test"); const gel=T.ladeKampf(["wolf","wolf"],"wolf");
+pruefe(T.Z().gegner.filter(g=>g.k==="wolf").length===3 && gel.length===3, "Verstärkung bei Gefahr 8 fehlt (Wölfe)");
+frisch(); T.setzeGefahr(7,"Test"); T.ladeKampf(["wolf","wolf"],"wolf");
+pruefe(T.Z().gegner.length===2, "Verstärkung kam schon bei Gefahr 7");
+frisch(); T.setzeGefahr(8,"Test"); T.waehle("e1",optIdx("e1","weg_b")); T.tunAusfuehren("keller_kampf");
+pruefe(T.Z().gegner.filter(g=>g.k==="wache").length===2, "Kellerwache ohne Verstärkung bei Gefahr 8: "+T.Z().gegner.length);
+T.waehle("e1",optIdx("e1","weg_c")); pruefe(T.Z().gegner.length===0, "Umwahl nahm die verstärkte Wache nicht mit zurück: "+T.Z().gegner.length);
 
 /* ---------- 7 · Neue Runde ---------- */
 frisch(); T.waehle("e1",0); T.setzeWissen("anneke",true); T.Z().gruppe[0].name="Vesper";

@@ -350,6 +350,7 @@ const BESTIARIUM = {
   anneke: {name:"Anneke",       hp:22, att:[{n:"Claws", d:"1d6+3"}]},
   thrall: {name:"Thrall",       hp:9,  att:[{n:"Grab",  d:"1d4+1"}]},
   wache:  {name:"Gate Guard",   hp:9,  att:[{n:"Club",  d:"1d6+1"}]},
+  hund:   {name:"Guard Hound",  hp:14, att:[{n:"Bite",  d:"1d6+2"}]},
   vaskir: {name:"Count Vaskir", hp:55, att:[{n:"Claws", d:"2d6+2"},{n:"Bite", d:"1d8+3"}]}
 };
 
@@ -391,6 +392,7 @@ const KAPITEL = [
    ["Sie streiten über eine Entscheidung","„You have one minute. Then we vote.“"],
    ["Eine Figur fällt auf 0 Lebenspunkte","Sie ist bewusstlos, nicht tot. Auf ihrem Blatt erscheint <b>„Roll your fate“</b>: eine 20 macht sie stärker, eine 1 macht ihren Schaden unberechenbar, alles dazwischen gibt eine Narbe. Danach heilt sie der Lightbearer wie üblich."],
    ["Der DM will einfach einen Wurf","Jedes Blatt hat den Knopf <b>„Just roll a d20“</b>. Sag vorher, ab welcher Zahl es klappt — meistens 10."],
+   ["Die Gefahr erreicht 8","Das Haus ist wach: Ab jetzt lädt jeder Kampfknopf <b>einen Gegner mehr</b>, und die Seite schiebt <b>einmal</b> einen Zwischenakt vor den nächsten Akt — eine Patrouille, drei Wachen und ein Hund. Du musst nichts tun; oben in der Leiste erscheint „⚠ Zwischenakt“, und beim Weiterklicken kommt er von selbst. Sinkt die Gefahr vorher wieder unter 8, wird er abgeblasen."],
    ["Du hast dich verklickt","Jede Entscheidung lässt sich umwählen — die Seite nimmt Gefahr, Lebenspunkte und Wissen der alten Wahl selbst zurück."]]},
  {t:"regie", titel:"Ein Kampf in drei Handgriffen", text:`<b>1.</b> Der Spieler liest seinen gelben Satz vor: „I hit for 9 damage.“
  <p><b>2.</b> Du tippst die 9 in die Karte des Monsters und drückst <em>Schaden</em>.</p>
@@ -494,13 +496,13 @@ const KAPITEL = [
  {t:"vorlesen", nur:"weg_a", titel:"Der Wald und der Galgen", text:[
   `You leave the tavern by the back door. The road climbs through the forest, and the fog is so thick that you walk into the gallows before you see it. The wood is grey and the rope is long gone.`,
   `Two wolves the size of ponies are sitting underneath it, side by side, watching you come. They are not barking. They are waiting for you to get closer.`]},
- {t:"kampf", nur:"weg_a", titel:"The wolves", text:"Zwei Wölfe, je 14 Lebenspunkte.", gegner:["wolf","wolf"]},
+ {t:"kampf", nur:"weg_a", titel:"The wolves", text:"Zwei Wölfe, je 14 Lebenspunkte.", gegner:["wolf","wolf"], extra:"wolf"},
  {t:"vorlesen", nur:"weg_a", titel:"Der Sumpf", text:[
   `Above the gallows the road simply stops. In front of you: black water, white mist, and a path that is only there if you find it. Every step, the ground pulls at your boots.`]},
  {t:"aufgabe", nur:"weg_a", sag:"Three steps each through the black water — roll a d20 for every step. Under ten, the bog has your boot: minus one hit point. And shout, or nobody will hear you sink.", hinweis:"Schaden rechts eintragen.", blatt:"Helfer-Blatt · Teil 4"},
  {t:"vorlesen", nur:"weg_a", titel:"Die Wachen am Tor", text:[
   `On the far side of the bog the gate of Nachtfels stands open. Two men in old grey livery stand beside it with lamps. They do not move. They do not talk. They are looking at the fog.`]},
- {t:"tun", id:"tor_kampf", nur:"weg_a", text:"Das Anschleichen ist misslungen — die beiden Wachen haben sie gesehen.", knopf:{art:"laden", gegner:["wache","wache"], gefahr:1}, beschriftung:"Kampf mit zwei Wachen, Gefahr +1"},
+ {t:"tun", id:"tor_kampf", nur:"weg_a", text:"Das Anschleichen ist misslungen — die beiden Wachen haben sie gesehen.", knopf:{art:"laden", gegner:["wache","wache"], gefahr:1, extra:"wache"}, beschriftung:"Kampf mit zwei Wachen, Gefahr +1"},
  {t:"vorlesen", nur:"weg_a", titel:"Im Hof", text:[
   `Past the guards, through the gate that nobody ever closed — and you are standing in a square courtyard of black stone.`]},
 
@@ -515,7 +517,7 @@ const KAPITEL = [
   `At the top of the stair stands a man with a lamp. He has heard the door. He comes down, slowly, and holds the lamp up to your faces.`]},
  {t:"sagen", nur:"weg_b", text:["Nobody comes in through the cellar. Who are you, and who let you in?"]},
  {t:"aufgabe", nur:"weg_b", sag:"He wants an answer, and he wants it now. Guests — say it like you mean it, one sentence each, and give him a reason. No weapons, no dice. Just talk.", hinweis:"Jeder ein ganzer Satz, keine Drohung → er glaubt ihnen. Sonst der Knopf unten.", blatt:"Helfer-Blatt · Teil 4"},
- {t:"tun", id:"keller_kampf", nur:"weg_b", text:"Die Wache glaubt ihnen nicht.", knopf:{art:"laden", gegner:["wache"], gefahr:1}, beschriftung:"Kampf mit der Wache, Gefahr +1"},
+ {t:"tun", id:"keller_kampf", nur:"weg_b", text:"Die Wache glaubt ihnen nicht.", knopf:{art:"laden", gegner:["wache"], gefahr:1, extra:"wache"}, beschriftung:"Kampf mit der Wache, Gefahr +1"},
  {t:"vorlesen", nur:"weg_b", titel:"Hinauf in den Hof", text:[
   `Up the cellar stair, through a low door — and you are standing in a square courtyard of black stone, with the night sky above you for the first time in five hours.`]},
 
@@ -589,7 +591,7 @@ const KAPITEL = [
  {t:"vorlesen", nur:"kapelle", titel:"Die Kapelle", text:[
   `You cross the courtyard and step through the broken door. Candles, hundreds of them, all burnt down to nothing. The saint above the altar has no face left.`,
   `Something sits up in the stone font. It is a girl of about nineteen, in a dress that was white twenty years ago. She looks at you without any anger at all, and that is worse.`]},
- {t:"kampf", nur:"kapelle", nicht:"anneke", titel:"Anneke", text:"22 Lebenspunkte. Sie kämpft ohne Wut, was schlimmer ist.", gegner:["anneke"]},
+ {t:"kampf", nur:"kapelle", nicht:"anneke", titel:"Anneke", text:"22 Lebenspunkte. Sie kämpft ohne Wut, was schlimmer ist.", gegner:["anneke"], extra:"thrall"},
  {t:"wenn", nur:"kapelle", alle:["anneke"], titel:"Sie kennen ihren Namen — kein Kampf", text:`Ruft jemand <b>„Anneke!“</b>, hält sie mitten in der Bewegung an und setzt sich zurück ins Becken. Dann fragt sie: „Is Greta still alive?“
  <p>Sie erzählt, was vor zwanzig Jahren geschah, und zeigt der Gruppe die Treppe hinter dem Altar. Die Gefahr ist dafür schon richtig eingetragen — +1 statt +2. Sag laut, woran das lag: <em>„Because you listened to the old man in the tavern, this fight never happens.“</em></p>`},
  {t:"vorlesen", nur:"kapelle", titel:"Der Weg zur Spiegeltür", text:[
@@ -708,7 +710,8 @@ const SCHLUESSEL = "nachtfels.dm.v5";
 function frischerZustand(namen){
   return { schritt:0, gefahr:0,
     gruppe:GRUPPE_VORLAGE.map((g,i)=>({name:(namen&&namen[i])||"", rolle:g.rolle, hp:g.max, max:g.max})),
-    wissen:{}, flaggen:{}, gewaehlt:{}, getan:{}, abgehakt:{}, gegner:[], chronik:[], besucht:{0:true} };
+    wissen:{}, flaggen:{}, gewaehlt:{}, getan:{}, abgehakt:{}, gegner:[], chronik:[], besucht:{0:true},
+    patrouille:{status:"keine", vor:null}, imZwischenakt:false, zwischenaktZiel:null };
 }
 let Z = frischerZustand();
 function laden(){ try{ const r=localStorage.getItem(SCHLUESSEL); if(r){const g=JSON.parse(r); if(g&&typeof g==="object") Z=Object.assign(frischerZustand(),g);} }catch(e){} }
@@ -750,10 +753,11 @@ function ortAufloesen(spec){
 /* ---- Gefahr ---- */
 const STUFEN=[{bis:3,name:"Der Nebel deckt euch",folge:"Niemand im Schloss weiss, dass ihr da seid."},
               {bis:7,name:"Das Haus horcht",folge:"Man hat euch gehört, aber nicht gefunden. Türen sind verriegelt."},
-              {bis:10,name:"Sie wissen, dass ihr hier seid",folge:"Jede Lampe brennt. Der Graf hat aufgehört zu warten."}];
+              {bis:10,name:"Sie wissen, dass ihr hier seid",folge:"Jede Lampe brennt. Jeder Kampf bekommt einen Gegner mehr, und vor dem nächsten Akt stellt euch eine Patrouille."}];
 function setzeGefahr(d, grund){
   const alt=Z.gefahr; Z.gefahr=Math.max(0,Math.min(10,Z.gefahr+d));
   if(Z.gefahr!==alt) notiere("Gefahr "+(Z.gefahr>alt?"+":"")+(Z.gefahr-alt)+" → <b>"+Z.gefahr+"</b>"+(grund?" · "+grund:""));
+  pruefePatrouille();
   zeichneBaro(); sichern();
   return Z.gefahr-alt;   /* tatsächlich angewandte Differenz (Deckel bei 0 und 10) */
 }
@@ -790,6 +794,36 @@ function ladeGegner(k, hp){
   Z.gegner.push({k, name:v.name, hp:hp||v.hp, max:hp||v.hp});
   notiere("<b>"+v.name+"</b> im Kampf ("+(hp||v.hp)+" HP)");
   zeichneGegner(); sichern();
+}
+/* Verstärkung: bei Gefahr 8–10 kommt zu jedem Kampf ein Gegner dazu */
+function ladeKampf(gegner, extra){
+  gegner.forEach(k=>ladeGegner(k));
+  if(extra && Z.gefahr>=8){ ladeGegner(extra); notiere("<b>Verstärkung</b> — Gefahr "+Z.gefahr+": +1 "+BESTIARIUM[extra].name); return gegner.concat([extra]); }
+  return gegner.slice();
+}
+
+/* ---- Zwischenakt: die Patrouille ---- */
+const PATROUILLE = {n:"Zwischenakt", titel:"The Patrol", art:"kampf", bloecke:[
+ {t:"ziel", text:"Das Haus hat genug gehört. Eine Patrouille stellt die Gruppe — drei Wachen und ein Hund. Zu schaffen, aber es kostet.", zeit:"15 Min."},
+ {t:"regie", titel:"Hintergrund", text:"Dieser Zwischenakt kommt nur, wenn das Barometer <b>8 oder mehr</b> erreicht — einmal pro Abend, vor dem nächsten Akt. Drei Wachen (je 9 HP) und ein Wachhund (14 HP): zusammen 41 Lebenspunkte gegen eure 72. <b>Gerade noch zu schaffen:</b> Ist der Hund gefallen und stehen die Wachen bei der Hälfte, ziehen sie sich zurück — „They don’t want to die for him.“ Lass den Lightbearer heilen, und wer die Wachen anspricht, bekommt eine Antwort. Danach geht die Geschichte weiter, wo sie war."},
+ {t:"vorlesen", titel:"Schritte", text:[
+  `Boots. Somewhere close, and getting closer — three pairs, in step. A lamp swings round the corner, and behind it comes something on a chain that is too big to be a dog and too quiet to be a wolf.`,
+  `The man with the lamp does not ask who you are. He already knows. “There you are,” he says — and lets go of the chain.`]},
+ {t:"aufgabe", sag:"No talking your way out of this one. But talk to each other: who takes the hound? Who covers the healer?", blatt:"Helfer-Blatt · Teil 8"},
+ {t:"kampf", titel:"The patrol", text:"Drei Wachen und der Hund — der Knopf lädt alle vier.", gegner:["wache","wache","wache","hund"]},
+ {t:"weiter", text:"Wenn die Patrouille gefallen ist oder sich zurückgezogen hat — dann „Zurück zur Geschichte“."}]};
+function naechsterAkt(){ for(let i=Z.schritt+1;i<KAPITEL.length;i++) if(KAPITEL[i].art!=="ent") return i; return null; }
+function pruefePatrouille(){
+  const p=Z.patrouille; if(!p || p.status==="erledigt") return;
+  if(Z.gefahr>=8 && p.status==="keine"){
+    const v=naechsterAkt();
+    if(v!==null && v<=10){ p.status="steht_bevor"; p.vor=v; notiere("<b>Patrouille</b> steht bevor — vor „"+KAPITEL[v].titel+"“"); }
+  } else if(Z.gefahr<8 && p.status==="steht_bevor"){ p.status="keine"; p.vor=null; notiere("Patrouille abgeblasen — Gefahr wieder unter 8"); }
+}
+function patrouilleFertig(){
+  Z.patrouille.status="erledigt"; Z.imZwischenakt=false;
+  notiere("<b>Patrouille</b> überstanden");
+  const ziel=Z.zwischenaktZiel; Z.zwischenaktZiel=null; geheZu(ziel);
 }
 function finaleLaden(){
   Z.gegner=[];
@@ -853,7 +887,7 @@ function tunAusfuehren(id){
   if(Z.getan[id]) return;
   if(kn.art==="gefahr"){ const d=setzeGefahr(kn.v, b.beschriftung); Z.getan[id]={art:"gefahr", v:d}; }
   if(kn.art==="schaden"){ Z.gruppe.forEach((h,i)=>aendereHP(i,-kn.v,"schlechte Luft")); Z.getan[id]={art:"schaden", v:kn.v}; }
-  if(kn.art==="laden"){ kn.gegner.forEach(g=>ladeGegner(g)); const d=kn.gefahr?setzeGefahr(kn.gefahr, b.beschriftung):0; Z.getan[id]={art:"laden", gegner:kn.gegner, v:d}; }
+  if(kn.art==="laden"){ const geladen=ladeKampf(kn.gegner, kn.extra||null); const d=kn.gefahr?setzeGefahr(kn.gefahr, b.beschriftung):0; Z.getan[id]={art:"laden", gegner:geladen, v:d}; }
   zeichneSzene(); sichern();
 }
 function tunZurueck(id){
@@ -908,6 +942,8 @@ function lage(){
   });
   const wiss=WISSEN.filter(e=>Z.wissen[e.k]).map(e=>e.txt);
   teile.push('<span>Wissen: <b>'+(wiss.length?wiss.join(", "):"noch nichts")+'</b></span>');
+  if(Z.patrouille.status==="steht_bevor") teile.push('<span class="warn">⚠ Patrouille vor „'+KAPITEL[Z.patrouille.vor].titel+'“</span>');
+  if(Z.gefahr>=8) teile.push('<span class="warn">Gefahr 8+: jeder Kampf +1 Gegner</span>');
   const fehlt=k.braucht && entscheidungOffen(k.braucht) ? k.braucht : null;
   if(fehlt) teile.push('<span class="warn">⚠ '+ENTSCHEIDUNGEN[fehlt].name+' noch nicht gewählt</span>');
   return teile.join("");
@@ -948,7 +984,8 @@ function blockHTML(b, idx){
     case "wenn": innen='<div class="wenn"><span class="tat">▸ das gilt bei euch</span><h4>'+b.titel+'</h4><p>'+b.text+'</p></div>'; break;
     case "kampf": innen='<div class="kampfblock"><span class="tat">Kampf</span><h4>'+b.titel+'</h4><p>'+b.text+'</p>'+
       b.gegner.map(k=>{const v=BESTIARIUM[k]; return '<div class="statblock"><b>'+v.name+'</b> — '+v.hp+' Lebenspunkte · '+v.att.map(a=>a.n+" "+a.d).join(", ")+'</div>';}).join("")+
-      '<button class="laden" data-laden="'+b.gegner.join(",")+'">In den Kampf laden</button>'+
+      (b.extra?'<div class="statblock" style="color:var(--blood-hi)">Bei Gefahr 8–10 kommt <b>+1 '+BESTIARIUM[b.extra].name+'</b> dazu'+(Z.gefahr>=8?" — jetzt der Fall":"")+'.</div>':'')+
+      '<button class="laden" data-laden="'+b.gegner.join(",")+'" data-extra="'+(b.extra||"")+'">In den Kampf laden</button>'+
       (b.zusatz?'<div class="zufuegen">'+b.zusatz.map(k=>'<button data-laden="'+k+'">+ '+BESTIARIUM[k].name+'</button>').join("")+'</div>':'')+'</div>'; break;
     case "optionen": {
       const fehlt=voraussetzungFehlt(b.id);
@@ -985,7 +1022,7 @@ function sichtbareBloecke(k){
   return k.bloecke.filter(b=>b.t!=="ziel"&&b.t!=="weiter"&&gilt(b));
 }
 function zeichneSzene(){
-  const k=KAPITEL[Z.schritt];
+  const k = Z.imZwischenakt ? PATROUILLE : KAPITEL[Z.schritt];
   $("s-n").textContent=k.n; $("s-titel").textContent=k.titel;
   $("lage").innerHTML=lage();
   let html=k.bloecke.filter(b=>b.t==="ziel").map(b=>blockHTML(b,0)).join("");
@@ -996,20 +1033,34 @@ function zeichneSzene(){
   }
   html+=k.bloecke.filter(b=>b.t==="weiter").map(b=>blockHTML(b,0)).join("");
   $("bloecke").innerHTML=html;
-  $("kschritt").textContent="Schritt "+(Z.schritt+1)+"/"+KAPITEL.length;
-  $("zurueck").disabled=Z.schritt===0; $("vor").disabled=Z.schritt===KAPITEL.length-1;
-  $("zurueck-t").textContent=Z.schritt>0?KAPITEL[Z.schritt-1].titel:"—";
-  $("vor-t").textContent=Z.schritt<KAPITEL.length-1?KAPITEL[Z.schritt+1].titel:"Ende";
+  if(Z.imZwischenakt){
+    $("kschritt").textContent="Zwischenakt";
+    $("zurueck").disabled=false; $("vor").disabled=false;
+    $("zurueck-t").textContent="Zurück zu "+KAPITEL[Z.schritt].titel;
+    $("vor-t").textContent="Patrouille überstanden → "+KAPITEL[Z.zwischenaktZiel].titel;
+  } else {
+    $("kschritt").textContent="Schritt "+(Z.schritt+1)+"/"+KAPITEL.length;
+    $("zurueck").disabled=Z.schritt===0; $("vor").disabled=Z.schritt===KAPITEL.length-1;
+    $("zurueck-t").textContent=Z.schritt>0?KAPITEL[Z.schritt-1].titel:"—";
+    $("vor-t").textContent=Z.schritt<KAPITEL.length-1?KAPITEL[Z.schritt+1].titel:"Ende";
+  }
   zeichnePfad();
 }
 function zeichnePfad(){
-  $("pfad").innerHTML=KAPITEL.map((k,i)=>
-   '<button class="'+(i===Z.schritt?"jetzt ":"")+(Z.besucht[i]&&i!==Z.schritt?"getan ":"")+(k.art==="ent"?"ent ":"")+(k.art==="kampf"?"kampf ":"")+'" data-schritt="'+i+'">'+
+  const chip=(i)=> (Z.patrouille.status==="steht_bevor" && Z.patrouille.vor===i)
+    ? '<button class="kampf '+(Z.imZwischenakt?"jetzt":"")+'" data-schritt="'+i+'" style="border-left:2px solid var(--blood)"><span class="n">⚠ Zwischenakt</span>Die Patrouille</button>' : "";
+  $("pfad").innerHTML=KAPITEL.map((k,i)=>chip(i)+
+   '<button class="'+(i===Z.schritt&&!Z.imZwischenakt?"jetzt ":"")+(Z.besucht[i]&&i!==Z.schritt?"getan ":"")+(k.art==="ent"?"ent ":"")+(k.art==="kampf"?"kampf ":"")+'" data-schritt="'+i+'">'+
    '<span class="n">'+(k.art==="ent"?"◆ ":"")+(k.art==="kampf"?"⚔ ":"")+k.n+'</span>'+k.titel+'</button>').join("");
   const j=$("pfad").querySelector(".jetzt"); if(j&&j.scrollIntoView) j.scrollIntoView({block:"nearest",inline:"center"});
 }
 function geheZu(i){
-  Z.schritt=Math.max(0,Math.min(KAPITEL.length-1,i)); Z.besucht[Z.schritt]=true;
+  i=Math.max(0,Math.min(KAPITEL.length-1,i));
+  if(Z.patrouille.status==="steht_bevor" && i>=Z.patrouille.vor && i>Z.schritt){
+    Z.imZwischenakt=true; Z.zwischenaktZiel=i; zeichneSzene(); sichern(); if(window.scrollTo) window.scrollTo({top:0,behavior:"smooth"}); return;
+  }
+  Z.imZwischenakt=false; Z.zwischenaktZiel=null;
+  Z.schritt=i; Z.besucht[Z.schritt]=true;
   zeichneSzene(); sichern(); if(window.scrollTo) window.scrollTo({top:0,behavior:"smooth"});
 }
 
@@ -1043,7 +1094,8 @@ function pruefeStory(){
         if(b.knopf.art==="wissen"){ const e=WISSEN.find(x=>x.k===b.knopf.k); if(e.braucht && !liste(b.nur).includes(e.braucht)) p.push(`tun ${b.id}: Wissen ${e.k} braucht ${e.braucht}, Knopf ist nicht darauf beschränkt`); }
       }
       if(b.t==="aufgabe" && !b.sag) p.push(`Schritt ${i} Block ${j}: Aufgabe ohne wörtliche Rede (sag)`);
-      if(b.t==="kampf") b.gegner.concat(liste(b.zusatz)).forEach(g=>{ if(!BESTIARIUM[g]) p.push(`Schritt ${i}: unbekannter Gegner ${g}`); });
+      if(b.t==="kampf") b.gegner.concat(liste(b.zusatz),liste(b.extra)).forEach(g=>{ if(!BESTIARIUM[g]) p.push(`Schritt ${i}: unbekannter Gegner ${g}`); });
+      if(b.t==="tun" && b.knopf.extra && !BESTIARIUM[b.knopf.extra]) p.push(`tun ${b.id}: unbekannte Verstärkung ${b.knopf.extra}`);
       if(b.t==="optionen"){
         if(!ENTSCHEIDUNGEN[b.id]) p.push(`Optionen ${b.id}: nicht in ENTSCHEIDUNGEN`);
         else {
@@ -1061,6 +1113,8 @@ function pruefeStory(){
     if(k.braucht){ const idx=KAPITEL.findIndex(kk=>kk.bloecke.some(bb=>bb.t==="optionen"&&bb.id===k.braucht)); if(idx<0||idx>i) p.push(`Schritt ${i}: braucht ${k.braucht}, die erst später gewählt wird`); }
   });
   Object.keys(ENTSCHEIDUNGEN).forEach(id=>{ if(!entIds.has(id)) p.push(`Entscheidung ${id} hat keinen Optionen-Block`); });
+  PATROUILLE.bloecke.forEach(b=>{ if(b.t==="kampf") b.gegner.forEach(g=>{ if(!BESTIARIUM[g]) p.push(`Patrouille: unbekannter Gegner ${g}`); }); });
+  if(PATROUILLE.bloecke.filter(b=>b.t==="ziel").length!==1 || PATROUILLE.bloecke.filter(b=>b.t==="weiter").length!==1) p.push("Patrouille: Ziel/Weiter fehlt");
   WISSEN.forEach(e=>{ if(e.braucht&&!bekannt(e.braucht)) p.push(`Wissen ${e.k}: braucht unbekannte Flagge`); });
   flaggen.forEach(f=>{ if(!gelesen.has(f)) p.push(`Flagge gesetzt, nie gelesen: ${f}`); });
   wissenK.forEach(f=>{ if(!gelesen.has(f)) p.push(`Wissen gesetzt, nie gelesen: ${f}`); });
@@ -1076,7 +1130,7 @@ document.addEventListener("click", e=>{
   const tu=t.closest("[data-tun]"); if(tu) return tunAusfuehren(tu.dataset.tun);
   const wi=t.closest("[data-wiss]"); if(wi) return setzeWissen(wi.dataset.wiss);
   const hk=t.closest("[data-hak]"); if(hk){ const k=hk.dataset.hak; if(Z.abgehakt[k]) delete Z.abgehakt[k]; else Z.abgehakt[k]=true; zeichneSzene(); sichern(); return; }
-  const l=t.closest("[data-laden]"); if(l){ l.dataset.laden.split(",").forEach(k=>ladeGegner(k)); return; }
+  const l=t.closest("[data-laden]"); if(l){ ladeKampf(l.dataset.laden.split(","), l.dataset.extra||null); return; }
   const weg=t.closest("[data-weg]"); if(weg){ const g2=Z.gegner.splice(+weg.dataset.weg,1)[0]; notiere("<b>"+g2.name+"</b> verlässt den Kampf"); zeichneGegner(); sichern(); return; }
   const gd=t.closest("[data-gdmg]"); if(gd){ const i=+gd.dataset.gdmg, v=Math.max(0,parseInt($("gin"+i).value,10)||0);
     const m=Z.gegner[i]; m.hp=Math.max(0,m.hp-v); notiere("<b>"+m.name+"</b> −"+v+" → "+m.hp+"/"+m.max+(m.hp===0?" · <b>fällt</b>":"")); zeichneGegner(); sichern(); return; }
@@ -1085,8 +1139,8 @@ document.addEventListener("click", e=>{
   const hi=t.closest("[data-hpin]"); if(hi){ const i=+hi.dataset.hpin, v=Math.max(0,parseInt($("hpin"+i).value,10)||0); aendereHP(i,v*(+hi.dataset.r), +hi.dataset.r>0?"Heilung":"Schaden"); return; }
 });
 document.addEventListener("input", e=>{ if(e.target.dataset&&e.target.dataset.nm!==undefined){ Z.gruppe[+e.target.dataset.nm].name=e.target.value; sichern(); } });
-$("vor").onclick=()=>geheZu(Z.schritt+1);
-$("zurueck").onclick=()=>geheZu(Z.schritt-1);
+$("vor").onclick=()=>{ if(Z.imZwischenakt) patrouilleFertig(); else geheZu(Z.schritt+1); };
+$("zurueck").onclick=()=>{ if(Z.imZwischenakt){ Z.imZwischenakt=false; Z.zwischenaktZiel=null; zeichneSzene(); sichern(); } else geheZu(Z.schritt-1); };
 $("vollheilung").onclick=()=>{ Z.gruppe.forEach(h=>h.hp=h.max); notiere("<b>Alle auf volle Lebenspunkte</b>"); zeichneGruppe(); sichern(); };
 $("zuruecksetzen").onclick=()=>{
   if(!confirm("Neue Runde? Gefahr, Lebenspunkte, Entscheidungen und Chronik werden geleert. Die Namen bleiben stehen.")) return;
