@@ -123,7 +123,8 @@ input{font:inherit;color:inherit}
 .tun button.getan{border-color:var(--moss);color:var(--moss)}
 
 /* ---- Sprechaufgabe ---- */
-.aufgabe{border:1px solid var(--moss);background:rgba(116,176,148,.06);padding:15px 18px}
+.aufgabe{border:1px solid var(--moss);background:rgba(116,176,148,.07);padding:13px 16px;margin-top:16px}
+.vorlesen .aufgabe p{font-size:17px;margin:0}
 .aufgabe .tat{color:var(--moss)}
 .aufgabe p{margin:0;font-size:16.5px}
 .aufgabe .blatt{display:inline-flex;align-items:center;gap:7px;margin-top:9px;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--moss);border:1px solid #3a5a4c;padding:5px 10px}
@@ -607,6 +608,7 @@ const KAPITEL = [
   `The room at the top is warm. There is a fire, and a pot of tea, and two cups.`,
   `Mirela Vance sits in an armchair with a book on her knees. She is not tied up. She is not hurt. She is not even pale.`,
   `She looks up and says: “You’re late. The coach comes at midnight — you could have taken the coach.”`]},
+ {t:"aufgabe", sag:"Each of you: give Mirela one real reason why she should not do this. Then listen to what she says back.", hinweis:"Mirela gibt erst nach, wenn ihr etwas Besseres angeboten wird als „wir retten dich“.", blatt:"Helfer-Blatt · Teil 7"},
  {t:"fa", abhaken:true, paare:[
   ["Why don’t you just come with us?","„And in February, when the wolves come back — will you be here?“"],
   ["Did they force you?","„Nobody forced anybody. That is the whole problem.“"],
@@ -614,7 +616,6 @@ const KAPITEL = [
   ["What happens at sunrise?","„I sign the book downstairs. After that I am still me for a while. Then less.“"],
   ["Can we just kill him?","„People have tried. There is a board in the tavern with their names on it too — on the back.“"],
   ["Where is he right now?","„Asleep, two floors down, in the ice cellar. He will know you are here the moment you touch the book.“"]]},
- {t:"aufgabe", sag:"Each of you: give Mirela one real reason why she should not do this. Then listen to what she says back.", hinweis:"Mirela gibt erst nach, wenn ihr etwas Besseres angeboten wird als „wir retten dich“.", blatt:"Helfer-Blatt · Teil 7"},
  {t:"weiter", text:"Wenn jede Figur einmal mit Mirela gestritten hat."}]},
 
 /* ===== 9 ===== */
@@ -657,6 +658,7 @@ const KAPITEL = [
  {t:"vorlesen", titel:"Der Graf", text:[
   `He is not tall. He is not pale. He looks like a tired man of fifty who has been doing the same job for far too long, and that is the frightening part.`,
   `“Four hundred years,” he says, “and I never took a single one of them. They were brought to me. Every twenty years, up that road, with a bag packed. Ask her who packed hers.”`]},
+ {t:"aufgabe", sag:"Before every attack — and in the negotiation anyway — say one sentence to the Count. He always answers.", blatt:"Helfer-Blatt · Teil 8"},
  {t:"tun", id:"pakt_scheitert", nur:"e3_pakt", text:"Die Verhandlung ist gescheitert — eine Drohung, eine Beleidigung, ein „we’ll kill you anyway“.", knopf:{art:"gefahr", v:4}, beschriftung:"Gefahr +4, es wird gekämpft"},
  {t:"wenn", gefahrVon:0, gefahrBis:3, titel:"Gefahr 0–3 · Er ist beeindruckt", text:`„You came up my mountain without waking a single one of my people. Do you know how long it has been since anyone did that?“ — Er ist allein und lässt bis zuletzt mit sich reden. Der Knopf unten lädt ihn <b>mit 40 statt 55 Lebenspunkten</b>, und die Gruppe darf einmal angreifen, bevor er reagiert.`},
  {t:"wenn", gefahrVon:4, gefahrBis:7, titel:"Gefahr 4–7 · Er hat gewartet", text:`Er weiss seit Stunden, dass sie da sind, und wollte sehen, wie weit sie kommen. Volle 55 Lebenspunkte.`},
@@ -664,7 +666,6 @@ const KAPITEL = [
  {t:"wenn", gefahrVon:4, gefahrBis:10, nicht:"e3_buch", titel:"Zwei Thralls kommen dazu", text:`Zwei Diener des Hauses stehen mit im Raum, je 9 Lebenspunkte. Der Knopf unten lädt sie mit.`},
  {t:"wenn", gefahrVon:4, gefahrBis:10, nur:"e3_buch", titel:"Keine Thralls", text:`Das Buch hat die Diener befreit — sie liegen irgendwo im Haus und schlafen zum ersten Mal seit Jahren. <b>Vaskir kommt allein.</b>`},
  {t:"tun", id:"finale_laden", wiederholbar:true, text:"Lade den Kampf — die Seite nimmt die richtigen Gegner nach Barometer und eurer Wahl. Bei geglückter Verhandlung brauchst du das nicht.", knopf:{art:"finale"}, beschriftung:"Kampf laden"},
- {t:"aufgabe", sag:"Before every attack — and in the negotiation anyway — say one sentence to the Count. He always answers.", blatt:"Helfer-Blatt · Teil 8"},
  {t:"kampf", titel:"Count Vaskir", text:"Trag den Schaden der Spieler rechts in seine Leiste ein. Für seinen Zug drückst du auf eine seiner Attacken — die Seite würfelt und du klickst an, wen es trifft.", gegner:["vaskir"], zusatz:["thrall"]},
  {t:"regie", titel:"Wie der Kampf endet", text:`<b>Unter 15 Lebenspunkten hört Vaskir auf zu kämpfen und redet.</b> Lass ihn nicht stumm zu Staub zerfallen — das ist der Moment, in dem die Gruppe noch einmal wählen kann: töten, ein Vertrag, oder ihn gehen lassen (er wird zu Nebel und ist weg).
  <p>Fällt eine Figur auf 0, ist sie bewusstlos, nicht tot. Der Lightbearer holt sie mit Healing Light zurück.</p>`},
@@ -907,6 +908,10 @@ function lage(){
 }
 
 /* ====================== SZENE ====================== */
+function aufgabeHTML(b){
+  return '<div class="aufgabe"><span class="tat">Das sagst du den Schülern</span><p class="rede">„'+(b.sag||b.text)+'“</p>'+
+    (b.hinweis?'<p class="hinweis">'+b.hinweis+'</p>':'')+(b.blatt?'<span class="blatt">→ '+b.blatt+'</span>':'')+'</div>';
+}
 function blockHTML(b, idx){
   const t=b.t;
   if(t==="ziel") return '<div class="ziel"><span class="label">Ziel</span><p>'+b.text+'</p><span class="zeit">'+b.zeit+'</span></div>';
@@ -915,7 +920,7 @@ function blockHTML(b, idx){
   switch(t){
     case "vorlesen": innen='<div class="vorlesen"><span class="tat">Vorlesen'+(b.titel?" · "+b.titel:"")+'</span>'+b.text.map(p=>"<p>"+p+"</p>").join("")+'</div>'; break;
     case "sagen": innen='<div class="sagen"><span class="tat">Das sagst du</span>'+b.text.map(p=>"<p>„"+p+"“</p>").join("")+'</div>'; break;
-    case "aufgabe": innen='<div class="aufgabe"><span class="tat">Das sagst du den Schülern</span><p class="rede">„'+(b.sag||b.text)+'“</p>'+(b.hinweis?'<p class="hinweis">'+b.hinweis+'</p>':'')+(b.blatt?'<span class="blatt">→ '+b.blatt+'</span>':'')+'</div>'; break;
+    case "aufgabe": innen='<div class="vorlesen">'+aufgabeHTML(b)+'</div>'; break;
     case "personen": innen='<div class="personen"><span class="tat">Wen man ansprechen kann</span>'+
       b.leute.map(l=>'<div class="person"><div class="kopf"><h4>'+l.name+'</h4><span class="wer">'+l.wer+'</span></div>'+
         '<p class="spielt">'+l.spielt+'</p><ul>'+l.sagt.map(s=>'<li>„'+s+'“</li>').join("")+'</ul>'+
@@ -929,7 +934,7 @@ function blockHTML(b, idx){
       innen='<div class="tun"><p>'+b.text+'</p><button class="'+(fertig?"getan":"")+'" data-tun="'+b.id+'">'+(fertig?"✓ "+b.beschriftung:b.beschriftung)+'</button></div>'; break; }
     case "regie": innen='<div class="regie"><span class="tat">'+(b.titel||"Hintergrund · nur für dich")+'</span><p>'+b.text+'</p></div>'; break;
     case "gruppe": innen='<div class="vorlesen"><span class="tat">Vorlesen'+(b.titel?" · "+b.titel:"")+'</span>'+b.text.map(p=>"<p>"+p+"</p>").join("")+
-      b.rede.map(p=>'<p class="rede">„'+p+'“</p>').join("")+'</div>'; break;
+      b.rede.map(p=>'<p class="rede">„'+p+'“</p>').join("")+(b.aufgabe?aufgabeHTML(b.aufgabe):"")+'</div>'; break;
     case "wenn": innen='<div class="wenn"><span class="tat">▸ das gilt bei euch</span><h4>'+b.titel+'</h4><p>'+b.text+'</p></div>'; break;
     case "kampf": innen='<div class="kampfblock"><span class="tat">Kampf</span><h4>'+b.titel+'</h4><p>'+b.text+'</p>'+
       b.gegner.map(k=>{const v=BESTIARIUM[k]; return '<div class="statblock"><b>'+v.name+'</b> — '+v.hp+' Lebenspunkte · '+v.att.map(a=>a.n+" "+a.d).join(", ")+'</div>';}).join("")+
@@ -956,10 +961,12 @@ function karten(bloecke){
   const out=[];
   bloecke.forEach(b=>{
     const letzte=out[out.length-1];
-    if(b.t==="sagen" && letzte && (letzte.t==="vorlesen"||letzte.t==="gruppe")){
-      if(letzte.t==="vorlesen") out[out.length-1]={t:"gruppe", titel:letzte.titel, text:letzte.text, rede:[...b.text]};
-      else letzte.rede.push(...b.text);
-    } else out.push(b);
+    const gelb = letzte && (letzte.t==="vorlesen"||letzte.t==="gruppe"||letzte.t==="sagen") && !letzte.aufgabe;
+    const alsGruppe = ()=>{ if(letzte.t==="vorlesen") out[out.length-1]={t:"gruppe", titel:letzte.titel, text:letzte.text, rede:[]};
+                            if(letzte.t==="sagen") out[out.length-1]={t:"gruppe", text:[], rede:[...letzte.text]}; return out[out.length-1]; };
+    if(b.t==="sagen" && gelb){ alsGruppe().rede.push(...b.text); }
+    else if(b.t==="aufgabe" && gelb){ alsGruppe().aufgabe=b; }
+    else out.push(b);
   });
   return out;
 }
