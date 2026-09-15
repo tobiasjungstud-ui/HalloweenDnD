@@ -489,7 +489,7 @@ const KAPITEL = [
 
 /* ===== 4 ===== */
 {n:"Aufstieg", titel:"Up the Mountain", art:"szene", braucht:"e1", ort:ORT.wirtshaus, nach:ORT.hof, bloecke:[
- {t:"ziel", text:"Der Weg nach oben. Hier steht nur noch, was euren Weg betrifft — bis alle drei im selben Hof ankommen.", zeit:"20–30 Min."},
+ {t:"ziel", text:"Die Gruppe steigt auf ihrem Weg zum Schloss hinauf — mit dem, was der Weg kostet (Kampf, schlechte Luft, Wachen) — und steht am Ende im Hof.", zeit:"20–30 Min."},
  {t:"regie", nur:"weg_a", titel:"Hintergrund · Strasse", text:"Drei Stationen: <b>Wölfe</b> am Galgen (erster Kampf des Abends — langsam: jeder sagt auf Englisch, was er tut, drückt seinen Knopf, liest seinen gelben Satz vor; fällt ein Wolf, läuft der andere), der <b>Sumpf</b> (jeder würfelt dreimal, unter 10 = −1 HP) und die <b>Wachen am Tor</b> (jeder würfelt einmal; alle ≥ 10 → vorbei, sonst Kampf mit einer Wache und Gefahr +1)."},
  {t:"vorlesen", nur:"weg_a", titel:"Der Wald und der Galgen", text:[
   `You leave the tavern by the back door. The road climbs through the forest, and the fog is so thick that you walk into the gallows before you see it. The wood is grey and the rope is long gone.`,
@@ -573,7 +573,7 @@ const KAPITEL = [
 
 /* ===== 7 ===== */
 {n:"Hinter der Tür", titel:"What You Find", art:"szene", braucht:"e2", ort:ORT.hof, nach:ORT.spiegel, bloecke:[
- {t:"ziel", text:"Hier steht nur eure Tür. Am Ende steht die Gruppe in jedem Fall hinter der Spiegeltür am Ende des Westgangs.", zeit:"20 Min."},
+ {t:"ziel", text:"Die Gruppe geht durch ihre Tür, erlebt, was dahinter wartet (Bellamy, Anneke oder Tam), und steht am Ende hinter der Spiegeltür am Ende des Westgangs.", zeit:"20 Min."},
  {t:"regie", nur:"bibliothek", text:"Bellamy ist <b>nicht gefährlich</b>, solange man höflich bleibt. Er will drei wahre Sätze von jeder Figur — er hört nicht auf den Inhalt, sondern auf die Stimme, und Lügen merkt er. <p>Danach führt er sie selbst zur Spiegeltür — und bittet um einen Gefallen: einen Brief mit ins Dorf zu nehmen. Merk dir, ob sie es versprechen; im Epilog zählt es.</p>"},
  {t:"vorlesen", nur:"bibliothek", titel:"Die Bibliothek", text:[
   `You cross the courtyard and open the door under the warm window. Bookshelves up to the ceiling, and a very thin man in a very good suit standing on a ladder, putting a book back.`,
@@ -649,7 +649,7 @@ const KAPITEL = [
 
 /* ===== 10 ===== */
 {n:"Finale", titel:"Count Vaskir", art:"kampf", braucht:"e3", ort:{e3_raus:ORT.treppe, e3_buch:ORT.studie, e3_pakt:ORT.turm}, nach:ORT.graf, bloecke:[
- {t:"ziel", text:"Wie er auftritt, hängt an eurer Wahl und am Barometer. Es steht nur der Fall da, der bei euch gilt. Am Ende trägst du ein, wie es ausging.", zeit:"30 Min."},
+ {t:"ziel", text:"Die Begegnung mit dem Grafen — Verhandlung, Kampf oder beides. Am Ende trägst du unten ein, wie es ausging.", zeit:"30 Min."},
  {t:"regie", titel:"Hintergrund", text:`Der Graf sieht aus wie ein müder Mann von fünfzig. Wie er auftritt, hängt an eurer Wahl (Übergang) und am Barometer (Lebenspunkte, Thralls) — es steht nur der Fall da, der bei euch gilt. <b>Unter 15 Lebenspunkten hört er auf zu kämpfen und redet:</b> Dann kann die Gruppe noch einmal wählen — töten, Vertrag, oder ihn gehen lassen. Fällt eine Figur auf 0, ist sie bewusstlos, nicht tot; der Lightbearer holt sie zurück. <b>Am Ende trägst du unten ein, wie es ausging.</b>`},
  {t:"regie", nur:"e3_pakt", titel:"Die Verhandlung — was er annimmt", text:`Das ist zuerst ein Gespräch, kein Kampf. <b>Eine einzige Regel:</b> Er nimmt jedes Angebot an, das die Gruppe etwas Echtes kostet — Zeit, ein Versprechen, einen Besuch jedes Jahr. Er lehnt alles ab, was nur ihm etwas kostet.
  <p>Lass die Gruppe laut überlegen, was sie geben könnte. Nimmt er an: unten „Ein neuer Vertrag“ anklicken, kein Kampf. Droht die Gruppe oder beleidigt ihn: Knopf „Verhandlung gescheitert“ — dann Kampf.</p>`},
@@ -682,7 +682,7 @@ const KAPITEL = [
 
 /* ===== 11 ===== */
 {n:"Epilog", titel:"Six O’Clock", art:"szene", braucht:"e4", ort:ORT.graf, nach:ORT.tor, bloecke:[
- {t:"ziel", text:"Es steht nur da, was bei euch eingetreten ist. Das letzte Wort haben die Schüler, nicht du.", zeit:"10 Min."},
+ {t:"ziel", text:"Der Morgen danach: die Folgen eurer Entscheidungen, dann drei Fragen an die Gruppe. Das letzte Wort haben die Schüler.", zeit:"10 Min."},
  {t:"vorlesen", titel:"Der Weg hinaus", text:[
   `Six o’clock. The sun comes up over the pass, and the castle looks smaller in daylight — a tired old house on a rock. You walk down through the courtyard and out through the gate that nobody ever closed.`]},
  {t:"wenn", nur:"ausgang_vertrag", titel:"Ein neuer Vertrag", text:`Auf einem Blatt Papier steht ein Vertrag, und er ist kurz. Vaskir hat ihn zweimal gelesen, „This is worse for me than the old one“ gesagt und trotzdem unterschrieben. Er hatte seit dreihundert Jahren keinen Besuch, den er nicht selbst bestellt hat. Mirela geht mit euch hinunter — heute jedenfalls.`},
