@@ -490,7 +490,7 @@ const KAPITEL = [
 /* ===== 4 ===== */
 {n:"Aufstieg", titel:"Up the Mountain", art:"szene", braucht:"e1", ort:ORT.wirtshaus, nach:ORT.hof, bloecke:[
  {t:"ziel", text:"Die Gruppe steigt auf ihrem Weg zum Schloss hinauf — mit dem, was der Weg kostet (Kampf, schlechte Luft, Wachen) — und steht am Ende im Hof.", zeit:"20–30 Min."},
- {t:"regie", nur:"weg_a", titel:"Hintergrund · Strasse", text:"Drei Stationen: <b>Wölfe</b> am Galgen (erster Kampf des Abends — langsam: jeder sagt auf Englisch, was er tut, drückt seinen Knopf, liest seinen gelben Satz vor; fällt ein Wolf, läuft der andere), der <b>Sumpf</b> (jeder würfelt dreimal, unter 10 = −1 HP) und die <b>Wachen am Tor</b> (jeder würfelt einmal; alle ≥ 10 → vorbei, sonst Kampf mit einer Wache und Gefahr +1)."},
+ {t:"regie", nur:"weg_a", titel:"Hintergrund · Strasse", text:"Drei Stationen: <b>Wölfe</b> am Galgen (erster Kampf des Abends — langsam: jeder sagt auf Englisch, was er tut, drückt seinen Knopf, liest seinen gelben Satz vor; fällt ein Wolf, läuft der andere), der <b>Sumpf</b> (jeder würfelt dreimal, unter 10 = −1 HP) und die <b>Wachen am Tor</b> (jeder würfelt einmal; alle ≥ 10 → vorbei, sonst Kampf mit beiden Wachen, je 9 HP, und Gefahr +1)."},
  {t:"vorlesen", nur:"weg_a", titel:"Der Wald und der Galgen", text:[
   `You leave the tavern by the back door. The road climbs through the forest, and the fog is so thick that you walk into the gallows before you see it. The wood is grey and the rope is long gone.`,
   `Two wolves the size of ponies are sitting underneath it, side by side, watching you come. They are not barking. They are waiting for you to get closer.`]},
@@ -500,7 +500,7 @@ const KAPITEL = [
  {t:"aufgabe", nur:"weg_a", sag:"Three steps each through the black water — roll a d20 for every step. Under ten, the bog has your boot: minus one hit point. And shout, or nobody will hear you sink.", hinweis:"Schaden rechts eintragen.", blatt:"Helfer-Blatt · Teil 4"},
  {t:"vorlesen", nur:"weg_a", titel:"Die Wachen am Tor", text:[
   `On the far side of the bog the gate of Nachtfels stands open. Two men in old grey livery stand beside it with lamps. They do not move. They do not talk. They are looking at the fog.`]},
- {t:"tun", id:"tor_kampf", nur:"weg_a", text:"Das Anschleichen ist misslungen — eine Wache hat sie gesehen.", knopf:{art:"laden", gegner:["wache"], gefahr:1}, beschriftung:"Kampf mit der Wache, Gefahr +1"},
+ {t:"tun", id:"tor_kampf", nur:"weg_a", text:"Das Anschleichen ist misslungen — die beiden Wachen haben sie gesehen.", knopf:{art:"laden", gegner:["wache","wache"], gefahr:1}, beschriftung:"Kampf mit zwei Wachen, Gefahr +1"},
  {t:"vorlesen", nur:"weg_a", titel:"Im Hof", text:[
   `Past the guards, through the gate that nobody ever closed — and you are standing in a square courtyard of black stone.`]},
 

@@ -69,7 +69,7 @@ function spiele(p, protokoll){
     if(i===4 && p.weg==="weg_b") T.tunAusfuehren("stollen_luft");
     if(i===4 && p.wache) T.tunAusfuehren(p.weg==="weg_a"?"tor_kampf":"keller_kampf");
     if(i===4){ T.geheZu(4); const wachen=T.Z().gegner.filter(g=>g.k==="wache").length;
-      pruefe(wachen===(p.wache?1:0), `Pfad ${JSON.stringify(p)}: ${wachen} Wachen geladen`); }
+      pruefe(wachen===(p.wache?(p.weg==="weg_a"?2:1):0), `Pfad ${JSON.stringify(p)}: ${wachen} Wachen geladen`); }
     if(i===6) T.waehle("e2", optIdx("e2",p.tuer));
     if(i===9) T.waehle("e3", optIdx("e3",p.wahl));
     if(i===10){ if(p.scheitert) T.tunAusfuehren("pakt_scheitert"); T.tunAusfuehren("finale_laden"); T.waehle("e4", optIdx("e4",p.ausgang)); }
