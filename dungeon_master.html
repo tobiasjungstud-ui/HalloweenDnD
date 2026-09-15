@@ -399,7 +399,7 @@ const KAPITEL = [
   `Then something moves in the trees. It stays level with the carriage for about twenty seconds — fast, low, quiet. Then it is gone. The driver does not slow down. The driver does not look.`,
   `And then, for the first time in six hours, he speaks — without turning round.`]},
  {t:"sagen", text:["Nobody comes up here in November. So — who are you? And what do you want in a place like this?"]},
- {t:"aufgabe", sag:"Answer him — each of you. At least two or three sentences.", hinweis:"Wer nur einen Satz sagt, bekommt von Marek: „What, that’s all? There’s plenty of time — tell me a bit more.“ Und er hakt nach: „Where are you from?“ — „What can you actually do?“ — „Why would anyone come up here in November?“ — „Who is paying you?“", blatt:"Helfer-Blatt · Teil 1"},
+ {t:"aufgabe", sag:"Marek doesn’t move the horses. He’s waiting — for every one of you. And he’s heard plenty of one-word answers in his life. They don’t impress him.", hinweis:"Wer nur einen Satz sagt, bekommt von Marek: „What, that’s all? There’s plenty of time — tell me a bit more.“ Und er hakt nach: „Where are you from?“ — „What can you actually do?“ — „Why would anyone come up here in November?“ — „Who is paying you?“", blatt:"Helfer-Blatt · Teil 1"},
  {t:"fa", abhaken:true, paare:[
   ["What’s up there? / What’s in the castle?","„A castle. Been there longer than the village.“ Mehr sagt er nicht."],
   ["Do you believe the stories?","„I believe I’m turning round at the bottom of that hill and driving home tonight.“"],
@@ -431,7 +431,7 @@ const KAPITEL = [
   `And at the door stands a boy, twelve maybe, who was clearly waiting for somebody — and who does not move out of your way.`,
   `The other eight look into their drinks.`]},
  {t:"sagen", text:["Who do you want to talk to?"]},
- {t:"aufgabe", sag:"Each of you asks at least one question — and one follow-up question. Nobody in here tells you anything by themselves.", hinweis:"Antwortmöglichkeiten unten abhaken, sobald eine Frage gestellt ist — jede nur einmal, egal von wem.", blatt:"Helfer-Blatt · Teil 2"},
+ {t:"aufgabe", sag:"Nobody in here will tell you anything you don’t ask for. So ask — every one of you. And when the answer is short, ask again.", hinweis:"Antwortmöglichkeiten unten abhaken, sobald eine Frage gestellt ist — jede nur einmal, egal von wem.", blatt:"Helfer-Blatt · Teil 2"},
  {t:"personen", leute:[
   {name:"Greta", wer:"Wirtin, drei Finger", spielt:"Kurze Sätze. Sie lügt nie — sie wechselt das Thema. Freundlich, nicht feindlich.", sagt:[
     "Mirela is gone. That is all there is.","We don’t go up there. That is the arrangement.","You want to help? Go home. That would help."],
@@ -468,7 +468,7 @@ const KAPITEL = [
   "Two: the Kessler mine. Straight through the rock, and it comes out somewhere under the castle. Dark, and the air down there is two hundred years old.",
   "Three: the coach. Every night at midnight a coach takes food up to the castle. You could be on it.",
   "What are you going to do?"]},
- {t:"aufgabe", sag:"One full sentence each: which way — and why. Then we vote.", hinweis:"Reihum. Bei Streit: „One minute, then we vote.“", blatt:"Helfer-Blatt · Teil 3"},
+ {t:"aufgabe", sag:"The candles are burning down. Everybody say it: which way, and why. Then you decide.", hinweis:"Reihum. Bei Streit: „One minute, then we vote.“", blatt:"Helfer-Blatt · Teil 3"},
  {t:"optionen", id:"e1", optionen:[
   {b:"A", name:"The old road", flagge:"weg_a", was:"Der lange Weg über den Grat: durch den Wald, über den Sumpf, an den Wachen vorbei. Das Abenteuer.",
    pro:["Der Weg mit den meisten Geschichten — und die Gruppe entscheidet unterwegs selbst, wie laut sie ist."], con:["Zwei Wölfe am Galgen (Kampf). Ein Sumpf, der an den Füssen zieht. Und zwei Wachen am Tor, an denen man vorbeimuss."],
@@ -491,7 +491,7 @@ const KAPITEL = [
  {t:"kampf", nur:"weg_a", titel:"The wolves", text:"Zwei Wölfe, je 14 Lebenspunkte.", gegner:["wolf","wolf"]},
  {t:"vorlesen", nur:"weg_a", titel:"Der Sumpf", text:[
   `Above the gallows the road simply stops. In front of you: black water, white mist, and a path that is only there if you find it. Every step, the ground pulls at your boots.`]},
- {t:"aufgabe", nur:"weg_a", sag:"Each of you rolls three times — press ‘Just roll a d20’. Under ten, your foot gets stuck and you lose one hit point. Talk to each other while you cross!", hinweis:"Schaden rechts eintragen.", blatt:"Helfer-Blatt · Teil 4"},
+ {t:"aufgabe", nur:"weg_a", sag:"Three steps each through the black water — roll a d20 for every step. Under ten, the bog has your boot: minus one hit point. And shout, or nobody will hear you sink.", hinweis:"Schaden rechts eintragen.", blatt:"Helfer-Blatt · Teil 4"},
  {t:"vorlesen", nur:"weg_a", titel:"Die Wachen am Tor", text:[
   `On the far side of the bog the gate of Nachtfels stands open. Two men in old grey livery stand beside it with lamps. They do not move. They do not talk. They are looking at the fog.`]},
  {t:"tun", id:"tor_kampf", nur:"weg_a", text:"Das Anschleichen ist misslungen — eine Wache hat sie gesehen.", knopf:{art:"laden", gegner:["wache"], gefahr:1}, beschriftung:"Kampf mit der Wache, Gefahr +1"},
@@ -508,7 +508,7 @@ const KAPITEL = [
   `The tunnel ends at a rotten wooden door. Behind it: a cellar full of barrels, a smell of wine and wet stone, and a stair going up.`,
   `At the top of the stair stands a man with a lamp. He has heard the door. He comes down, slowly, and holds the lamp up to your faces.`]},
  {t:"sagen", nur:"weg_b", text:["Nobody comes in through the cellar. Who are you, and who let you in?"]},
- {t:"aufgabe", nur:"weg_b", sag:"Convince him you are guests — one calm sentence each, with a reason. No dice here. You talk.", hinweis:"Jeder ein ganzer Satz, keine Drohung → er glaubt ihnen. Sonst der Knopf unten.", blatt:"Helfer-Blatt · Teil 4"},
+ {t:"aufgabe", nur:"weg_b", sag:"He wants an answer, and he wants it now. Guests — say it like you mean it, one sentence each, and give him a reason. No weapons, no dice. Just talk.", hinweis:"Jeder ein ganzer Satz, keine Drohung → er glaubt ihnen. Sonst der Knopf unten.", blatt:"Helfer-Blatt · Teil 4"},
  {t:"tun", id:"keller_kampf", nur:"weg_b", text:"Die Wache glaubt ihnen nicht.", knopf:{art:"laden", gegner:["wache"], gefahr:1}, beschriftung:"Kampf mit der Wache, Gefahr +1"},
  {t:"vorlesen", nur:"weg_b", titel:"Hinauf in den Hof", text:[
   `Up the cellar stair, through a low door — and you are standing in a square courtyard of black stone, with the night sky above you for the first time in five hours.`]},
@@ -535,7 +535,7 @@ const KAPITEL = [
  {t:"vorlesen", titel:"Der Rabe", text:[
   `On the edge of the fountain sits a raven. It looks at you for a long moment.`,
   `Then it says one word, and the word is your name.`]},
- {t:"aufgabe", sag:"One whole sentence to the raven — slowly and clearly. If you mumble, you get nonsense back.", blatt:"Helfer-Blatt · Teil 5"},
+ {t:"aufgabe", sag:"It’s listening. Say something — one whole sentence, slow and clear. Mumble, and it will mumble back.", blatt:"Helfer-Blatt · Teil 5"},
  {t:"fa", abhaken:true, paare:[
   ["Was ist hinter der Kapellentür?","„Candles. And the door was broken from the outside in. Something came out of there.“"],
   ["Was ist hinter dem Fenster?","„Bookshelves up to the ceiling. Somebody in there is awake — you can see a shadow moving.“"],
@@ -549,7 +549,7 @@ const KAPITEL = [
  {t:"ziel", text:"Eine Tür. Alle drei enden vor derselben Spiegeltür — sie unterscheiden sich darin, was die Gruppe mitnimmt und was es kostet.", zeit:"10 Min."},
  {t:"regie", titel:"Hintergrund", text:"Drei Türen, alle enden an der Spiegeltür im Westgang. <b>Bibliothek:</b> Bellamy, ein höflicher Ghul — er redet statt zu kämpfen, will drei wahre Sätze je Figur, Gefahr +1. <b>Kapelle:</b> Anneke im Taufbecken — Kampf, ausser jemand ruft ihren Namen, Gefahr +2 (mit Namen +1). <b>Küche:</b> Tam, vierzehn, kennt jeden Gang — will ein Versprechen, Gefahr ±0. Jede Figur nennt ihre Tür mit Grund, dann wird geklickt."},
  {t:"sagen", text:["Three doors. The chapel, broken open. The library, where somebody is awake. Or the kitchen stair, where somebody is cooking.","You have time for one of them. Which one?"]},
- {t:"aufgabe", sag:"One full sentence each: which door — and why.", blatt:"Helfer-Blatt · Teil 3"},
+ {t:"aufgabe", sag:"One hour before this house wakes up. Everybody: which door, and why.", blatt:"Helfer-Blatt · Teil 3"},
  {t:"optionen", id:"e2", optionen:[
   {b:"A", name:"The library", flagge:"bibliothek", was:"Dort sitzt Bellamy, seit 1790 Archivar des Hauses und heute ein sehr höflicher Ghul. Er greift nicht an — er handelt.",
    pro:["Der ruhigste Weg: Bellamy kämpft nicht, er redet. Und er bringt euch selbst zur Spiegeltür."],
@@ -573,7 +573,7 @@ const KAPITEL = [
   `You cross the courtyard and open the door under the warm window. Bookshelves up to the ceiling, and a very thin man in a very good suit standing on a ladder, putting a book back.`,
   `He says, without turning round: “Nobody has spoken to me since 1912. Say something. Anything — as long as it is true.”`,
   `Then he climbs down, and you see his hands, and his teeth, and you understand what he is. He offers you a chair anyway.`]},
- {t:"aufgabe", nur:"bibliothek", sag:"Three true things about yourself. Thirty seconds to think — then one after the other.", hinweis:"Er hört auf die Stimme, nicht auf den Inhalt — Lügen merkt er.", blatt:"Helfer-Blatt · Teil 6"},
+ {t:"aufgabe", nur:"bibliothek", sag:"Three true things about yourself. He can wait — he’s been waiting since 1912. Take thirty seconds, then talk.", hinweis:"Er hört auf die Stimme, nicht auf den Inhalt — Lügen merkt er.", blatt:"Helfer-Blatt · Teil 6"},
  {t:"vorlesen", nur:"bibliothek", titel:"Der Weg zur Spiegeltür", text:[
   `Bellamy walks you out of the library and along a corridor with no windows — the west corridor — and stops at the end of it, in front of a tall mirror. “The tower has no stair,” he says. “It has this. Walk backwards through it, and don’t look.”`,
   `He does not come with you. “He forbade it in 1804, and I find I still care what he thinks. Isn’t that the saddest thing you have ever heard?”`]},
@@ -590,7 +590,7 @@ const KAPITEL = [
  {t:"vorlesen", nur:"kueche", titel:"Die Küche", text:[
   `You go down the low stair on the right. A boy of about fourteen is cooking for nobody. There is enough food on that table for twenty people, and there has not been anybody to eat it for years.`,
   `He sees you. He does not scream. He puts the knife down very slowly and says: “You’re here for the new one. The one in the tower.”`]},
- {t:"aufgabe", nur:"kueche", sag:"Give him a real answer — yes or no, and why. No dodging.", blatt:"Helfer-Blatt · Teil 6"},
+ {t:"aufgabe", nur:"kueche", sag:"He asked you a question. He’s fourteen, and he’ll know if you lie. Yes or no — and why.", blatt:"Helfer-Blatt · Teil 6"},
  {t:"vorlesen", nur:"kueche", titel:"Der Weg zur Spiegeltür", text:[
   `Tam takes corridors that do not look like corridors. Twice he stops, puts up a hand, and you all wait forty seconds in the dark without knowing what for.`,
   `Then he points down a corridor with no windows — the west corridor — at a tall mirror at the end of it. “That’s the door. You have to walk backwards. Don’t look at it.” And then, quietly: “I’ll wait here.”`]},
@@ -609,7 +609,7 @@ const KAPITEL = [
   `The room at the top is warm. There is a fire, and a pot of tea, and two cups.`,
   `Mirela Vance sits in an armchair with a book on her knees. She is not tied up. She is not hurt. She is not even pale.`,
   `She looks up and says: “You’re late. The coach comes at midnight — you could have taken the coach.”`]},
- {t:"aufgabe", sag:"One real reason each why she should not do this. Then listen to what she says back.", hinweis:"Mirela gibt erst nach, wenn ihr etwas Besseres angeboten wird als „wir retten dich“.", blatt:"Helfer-Blatt · Teil 7"},
+ {t:"aufgabe", sag:"She’s not going anywhere until you give her a reason. One real reason each. Then listen to what she says back.", hinweis:"Mirela gibt erst nach, wenn ihr etwas Besseres angeboten wird als „wir retten dich“.", blatt:"Helfer-Blatt · Teil 7"},
  {t:"fa", abhaken:true, paare:[
   ["Why don’t you just come with us?","„And in February, when the wolves come back — will you be here?“"],
   ["Did they force you?","„Nobody forced anybody. That is the whole problem.“"],
@@ -629,7 +629,7 @@ const KAPITEL = [
   "You can burn the book downstairs. Every contract in it, four hundred years of them.",
   "Or you can call him up here and make him a new offer.",
   "What are you going to do?"]},
- {t:"aufgabe", sag:"One full sentence each: what should we do — and why? She is listening.", blatt:"Helfer-Blatt · Teil 3"},
+ {t:"aufgabe", sag:"One hour until sunrise. Everybody: what do we do, and why. She’s listening.", blatt:"Helfer-Blatt · Teil 3"},
  {t:"optionen", id:"e3", optionen:[
   {b:"A", name:"Take her out", flagge:"e3_raus", was:"Über die Schulter und hinunter. Das Dorf soll selbst sehen, wie es zurechtkommt.",
    pro:["Sicher: Mirela lebt, egal wie der Abend sonst ausgeht."], con:["Sie wehrt sich und schreit. Das ganze Haus wacht auf."],
@@ -660,7 +660,7 @@ const KAPITEL = [
  {t:"vorlesen", titel:"Der Graf", text:[
   `He is not tall. He is not pale. He looks like a tired man of fifty who has been doing the same job for far too long, and that is the frightening part.`,
   `“Four hundred years,” he says, “and I never took a single one of them. They were brought to me. Every twenty years, up that road, with a bag packed. Ask her who packed hers.”`]},
- {t:"aufgabe", sag:"Before every attack, one sentence to the Count. He always answers.", blatt:"Helfer-Blatt · Teil 8"},
+ {t:"aufgabe", sag:"He hears everything you say — so say something. Before every attack, one sentence to him. He always answers.", blatt:"Helfer-Blatt · Teil 8"},
  {t:"tun", id:"pakt_scheitert", nur:"e3_pakt", text:"Die Verhandlung ist gescheitert — eine Drohung, eine Beleidigung, ein „we’ll kill you anyway“.", knopf:{art:"gefahr", v:4}, beschriftung:"Gefahr +4, es wird gekämpft"},
  {t:"wenn", gefahrVon:0, gefahrBis:3, titel:"Gefahr 0–3 · Er ist beeindruckt", text:`„You came up my mountain without waking a single one of my people. Do you know how long it has been since anyone did that?“ — Er ist allein und lässt bis zuletzt mit sich reden. Der Knopf unten lädt ihn <b>mit 40 statt 55 Lebenspunkten</b>, und die Gruppe darf einmal angreifen, bevor er reagiert.`},
  {t:"wenn", gefahrVon:4, gefahrBis:7, titel:"Gefahr 4–7 · Er hat gewartet", text:`Er weiss seit Stunden, dass sie da sind, und wollte sehen, wie weit sie kommen. Volle 55 Lebenspunkte.`},
@@ -692,7 +692,7 @@ const KAPITEL = [
  {t:"wenn", nur:"e3_buch", nicht:"kapelle", titel:"Ein Mädchen aus der Kapelle", text:`Aus der Kapelle, an der ihr vorbeigeht, kommt ein Mädchen von etwa neunzehn in einem Kleid, das vor zwanzig Jahren weiss war. Ihr seid ihr nie begegnet. Sie sieht in die Sonne, als hätte sie sie noch nie gesehen.`},
  {t:"wenn", gefahrVon:0, gefahrBis:3, titel:"Barometer 0–3", text:`Niemand im Tal erfährt je, dass jemand oben war. Das ist die seltenste Art, diesen Abend zu gewinnen — sag der Gruppe ausdrücklich, dass sie das geschafft hat.`},
  {t:"wenn", gefahrVon:8, gefahrBis:10, titel:"Barometer 8–10", text:`Was auch immer sie erreicht haben, sie haben es unter Lärm erreicht. Eine Figur ihrer Wahl trägt etwas mit hinunter, das nicht mehr weggeht: einen weissen Streifen im Haar, eine Hand, die nicht mehr warm wird, oder einen Namen, den sie im Schlaf sagt.`},
- {t:"aufgabe", sag:"Three questions, everybody answers: What would you do differently? Was the village wrong? What do you tell Tobias?", blatt:"Helfer-Blatt · Teil 9"},
+ {t:"aufgabe", sag:"It’s morning. Three questions before you go: What would you do differently? Was the village wrong? What do you tell Tobias?", blatt:"Helfer-Blatt · Teil 9"},
  {t:"weiter", text:"Fertig. Gut gemacht."}]}
 ];
 
