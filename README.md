@@ -61,8 +61,8 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
 3. Die Konsole führt durch zwölf Seiten:
    **gelb umrandet** = wörtlich vorlesen, **grün** = das sollen die Schüler jetzt tun,
    **grau** = nur für die Spielleitung, **rot** = Kampf. Unten steht immer, wann es weitergeht.
-   Darüber, klein und gestrichelt: **Optional** — Gelegenheiten für eine einzelne Figur
-   (siehe unten). Blättern geht auch mit den Pfeiltasten.
+   Rechts in der Karte jeder Figur, klein und gestrichelt: **Optional** — eine Gelegenheit
+   für genau diese Figur in dieser Szene (siehe unten). Blättern geht auch mit den Pfeiltasten.
 4. Etwa drei Stunden. Gut teilbar in zwei Doppelstunden — der Schnitt liegt beim Aufstieg.
 
 ## Wie es aufgebaut ist
@@ -88,10 +88,10 @@ Jeder Hinweis, den die Gruppe finden kann, ist an einen Satz gebunden, den eine 
 wirklich ausspricht — und jede Person trägt eine Zeile **„Notfalls“**, falls niemand danach
 fragt. Das Spiel kann nicht hängenbleiben.
 
-**Zwei Ebenen je Szene.** Oben steht, was die Spielleitung wirklich braucht: Ort, was die
-Gruppe sieht, wen sie ansprechen kann, was zu tun ist. Darunter, deutlich leiser, eine
-gestrichelte Zeile **Optional**: Gelegenheiten für *eine* Figur — der Arcanist mit *Magic
-Hand*, der Blade mit *Strength*, die Lightbearer mit *Healing Touch*. Sie sind als Möglichkeit
+**Zwei Ebenen je Szene.** Links steht, was die Spielleitung wirklich braucht: Ort, was die
+Gruppe sieht, wen sie ansprechen kann, was zu tun ist. Rechts, in der Karte der Figur und
+deutlich leiser, eine gestrichelte Zeile **Optional**: eine Gelegenheit für *diese* Figur —
+der Arcanist mit *Magic Hand*, der Blade mit *Strength*, die Lightbearer mit *Healing Touch*. Sie sind als Möglichkeit
 formuliert, nie als Lösung (*„Magic Hand könnte den Raben heben“*), und jede Szene funktioniert
 ohne sie: Wer den Küchenjungen heilt, bekommt sein Vertrauen und einen Satz mehr — wer es
 nicht tut, kommt trotzdem weiter. Die Spieler sollen selbst auf die Idee kommen; die Zeile

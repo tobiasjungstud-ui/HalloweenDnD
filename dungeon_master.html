@@ -73,21 +73,16 @@ input{font:inherit;color:inherit}
 .legende{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:10px}
 .legende span::before{content:"";display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:-1px}
 .legende .g::before{background:var(--gold)}.legende .s::before{background:var(--moss)}.legende .d::before{background:var(--line-hi)}.legende .k::before{background:var(--blood)}
-.legende .o::before{background:none;border:1px dashed var(--dim);width:8px;height:8px}
-
-/* ---- Zweite Ebene: Gelegenheiten für einzelne Figuren — bewusst leise ---- */
-.schritt>.nr.leer{border:none}
-.chancen{border-left:2px dashed var(--line-hi);padding:8px 14px 6px;font-size:13.5px;color:var(--dim);line-height:1.5}
-.chancen .tat{color:var(--dim);margin-bottom:4px}
-.chancen details{border-top:1px dotted var(--line)}
-.chancen details:first-of-type{border-top:none}
-.chancen summary{cursor:pointer;list-style:none;padding:6px 0;color:var(--ash);display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
-.chancen summary::-webkit-details-marker{display:none}
-.chancen summary::before{content:"▸";color:var(--dim);font-family:var(--mono);font-size:11px;flex:none}
-.chancen details[open] summary::before{content:"▾"}
-.chancen summary b{font-weight:400;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ash);flex:none}
-.chancen summary span{flex:1;min-width:200px}
-.chancen p{margin:2px 0 10px 22px;color:var(--ash);border-left:1px solid var(--line);padding-left:10px;font-size:13.5px}
+/* ---- Zweite Ebene: Gelegenheiten für einzelne Figuren — rechts in der Heldenkarte, bewusst leise ---- */
+.chancen-held:empty{display:none}
+.chancen-held{border-top:1px dashed var(--line-hi);margin-top:3px;padding-top:5px}
+.chance summary{cursor:pointer;list-style:none;font-size:12.5px;line-height:1.45;color:var(--ash);padding:3px 0;display:block}
+.chance summary::-webkit-details-marker{display:none}
+.chance summary .opt{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);border:1px dashed var(--line-hi);padding:1px 5px;margin-right:7px;vertical-align:2px}
+.chance summary b{font-weight:400;color:var(--bone)}
+.chance summary:hover{color:var(--bone)}
+.chance[open] summary .opt{border-style:solid;color:var(--gold-dim);border-color:var(--gold-dim)}
+.chance p{margin:4px 0 6px;font-size:12.5px;line-height:1.45;color:var(--ash);border-left:1px solid var(--line-hi);padding-left:9px}
 .tasten{font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:.06em;text-align:right;margin:10px 0 0}
 .vonhand summary{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);cursor:pointer;list-style:none;padding:6px 0 2px}
 .vonhand summary::-webkit-details-marker{display:none}
@@ -309,7 +304,7 @@ input{font:inherit;color:inherit}
       <span class="n" id="s-n">Anleitung</span>
       <h2 id="s-titel">…</h2>
       <div class="lage" id="lage"></div>
-      <div class="legende"><span class="g">Gelb · vorlesen</span><span class="s">Grün · an die Schüler</span><span class="d">Grau · nur du</span><span class="k">Rot · Kampf</span><span class="o">Gestrichelt · optional</span></div>
+      <div class="legende"><span class="g">Gelb · vorlesen</span><span class="s">Grün · an die Schüler</span><span class="d">Grau · nur du</span><span class="k">Rot · Kampf</span></div>
     </div>
     <div class="bloecke" id="bloecke"></div>
     <div class="blaettern">
@@ -408,7 +403,7 @@ const KAPITEL = [
  {t:"regie", titel:"Wer die Gruppe ist", text:`Das ist vorgegeben, das müssen die Schüler nicht erfinden: <b>Sie sind Vampirjäger.</b> Nicht berühmt, noch nicht. Ein Gerücht hat sie hergeführt — in diesen Bergen liege ein Tal, in dem Menschen nach Plan verschwinden. Sie wollen wissen, ob es stimmt.
  <p>Erfinden dürfen sie: Namen, Herkunft, wie sie sich kennen, was sie können. Der Auftrag steht fest.</p>`},
  {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`<b>Gelb</b> heisst: wörtlich vorlesen — Erzähltext und die Sätze der Figuren stehen in einer Karte. <b>Grün</b> heisst: das sagst du den Schülern, ebenfalls wörtlich — es ist ihre Aufgabe. <b>Grau</b> heisst: nur für dich, und steht als Hintergrund oben. <b>Rot</b> heisst: Kampf. Ganz unten steht immer, <b>wann es weitergeht</b>.
- <p>Manchmal steht darüber, klein und gestrichelt, <b>Optional</b>: Gelegenheiten für <em>eine</em> Figur — Magic Hand, Strength, Healing Touch. Das sind keine Aufgaben und keine Lösungen. Sie sagen dir nur, was du zulassen kannst, falls ein Spieler von selbst darauf kommt. Jede Szene funktioniert auch ohne.</p>
+ <p>Rechts, <b>in der Karte der Figur</b>, steht manchmal eine gestrichelte Zeile <b>Optional</b>: eine Gelegenheit für genau diese Figur — Magic Hand, Strength, Healing Touch. Anklicken zeigt die Folge. Das sind keine Aufgaben und keine Lösungen: Sie sagen dir nur, was du zulassen kannst, falls der Spieler von selbst darauf kommt. Jede Szene funktioniert auch ohne.</p>
  <p>Unter dem Titel jeder Seite steht die <b>Lage</b>: wo die Gruppe ist, was sie gewählt hat, was sie weiss. Auf der Seite steht immer nur, was zu diesem Weg gehört — das andere siehst du gar nicht erst. Und eine Entscheidung lässt sich erst anklicken, wenn die davor getroffen ist.</p>`},
  {t:"sagen", text:["You always have to speak English. If you don’t — who knows what consequences it might have… (evil laugh)","If you don’t know a word, ask me. In English. Nobody laughs."]},
  {t:"regie", titel:"Hintergrund zur Regel", text:`Du kannst den Grafen <b>deutschempfindlich</b> machen: Er hört jeden ganzen deutschen Satz, der am Tisch fällt — für ihn ein Geräusch im Haus. Folge: Die Gefahr steigt um 1 (Knopf rechts), oder er schickt einen Diener los — dafür einen <b>Thrall</b> in den Kampf laden. Hier darfst du improvisieren; die Drohung wirkt meist schon allein.
@@ -419,7 +414,7 @@ const KAPITEL = [
    ["Sie fragen etwas, das nicht auf der Seite steht","Ist es harmlos: sag Ja und erfinde eine Kleinigkeit. Sprengt es die Szene: „That doesn’t work.“ Fertig."],
    ["Sie finden einen Hinweis nicht","Auf jeder Personenkarte steht eine Zeile <b>Notfalls</b>. Nimm sie und geh weiter. Nichts darf hängenbleiben."],
    ["Sie streiten über eine Entscheidung","„You have one minute. Then we vote.“"],
-   ["Ein Spieler will sein Talent einsetzen (Magic Hand, Strength, Healing Touch)","Steht unten in der Szene eine <b>Optional</b>-Zeile dazu: nimm sie. Steht keine: Ist es harmlos, sag Ja und erfinde eine Kleinigkeit. Ein Talent ersetzt nie ein Gespräch — wer verhandeln soll, verhandelt."],
+   ["Ein Spieler will sein Talent einsetzen (Magic Hand, Strength, Healing Touch)","Steht rechts in seiner Karte eine <b>Optional</b>-Zeile dazu: nimm sie. Steht keine: Ist es harmlos, sag Ja und erfinde eine Kleinigkeit. Ein Talent ersetzt nie ein Gespräch — wer verhandeln soll, verhandelt."],
    ["Eine Figur fällt auf 0 Lebenspunkte","Sie ist bewusstlos, nicht tot. Zwei Wege zurück: der eigene <b>Heiltrank</b> (jede Figur hat genau einen, Knopf auf dem Blatt: +10 HP oder wieder auf die Beine) — oder sie liegt, bis der Kampf vorbei ist; <b>nach dem Kampf heilt die Lightbearer alle umsonst</b> (ihr Knopf, und rechts „alle voll“). Auf dem Blatt erscheint ausserdem <b>„Roll your fate“</b>: eine 20 macht sie stärker, eine 1 macht ihren Schaden unberechenbar, alles dazwischen gibt eine Narbe."],
    ["Der DM will einfach einen Wurf","Jedes Blatt hat den Knopf <b>„Just roll a d20“</b>. Sag vorher, ab welcher Zahl es klappt — meistens 10."],
    ["Die Gefahr wird orange (4–7)","Die Kämpfe bleiben, wie sie sind — aber jeder Kampfblock zeigt dir einen Knopf <b>„+1 … dazu — deine Entscheidung“</b>. Nimm ihn, wenn die Gruppe laut oder leichtsinnig war."],
@@ -847,7 +842,9 @@ function zeichneGruppe(){
      '<div class="hpzeile"><span class="hpwert"><b>'+h.hp+'</b>/'+h.max+'</span><span class="bar"><i style="width:'+p+'%"></i></span></div>'+
      '<div class="steuer"><input type="number" id="hpin'+i+'" value="5" min="1" max="99" aria-label="Punkte">'+
      '<button class="minus" data-hpin="'+i+'" data-r="-1">Schaden</button>'+
-     '<button class="plus" data-hpin="'+i+'" data-r="1">Heilung</button></div></div>';}).join("");
+     '<button class="plus" data-hpin="'+i+'" data-r="1">Heilung</button></div>'+
+     '<div class="chancen-held" id="ch'+i+'">'+chancenLeisteHTML(h.rolle)+'</div></div>';}).join("");
+  zeichneChancen();
 }
 function aendereHP(i,d,grund){
   const h=Z.gruppe[i], alt=h.hp;
@@ -1098,11 +1095,13 @@ function sichtbareChancen(k){
   if(k.braucht && entscheidungOffen(k.braucht)) return [];
   return (k.chancen||[]).filter(gilt);
 }
-function chancenHTML(k){
-  const cs=sichtbareChancen(k); if(!cs.length) return "";
-  return '<div class="schritt"><span class="nr leer"></span><div class="kern"><div class="chancen"><span class="tat">Optional · Gelegenheiten für einzelne Figuren — nur, falls ein Spieler von selbst darauf kommt</span>'+
-    cs.map(c=>'<details><summary><b>'+c.wer+' · '+c.talent+'</b><span>'+c.text+'</span></summary><p>'+c.folge+'</p></details>').join("")+'</div></div></div>';
+/* Sie stehen rechts bei der Figur, der sie gehören — sichtbar ohne Scrollen, aber leise */
+function aktuelleSzene(){ return Z.imZwischenakt ? PATROUILLE : KAPITEL[Z.schritt]; }
+function chancenLeisteHTML(rolle){
+  return sichtbareChancen(aktuelleSzene()).filter(c=>c.wer===rolle).map(c=>
+    '<details class="chance"><summary><span class="opt">Optional</span><b>'+c.talent+'</b> — '+c.text+'</summary><p>'+c.folge+'</p></details>').join("");
 }
+function zeichneChancen(){ Z.gruppe.forEach((h,i)=>{ const e=$("ch"+i); if(e) e.innerHTML=chancenLeisteHTML(h.rolle); }); }
 function zeichneSzene(){
   const k = Z.imZwischenakt ? PATROUILLE : KAPITEL[Z.schritt];
   $("s-n").textContent=k.n; $("s-titel").textContent=k.titel;
@@ -1111,13 +1110,11 @@ function zeichneSzene(){
   if(k.braucht && entscheidungOffen(k.braucht)){
     html+='<div class="hinweisfehlt">Auf dieser Seite steht nur, was zu eurem Weg gehört — und <b>'+ENTSCHEIDUNGEN[k.braucht].name+'</b> ist noch nicht gewählt. Geh zurück und klick die Karte an, für die sich die Gruppe entschieden hat.</div>';
   } else {
-    const ks=karten(sichtbareBloecke(k)), teile=ks.map((b,i)=>blockHTML(b,i+1));
-    const vorOptionen=ks.findIndex(b=>b.t==="optionen");           /* im Finale: vor „Wie ist es ausgegangen?“ */
-    teile.splice(vorOptionen<0?teile.length:vorOptionen, 0, chancenHTML(k));
-    html+=teile.join("");
+    html+=karten(sichtbareBloecke(k)).map((b,i)=>blockHTML(b,i+1)).join("");
   }
   html+=k.bloecke.filter(b=>b.t==="weiter").map(b=>blockHTML(b,0)).join("");
   $("bloecke").innerHTML=html;
+  zeichneChancen();
   if(Z.imZwischenakt){
     $("kschritt").textContent="Zwischenakt";
     $("zurueck").disabled=false; $("vor").disabled=false;

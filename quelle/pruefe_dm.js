@@ -95,7 +95,13 @@ function spiele(p, protokoll){
     pruefe(k.art!=="ent" || chancen.length===0, wo+": Gelegenheiten auf einer Entscheidungsseite");
     pruefe(chancen.length<=3, wo+`: ${chancen.length} Gelegenheiten sichtbar — mehr als drei lenken ab`);
     pruefe(chancen.length<=sichtbar.length, wo+": mehr Gelegenheiten als Szenenblöcke");
-    pruefe(text().includes("Gelegenheiten für einzelne Figuren")===(chancen.length>0), wo+": Optional-Zeile sichtbar/unsichtbar falsch");
+    const leiste=T.Z().gruppe.map((_,n)=>el("ch"+n).innerHTML);
+    pruefe(leiste.join("").includes("Optional")===(chancen.length>0), wo+": Optional-Zeile rechts sichtbar/unsichtbar falsch");
+    pruefe(!text().includes('class="chance"'), wo+": Gelegenheiten stehen noch in der Hauptspalte");
+    chancen.forEach(c=>{ const n=T.Z().gruppe.findIndex(hh=>hh.rolle===c.wer);
+      pruefe(n>=0 && leiste[n].includes(c.talent) && leiste[n].includes(c.text), wo+": Gelegenheit steht nicht in der Karte von "+c.wer); });
+    T.Z().gruppe.forEach((hh,n)=>{ const fremd=chancen.filter(c=>c.wer!==hh.rolle && leiste[n].includes(c.text)).length;
+      pruefe(fremd===0, wo+": Karte von "+hh.rolle+" zeigt eine Gelegenheit einer anderen Figur"); });
     for(const gruppe of [WEGE,TUEREN,WAHLEN,AUSGAENGE]){
       const flags=new Set(); chancen.forEach(c=>T.liste(c.nur).concat(T.liste(c.alle)).forEach(f=>{ if(gruppe.includes(f)) flags.add(f); }));
       pruefe(flags.size<=1, wo+": Gelegenheiten aus verschiedenen Zweigen gleichzeitig sichtbar: "+[...flags]);
