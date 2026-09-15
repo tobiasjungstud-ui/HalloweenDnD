@@ -19,6 +19,7 @@
   --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{height:100%}
 body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
 h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance}
@@ -56,6 +57,14 @@ input{font:inherit;color:inherit}
 .hp-btns button:hover{background:var(--stone-hi);color:var(--bone)}
 .hp-btns button.heal:hover{color:var(--moss);border-color:#2f5a48}
 .hp-btns button.harm:hover{color:var(--blood-hi);border-color:#5a2721}
+.hint{margin:0;font-size:12.5px;color:var(--dim);line-height:1.45}
+.extras{display:grid;gap:6px}
+.extras button{border:1px solid var(--line-hi);padding:9px 10px;font-size:13px;text-align:left;color:var(--bone);background:var(--stone)}
+.extras .trankbtn{border-color:var(--blood);color:var(--blood-hi)}
+.extras .trankbtn:hover{background:var(--blood);color:var(--bone)}
+.extras .trankbtn:disabled{opacity:.4;cursor:not-allowed;text-decoration:line-through}
+.extras .heilbtn{border-color:#2f5a48;color:var(--moss)}
+.extras .heilbtn:hover{background:#2f5a48;color:var(--bone)}
 .down{border:1px solid var(--blood);background:rgba(178,58,44,.1);padding:10px 12px;font-size:13.5px;color:var(--blood-hi);display:flex;flex-direction:column;gap:8px}
 .down button{border:1px solid var(--blood-hi);color:var(--bone);padding:9px;font-family:var(--display);font-size:16px;background:rgba(0,0,0,.3)}
 .down button:hover{background:var(--blood);}
@@ -171,7 +180,12 @@ footer.fine{font-size:12.5px;color:var(--dim);border-top:1px solid var(--line);p
         <button class="heal" data-hp="3">+3</button>
         <button class="heal" data-hp="5">+5</button>
       </div>
-      <div class="down" id="downbox" hidden><span>You are down. You cannot act until someone heals you.</span><button id="schicksal" hidden>Roll your fate (d20)</button></div>
+      <div class="extras">
+        <button id="trank" class="trankbtn">Healing potion — drink it (once per game)</button>
+        <button id="vollheil" class="heilbtn">__NACHKAMPF__</button>
+      </div>
+      <p class="hint">The potion works once: 10 hit points back — or back on your feet when you are down. After a fight, the Lightbearer heals everyone for free. Every change is logged below.</p>
+      <div class="down" id="downbox" hidden><span>You are down. Drink your potion — or wait: after the fight, the Lightbearer heals everyone.</span><button id="schicksal" hidden>Roll your fate (d20)</button></div>
     </div>
     <div class="howto">
       <span class="label">How to play</span>
@@ -254,18 +268,18 @@ const KLASSEN = {
   heiler: {
     id:"heiler", hpmax:24,
     aktionen:[
-      {name:"Healing Light", kind:"Blessing", art:"heilen", dmg:"1d8+4", risiko:"Always works",
-       text:"Warm light in your hands. Give the hit points to a friend — or keep them yourself."},
-      {name:"Circle of Light", kind:"Blessing", art:"gruppe", dmg:"1d4+2", risiko:"Always works",
-       text:"Light spreads through the room. Everyone in your group gets hit points back, you as well."},
-      {name:"Radiant Strike", kind:"Weapon", art:"angriff", ab:8, dmg:"1d8+3", risiko:"Usually hits",
-       text:"Your mace, wrapped in white light. Monsters of the night hate it."}
+      {name:"Radiant Strike", kind:"Weapon", art:"angriff", ab:7, dmg:"1d10+4", risiko:"Usually hits",
+       text:"Your mace, wrapped in white light. Monsters of the night hate it."},
+      {name:"Blinding Light", kind:"Blessing", art:"angriff", ab:7, dmg:"1d6+2", risiko:"Usually hits", stun:true,
+       text:"A flash from your palm. Less damage — but the monster is blinded and loses its next turn."},
+      {name:"Judgement", kind:"Blessing", art:"angriff", ab:11, dmg:"3d6+4", risiko:"Often misses",
+       text:"You call the light down from above. Huge damage — when it lands. It often doesn’t."}
     ]}
 };
 const K = KLASSEN["__ID__"];
 const SCHLUESSEL = "nachtfels.spieler2." + K.id;
 
-let S = { name:"", hp:K.hpmax, log:[], zaehler:0, narben:[], bonus:0, wahnsinn:false, schicksalOffen:false };
+let S = { name:"", hp:K.hpmax, log:[], zaehler:0, narben:[], bonus:0, wahnsinn:false, schicksalOffen:false, trank:true };
 function laden(){ try{ const r=localStorage.getItem(SCHLUESSEL); if(r){const g=JSON.parse(r); if(g&&typeof g==="object") S=Object.assign(S,g);} }catch(e){} }
 function sichern(){ try{ localStorage.setItem(SCHLUESSEL, JSON.stringify(S)); }catch(e){} }
 
@@ -436,6 +450,24 @@ function dreheD20(danach){
   (function dreh(){ if(performance.now()<bis){ $("wurfzahl").textContent=w(20); setTimeout(dreh,58); }
     else { $("die").classList.remove("rolling"); $("die").classList.add("landed"); fertig(); } })();
 }
+function zeichneTrank(){ const b=$("trank"); b.disabled=!S.trank; b.textContent=S.trank?"Healing potion — drink it (once per game)":"Healing potion — used"; }
+function trinken(){
+  if(!S.trank) return;
+  S.trank=false;
+  const unten=S.hp===0;
+  S.hp=Math.min(K.hpmax,S.hp+10); zeichneHP(); zeichneTrank();
+  $("was").textContent="Potion"; $("verdict").className="verdict hit"; $("verdict").textContent=unten?"Back on your feet":"+10 hit points";
+  $("detail").textContent="That was your only potion."; $("dmgline").innerHTML=""; $("after").innerHTML="";
+  sag(unten?"I drink my potion — I’m back on my feet!":"I drink my potion. Ten hit points back.");
+  notiere("<b>Healing potion</b>"+(unten?" — revived":""), "+10 HP → "+S.hp, "heal"); sichern();
+}
+function nachKampfHeilen(){
+  const vorher=S.hp; S.hp=K.hpmax; zeichneHP();
+  $("was").textContent="After the fight"; $("verdict").className="verdict hit"; $("verdict").textContent="Back to full";
+  $("detail").textContent=K.id==="heiler"?"Tell everyone: they set their sheets back to full too.":"Only after a fight, and only when the Lightbearer says so."; $("dmgline").innerHTML=""; $("after").innerHTML="";
+  sag(K.id==="heiler"?"The fight is over. I heal all of you — everybody back to full!":"Thank you — I’m back to full.");
+  notiere("<b>Healed by the Lightbearer</b> after the fight", "+"+(K.hpmax-vorher)+" HP → "+S.hp, "heal");
+}
 function freierWurf(){
   $("was").textContent="d20";
   dreheD20(augen=>{
@@ -482,12 +514,14 @@ document.addEventListener("click", e=>{
   const weg=e.target.closest("[data-weg]"); if(weg){ notiere("<b>Healing</b> given to a friend","+"+weg.dataset.weg+" HP","heal"); $("after").innerHTML=""; return; }
 });
 $("schicksal").onclick=schicksal;
+$("trank").onclick=trinken;
+$("vollheil").onclick=nachKampfHeilen;
 $("d20frei").onclick=freierWurf;
 $("heldname").addEventListener("input", e=>{ S.name=e.target.value; $("gravur").textContent=S.name; sichern(); });
 $("neu").onclick=()=>{
   if(!confirm("Start a new game? Your hit points and the whole roll log are cleared.")) return;
-  S={name:S.name, hp:K.hpmax, log:[], zaehler:0, narben:[], bonus:0, wahnsinn:false, schicksalOffen:false};
-  zeichneNarben();
+  S={name:S.name, hp:K.hpmax, log:[], zaehler:0, narben:[], bonus:0, wahnsinn:false, schicksalOffen:false, trank:true};
+  zeichneNarben(); zeichneTrank();
   zeichneHP(); zeichneLog(); sichern();
   $("verdict").className="verdict warten"; $("verdict").textContent="Pick one of the three below.";
   $("detail").textContent="The sheet rolls for you and tells you what happened.";
@@ -497,7 +531,7 @@ $("neu").onclick=()=>{
 
 laden();
 $("heldname").value=S.name; $("gravur").textContent=S.name;
-zeichneHP(); zeichneAktionen(); zeichneLog(); zeichneNarben();
+zeichneHP(); zeichneAktionen(); zeichneLog(); zeichneNarben(); zeichneTrank();
 </script>
 <template id="p-magier">
 <svg viewBox="0 0 300 400" role="img" aria-label="A hooded arcanist, face in shadow, holding a glowing rune sphere">

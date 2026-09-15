@@ -18,6 +18,7 @@
   --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{height:100%}
 body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--body);font-size:16px;line-height:1.6}
 h1,h2,h3,h4{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance}
@@ -68,13 +69,16 @@ input{font:inherit;color:inherit}
 .tat{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;display:block;margin-bottom:7px}
 
 /* ---- Ziel ---- */
-.ziel{border:1px solid var(--line-hi);background:var(--stone);padding:14px 18px;display:flex;gap:18px;flex-wrap:wrap;align-items:baseline}
+.ziel{border-left:4px solid var(--bone);background:var(--stone);padding:14px 18px;display:flex;gap:18px;flex-wrap:wrap;align-items:baseline}
+.legende{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:10px}
+.legende span::before{content:"";display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:-1px}
+.legende .g::before{background:var(--gold)}.legende .s::before{background:var(--moss)}.legende .d::before{background:var(--line-hi)}.legende .k::before{background:var(--blood)}
 .ziel .label{color:var(--gold);flex:none}
 .ziel p{margin:0;font-size:15.5px;flex:1;min-width:220px}
 .ziel .zeit{font-family:var(--mono);font-size:12px;color:var(--dim);white-space:nowrap}
 
 /* ---- Vorlesen ---- */
-.vorlesen{border-left:3px solid var(--gold);background:linear-gradient(90deg,rgba(217,164,65,.07),transparent 65%);padding:16px 20px}
+.vorlesen{border-left:4px solid var(--gold);background:linear-gradient(90deg,rgba(217,164,65,.08),rgba(217,164,65,.02));padding:18px 22px}
 .vorlesen .tat{color:var(--gold)}
 .vorlesen p{margin:0 0 11px;font-size:18px;line-height:1.62;max-width:60ch}
 .vorlesen p:last-child{margin:0}
@@ -94,14 +98,14 @@ input{font:inherit;color:inherit}
 .fa dt.erledigt{text-decoration:line-through}
 
 /* ---- Sagen: ein einzelner Satz, wörtlich ---- */
-.sagen{border:1px solid var(--gold-dim);background:rgba(217,164,65,.06);padding:14px 18px}
+.sagen{border-left:4px solid var(--gold);background:rgba(217,164,65,.06);padding:16px 20px}
 .sagen .tat{color:var(--gold)}
 .sagen p{margin:0;font-size:19px;font-style:italic;line-height:1.4;max-width:58ch}
 .sagen p+p{margin-top:9px}
 
 /* ---- Personen im Raum ---- */
-.personen{border:1px solid var(--line);background:var(--crypt);padding:16px 18px}
-.personen .tat{color:var(--moon)}
+.personen{border-left:4px solid var(--line-hi);background:rgba(255,255,255,.025);padding:14px 18px}
+.personen .tat{color:var(--ash)}
 .person{border-top:1px solid var(--line);padding:12px 0 2px}
 .person:first-of-type{border-top:none;padding-top:4px}
 .person .kopf{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
@@ -114,8 +118,8 @@ input{font:inherit;color:inherit}
 .sonst b{color:var(--bone);font-weight:400}
 
 /* ---- Wenn sie fragen ---- */
-.fa{border:1px solid var(--line);background:var(--crypt);padding:16px 18px}
-.fa .tat{color:var(--moon)}
+.fa{border-left:4px solid var(--line-hi);background:rgba(255,255,255,.025);padding:14px 18px}
+.fa .tat{color:var(--ash)}
 .fa dl{margin:0;display:flex;flex-direction:column;gap:2px}
 .fa dt{font-size:14px;color:var(--ash);font-family:var(--mono);font-size:12.5px;padding-top:10px;border-top:1px solid var(--line)}
 .fa dt:first-of-type{border-top:none;padding-top:0}
@@ -123,7 +127,7 @@ input{font:inherit;color:inherit}
 .fa dd em{font-style:normal;color:var(--ash);font-size:14px;display:block;margin-top:4px;padding-left:2px}
 
 /* ---- Tun: ein Knopf, eine Wirkung ---- */
-.tun{border:1px dashed var(--line-hi);padding:14px 18px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--crypt)}
+.tun{border-left:4px solid var(--line-hi);border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);padding:12px 18px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:none}
 .tun p{margin:0;flex:1;min-width:200px;font-size:15px}
 .tun p b{color:var(--gold)}
 .tun button{border:1px solid var(--gold);color:var(--gold);padding:10px 18px;font-size:15px;white-space:nowrap}
@@ -131,22 +135,23 @@ input{font:inherit;color:inherit}
 .tun button.getan{border-color:var(--moss);color:var(--moss)}
 
 /* ---- Sprechaufgabe ---- */
-.aufgabe{border:1px solid var(--moss);background:rgba(116,176,148,.07);padding:13px 16px;margin-top:16px}
+.aufgabe{border-left:4px solid var(--moss);border-top:1px solid #2f5a48;border-bottom:1px solid #2f5a48;background:rgba(116,176,148,.08);padding:13px 16px;margin-top:16px}
 .vorlesen .aufgabe p{font-size:17px;margin:0}
 .aufgabe .tat{color:var(--moss)}
 .aufgabe p{margin:0;font-size:16.5px}
 .aufgabe .blatt{display:inline-flex;align-items:center;gap:7px;margin-top:9px;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--moss);border:1px solid #3a5a4c;padding:5px 10px}
 
 /* ---- Regie / Wortschatz ---- */
-.regie{font-size:14.5px;color:var(--ash);line-height:1.6;border-left:1px solid var(--line-hi);padding-left:16px}
-.regie .tat{color:var(--dim)}
+.regie{font-size:14.5px;color:var(--ash);line-height:1.6;border-left:4px solid var(--line-hi);background:rgba(255,255,255,.025);padding:14px 18px}
+.regie .tat{color:var(--ash)}
 .regie p{margin:0 0 8px}.regie p:last-child{margin:0}
 .regie b{color:var(--bone);font-weight:400}
 
 
 /* ---- Bedingte Karte ---- */
-.wenn{border:1px solid var(--gold-dim);background:rgba(217,164,65,.05);padding:15px 18px}
+.wenn{border-left:4px solid var(--line-hi);background:rgba(255,255,255,.025);padding:14px 18px}
 .wenn .tat{color:var(--gold)}
+.wenn p{color:var(--ash);font-size:15px}
 .wenn h4{font-size:19px;margin-bottom:6px}
 .wenn p{margin:0;font-size:16px}
 .wenn p+p{margin-top:8px}
@@ -177,7 +182,7 @@ input{font:inherit;color:inherit}
 .option.gewaehlt .waehlen{background:rgba(217,164,65,.12);border-color:var(--gold);color:var(--gold)}
 
 /* ---- Kampf ---- */
-.kampfblock{border:1px solid var(--blood);background:rgba(178,58,44,.05);padding:15px 18px;display:flex;flex-direction:column;gap:11px}
+.kampfblock{border-left:4px solid var(--blood);background:rgba(178,58,44,.06);padding:14px 18px;display:flex;flex-direction:column;gap:11px}
 .kampfblock .tat{color:var(--blood-hi)}
 .kampfblock h4{font-size:20px}
 .kampfblock>p{margin:0;font-size:15.5px}
@@ -284,6 +289,7 @@ input{font:inherit;color:inherit}
       <span class="n" id="s-n">Anleitung</span>
       <h2 id="s-titel">…</h2>
       <div class="lage" id="lage"></div>
+      <div class="legende"><span class="g">Gelb · vorlesen</span><span class="s">Grün · an die Schüler</span><span class="d">Grau · nur du</span><span class="k">Rot · Kampf</span></div>
     </div>
     <div class="bloecke" id="bloecke"></div>
     <div class="blaettern">
@@ -311,7 +317,7 @@ input{font:inherit;color:inherit}
     </section>
 
     <section class="fach">
-      <span class="label">Die Gruppe <button id="vollheilung">alle voll</button></span>
+      <span class="label">Die Gruppe <button id="vollheilung">nach dem Kampf: alle voll</button></span>
       <div id="gruppe"></div>
     </section>
 
@@ -327,10 +333,10 @@ input{font:inherit;color:inherit}
       <div id="wissen"></div>
     </section>
 
-    <section class="fach">
-      <span class="label">Chronik</span>
-      <ul class="chronik" id="chronik"></ul>
-    </section>
+    <details class="fach" style="padding:0">
+      <summary class="label" style="padding:15px 17px;cursor:pointer;list-style:none">Chronik <span style="color:var(--dim);letter-spacing:0;text-transform:none;font-family:var(--body);font-size:12px">— aufklappen</span></summary>
+      <ul class="chronik" id="chronik" style="padding:0 17px 15px"></ul>
+    </details>
   </aside>
 </div>
 
@@ -391,14 +397,15 @@ const KAPITEL = [
    ["Sie fragen etwas, das nicht auf der Seite steht","Ist es harmlos: sag Ja und erfinde eine Kleinigkeit. Sprengt es die Szene: „That doesn’t work.“ Fertig."],
    ["Sie finden einen Hinweis nicht","Auf jeder Personenkarte steht eine Zeile <b>Notfalls</b>. Nimm sie und geh weiter. Nichts darf hängenbleiben."],
    ["Sie streiten über eine Entscheidung","„You have one minute. Then we vote.“"],
-   ["Eine Figur fällt auf 0 Lebenspunkte","Sie ist bewusstlos, nicht tot. Auf ihrem Blatt erscheint <b>„Roll your fate“</b>: eine 20 macht sie stärker, eine 1 macht ihren Schaden unberechenbar, alles dazwischen gibt eine Narbe. Danach heilt sie der Lightbearer wie üblich."],
+   ["Eine Figur fällt auf 0 Lebenspunkte","Sie ist bewusstlos, nicht tot. Zwei Wege zurück: der eigene <b>Heiltrank</b> (jede Figur hat genau einen, Knopf auf dem Blatt: +10 HP oder wieder auf die Beine) — oder sie liegt, bis der Kampf vorbei ist; <b>nach dem Kampf heilt die Lightbearer alle umsonst</b> (ihr Knopf, und rechts „alle voll“). Auf dem Blatt erscheint ausserdem <b>„Roll your fate“</b>: eine 20 macht sie stärker, eine 1 macht ihren Schaden unberechenbar, alles dazwischen gibt eine Narbe."],
    ["Der DM will einfach einen Wurf","Jedes Blatt hat den Knopf <b>„Just roll a d20“</b>. Sag vorher, ab welcher Zahl es klappt — meistens 10."],
    ["Die Gefahr wird orange (4–7)","Die Kämpfe bleiben, wie sie sind — aber jeder Kampfblock zeigt dir einen Knopf <b>„+1 … dazu — deine Entscheidung“</b>. Nimm ihn, wenn die Gruppe laut oder leichtsinnig war."],
    ["Die Gefahr wird rot (8–10)","Das Haus ist wach: Ab jetzt lädt jeder Kampfknopf <b>einen Gegner mehr</b>, und die Seite schiebt <b>einmal</b> einen Zwischenakt vor den nächsten Akt — eine Patrouille, drei Wachen und ein Hund. Du musst nichts tun; oben in der Leiste erscheint „⚠ Zwischenakt“, und beim Weiterklicken kommt er von selbst. Sinkt die Gefahr vorher wieder unter 8, wird er abgeblasen."],
    ["Du hast dich verklickt","Jede Entscheidung lässt sich umwählen — die Seite nimmt Gefahr, Lebenspunkte und Wissen der alten Wahl selbst zurück."]]},
  {t:"regie", titel:"Ein Kampf in drei Handgriffen", text:`<b>1.</b> Der Spieler liest seinen gelben Satz vor: „I hit for 9 damage.“
  <p><b>2.</b> Du tippst die 9 in die Karte des Monsters und drückst <em>Schaden</em>.</p>
- <p><b>3.</b> Das Monster ist dran: Du drückst auf seine Attacke. Die Seite würfelt und sagt dir, ob es trifft. Dann klickst du an, wen es erwischt hat.</p>`},
+ <p><b>3.</b> Das Monster ist dran: Du drückst auf seine Attacke. Die Seite würfelt und sagt dir, ob es trifft. Dann klickst du an, wen es erwischt hat.</p>
+ <p><b>Im Kampf heilt niemand</b> — ausser mit dem eigenen Trank. Danach heilt die Lightbearer alle: rechts „alle voll“.</p>`},
  {t:"weiter", text:"Wenn du das gelesen hast und jeder sein Helfer-Blatt vor sich liegen hat."}]},
 
 /* ===== 1 ===== */
@@ -656,7 +663,7 @@ const KAPITEL = [
 /* ===== 10 ===== */
 {n:"Finale", titel:"Count Vaskir", art:"kampf", braucht:"e3", ort:{e3_raus:ORT.treppe, e3_buch:ORT.studie, e3_pakt:ORT.turm}, nach:ORT.graf, bloecke:[
  {t:"ziel", text:"Die Begegnung mit dem Grafen — Verhandlung, Kampf oder beides. Am Ende trägst du unten ein, wie es ausging.", zeit:"30 Min."},
- {t:"regie", titel:"Hintergrund", text:`Der Graf sieht aus wie ein müder Mann von fünfzig. Wie er auftritt, hängt an eurer Wahl (Übergang) und am Barometer (Lebenspunkte, Thralls) — es steht nur der Fall da, der bei euch gilt. <b>Unter 15 Lebenspunkten hört er auf zu kämpfen und redet:</b> Dann kann die Gruppe noch einmal wählen — töten, Vertrag, oder ihn gehen lassen. Fällt eine Figur auf 0, ist sie bewusstlos, nicht tot; der Lightbearer holt sie zurück. <b>Am Ende trägst du unten ein, wie es ausging.</b>`},
+ {t:"regie", titel:"Hintergrund", text:`Der Graf sieht aus wie ein müder Mann von fünfzig. Wie er auftritt, hängt an eurer Wahl (Übergang) und am Barometer (Lebenspunkte, Thralls) — es steht nur der Fall da, der bei euch gilt. <b>Unter 15 Lebenspunkten hört er auf zu kämpfen und redet:</b> Dann kann die Gruppe noch einmal wählen — töten, Vertrag, oder ihn gehen lassen. Fällt eine Figur auf 0, ist sie bewusstlos, nicht tot — Trank, oder sie liegt bis nach dem Kampf. <b>Am Ende trägst du unten ein, wie es ausging.</b>`},
  {t:"regie", nur:"e3_pakt", titel:"Die Verhandlung — was er annimmt", text:`Das ist zuerst ein Gespräch, kein Kampf. <b>Eine einzige Regel:</b> Er nimmt jedes Angebot an, das die Gruppe etwas Echtes kostet — Zeit, ein Versprechen, einen Besuch jedes Jahr. Er lehnt alles ab, was nur ihm etwas kostet.
  <p>Lass die Gruppe laut überlegen, was sie geben könnte. Nimmt er an: unten „Ein neuer Vertrag“ anklicken, kein Kampf. Droht die Gruppe oder beleidigt ihn: Knopf „Verhandlung gescheitert“ — dann Kampf.</p>`},
  {t:"vorlesen", nur:"e3_raus", von:ORT.treppe, titel:"Der Weg hinunter", text:[
@@ -807,7 +814,7 @@ function ladeKampf(gegner, extra){
 /* ---- Zwischenakt: die Patrouille ---- */
 const PATROUILLE = {n:"Zwischenakt", titel:"The Patrol", art:"kampf", bloecke:[
  {t:"ziel", text:"Das Haus hat genug gehört. Eine Patrouille stellt die Gruppe — drei Wachen und ein Hund. Zu schaffen, aber es kostet.", zeit:"15 Min."},
- {t:"regie", titel:"Hintergrund", text:"Dieser Zwischenakt kommt nur, wenn das Barometer <b>8 oder mehr</b> erreicht — einmal pro Abend, vor dem nächsten Akt. Drei Wachen (je 9 HP) und ein Wachhund (14 HP): zusammen 41 Lebenspunkte gegen eure 72. <b>Gerade noch zu schaffen:</b> Ist der Hund gefallen und stehen die Wachen bei der Hälfte, ziehen sie sich zurück — „They don’t want to die for him.“ Lass den Lightbearer heilen, und wer die Wachen anspricht, bekommt eine Antwort. Danach geht die Geschichte weiter, wo sie war."},
+ {t:"regie", titel:"Hintergrund", text:"Dieser Zwischenakt kommt nur, wenn das Barometer <b>8 oder mehr</b> erreicht — einmal pro Abend, vor dem nächsten Akt. Drei Wachen (je 9 HP) und ein Wachhund (14 HP): zusammen 41 Lebenspunkte gegen eure 72. <b>Gerade noch zu schaffen:</b> Ist der Hund gefallen und stehen die Wachen bei der Hälfte, ziehen sie sich zurück — „They don’t want to die for him.“ Die Tränke sind für genau diesen Kampf da; danach heilt die Lightbearer alle. Wer die Wachen anspricht, bekommt eine Antwort. Danach geht die Geschichte weiter, wo sie war."},
  {t:"vorlesen", titel:"Schritte", text:[
   `Boots. Somewhere close, and getting closer — three pairs, in step. A lamp swings round the corner, and behind it comes something on a chain that is too big to be a dog and too quiet to be a wolf.`,
   `The man with the lamp does not ask who you are. He already knows. “There you are,” he says — and lets go of the chain.`]},

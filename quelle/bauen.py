@@ -14,11 +14,11 @@ VORLAGE = (HIER / "vorlage_spieler.html").read_text(encoding="utf-8")
 
 KLASSEN = {
     "magier":  dict(datei="spieler_magier.html",  titel="Nachtfels Arcanist",
-                    farbe="#8f86e0", rolle="The <em>Arcanist</em>", platte="Arcanist · Level 3"),
+                    farbe="#8f86e0", rolle="The <em>Arcanist</em>", platte="Arcanist · Level 3", nachkampf="After the fight: healed by the Lightbearer → full"),
     "krieger": dict(datei="spieler_krieger.html", titel="Nachtfels Blade",
-                    farbe="#c8763c", rolle="The <em>Blade</em>", platte="Blade · Level 3"),
+                    farbe="#c8763c", rolle="The <em>Blade</em>", platte="Blade · Level 3", nachkampf="After the fight: healed by the Lightbearer → full"),
     "heiler":  dict(datei="spieler_heiler.html",  titel="Nachtfels Lightbearer",
-                    farbe="#6fae9a", rolle="The <em>Lightbearer</em>", platte="Lightbearer · Level 3"),
+                    farbe="#6fae9a", rolle="The <em>Lightbearer</em>", platte="Lightbearer · Level 3", nachkampf="After the fight: I heal everyone → full"),
 }
 
 PORTRAET = re.compile(r'<template id="p-(\w+)">(.*?)</template>\n?', re.S)
@@ -36,6 +36,7 @@ for kennung, k in KLASSEN.items():
              .replace("__FARBE__", k["farbe"])
              .replace("__ROLLE__", k["rolle"])
              .replace("__KLASSENNAME__", k["platte"])
+             .replace("__NACHKAMPF__", k["nachkampf"])
              .replace("__ID__", kennung))
     offen = re.findall(r"__[A-ZÄÖÜ]+__", seite)
     if offen:

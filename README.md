@@ -7,9 +7,11 @@ drei Entscheidungen — und möglichst viel gesprochenes Englisch.
 Gebaut für **Vierzehnjährige ohne jedes Vorwissen**: kein Regelwerk, keine Rüstungsklasse,
 keine Zauberplätze, keine Absprachen darüber, ob ein Angriff trifft. Die Spielerblätter
 würfeln selbst, entscheiden selbst und schreiben jedem den englischen Satz hin, den er
-sagen soll. Fällt eine Figur auf 0, würfelt sie einmal ihr Schicksal: eine 20 macht sie
-stärker, eine 1 macht ihren Schaden unberechenbar, alles dazwischen gibt eine Narbe. Die
-Spielleitung wird Satz für Satz geführt und muss nichts vorbereiten.
+sagen soll. Jede Figur hat genau einen Heiltrank (+10 HP oder wieder auf die Beine); im Kampf
+heilt sonst niemand, nach dem Kampf heilt die Lightbearer alle. Fällt eine Figur auf 0, würfelt
+sie einmal ihr Schicksal: eine 20 macht sie stärker, eine 1 macht ihren Schaden unberechenbar,
+alles dazwischen gibt eine Narbe. Die Spielleitung wird Satz für Satz geführt und muss nichts
+vorbereiten.
 
 Alles läuft in einer einzelnen HTML-Datei je Person. Kein Server, kein Build-Schritt zum
 Spielen, kein Konto, keine Daten verlassen das Gerät.
@@ -23,7 +25,7 @@ Spielen, kein Konto, keine Daten verlassen das Gerät.
 | `dungeon_master.html` | Spielleitung | Zwölf Seiten Ablauf, Gefahrenbarometer, Lebenspunkte, Kampf-Tracker |
 | `spieler_magier.html` | The Arcanist, 18 HP | Fireball · Magic Hand · Arcane Darts |
 | `spieler_krieger.html` | The Blade, 30 HP | Sword Strike · Shield Bash · Reckless Charge |
-| `spieler_heiler.html` | The Lightbearer, 24 HP | Healing Light · Circle of Light · Radiant Strike |
+| `spieler_heiler.html` | The Lightbearer, 24 HP | Radiant Strike · Blinding Light · Judgement — und nach jedem Kampf heilt sie alle umsonst |
 
 Dazu drei Word-Dateien in `helferblatt/`, alle zum Ausdrucken:
 
