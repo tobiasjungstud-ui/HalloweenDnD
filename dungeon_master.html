@@ -81,7 +81,9 @@ input{font:inherit;color:inherit}
 .vorlesen p.rede{font-style:italic;border-left:2px solid var(--gold-dim);padding-left:14px;margin-left:2px}
 .aufgabe p.rede{font-size:17.5px;font-style:italic;line-height:1.5}
 .aufgabe .hinweis{font-size:13.5px;color:var(--ash);margin:8px 0 0;font-style:normal}
-.fa dt .hak{font-size:15px;color:var(--gold);padding:0 4px 0 0;line-height:1}
+.hak{font-size:15px;color:var(--gold);padding:0 4px 0 0;line-height:1}
+.person li.erledigt{opacity:.38;text-decoration:line-through}
+.person.stumm h4{color:var(--dim)}
 .fa dt.erledigt,.fa dd.erledigt{opacity:.38}
 .fa dt.erledigt{text-decoration:line-through}
 
@@ -421,7 +423,7 @@ const KAPITEL = [
 /* ===== 2 ===== */
 {n:"Kapitel I", titel:"The Inn", art:"szene", ort:ORT.vorWirtshaus, nach:ORT.wirtshaus, bloecke:[
  {t:"ziel", text:"Die Gruppe spricht mit drei Menschen, erfährt zwei Dinge und bekommt am Ende die Karte.", zeit:"25 Min."},
- {t:"regie", titel:"Hintergrund", text:"Im Wirtshaus sitzen elf Menschen. <b>Drei sind ansprechbar:</b> Greta (Wirtin, drei Finger), Old Pieter (Totengräber, betrunken) und Tobias (Junge an der Tür). Die anderen acht antworten nicht — spricht jemand sie an: „They look into their drinks and say nothing.“ <b>Wichtig:</b> Der Name <b>Anneke</b> muss fallen; notfalls ruft Pieter ihn von selbst. Am Ende der Szene liegt die Karte mit den drei Wegen auf dem Tisch."},
+ {t:"regie", titel:"Hintergrund", text:"Im Wirtshaus sitzen elf Menschen. <b>Drei sind ansprechbar:</b> Greta (Wirtin, drei Finger), Old Pieter (Totengräber, betrunken) und Tobias (Junge an der Tür). Die anderen acht antworten nicht — spricht jemand sie an: „They look into their drinks and say nothing.“ Jeder Satz der drei ist nur <b>einmal</b> zu haben (abhaken); wer alle drei verbraucht hat, schweigt und beachtet die Gruppe nicht mehr. <b>Wichtig:</b> Der Name <b>Anneke</b> muss fallen; notfalls ruft Pieter ihn von selbst. Am Ende der Szene liegt die Karte mit den drei Wegen auf dem Tisch."},
  {t:"vorlesen", titel:"Der Raum", text:[
   `You push the door open. Inside it is warm and far too quiet. Eleven people are sitting in a room built for forty, and every one of them stops talking.`,
   `Above the fireplace hangs a long wooden board with names carved into it. The last one is fresh — you can still see the pale wood inside the letters. It says: MIRELA VANCE.`]},
@@ -917,10 +919,12 @@ function blockHTML(b, idx){
     case "vorlesen": innen='<div class="vorlesen"><span class="tat">Vorlesen'+(b.titel?" · "+b.titel:"")+'</span>'+b.text.map(p=>"<p>"+p+"</p>").join("")+'</div>'; break;
     case "sagen": innen='<div class="sagen"><span class="tat">Das sagst du</span>'+b.text.map(p=>"<p>„"+p+"“</p>").join("")+'</div>'; break;
     case "aufgabe": innen='<div class="vorlesen">'+aufgabeHTML(b)+'</div>'; break;
-    case "personen": innen='<div class="personen"><span class="tat">Wen man ansprechen kann</span>'+
-      b.leute.map(l=>'<div class="person"><div class="kopf"><h4>'+l.name+'</h4><span class="wer">'+l.wer+'</span></div>'+
-        '<p class="spielt">'+l.spielt+'</p><ul>'+l.sagt.map(s=>'<li>„'+s+'“</li>').join("")+'</ul>'+
-        '<p class="sonst" style="border:none;padding-top:8px;margin-top:8px"><b>Notfalls:</b> '+l.notfalls+'</p></div>').join("")+
+    case "personen": innen='<div class="personen"><span class="tat">Wen man ansprechen kann · jeder Satz nur einmal</span>'+
+      b.leute.map(l=>{ const keys=l.sagt.map((_,j)=>(Z.schritt+":"+l.name+":"+j)); const stumm=keys.every(k=>Z.abgehakt[k]);
+        return '<div class="person'+(stumm?" stumm":"")+'"><div class="kopf"><h4>'+l.name+'</h4><span class="wer">'+l.wer+'</span></div>'+
+        '<p class="spielt">'+l.spielt+'</p><ul>'+l.sagt.map((s,j)=>'<li class="'+(Z.abgehakt[keys[j]]?"erledigt":"")+'"><button class="hak" data-hak="'+keys[j].replace(/"/g,"&quot;")+'">'+(Z.abgehakt[keys[j]]?"☑":"☐")+'</button> „'+s+'“</li>').join("")+'</ul>'+
+        (stumm ? '<p class="sonst" style="border:none;padding-top:8px;margin-top:8px;color:var(--blood-hi)"><b>Ausgeredet.</b> '+l.name+' sagt nichts mehr und beachtet die Gruppe nicht — „'+l.name+' looks away and says nothing more.“</p>'
+               : '<p class="sonst" style="border:none;padding-top:8px;margin-top:8px"><b>Notfalls:</b> '+l.notfalls+'</p>')+'</div>';}).join("")+
       (b.sonst?'<p class="sonst">'+b.sonst+'</p>':'')+'</div>'; break;
     case "fa": innen='<div class="fa"><span class="tat">'+(b.titel||"Antwortmöglichkeiten")+(b.abhaken?' · jede Frage nur einmal':'')+'</span><dl>'+
       b.paare.map(p=>{ const k=Z.schritt+":"+p[0], weg=b.abhaken&&Z.abgehakt[k];
