@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Bride of Nachtfels</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=JetBrains+Mono:wght@400;700&family=Spectral:ital,wght@0,300;0,400;0,600;1,400&display=swap">
+<style>
+:root{
+  color-scheme: dark;
+  --ink:#08080c; --crypt:#0e0e15; --stone:#14141e;
+  --line:#262633; --line-hi:#3a3a4c;
+  --bone:#eae4d7; --ash:#948fa2; --dim:#5d5a6b;
+  --gold:#d9a441; --gold-dim:#8a6a2c;
+  --display:'IM Fell English SC','Iowan Old Style',Georgia,serif;
+  --body:'Spectral',Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--body);font-size:16px;line-height:1.6;
+  padding-block:clamp(36px,7vw,80px) 60px;padding-inline:20px}
+.mitte{max-width:860px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance}
+a{color:inherit}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-dim);margin:0 0 10px}
+h1{font-size:clamp(38px,7vw,62px);line-height:1.02;margin-bottom:14px}
+.lead{font-size:clamp(17px,2.2vw,20px);color:var(--ash);max-width:56ch;margin:0 0 6px}
+.lead b{color:var(--bone);font-weight:400}
+hr{border:none;border-top:1px solid var(--line);margin:38px 0 30px}
+h2{font-size:24px;margin-bottom:6px}
+.klein{font-size:14.5px;color:var(--ash);margin:0 0 18px;max-width:58ch}
+.karten{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px}
+.karte{display:flex;flex-direction:column;gap:7px;border:1px solid var(--line);background:var(--crypt);
+  padding:18px;text-decoration:none;transition:.18s}
+.karte:hover{border-color:var(--klasse,var(--gold));background:var(--stone);transform:translateY(-2px)}
+.karte .rolle{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--klasse,var(--gold))}
+.karte h3{font-size:23px}
+.karte p{margin:0;font-size:14px;color:var(--ash);line-height:1.5;flex:1}
+.karte .pfeil{font-family:var(--mono);font-size:12px;color:var(--dim)}
+.karte.dm{--klasse:#d9a441;grid-column:1/-1}
+.karte.m{--klasse:#8f86e0}.karte.k{--klasse:#c8763c}.karte.h{--klasse:#6fae9a}
+ol.ablauf{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:9px;max-width:60ch}
+ol.ablauf li{font-size:15.5px;color:var(--ash)}
+ol.ablauf li b{color:var(--bone);font-weight:400}
+ol.ablauf li::marker{font-family:var(--mono);font-size:12px;color:var(--gold-dim)}
+.datei{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line-hi);padding:10px 16px;
+  text-decoration:none;font-size:15px;transition:.15s;margin-top:4px}
+.datei:hover{border-color:var(--gold);color:var(--gold)}
+footer{margin-top:44px;border-top:1px solid var(--line);padding-top:18px;font-size:13px;color:var(--dim);
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<main class="mitte">
+  <p class="eyebrow">Ein Abend D&amp;D light für den Englischunterricht</p>
+  <h1>The Bride of Nachtfels</h1>
+  <p class="lead">Drei Schülerinnen und Schüler spielen Vampirjäger, eine Lehrperson führt.
+  Ein Abend, drei Entscheidungen, ein Schloss in den Bergen — und <b>möglichst viel gesprochenes Englisch</b>.</p>
+  <p class="lead">Kein Vorwissen nötig, weder bei den Spielenden noch bei der Spielleitung.
+  Die Blätter würfeln selbst und schreiben jedem den Satz hin, den er sagen soll.</p>
+
+  <hr>
+
+  <h2>Die vier Seiten</h2>
+  <p class="klein">Jede Person öffnet ihre eigene Seite auf ihrem eigenen Gerät.</p>
+  <div class="karten">
+    <a class="karte dm" href="dungeon_master.html">
+      <span class="rolle">Spielleitung</span>
+      <h3>Dungeon Master</h3>
+      <p>Zwölf Seiten, Schritt für Schritt: was vorzulesen ist, wen die Gruppe ansprechen kann, was diese Person
+      auf welche Frage antwortet. Dazu Gefahrenbarometer, Lebenspunkte und Kampf-Tracker.</p>
+      <span class="pfeil">öffnen →</span>
+    </a>
+    <a class="karte m" href="spieler_magier.html">
+      <span class="rolle">Spieler 1 · 18 HP</span>
+      <h3>The Arcanist</h3>
+      <p>Fireball, Magic Hand, Arcane Darts.</p>
+      <span class="pfeil">öffnen →</span>
+    </a>
+    <a class="karte k" href="spieler_krieger.html">
+      <span class="rolle">Spieler 2 · 30 HP</span>
+      <h3>The Blade</h3>
+      <p>Sword Strike, Shield Bash, Reckless Charge.</p>
+      <span class="pfeil">öffnen →</span>
+    </a>
+    <a class="karte h" href="spieler_heiler.html">
+      <span class="rolle">Spieler 3 · 24 HP</span>
+      <h3>The Lightbearer</h3>
+      <p>Healing Light, Circle of Light, Radiant Strike.</p>
+      <span class="pfeil">öffnen →</span>
+    </a>
+  </div>
+
+  <hr>
+
+  <h2>Für die Schüler auf Papier</h2>
+  <p class="klein">Das Helfer-Blatt enthält alle englischen Satzanfänge und Vokabeln, nach Szenen geordnet.
+  Einmal pro Schüler ausdrucken und vor Beginn austeilen.</p>
+  <a class="datei" href="helferblatt/Nachtfels_Helfer-Blatt.docx" download>Helfer-Blatt herunterladen (Word)</a>
+
+  <hr>
+
+  <h2>So läuft der Abend</h2>
+  <ol class="ablauf">
+    <li><b>Vorbereiten:</b> Helfer-Blatt ausdrucken, drei Geräte bereitlegen, jedem seinen Link geben.</li>
+    <li><b>Lesen:</b> Die Spielleitung liest Seite 1 der Konsole — fünf Minuten, mehr braucht es nicht.</li>
+    <li><b>Spielen:</b> Die Konsole führt durch zwölf Seiten. Gelb umrandet heisst vorlesen,
+      grün heisst „das sollen die Schüler jetzt tun“, grau ist nur für die Spielleitung.</li>
+    <li><b>Dauer:</b> etwa drei Stunden, gut teilbar in zwei Doppelstunden — der Schnitt liegt beim Aufstieg.</li>
+  </ol>
+
+  <footer>
+    <span>The Bride of Nachtfels · Unterrichtsmaterial</span>
+    <span>Alle Seiten laufen ohne Server und ohne Konto. Ohne Internet fehlen nur die Schriften.</span>
+  </footer>
+</main>
+</body>
+</html>

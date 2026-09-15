@@ -1,0 +1,532 @@
+<title>__TITEL__</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=JetBrains+Mono:wght@400;700&family=Spectral:ital,wght@0,300;0,400;0,600;1,400&display=swap">
+<style>
+:root{
+  color-scheme: dark;
+  --ink:#08080c; --crypt:#0e0e15; --stone:#14141e; --stone-hi:#1f1f2c;
+  --line:#262633; --line-hi:#3a3a4c;
+  --bone:#eae4d7; --ash:#948fa2; --dim:#5d5a6b;
+  --gold:#d9a441; --gold-dim:#8a6a2c;
+  --blood:#b23a2c; --blood-hi:#e0645a;
+  --moss:#74b094;
+  --klasse:__FARBE__;
+  --display:'IM Fell English SC','Iowan Old Style',Georgia,serif;
+  --body:'Spectral',Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:2px}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin:0}
+.label{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ash)}
+
+.blatt{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);min-height:100%}
+@media (max-width:880px){.blatt{grid-template-columns:1fr}}
+
+/* ---------- Porträtplatte ---------- */
+.plate{background:linear-gradient(180deg,#0a0a11,#06060a);border-right:1px solid var(--line);padding-block:24px 30px;padding-inline:20px;display:flex;flex-direction:column;gap:18px}
+.frame{position:relative;border:1px solid var(--line);background:#050508;overflow:hidden}
+.frame::after{content:"";position:absolute;inset:6px;border:1px solid rgba(217,164,65,.14);pointer-events:none}
+.frame svg{display:block;width:100%;height:auto;max-width:100%}
+.nameplate{text-align:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding-block:10px}
+.nameplate .engraved{font-family:var(--display);font-size:22px;text-shadow:0 1px 0 #000,0 -1px 0 rgba(255,255,255,.07);word-break:break-word}
+.nameplate .engraved:empty::before{content:"Unnamed";color:var(--dim)}
+.nameplate p{margin:2px 0 0;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--klasse)}
+
+/* ---------- Lebenspunkte ---------- */
+.vitals{display:flex;flex-direction:column;gap:9px}
+.vitals-head{display:flex;justify-content:space-between;align-items:baseline}
+.hp-num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.hp-num b{font-size:32px;font-weight:700;line-height:1}
+.hp-num span{font-size:14px;color:var(--dim)}
+.hpbar{height:15px;background:#0f0f16;border:1px solid var(--line);overflow:hidden}
+.hpbar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#7e2018,var(--blood));transition:width .35s ease}
+.hpbar.low i{background:linear-gradient(90deg,#5e150f,var(--blood-hi));animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.55}}
+.hp-btns{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
+.hp-btns button{font-family:var(--mono);font-size:13px;padding:10px 0;border:1px solid var(--line);background:var(--stone);color:var(--ash);transition:.15s}
+.hp-btns button:hover{background:var(--stone-hi);color:var(--bone)}
+.hp-btns button.heal:hover{color:var(--moss);border-color:#2f5a48}
+.hp-btns button.harm:hover{color:var(--blood-hi);border-color:#5a2721}
+.down{border:1px solid var(--blood);background:rgba(178,58,44,.1);padding:10px 12px;font-size:13.5px;color:var(--blood-hi)}
+
+/* ---------- So spielst du ---------- */
+.howto{border:1px solid var(--line);background:var(--crypt);padding:14px 16px}
+.howto .label{display:block;margin-bottom:9px;color:var(--klasse)}
+.howto ol{margin:0;padding-left:19px;display:flex;flex-direction:column;gap:7px}
+.howto li{font-size:14px;color:var(--ash);line-height:1.45}
+.howto li b{color:var(--bone);font-weight:400}
+.howto li::marker{font-family:var(--mono);font-size:11px;color:var(--klasse)}
+
+/* ---------- Rechte Seite ---------- */
+.panel{padding-block:24px 40px;padding-inline:clamp(18px,3vw,34px);display:flex;flex-direction:column;gap:24px;min-width:0}
+.panelhead{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--line);padding-bottom:18px}
+.panelhead h1{font-size:clamp(28px,4vw,40px);line-height:1.05}
+.panelhead h1 em{font-style:normal;color:var(--klasse)}
+.field{display:flex;flex-direction:column;gap:5px;min-width:230px;flex:1;max-width:340px}
+.field input{background:var(--crypt);border:1px solid var(--line);border-bottom:2px solid var(--klasse);padding:10px 12px;font-family:var(--display);font-size:19px}
+.field input::placeholder{font-family:var(--body);font-size:15px;color:var(--dim)}
+
+/* ---------- Würfelbühne ---------- */
+.stage{border:1px solid var(--line);background:radial-gradient(120% 130% at 50% 0%,#12121b,#08080c 70%);padding:22px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:center}
+@media (max-width:620px){.stage{grid-template-columns:1fr;justify-items:center;text-align:center}}
+.die{position:relative;width:114px;height:114px;flex:none}
+.die svg{width:100%;height:100%;display:block}
+.die .face{font-family:var(--mono);font-weight:700;font-size:33px;position:absolute;inset:0;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.die.rolling{animation:tumble .62s cubic-bezier(.3,.8,.4,1) infinite}
+@keyframes tumble{0%{transform:rotate(0) scale(1)}35%{transform:rotate(140deg) scale(1.07)}70%{transform:rotate(255deg) scale(.95)}100%{transform:rotate(360deg) scale(1)}}
+.die.landed{animation:land .4s ease-out}
+@keyframes land{0%{transform:scale(1.18)}60%{transform:scale(.96)}100%{transform:scale(1)}}
+.die.crit .face{color:var(--gold)}
+.die.miss .face{color:var(--dim)}
+.readout{min-width:0;width:100%}
+.readout .what{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--klasse);margin:0 0 5px}
+.verdict{font-family:var(--display);font-size:clamp(26px,3.6vw,36px);line-height:1.08;margin:0}
+.verdict.hit{color:var(--bone)}
+.verdict.crit{color:var(--gold);text-shadow:0 0 22px rgba(217,164,65,.45)}
+.verdict.miss{color:var(--ash)}
+.verdict.warten{color:var(--dim)}
+.detail{margin:5px 0 0;font-size:14px;color:var(--ash)}
+.dmgline{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-top:12px;min-height:38px}
+.pip{width:36px;height:36px;border:1px solid var(--line-hi);background:var(--stone);display:grid;place-items:center;font-family:var(--mono);font-size:15px;animation:drop .28s ease-out backwards}
+.pip.d6{border-radius:5px}
+.pip.d4{clip-path:polygon(50% 0,100% 100%,0 100%);border:none;background:var(--stone-hi)}
+.pip.d8,.pip.d10{clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);border:none;background:var(--stone-hi)}
+@keyframes drop{from{opacity:0;transform:translateY(-14px) rotate(-18deg)}}
+.dmgtotal{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--klasse);margin-left:4px;font-variant-numeric:tabular-nums}
+.sagbox{margin-top:14px;border:1px solid var(--gold-dim);background:rgba(217,164,65,.07);padding:12px 15px}
+.sagbox .label{color:var(--gold);display:block;margin-bottom:5px}
+.sagbox p{margin:0;font-size:clamp(17px,2.4vw,21px);color:var(--bone);font-style:italic;line-height:1.35}
+.sagbox.leer{border-color:var(--line);background:none}
+.sagbox.leer p{color:var(--dim);font-style:normal;font-size:15px}
+.after{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+.after button{border:1px solid var(--klasse);color:var(--klasse);padding:8px 15px;font-size:14px}
+.after button:hover{background:var(--klasse);color:#07070b}
+
+/* ---------- Aktionen ---------- */
+.actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(246px,1fr));gap:14px}
+.action{border:1px solid var(--line);background:var(--crypt);padding:16px;display:flex;flex-direction:column;gap:10px;transition:.18s}
+.action:hover{border-color:var(--line-hi);background:var(--stone)}
+.action h3{font-size:22px}
+.action .kind{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--klasse)}
+.action .desc{margin:0;font-size:14.5px;color:var(--ash);line-height:1.5;flex:1}
+.action .nums{display:flex;gap:10px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--line);padding-top:10px;font-family:var(--mono);font-size:11px}
+.action .nums span{border:1px solid var(--line-hi);padding:3px 8px;color:var(--ash)}
+.action .nums span.sicher{border-color:#3a5a4c;color:var(--moss)}
+.action .nums span.risiko{border-color:var(--blood);color:var(--blood-hi)}
+.action .go{width:100%;border:1px solid var(--line-hi);background:var(--stone);padding:12px;font-family:var(--display);font-size:18px;transition:.15s}
+.action .go:hover{background:var(--klasse);color:#07070b;border-color:var(--klasse)}
+
+/* ---------- Protokoll ---------- */
+.log h2{font-size:20px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.log h2 span{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--dim);text-transform:uppercase}
+.log ol{list-style:none;margin:12px 0 0;padding:0;border-top:1px solid var(--line);max-height:280px;overflow-y:auto}
+.log li{display:grid;grid-template-columns:40px 1fr auto;gap:12px;padding:9px 2px;border-bottom:1px solid var(--line);font-size:13.5px;align-items:baseline}
+@media (max-width:520px){.log li{grid-template-columns:32px 1fr}.log li .res{grid-column:2}}
+.log .no{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.log .txt{color:var(--ash);min-width:0;overflow-wrap:anywhere}
+.log .txt b{color:var(--bone);font-weight:400}
+.log .res{font-family:var(--mono);font-size:13px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.log .res.hit{color:var(--gold)}.log .res.miss{color:var(--dim)}
+.log .res.harm{color:var(--blood-hi)}.log .res.heal{color:var(--moss)}
+.log .leer{display:block;color:var(--dim);font-size:13.5px;padding:14px 2px;border-bottom:1px solid var(--line)}
+footer.fine{font-size:12.5px;color:var(--dim);border-top:1px solid var(--line);padding-top:14px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+@media (prefers-reduced-motion:reduce){*,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+
+<div class="blatt">
+  <aside class="plate">
+    <div class="frame" id="portraet"><!--__PORTRAET__--></div>
+    <div class="nameplate">
+      <div class="engraved" id="gravur"></div>
+      <p>__KLASSENNAME__</p>
+    </div>
+    <div class="vitals">
+      <div class="vitals-head">
+        <span class="label">Hit points</span>
+        <span class="hp-num"><b id="hp">0</b><span id="hpmax">/0</span></span>
+      </div>
+      <div class="hpbar" id="hpbar"><i id="hpfill"></i></div>
+      <div class="hp-btns">
+        <button class="harm" data-hp="-5">−5</button>
+        <button class="harm" data-hp="-3">−3</button>
+        <button class="harm" data-hp="-1">−1</button>
+        <button class="heal" data-hp="1">+1</button>
+        <button class="heal" data-hp="3">+3</button>
+        <button class="heal" data-hp="5">+5</button>
+      </div>
+      <div class="down" id="downbox" hidden>You are down. You cannot act until someone heals you.</div>
+    </div>
+    <div class="howto">
+      <span class="label">How to play</span>
+      <ol>
+        <li><b>Say what you do</b> — in English. “I attack the wolf!”</li>
+        <li><b>Press a button.</b> The sheet rolls and decides everything for you.</li>
+        <li><b>Read the yellow sentence out loud.</b> That is your turn.</li>
+      </ol>
+    </div>
+  </aside>
+
+  <main class="panel">
+    <header class="panelhead">
+      <div>
+        <p class="eyebrow">The Bride of Nachtfels · Player sheet</p>
+        <h1>__ROLLE__</h1>
+      </div>
+      <label class="field" for="heldname"><span class="label">Your character's name</span>
+        <input id="heldname" type="text" maxlength="28" placeholder="Write it here" autocomplete="off"></label>
+    </header>
+
+    <section class="stage" aria-live="polite">
+      <div class="die" id="die">
+        <svg viewBox="0 0 100 100" aria-hidden="true">
+          <polygon points="50,3 93,27 93,73 50,97 7,73 7,27" fill="#11111a" stroke="var(--klasse)" stroke-width="1.6"></polygon>
+          <polygon points="50,3 93,27 50,44 7,27" fill="rgba(255,255,255,.035)"></polygon>
+          <polygon points="50,44 93,27 93,73" fill="rgba(0,0,0,.28)"></polygon>
+          <polygon points="50,44 7,27 7,73" fill="rgba(0,0,0,.14)"></polygon>
+          <polygon points="50,44 93,73 50,97 7,73" fill="none" stroke="rgba(255,255,255,.09)" stroke-width="1"></polygon>
+        </svg>
+        <span class="face" id="wurfzahl">20</span>
+      </div>
+      <div class="readout">
+        <p class="what" id="was">Your turn</p>
+        <p class="verdict warten" id="verdict">Pick one of the three below.</p>
+        <p class="detail" id="detail">The sheet rolls for you and tells you what happened.</p>
+        <div class="dmgline" id="dmgline"></div>
+        <div class="sagbox leer" id="sagbox"><span class="label">Say this</span><p id="sagtext">Your sentence appears here after you roll.</p></div>
+        <div class="after" id="after"></div>
+      </div>
+    </section>
+
+    <section class="actions" id="aktionen"></section>
+
+    <section class="log">
+      <h2>Roll log <span id="siegel">0 rolls</span></h2>
+      <ol id="protokoll"><li class="leer">Nothing rolled yet. Every roll lands here — the good ones and the bad ones.</li></ol>
+    </section>
+
+    <footer class="fine">
+      <span>The Bride of Nachtfels — one evening, three heroes, one castle.</span>
+      <button id="neu" style="color:var(--dim);text-decoration:underline">Start a new game</button>
+    </footer>
+  </main>
+</div>
+
+<script>
+"use strict";
+const KLASSEN = {
+  magier: {
+    id:"magier", hpmax:18,
+    aktionen:[
+      {name:"Fireball", kind:"Spell", art:"angriff", ab:9, dmg:"2d8+2", risiko:"Often misses",
+       text:"A huge ball of fire. It hits harder than anything else you have — when it hits."},
+      {name:"Magic Hand", kind:"Spell", art:"trick", ab:8,
+       text:"An invisible hand. Open a door, pull a lever, take a key. Tell your DM what it should do, then roll."},
+      {name:"Arcane Darts", kind:"Spell", art:"immer", dmg:"1d6+3", risiko:"Never misses",
+       text:"Three darts of light. Small damage — but they always hit. Use them when you cannot afford to miss."}
+    ]},
+  krieger: {
+    id:"krieger", hpmax:30,
+    aktionen:[
+      {name:"Sword Strike", kind:"Weapon", art:"angriff", ab:7, dmg:"1d10+4", risiko:"Usually hits",
+       text:"A heavy cut with your greatsword. Nothing clever about it. It works."},
+      {name:"Shield Bash", kind:"Weapon", art:"angriff", ab:7, dmg:"1d6+2", risiko:"Usually hits", stun:true,
+       text:"You throw your shield into it. Less damage — but the monster loses its next turn."},
+      {name:"Reckless Charge", kind:"Weapon", art:"angriff", ab:11, dmg:"3d6+4", risiko:"Often misses", selbstschaden:2,
+       text:"You run straight in with no guard up. Huge damage — and you always take 2 damage yourself, hit or miss."}
+    ]},
+  heiler: {
+    id:"heiler", hpmax:24,
+    aktionen:[
+      {name:"Healing Light", kind:"Blessing", art:"heilen", dmg:"1d8+4", risiko:"Always works",
+       text:"Warm light in your hands. Give the hit points to a friend — or keep them yourself."},
+      {name:"Circle of Light", kind:"Blessing", art:"gruppe", dmg:"1d4+2", risiko:"Always works",
+       text:"Light spreads through the room. Everyone in your group gets hit points back, you as well."},
+      {name:"Radiant Strike", kind:"Weapon", art:"angriff", ab:8, dmg:"1d8+3", risiko:"Usually hits",
+       text:"Your mace, wrapped in white light. Monsters of the night hate it."}
+    ]}
+};
+const K = KLASSEN["__ID__"];
+const SCHLUESSEL = "nachtfels.spieler2." + K.id;
+
+let S = { name:"", hp:K.hpmax, log:[], zaehler:0 };
+function laden(){ try{ const r=localStorage.getItem(SCHLUESSEL); if(r){const g=JSON.parse(r); if(g&&typeof g==="object") S=Object.assign(S,g);} }catch(e){} }
+function sichern(){ try{ localStorage.setItem(SCHLUESSEL, JSON.stringify(S)); }catch(e){} }
+
+const $ = id => document.getElementById(id);
+const w = n => Math.floor(Math.random()*n)+1;
+function wuerfle(f, doppelt){
+  const m=/^(\d+)d(\d+)(?:\+(\d+))?$/.exec(f);
+  const anzahl = doppelt ? +m[1]*2 : +m[1];
+  const augen=[]; for(let i=0;i<anzahl;i++) augen.push(w(+m[2]));
+  const mod = m[3]?+m[3]:0;
+  return {augen, seiten:+m[2], mod, summe:augen.reduce((a,b)=>a+b,0)+mod};
+}
+const ruhig = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let laeuft=false;
+
+function notiere(text, ergebnis, sorte){
+  S.zaehler++;
+  const t=new Date();
+  S.log.unshift({no:S.zaehler, zeit:t.getHours().toString().padStart(2,"0")+":"+t.getMinutes().toString().padStart(2,"0"), text, ergebnis, sorte:sorte||""});
+  if(S.log.length>60) S.log.length=60;
+  zeichneLog(); sichern();
+}
+function zeichneLog(){
+  $("siegel").textContent = S.zaehler===1 ? "1 roll" : S.zaehler+" rolls";
+  const ol=$("protokoll");
+  if(!S.log.length){ ol.innerHTML='<li class="leer">Nothing rolled yet. Every roll lands here — the good ones and the bad ones.</li>'; return; }
+  ol.innerHTML = S.log.map(e=>'<li><span class="no">'+e.no+'</span><span class="txt">'+e.text+
+    ' <span style="color:var(--dim)">· '+e.zeit+'</span></span><span class="res '+e.sorte+'">'+e.ergebnis+'</span></li>').join("");
+}
+function zeichneHP(){
+  $("hp").textContent=S.hp; $("hpmax").textContent="/"+K.hpmax;
+  const p=(S.hp/K.hpmax)*100;
+  $("hpfill").style.width=p+"%";
+  $("hpbar").classList.toggle("low", S.hp>0 && p<=30);
+  $("downbox").hidden = S.hp>0;
+}
+function setzeHP(delta, grund){
+  const vorher=S.hp;
+  S.hp=Math.max(0,Math.min(K.hpmax,S.hp+delta));
+  const echt=S.hp-vorher;
+  if(echt===0){ $("detail").textContent = delta>0 ? "You are already at full health." : "You are already down at 0."; return; }
+  zeichneHP();
+  notiere(grund||(echt<0?"Damage taken":"Healed"), (echt>0?"+":"")+echt+" HP → "+S.hp, echt<0?"harm":"heal");
+}
+function zeichneAktionen(){
+  $("aktionen").innerHTML = K.aktionen.map((a,i)=>{
+    const marken=[];
+    if(a.dmg) marken.push('<span>'+(a.art==="heilen"||a.art==="gruppe"?"Heals ":"Damage ")+a.dmg+'</span>');
+    marken.push('<span class="'+(a.risiko==="Often misses"?"risiko":a.risiko==="Never misses"||a.risiko==="Always works"?"sicher":"")+'">'+
+      (a.risiko||"Usually works")+'</span>');
+    if(a.stun) marken.push('<span class="sicher">Stuns</span>');
+    if(a.selbstschaden) marken.push('<span class="risiko">You take '+a.selbstschaden+'</span>');
+    return '<article class="action"><div><span class="kind">'+a.kind+'</span><h3>'+a.name+'</h3></div>'+
+      '<p class="desc">'+a.text+'</p><div class="nums">'+marken.join("")+'</div>'+
+      '<button class="go" data-i="'+i+'">Roll</button></article>';
+  }).join("");
+}
+function zeigeDice(wurf){
+  $("dmgline").innerHTML = wurf.augen.map((z,j)=>'<span class="pip d'+wurf.seiten+'" style="animation-delay:'+(j*70)+'ms">'+z+'</span>').join("")
+    + (wurf.mod?'<span style="color:var(--dim);font-family:var(--mono)">+'+wurf.mod+'</span>':'')
+    + '<span class="dmgtotal">'+wurf.summe+'</span>';
+}
+function sag(text){ const b=$("sagbox"); b.classList.remove("leer"); $("sagtext").textContent=text; }
+
+function rolle(i){
+  if(laeuft) return;
+  const a=K.aktionen[i];
+  if(S.hp<=0 && a.art!=="heilen" && a.art!=="gruppe"){ $("detail").textContent="You are down at 0 hit points. You cannot act."; return; }
+  laeuft=true;
+  $("after").innerHTML=""; $("dmgline").innerHTML="";
+  $("was").textContent=a.name;
+  $("verdict").className="verdict warten"; $("verdict").textContent="Rolling…";
+  $("detail").textContent=""; $("sagbox").classList.add("leer"); $("sagtext").textContent="…";
+  $("die").classList.remove("landed","crit","miss");
+
+  const braucht20 = (a.art==="angriff"||a.art==="trick");
+  const augen = braucht20 ? w(20) : null;
+  if(!braucht20){ $("wurfzahl").textContent="✦"; return ende(a,null); }
+  if(ruhig){ $("wurfzahl").textContent=augen; return ende(a,augen); }
+  $("die").classList.add("rolling");
+  const bis=performance.now()+850;
+  (function dreh(){
+    if(performance.now()<bis){ $("wurfzahl").textContent=w(20); setTimeout(dreh,58); }
+    else { $("die").classList.remove("rolling"); $("die").classList.add("landed"); $("wurfzahl").textContent=augen; ende(a,augen); }
+  })();
+}
+
+function ende(a, augen){
+  if(a.art==="trick"){
+    const klappt = augen>=a.ab;
+    $("die").classList.toggle("miss",!klappt);
+    $("verdict").className="verdict "+(klappt?"hit":"miss");
+    $("verdict").textContent = klappt ? "It works!" : "Nothing happens.";
+    $("detail").textContent = klappt ? "Tell your DM exactly what your hand does." : "The hand slips. Try something else next turn.";
+    sag(klappt ? "My magic hand does it — it works!" : "My magic hand fails. Nothing happens.");
+    notiere("<b>Magic Hand</b>", klappt?"works":"fails", klappt?"hit":"miss");
+  }
+  else if(a.art==="heilen"){
+    const h=wuerfle(a.dmg,false);
+    $("verdict").className="verdict hit"; $("verdict").textContent = "+"+h.summe+" hit points";
+    $("detail").textContent="Choose one person in your group — or keep it yourself.";
+    zeigeDice(h);
+    sag("I heal you for "+h.summe+" hit points!");
+    $("after").innerHTML='<button data-heal="'+h.summe+'">Keep it myself (+'+h.summe+')</button><button data-weg="'+h.summe+'">I gave it to a friend</button>';
+    notiere("<b>Healing Light</b>", "+"+h.summe+" HP", "heal");
+  }
+  else if(a.art==="gruppe"){
+    const h=wuerfle(a.dmg,false);
+    $("verdict").className="verdict hit"; $("verdict").textContent = "+"+h.summe+" for everyone";
+    $("detail").textContent="Everyone in the group adds this to their own sheet — you too.";
+    zeigeDice(h);
+    sag("Everybody gets "+h.summe+" hit points back!");
+    $("after").innerHTML='<button data-heal="'+h.summe+'">Add '+h.summe+' to my own sheet</button>';
+    notiere("<b>Circle of Light</b>", "+"+h.summe+" all", "heal");
+  }
+  else { /* Angriff */
+    const krit = augen===20;
+    const trifft = krit || (augen!==1 && augen>=a.ab);
+    if(!trifft){
+      $("die").classList.add("miss");
+      $("verdict").className="verdict miss"; $("verdict").textContent="Miss";
+      $("detail").textContent="Bad luck. Your turn is over — the next player is up.";
+      $("dmgline").innerHTML='<span style="color:var(--dim);font-size:14px">no damage</span>';
+      sag(a.selbstschaden ? "I missed — and I hurt myself doing it." : "I missed!");
+      notiere("<b>"+a.name+"</b>", "miss", "miss");
+    } else {
+      const d=wuerfle(a.dmg,krit);
+      zeigeDice(d);
+      $("die").classList.toggle("crit",krit);
+      $("verdict").className="verdict "+(krit?"crit":"hit");
+      $("verdict").textContent = krit ? ("Critical hit! "+d.summe+" damage") : (d.summe+" damage");
+      $("detail").textContent = krit ? "A natural 20 — double dice. Say it loudly." : "Tell your DM the number so it can be taken off the monster.";
+      let satz = krit ? "Critical hit! I hit for "+d.summe+" damage!" : "I hit for "+d.summe+" damage.";
+      if(a.stun) satz += " And it loses its next turn!";
+      if(a.selbstschaden) satz += " But I take "+a.selbstschaden+" damage myself.";
+      sag(satz);
+      notiere("<b>"+a.name+"</b>"+(krit?" — CRITICAL":""), d.summe+" dmg", "hit");
+    }
+    if(a.selbstschaden) setzeHP(-a.selbstschaden, "Reckless Charge — you took the hit as well");
+  }
+  laeuft=false;
+}
+
+document.addEventListener("click", e=>{
+  const go=e.target.closest(".go"); if(go){ rolle(+go.dataset.i); return; }
+  const hp=e.target.closest("[data-hp]"); if(hp){ setzeHP(+hp.dataset.hp, +hp.dataset.hp<0?"Took damage":"Was healed"); return; }
+  const heal=e.target.closest("[data-heal]"); if(heal){ setzeHP(+heal.dataset.heal,"Healing on myself"); $("after").innerHTML=""; return; }
+  const weg=e.target.closest("[data-weg]"); if(weg){ notiere("<b>Healing</b> given to a friend","+"+weg.dataset.weg+" HP","heal"); $("after").innerHTML=""; return; }
+});
+$("heldname").addEventListener("input", e=>{ S.name=e.target.value; $("gravur").textContent=S.name; sichern(); });
+$("neu").onclick=()=>{
+  if(!confirm("Start a new game? Your hit points and the whole roll log are cleared.")) return;
+  S={name:S.name, hp:K.hpmax, log:[], zaehler:0};
+  zeichneHP(); zeichneLog(); sichern();
+  $("verdict").className="verdict warten"; $("verdict").textContent="Pick one of the three below.";
+  $("detail").textContent="The sheet rolls for you and tells you what happened.";
+  $("dmgline").innerHTML=""; $("after").innerHTML="";
+  $("sagbox").classList.add("leer"); $("sagtext").textContent="Your sentence appears here after you roll.";
+};
+
+laden();
+$("heldname").value=S.name; $("gravur").textContent=S.name;
+zeichneHP(); zeichneAktionen(); zeichneLog();
+</script>
+<template id="p-magier">
+<svg viewBox="0 0 300 400" role="img" aria-label="A hooded arcanist, face in shadow, holding a glowing rune sphere">
+ <defs>
+  <radialGradient id="mg-bg" cx="50%" cy="38%" r="72%"><stop offset="0" stop-color="#1b1733"/><stop offset="55%" stop-color="#0c0a17"/><stop offset="1" stop-color="#050509"/></radialGradient>
+  <radialGradient id="mg-orb" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#e8e4ff"/><stop offset="35%" stop-color="#8f86e0"/><stop offset="1" stop-color="#8f86e0" stop-opacity="0"/></radialGradient>
+  <linearGradient id="mg-robe" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a1728"/><stop offset="1" stop-color="#08070e"/></linearGradient>
+  <filter id="mg-blur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="7"/></filter>
+ </defs>
+ <rect width="300" height="400" fill="url(#mg-bg)"/>
+ <g stroke="#2a2440" stroke-width="1.2" fill="none" opacity=".75">
+  <path d="M42 400V196c0-30 24-54 54-54s54 24 54 54v204"/>
+  <path d="M258 400V214c0-26-21-47-47-47s-47 21-47 47v186"/>
+  <path d="M96 142v-26M211 167v-22"/>
+ </g>
+ <g opacity=".5" fill="#8f86e0">
+  <circle cx="64" cy="118" r="1.4"/><circle cx="240" cy="96" r="1.1"/><circle cx="196" cy="60" r="1.6"/><circle cx="108" cy="64" r="1"/><circle cx="270" cy="168" r="1.3"/>
+ </g>
+ <ellipse cx="150" cy="392" rx="120" ry="26" fill="#000" opacity=".65"/>
+ <circle cx="96" cy="196" r="46" fill="#8f86e0" opacity=".28" filter="url(#mg-blur)"/>
+ <path d="M150 400c-56 0-84-14-92-40-7-24 4-96 16-140 8-30 30-48 76-48s68 18 76 48c12 44 23 116 16 140-8 26-36 40-92 40z" fill="url(#mg-robe)"/>
+ <path d="M150 172c-34 0-52-16-52-44 0-34 22-58 52-58s52 24 52 58c0 28-18 44-52 44z" fill="#151228"/>
+ <path d="M150 70c30 0 52 24 52 58 0 12-3 22-9 29-4-36-20-56-43-56s-39 20-43 56c-6-7-9-17-9-29 0-34 22-58 52-58z" fill="#231e3d"/>
+ <ellipse cx="150" cy="126" rx="31" ry="34" fill="#05040a"/>
+ <g fill="#b9b2ff"><ellipse cx="139" cy="128" rx="4.6" ry="2.6"/><ellipse cx="161" cy="128" rx="4.6" ry="2.6"/></g>
+ <g fill="#8f86e0" opacity=".45" filter="url(#mg-blur)"><ellipse cx="139" cy="128" rx="7" ry="5"/><ellipse cx="161" cy="128" rx="7" ry="5"/></g>
+ <path d="M150 172c-14 0-26-2-35-7l35 44 35-44c-9 5-21 7-35 7z" fill="#0b0914"/>
+ <path d="M118 236l32 22 32-22" fill="none" stroke="#3b3560" stroke-width="1.6"/>
+ <circle cx="96" cy="196" r="34" fill="url(#mg-orb)" opacity=".85"/>
+ <circle cx="96" cy="196" r="13" fill="#efecff"/>
+ <circle cx="96" cy="196" r="23" fill="none" stroke="#cfc9ff" stroke-width="1.1" stroke-dasharray="5 9" opacity=".9"><animateTransform attributeName="transform" type="rotate" from="0 96 196" to="360 96 196" dur="11s" repeatCount="indefinite"/></circle>
+ <circle cx="96" cy="196" r="30" fill="none" stroke="#8f86e0" stroke-width=".9" stroke-dasharray="2 13" opacity=".7"><animateTransform attributeName="transform" type="rotate" from="360 96 196" to="0 96 196" dur="17s" repeatCount="indefinite"/></circle>
+ <path d="M120 250c-14-4-22-16-22-30 0-8 3-14 8-18" fill="none" stroke="#2b2542" stroke-width="9" stroke-linecap="round"/>
+ <path d="M106 208c-6 3-10 9-10 16" fill="none" stroke="#3a3358" stroke-width="7" stroke-linecap="round"/>
+ <rect width="300" height="400" fill="none" stroke="#000" stroke-width="26" opacity=".5"/>
+</svg>
+</template>
+<template id="p-krieger">
+<svg viewBox="0 0 300 400" role="img" aria-label="An armoured blade with a greatsword point down, lit by forge embers">
+ <defs>
+  <radialGradient id="kr-bg" cx="50%" cy="72%" r="78%"><stop offset="0" stop-color="#2a1608"/><stop offset="45%" stop-color="#120a06"/><stop offset="1" stop-color="#050406"/></radialGradient>
+  <linearGradient id="kr-steel" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2c2f36"/><stop offset=".45" stop-color="#6d747f"/><stop offset=".55" stop-color="#8e96a2"/><stop offset="1" stop-color="#252830"/></linearGradient>
+  <linearGradient id="kr-blade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a3f47"/><stop offset=".48" stop-color="#aab2bd"/><stop offset=".52" stop-color="#c8d0da"/><stop offset="1" stop-color="#31353c"/></linearGradient>
+  <filter id="kr-blur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="8"/></filter>
+ </defs>
+ <rect width="300" height="400" fill="url(#kr-bg)"/>
+ <ellipse cx="150" cy="372" rx="128" ry="46" fill="#c8763c" opacity=".2" filter="url(#kr-blur)"/>
+ <g stroke="#2e2119" stroke-width="1.2" fill="none" opacity=".8"><path d="M26 400V150l34-24 34 24v250"/><path d="M206 400V150l34-24 34 24v250"/><path d="M60 126v218M240 126v218"/></g>
+ <g fill="#e08a3c" opacity=".8">
+  <circle cx="58" cy="296" r="1.5"><animate attributeName="cy" values="330;190" dur="6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;.9;0" dur="6s" repeatCount="indefinite"/></circle>
+  <circle cx="246" cy="280" r="1.2"><animate attributeName="cy" values="340;170" dur="8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;.8;0" dur="8s" repeatCount="indefinite"/></circle>
+  <circle cx="92" cy="310" r="1"><animate attributeName="cy" values="345;215" dur="7.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;.7;0" dur="7.2s" repeatCount="indefinite"/></circle>
+ </g>
+ <path d="M150 400c-62 0-96-10-96-24 0-42 14-84 30-104 10-13 24-20 32-24h68c8 4 22 11 32 24 16 20 30 62 30 104 0 14-34 24-96 24z" fill="#1a1a20"/>
+ <path d="M86 272c18-8 40-12 64-12s46 4 64 12" fill="none" stroke="#2c2d36" stroke-width="2"/>
+ <path d="M104 248h92v14h-92zM100 296h100v12H100z" fill="#24252e"/>
+ <path d="M102 216c0-26 22-44 48-44s48 18 48 44v34h-96z" fill="url(#kr-steel)"/>
+ <path d="M150 118c26 0 44 18 44 44v22c0 20-20 32-44 32s-44-12-44-32v-22c0-26 18-44 44-44z" fill="url(#kr-steel)"/>
+ <path d="M150 118c26 0 44 18 44 44v10c-10-16-25-24-44-24s-34 8-44 24v-10c0-26 18-44 44-44z" fill="#9aa2ae" opacity=".55"/>
+ <rect x="118" y="156" width="64" height="11" rx="2" fill="#05060a"/>
+ <rect x="147" y="156" width="6" height="42" fill="#05060a"/>
+ <g fill="#e0a83c" opacity=".9"><rect x="126" y="159" width="14" height="4.5"/><rect x="160" y="159" width="14" height="4.5"/></g>
+ <path d="M106 206c-6 10-10 22-10 34" fill="none" stroke="#3b3d47" stroke-width="5"/>
+ <path d="M150 232l12 10-12 132-12-132z" fill="url(#kr-blade)"/>
+ <path d="M150 232v142" stroke="#dfe6ef" stroke-width="1.1" opacity=".55"/>
+ <rect x="112" y="224" width="76" height="9" rx="3" fill="#8c6a32"/>
+ <rect x="140" y="196" width="20" height="30" rx="5" fill="#3a2c17"/>
+ <circle cx="150" cy="194" r="8" fill="#c8763c"/>
+ <circle cx="150" cy="194" r="3.4" fill="#f2c98a"/>
+ <path d="M124 224c-10 2-16 8-16 16s6 14 14 16M176 224c10 2 16 8 16 16s-6 14-14 16" fill="none" stroke="#2f313a" stroke-width="9" stroke-linecap="round"/>
+ <rect width="300" height="400" fill="none" stroke="#000" stroke-width="26" opacity=".5"/>
+</svg>
+</template>
+<template id="p-heiler">
+<svg viewBox="0 0 300 400" role="img" aria-label="A cloaked lightbearer holding up a green lantern, moths circling">
+ <defs>
+  <radialGradient id="hl-bg" cx="68%" cy="30%" r="80%"><stop offset="0" stop-color="#0f2a25"/><stop offset="50%" stop-color="#081514"/><stop offset="1" stop-color="#040709"/></radialGradient>
+  <radialGradient id="hl-lamp" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#e6fff5"/><stop offset="30%" stop-color="#6fae9a"/><stop offset="1" stop-color="#6fae9a" stop-opacity="0"/></radialGradient>
+  <linearGradient id="hl-cloak" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16241f"/><stop offset="1" stop-color="#070c0b"/></linearGradient>
+  <filter id="hl-blur" x="-70%" y="-70%" width="240%" height="240%"><feGaussianBlur stdDeviation="9"/></filter>
+ </defs>
+ <rect width="300" height="400" fill="url(#hl-bg)"/>
+ <g opacity=".5" stroke="#1d3630" stroke-width="1.2" fill="none"><path d="M0 330c40-8 70-30 92-62M300 352c-48-6-86-28-112-62"/><path d="M150 400V276"/></g>
+ <ellipse cx="204" cy="150" rx="86" ry="86" fill="#6fae9a" opacity=".2" filter="url(#hl-blur)"/>
+ <path d="M196 156l-56 244h128z" fill="#6fae9a" opacity=".1"/>
+ <ellipse cx="150" cy="392" rx="116" ry="24" fill="#000" opacity=".6"/>
+ <path d="M150 400c-54 0-82-12-90-34-8-22 2-92 14-132 8-28 28-46 72-46 20 0 35 4 46 11l-8 24c8 10 14 22 18 36 11 40 20 89 12 111-8 22-10 30-64 30z" fill="url(#hl-cloak)"/>
+ <path d="M150 188c-32 0-48-14-48-40 0-31 20-53 48-53s48 22 48 53c0 26-16 40-48 40z" fill="#122019"/>
+ <path d="M150 95c28 0 48 22 48 53 0 8-2 15-5 21-6-32-22-50-43-50s-37 18-43 50c-3-6-5-13-5-21 0-31 20-53 48-53z" fill="#1d3229"/>
+ <ellipse cx="150" cy="144" rx="29" ry="32" fill="#040807"/>
+ <path d="M136 150c4 5 9 8 14 8s10-3 14-8" fill="none" stroke="#5b8a79" stroke-width="2" stroke-linecap="round" opacity=".8"/>
+ <g fill="#cfeee0" opacity=".85"><ellipse cx="139" cy="140" rx="4" ry="2.4"/><ellipse cx="161" cy="140" rx="4" ry="2.4"/></g>
+ <path d="M150 188c-12 0-23-2-31-6l31 40 31-40c-8 4-19 6-31 6z" fill="#0a110e"/>
+ <path d="M126 240l24 18 24-18" fill="none" stroke="#2c4b3f" stroke-width="1.6"/>
+ <path d="M196 262c-12-4-20-14-20-28 0-20 8-48 14-70" fill="none" stroke="#1b2e27" stroke-width="10" stroke-linecap="round"/>
+ <path d="M190 164c2-10 4-18 6-24" fill="none" stroke="#2a4438" stroke-width="7" stroke-linecap="round"/>
+ <circle cx="204" cy="150" r="42" fill="url(#hl-lamp)" opacity=".8"><animate attributeName="opacity" values=".65;.88;.65" dur="4.5s" repeatCount="indefinite"/></circle>
+ <g stroke="#3f6a5c" stroke-width="2" fill="none"><path d="M204 118v-12M196 106h16"/></g>
+ <path d="M188 118h32v46h-32z" fill="#0d1815" stroke="#40695c" stroke-width="2"/>
+ <path d="M192 122h24v38h-24z" fill="#8fd8bd" opacity=".75"><animate attributeName="opacity" values=".6;.9;.6" dur="3.1s" repeatCount="indefinite"/></path>
+ <path d="M204 128c5 6 7 11 7 16 0 5-3 9-7 9s-7-4-7-9c0-5 2-10 7-16z" fill="#f2fff9"/>
+ <path d="M186 164h36l-6 8h-24z" fill="#40695c"/>
+ <g fill="#cfeee0" opacity=".7">
+  <ellipse cx="246" cy="126" rx="5" ry="3"><animateTransform attributeName="transform" type="rotate" values="0 246 126;14 246 126;0 246 126" dur="1.1s" repeatCount="indefinite"/></ellipse>
+  <ellipse cx="164" cy="98" rx="4" ry="2.4"><animateTransform attributeName="transform" type="rotate" values="0 164 98;-16 164 98;0 164 98" dur="1.4s" repeatCount="indefinite"/></ellipse>
+ </g>
+ <rect width="300" height="400" fill="none" stroke="#000" stroke-width="26" opacity=".5"/>
+</svg>
+</template>

@@ -1,0 +1,901 @@
+<title>The Bride of Nachtfels</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=JetBrains+Mono:wght@400;700&family=Spectral:ital,wght@0,300;0,400;0,600;1,400&display=swap">
+<style>
+:root{
+  color-scheme: dark;
+  --ink:#08080c; --crypt:#0e0e15; --stone:#14141e; --stone-hi:#1f1f2c;
+  --line:#262633; --line-hi:#3a3a4c;
+  --bone:#eae4d7; --ash:#948fa2; --dim:#5d5a6b;
+  --gold:#d9a441; --gold-dim:#8a6a2c;
+  --blood:#b23a2c; --blood-hi:#e0645a;
+  --moon:#7d9bc4; --moss:#74b094;
+  --display:'IM Fell English SC','Iowan Old Style',Georgia,serif;
+  --body:'Spectral',Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--body);font-size:16px;line-height:1.6}
+h1,h2,h3,h4{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.label{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ash)}
+
+.krone{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(8,8,12,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:11px clamp(16px,2.5vw,28px)}
+.krone h1{font-size:20px;line-height:1.1}
+.krone .sub{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);display:block}
+.krone .rechts{margin-left:auto;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:12px;border:1px solid var(--line);padding:6px 11px;color:var(--ash);white-space:nowrap}
+.badge b{font-size:15px;font-weight:700}
+.badge.g0{border-color:#2c4460;color:var(--moon)}
+.badge.g1{border-color:var(--gold-dim);color:var(--gold)}
+.badge.g2{border-color:var(--blood);color:var(--blood-hi)}
+.krone button.klein{font-size:12px;color:var(--dim);border:1px solid var(--line);padding:6px 11px}
+.krone button.klein:hover{color:var(--bone);border-color:var(--line-hi)}
+
+.pfad{display:flex;overflow-x:auto;border-bottom:1px solid var(--line);background:var(--crypt)}
+.pfad button{flex:none;padding:9px 15px;border-right:1px solid var(--line);color:var(--dim);font-size:13px;text-align:left;min-width:120px;position:relative}
+.pfad button:hover{background:var(--stone);color:var(--ash)}
+.pfad button .n{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px}
+.pfad button.jetzt{background:var(--stone-hi);color:var(--bone)}
+.pfad button.jetzt::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--gold)}
+.pfad button.getan .n{color:var(--moss)}
+.pfad button.ent .n{color:var(--gold)}
+.pfad button.kampf .n{color:var(--blood-hi)}
+
+.raum{display:grid;grid-template-columns:minmax(0,1fr) 330px}
+@media (max-width:1040px){.raum{grid-template-columns:1fr}}
+.szene{padding-block:26px 60px;padding-inline:clamp(16px,3vw,38px);max-width:840px;min-width:0}
+.szenenkopf{border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:22px}
+.szenenkopf .n{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.szenenkopf h2{font-size:clamp(28px,4.4vw,42px);line-height:1.04;margin:5px 0}
+.bloecke{display:flex;flex-direction:column;gap:18px}
+
+/* ---- Schritt-Nummerierung: jeder Block ist ein Handgriff ---- */
+.schritt{display:grid;grid-template-columns:34px minmax(0,1fr);gap:14px;align-items:start}
+.schritt>.nr{font-family:var(--mono);font-size:12px;color:var(--dim);border:1px solid var(--line);width:34px;height:34px;display:grid;place-items:center;margin-top:2px}
+.schritt>.kern{min-width:0}
+.tat{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;display:block;margin-bottom:7px}
+
+/* ---- Ziel ---- */
+.ziel{border:1px solid var(--line-hi);background:var(--stone);padding:14px 18px;display:flex;gap:18px;flex-wrap:wrap;align-items:baseline}
+.ziel .label{color:var(--gold);flex:none}
+.ziel p{margin:0;font-size:15.5px;flex:1;min-width:220px}
+.ziel .zeit{font-family:var(--mono);font-size:12px;color:var(--dim);white-space:nowrap}
+
+/* ---- Vorlesen ---- */
+.vorlesen{border-left:3px solid var(--gold);background:linear-gradient(90deg,rgba(217,164,65,.07),transparent 65%);padding:16px 20px}
+.vorlesen .tat{color:var(--gold)}
+.vorlesen p{margin:0 0 11px;font-size:18px;line-height:1.62;max-width:60ch}
+.vorlesen p:last-child{margin:0}
+
+/* ---- Sagen: ein einzelner Satz, wörtlich ---- */
+.sagen{border:1px solid var(--gold-dim);background:rgba(217,164,65,.06);padding:14px 18px}
+.sagen .tat{color:var(--gold)}
+.sagen p{margin:0;font-size:19px;font-style:italic;line-height:1.4;max-width:58ch}
+.sagen p+p{margin-top:9px}
+
+/* ---- Personen im Raum ---- */
+.personen{border:1px solid var(--line);background:var(--crypt);padding:16px 18px}
+.personen .tat{color:var(--moon)}
+.person{border-top:1px solid var(--line);padding:12px 0 2px}
+.person:first-of-type{border-top:none;padding-top:4px}
+.person .kopf{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.person h4{font-size:19px}
+.person .wer{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.person .spielt{font-size:13.5px;color:var(--ash);margin:3px 0 8px}
+.person ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px}
+.person li{font-size:16px;border-left:1px solid var(--line-hi);padding-left:12px;font-style:italic}
+.sonst{margin:14px 0 0;font-size:13.5px;color:var(--ash);border-top:1px dotted var(--line);padding-top:10px}
+.sonst b{color:var(--bone);font-weight:400}
+
+/* ---- Wenn sie fragen ---- */
+.fa{border:1px solid var(--line);background:var(--crypt);padding:16px 18px}
+.fa .tat{color:var(--moon)}
+.fa dl{margin:0;display:flex;flex-direction:column;gap:2px}
+.fa dt{font-size:14px;color:var(--ash);font-family:var(--mono);font-size:12.5px;padding-top:10px;border-top:1px solid var(--line)}
+.fa dt:first-of-type{border-top:none;padding-top:0}
+.fa dd{margin:3px 0 10px;font-size:16.5px;font-style:italic;padding-left:14px;border-left:2px solid var(--gold-dim)}
+.fa dd em{font-style:normal;color:var(--ash);font-size:14px;display:block;margin-top:4px;padding-left:2px}
+
+/* ---- Tun: ein Knopf, eine Wirkung ---- */
+.tun{border:1px dashed var(--line-hi);padding:14px 18px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--crypt)}
+.tun p{margin:0;flex:1;min-width:200px;font-size:15px}
+.tun p b{color:var(--gold)}
+.tun button{border:1px solid var(--gold);color:var(--gold);padding:10px 18px;font-size:15px;white-space:nowrap}
+.tun button:hover{background:var(--gold);color:#07070b}
+.tun button.getan{border-color:var(--moss);color:var(--moss)}
+
+/* ---- Sprechaufgabe ---- */
+.aufgabe{border:1px solid var(--moss);background:rgba(116,176,148,.06);padding:15px 18px}
+.aufgabe .tat{color:var(--moss)}
+.aufgabe p{margin:0;font-size:16.5px}
+.aufgabe .blatt{display:inline-flex;align-items:center;gap:7px;margin-top:9px;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--moss);border:1px solid #3a5a4c;padding:5px 10px}
+
+/* ---- Regie / Wortschatz ---- */
+.regie{font-size:14.5px;color:var(--ash);line-height:1.6;border-left:1px solid var(--line-hi);padding-left:16px}
+.regie .tat{color:var(--dim)}
+.regie p{margin:0 0 8px}.regie p:last-child{margin:0}
+.regie b{color:var(--bone);font-weight:400}
+
+
+/* ---- Bedingte Karte ---- */
+.wenn{border:1px solid var(--gold-dim);background:rgba(217,164,65,.05);padding:15px 18px}
+.wenn .tat{color:var(--gold)}
+.wenn h4{font-size:19px;margin-bottom:6px}
+.wenn p{margin:0;font-size:16px}
+.wenn p+p{margin-top:8px}
+.hinweisfehlt{border:1px dashed var(--line-hi);padding:14px 18px;color:var(--ash);font-size:15px}
+
+/* ---- Entscheidung ---- */
+.optionen{display:flex;flex-direction:column;gap:12px}
+.option{border:1px solid var(--line);background:var(--crypt);display:grid;grid-template-columns:48px minmax(0,1fr)}
+.option:hover{border-color:var(--line-hi)}
+.option.gewaehlt{border-color:var(--gold);background:rgba(217,164,65,.05)}
+.option .buchstabe{border-right:1px solid var(--line);display:flex;align-items:flex-start;justify-content:center;padding-top:15px;font-family:var(--display);font-size:25px;color:var(--dim)}
+.option.gewaehlt .buchstabe{color:var(--gold);border-color:var(--gold-dim)}
+.option .kern{padding:14px 18px 15px;display:flex;flex-direction:column;gap:9px;min-width:0}
+.option h4{font-size:20px}
+.option .was{margin:0;font-size:15.5px}
+.option .bil{margin:0;padding:0;list-style:none;display:grid;gap:4px}
+.option .bil li{font-size:14.5px;color:var(--ash);padding-left:19px;position:relative}
+.option .bil li.pro::before{content:"+";position:absolute;left:4px;color:var(--moss);font-family:var(--mono)}
+.option .bil li.con::before{content:"−";position:absolute;left:4px;color:var(--blood-hi);font-family:var(--mono)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line-hi);padding:4px 9px;color:var(--ash)}
+.chip.gefahr{border-color:var(--blood);color:var(--blood-hi)}
+.chip.ruhe{border-color:#2c4460;color:var(--moon)}
+.chip.wissen{border-color:#3a5a4c;color:var(--moss)}
+.option .waehlen{border:1px solid var(--line-hi);padding:9px 0;font-family:var(--display);font-size:16px}
+.option .waehlen:hover{background:var(--gold);color:#07070b;border-color:var(--gold)}
+.option.gewaehlt .waehlen{background:rgba(217,164,65,.12);border-color:var(--gold);color:var(--gold)}
+
+/* ---- Kampf ---- */
+.kampfblock{border:1px solid var(--blood);background:rgba(178,58,44,.05);padding:15px 18px;display:flex;flex-direction:column;gap:11px}
+.kampfblock .tat{color:var(--blood-hi)}
+.kampfblock h4{font-size:20px}
+.kampfblock>p{margin:0;font-size:15.5px}
+.statblock{border-top:1px solid var(--line);padding-top:10px;font-size:14.5px;color:var(--ash)}
+.statblock b{color:var(--bone);font-weight:400}
+.laden{border:1px solid var(--blood);color:var(--blood-hi);padding:10px 17px;font-size:15px;align-self:flex-start}
+.laden:hover{background:var(--blood);color:var(--bone)}
+
+/* ---- Weiter ---- */
+.weiter{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:13px 0;display:flex;gap:14px;align-items:baseline}
+.weiter .tat{color:var(--moss);flex:none;margin:0}
+.weiter p{margin:0;font-size:15.5px}
+.blaettern{display:flex;justify-content:space-between;gap:14px;margin-top:30px}
+.blaettern button{border:1px solid var(--line-hi);padding:13px 22px;font-family:var(--display);font-size:18px;max-width:48%;text-align:left}
+.blaettern button:hover{border-color:var(--gold);color:var(--gold)}
+.blaettern button:disabled{opacity:.3;cursor:not-allowed}
+.blaettern button span{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.blaettern .vor{text-align:right;margin-left:auto}
+
+/* ---- Seitenleiste ---- */
+.leiste{border-left:1px solid var(--line);background:var(--crypt);position:sticky;top:calc(env(safe-area-inset-top,0px) + 52px);max-height:calc(100vh - 52px);overflow-y:auto}
+@media (max-width:1040px){.leiste{position:static;max-height:none;border-left:none;border-top:1px solid var(--line)}}
+.fach{border-bottom:1px solid var(--line);padding:15px 17px}
+.fach>.label{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}
+.fach>.label button{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--line-hi)}
+.fach>.label button:hover{color:var(--gold)}
+.baro{display:grid;grid-template-columns:40px 1fr;gap:13px}
+.saeule{display:flex;flex-direction:column-reverse;gap:3px}
+.saeule i{height:13px;background:#12121b;border:1px solid var(--line)}
+.saeule i.an1{background:linear-gradient(90deg,#1f3346,#2c4d6b);border-color:#3a5f80}
+.saeule i.an2{background:linear-gradient(90deg,#4a3714,var(--gold-dim));border-color:var(--gold-dim)}
+.saeule i.an3{background:linear-gradient(90deg,#5e1d16,var(--blood));border-color:var(--blood)}
+.barotext .zahl{font-family:var(--mono);font-size:38px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.barotext .zahl small{font-size:14px;color:var(--dim);font-weight:400}
+.barotext .stufe{font-family:var(--display);font-size:17px;line-height:1.2;margin-top:3px}
+.barotext .folge{font-size:12.5px;color:var(--ash);line-height:1.45;margin:6px 0 0}
+.barobtn{display:flex;gap:5px;margin-top:11px}
+.barobtn button{flex:1;border:1px solid var(--line);padding:7px 0;font-family:var(--mono);font-size:12px;color:var(--ash)}
+.barobtn button:hover{border-color:var(--line-hi);color:var(--bone)}
+.held,.gegner{border:1px solid var(--line);background:var(--stone);padding:10px 11px;display:flex;flex-direction:column;gap:7px;margin-bottom:7px}
+.held.tot,.gegner.tot{opacity:.45}
+.held-kopf,.g-kopf{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.held input.nm{background:none;border:none;border-bottom:1px solid var(--line);font-family:var(--display);font-size:16px;width:100%;min-width:0;padding:1px 0}
+.held input.nm::placeholder{font-family:var(--body);font-size:13px;color:var(--dim)}
+.held .rolle,.gegner .werte{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
+.gegner h4{font-size:16px}
+.gegner .weg{font-family:var(--mono);font-size:12px;color:var(--dim)}
+.gegner .weg:hover{color:var(--blood-hi)}
+.hpzeile{display:flex;align-items:center;gap:7px}
+.hpwert{font-family:var(--mono);font-size:15px;font-variant-numeric:tabular-nums;min-width:54px}
+.hpwert b{font-weight:700}
+.bar{flex:1;height:7px;background:#0f0f16;border:1px solid var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--blood);transition:width .3s}
+.steuer{display:flex;gap:4px}
+.steuer input{width:100%;min-width:0;background:var(--crypt);border:1px solid var(--line);padding:5px 6px;font-family:var(--mono);font-size:13px;text-align:center}
+.steuer button{border:1px solid var(--line);padding:5px 9px;font-family:var(--mono);font-size:12px;flex:none}
+.steuer button.minus:hover{border-color:var(--blood);color:var(--blood-hi)}
+.steuer button.plus:hover{border-color:var(--moss);color:var(--moss)}
+.att{display:flex;gap:5px;flex-wrap:wrap}
+.att button{border:1px solid var(--line-hi);padding:5px 9px;font-size:12px;color:var(--ash)}
+.att button:hover{border-color:var(--blood);color:var(--blood-hi)}
+.wurfbox{border:1px solid var(--gold-dim);background:rgba(217,164,65,.06);padding:9px 10px;font-size:13px}
+.wurfbox .erg{font-family:var(--mono);font-size:13.5px;display:block;margin-bottom:7px}
+.wurfbox .erg b{color:var(--gold);font-size:16px}
+.wurfbox .an{display:flex;gap:5px;flex-wrap:wrap}
+.wurfbox .an button{border:1px solid var(--line-hi);padding:4px 9px;font-size:11.5px;color:var(--ash)}
+.wurfbox .an button:hover{border-color:var(--blood);color:var(--blood-hi)}
+.zufuegen{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.zufuegen button{border:1px dashed var(--line-hi);padding:6px 10px;font-size:12px;color:var(--dim)}
+.zufuegen button:hover{border-color:var(--gold-dim);color:var(--gold);border-style:solid}
+.wisszeile{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);padding:9px 10px;margin-bottom:6px;width:100%;text-align:left}
+.wisszeile:hover{border-color:var(--line-hi)}
+.wisszeile.hat{border-color:var(--moss);background:rgba(116,176,148,.07)}
+.wisszeile .haken{font-family:var(--mono);font-size:13px;color:var(--dim);flex:none}
+.wisszeile.hat .haken{color:var(--moss)}
+.wisszeile b{font-weight:400;font-size:14px;display:block}
+.wisszeile span{font-size:12px;color:var(--ash);display:block;margin-top:2px}
+.wisszeile.hat span{color:var(--moss)}
+.leerfach{font-size:12.5px;color:var(--dim);font-style:italic;margin:0}
+.chronik{list-style:none;margin:0;padding:0;max-height:180px;overflow-y:auto;font-size:12.5px}
+.chronik li{display:flex;gap:9px;padding:5px 0;border-bottom:1px solid var(--line);color:var(--ash)}
+.chronik li .z{font-family:var(--mono);font-size:10px;color:var(--dim);flex:none}
+.chronik li b{color:var(--bone);font-weight:400}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+
+<header class="krone">
+  <div>
+    <span class="sub">Dungeon Master · Ein Abend, drei Spieler</span>
+    <h1>The Bride of Nachtfels</h1>
+  </div>
+  <div class="rechts">
+    <span class="badge g0" id="kgefahr">Gefahr <b>0</b>/10</span>
+    <span class="badge" id="kschritt">Schritt 1/12</span>
+    <button class="klein" id="zuruecksetzen">Neue Runde</button>
+  </div>
+</header>
+
+<nav class="pfad" id="pfad" aria-label="Szenen"></nav>
+
+<div class="raum">
+  <main class="szene">
+    <div class="szenenkopf">
+      <span class="n" id="s-n">Anleitung</span>
+      <h2 id="s-titel">…</h2>
+    </div>
+    <div class="bloecke" id="bloecke"></div>
+    <div class="blaettern">
+      <button id="zurueck"><span>zurück</span><em id="zurueck-t" style="font-style:normal">—</em></button>
+      <button id="vor" class="vor"><span>weiter</span><em id="vor-t" style="font-style:normal">—</em></button>
+    </div>
+  </main>
+
+  <aside class="leiste">
+    <section class="fach">
+      <span class="label">Gefahrenbarometer</span>
+      <div class="baro">
+        <div class="saeule" id="saeule"></div>
+        <div class="barotext">
+          <div><span class="zahl" id="b-zahl">0</span><small> / 10</small></div>
+          <div class="stufe" id="b-stufe">—</div>
+          <p class="folge" id="b-folge">—</p>
+        </div>
+      </div>
+      <div class="barobtn">
+        <button data-gefahr="-1">−1</button>
+        <button data-gefahr="1">+1</button>
+        <button data-gefahr="2">+2</button>
+      </div>
+    </section>
+
+    <section class="fach">
+      <span class="label">Die Gruppe <button id="vollheilung">alle voll</button></span>
+      <div id="gruppe"></div>
+    </section>
+
+    <section class="fach">
+      <span class="label">Kampf</span>
+      <div id="gegner"></div>
+      <p class="leerfach" id="gegner-leer">Kein Kampf im Gang.</p>
+      <div class="zufuegen" id="zufuegen"></div>
+    </section>
+
+    <section class="fach">
+      <span class="label">Was die Gruppe weiss</span>
+      <div id="wissen"></div>
+    </section>
+
+    <section class="fach">
+      <span class="label">Chronik</span>
+      <ul class="chronik" id="chronik"></ul>
+    </section>
+  </aside>
+</div>
+
+<script>
+"use strict";
+
+const GRUPPE_VORLAGE = [{rolle:"Arcanist", max:18},{rolle:"Blade", max:30},{rolle:"Lightbearer", max:24}];
+
+const WISSEN = [
+  {k:"anneke",     txt:"Der Name Anneke",        nutzen:"Kapelle: kein Kampf"},
+  {k:"freiwillig", txt:"Mirela ging freiwillig", nutzen:"Turm: Gefahr −1"},
+  {k:"name",       txt:"Vaskirs wahrer Name",    nutzen:"Finale: er verliert die erste Runde"}
+];
+
+const BESTIARIUM = {
+  wolf:   {name:"Dire Wolf", hp:14, att:[{n:"Bite", d:"1d6+2"}]},
+  anneke: {name:"Anneke", hp:22, att:[{n:"Claws", d:"1d6+3"}]},
+  thrall: {name:"Thrall", hp:9, att:[{n:"Grab", d:"1d4+1"}]},
+  vaskir: {name:"Count Vaskir", hp:55, att:[{n:"Claws", d:"2d6+2"},{n:"Bite", d:"1d8+3"}]}
+};
+
+const KAPITEL = [
+/* ===== 0 ===== */
+{n:"Anleitung", titel:"So führst du den Abend", art:"info", bloecke:[
+ {t:"ziel", text:"Diese Seite führt dich Satz für Satz. Du musst nichts vorbereiten und die Geschichte nicht kennen.", zeit:"5 Min. lesen"},
+ {t:"regie", titel:"Was du brauchst", text:`Drei Spieler, jeder mit seinem eigenen Link auf einem Gerät: <b>Arcanist</b>, <b>Blade</b>, <b>Lightbearer</b>. Trag ihre Figurennamen rechts in die Gruppe ein.
+ <p>Dazu das <b>Helfer-Blatt</b> als Ausdruck, einmal pro Schüler. Darauf stehen alle englischen Satzanfänge und Vokabeln, nach Szene geordnet. Teil es aus, bevor du anfängst.</p>`},
+ {t:"regie", titel:"Wer die Gruppe ist", text:`Das ist vorgegeben, das müssen die Schüler nicht erfinden: <b>Sie sind Vampirjäger.</b> Nicht berühmt, noch nicht. Ein Gerücht hat sie hergeführt — in diesen Bergen liege ein Tal, in dem Menschen nach Plan verschwinden. Sie wollen wissen, ob es stimmt.
+ <p>Erfinden dürfen sie: Namen, Herkunft, wie sie sich kennen, was sie können. Der Auftrag steht fest.</p>`},
+ {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`<b>Gelb umrandet</b> heisst: wörtlich vorlesen oder sagen. <b>Grün</b> heisst: das sollen die Schüler jetzt tun. <b>Grau</b> heisst: nur für dich. Ganz unten steht immer, <b>wann es weitergeht</b>.
+ <p>Es steht immer nur das auf der Seite, was euren Weg betrifft. Was die Gruppe nicht gewählt hat, siehst du gar nicht erst.</p>`},
+ {t:"sagen", text:["Eine Regel für heute: when your character speaks, speak English.","If you don’t know a word, ask me — in English. Nobody laughs."]},
+ {t:"fa", titel:"Wenn etwas klemmt", paare:[
+   ["Niemand sagt etwas","„Let’s go around. [Name], what does your character do?“ — reihum, jeder einmal."],
+   ["Einer sagt nur ein Wort","„Give me two more sentences.“ Jede Figur soll pro Szene <b>mindestens zwei bis drei Sätze</b> sagen. Das ist die Messlatte."],
+   ["Sie fragen etwas, das nicht auf der Seite steht","Ist es harmlos: sag Ja und erfinde eine Kleinigkeit. Sprengt es die Szene: „That doesn’t work.“ Fertig."],
+   ["Sie finden einen Hinweis nicht","Auf jeder Personenkarte steht eine Zeile <b>Notfalls</b>. Nimm sie und geh weiter. Nichts darf hängenbleiben."],
+   ["Sie streiten über eine Entscheidung","„You have one minute. Then we vote.“"],
+   ["Eine Figur fällt auf 0 Lebenspunkte","Sie ist bewusstlos, nicht tot. Sie kann nichts tun, bis jemand sie heilt. Der Lightbearer kann das jederzeit."]]},
+ {t:"regie", titel:"Ein Kampf in drei Handgriffen", text:`<b>1.</b> Der Spieler liest seinen gelben Satz vor: „I hit for 9 damage.“
+ <p><b>2.</b> Du tippst die 9 in die Karte des Monsters und drückst <em>Schaden</em>.</p>
+ <p><b>3.</b> Das Monster ist dran: Du drückst auf seine Attacke. Die Seite würfelt und sagt dir, ob es trifft. Dann klickst du an, wen es erwischt hat.</p>`},
+ {t:"weiter", text:"Wenn du das gelesen hast und jeder sein Helfer-Blatt vor sich liegen hat."}]},
+
+/* ===== 1 ===== */
+{n:"Prolog", titel:"The Carriage", art:"szene", bloecke:[
+ {t:"ziel", text:"Die Gruppe stellt sich vor, erfährt ihren Auftrag und steigt vor dem Wirtshaus aus.", zeit:"15 Min."},
+ {t:"vorlesen", titel:"Die Fahrt", text:[
+  `The carriage has been climbing for six hours. The windows are cold and wet, and outside there is nothing but pine trees and fog. The moon is up there somewhere — you can see its light on the fog, but you cannot see the sky.`,
+  `Everything in here is damp. Your coats, your bags, the seats. Nobody has spoken for a long time.`,
+  `Then something moves in the trees. It stays level with the carriage for about twenty seconds — fast, low, quiet. Then it is gone. The driver does not slow down. The driver does not look.`]},
+ {t:"regie", text:"Der Fahrer heisst <b>Marek</b>. Grimmig, wortkarg, will das Geld und wieder weg. Er ist kein Rätsel — er ist der Mann, der die erste Frage stellt."},
+ {t:"sagen", text:[
+  "Marek says, without turning round:",
+  "Nobody comes up here in November. So — who are you? And what do you want in a place like this?"]},
+ {t:"aufgabe", text:"Jede Figur antwortet Marek: Name, was sie kann, warum sie mitgekommen ist. <b>Mindestens zwei bis drei Sätze pro Person</b> — wer nur „I am a mage“ sagt, bekommt von dir: „Give me two more sentences.“", blatt:"Helfer-Blatt · Teil 1"},
+ {t:"fa", titel:"Wenn sie Marek etwas fragen", paare:[
+  ["What’s up there? / What’s in the castle?","„A castle. Been there longer than the village.“ Mehr sagt er nicht."],
+  ["Do you believe the stories?","„I believe I’m turning round at the bottom of that hill and driving home tonight.“"],
+  ["What was that in the trees?","„Deer.“ Pause. „Big ones.“"],
+  ["Will you wait for us?","„No.“"]]},
+ {t:"vorlesen", titel:"Warum ihr hier seid — das liest du als Nächstes", text:[
+  `You are vampire hunters. Not famous ones. Not yet.`,
+  `Three weeks ago a rumour reached you: somewhere in these mountains there is a valley where people disappear on a schedule. Not often — once every twenty years. And always exactly one.`,
+  `Three nights ago it happened again. A woman was taken from the village of Dornwald. Her name is Mirela Vance. She is twenty-six years old and she grows medicine in her garden.`,
+  `And nobody in Dornwald is looking for her. Nobody. That is the part that should worry you.`]},
+ {t:"vorlesen", titel:"Die Ankunft", text:[
+  `The carriage stops. Marek does not get down and he does not open the door — you do that yourselves.`,
+  `The village is twenty dark houses and a bell tower with no bell in it. There is exactly one building with light in the windows: a tavern, with a black goat painted on the sign.`,
+  `Your bags land in the mud beside you. By the time you turn round, the carriage is already moving, and Marek is driving downhill faster than he ever drove up.`,
+  `High above the village, on bare rock, stands a castle. One window is lit.`]},
+ {t:"weiter", text:"Wenn alle drei gesprochen haben und die Gruppe vor der Wirtshaustür steht."}]},
+
+/* ===== 2 ===== */
+{n:"Kapitel I", titel:"The Inn", art:"szene", bloecke:[
+ {t:"ziel", text:"Die Gruppe spricht mit drei Menschen, erfährt zwei Dinge und bekommt am Ende die Karte.", zeit:"25 Min."},
+ {t:"vorlesen", titel:"Der Raum", text:[
+  `Inside it is warm and far too quiet. Eleven people are sitting in a room built for forty, and every one of them stops talking when you open the door.`,
+  `Above the fireplace hangs a long wooden board with names carved into it. The last one is fresh — you can still see the pale wood inside the letters. It says: MIRELA VANCE.`]},
+ {t:"vorlesen", titel:"Die drei, die euch ansehen", text:[
+  `Behind the bar stands a woman of about fifty with three fingers on her left hand. She is filling a cup that is already full.`,
+  `By the fire sits an old man with a bottle between his boots. He is the only person in the room who is grinning.`,
+  `And at the door stands a boy, twelve maybe, who was clearly waiting for somebody — and who does not move out of your way.`,
+  `The other eight look into their drinks.`]},
+ {t:"regie", text:"<b>Nur diese drei antworten.</b> Die anderen acht sind Kulisse: Spricht jemand sie an, sagst du „They look into their drinks and say nothing“ — damit ist es erledigt, und du musst dir niemanden ausdenken. An den drei Beschreibungen oben erkennen die Schüler, wen sie ansprechen können."},
+ {t:"personen", leute:[
+  {name:"Greta", wer:"Wirtin, drei Finger", spielt:"Kurze Sätze. Sie lügt nie — sie wechselt das Thema. Freundlich, nicht feindlich.", sagt:[
+    "Mirela is gone. That is all there is.",
+    "We don’t go up there. That is the arrangement.",
+    "You want to help? Go home. That would help."],
+   notfalls:"Fragt sie niemand, stellt sie ungefragt drei Becher hin: „You’re going up there anyway, aren’t you.“"},
+  {name:"Old Pieter", wer:"Totengräber, betrunken", spielt:"Zu laut, lacht an den falschen Stellen. Er sagt die Wahrheit, darum glaubt ihm niemand.", sagt:[
+    "Twenty years! Ask her what happened twenty years ago!",
+    "Ask her about Anneke! Go on — ask her about Anneke!",
+    "I dug no grave for that girl. Because there was nothing to bury."],
+   notfalls:"Spricht ihn niemand an, ruft er den Anneke-Satz nach fünf Minuten quer durch den Raum. Der Name muss fallen."},
+  {name:"Tobias", wer:"Junge an der Tür, 12", spielt:"Schnell, hoffnungsvoll, zu ehrlich. Er wartet seit drei Nächten auf jemanden wie euch.", sagt:[
+    "She wasn’t taken. She packed a bag.",
+    "She said it was her turn. She said it like it was a shopping list.",
+    "She said: tell them it’s for Lene. Lene is my sister. She’s nine."],
+   notfalls:"Redet niemand mit ihm, läuft er ihnen an der Tür nach und sagt den Satz mit dem Koffer."}],
+  sonst:"Tobias ist Mirelas Lehrling. Er will mit ins Schloss. Er darf nicht mit — aber lass ihn fragen."},
+ {t:"sagen", text:["Three people in this room are looking straight at you. The woman behind the bar, the old man by the fire, and the boy at the door.","Who do you want to talk to?"]},
+ {t:"aufgabe", text:"Jede Figur stellt <b>mindestens eine Frage auf Englisch</b> an eine der drei Personen — und hakt einmal nach. Von selbst wird hier nichts erzählt.", blatt:"Helfer-Blatt · Teil 2"},
+ {t:"fa", titel:"Wenn sie fragen — antworte so", paare:[
+  ["What happened to Mirela?","<b>Greta:</b> „She is gone. Three nights ago.“ — mehr nicht."],
+  ["Why is nobody looking for her?","<b>Greta:</b> „Because we know exactly where she is.“ <em>Der Satz, der sie stutzig machen soll.</em>"],
+  ["What happened twenty years ago?","<b>Pieter</b> lacht: „Ask her about Anneke!“ <em>→ Knopf unten.</em>"],
+  ["What is that board? Who wrote the names?","<b>Greta:</b> „I did. Both times.“ Die Namen stehen in Abständen von zwanzig Jahren. Der davor: ANNEKE KOLL."],
+  ["Did she go by herself?","<b>Tobias:</b> „She packed a bag.“ <em>→ Knopf unten.</em>"],
+  ["Is it a vampire? Have you seen it?","<b>Greta:</b> „We don’t use that word in here.“ <b>Pieter:</b> „SHE used it!“ — und lacht."],
+  ["How do we get up to the castle?","<b>Greta</b> holt eine alte Karte unter der Theke hervor. <em>→ vorletzter Block.</em>"],
+  ["Can we look around the room?","Ja: das Namensbrett, ein Koffer neben der Tür mit dem Anhänger <b>M. VANCE</b> (nie abgeholt), und hinter der Theke die Karte."]]},
+ {t:"tun", text:"Hat jemand den Namen <b>Anneke</b> gehört?", knopf:{art:"wissen", k:"anneke"}, beschriftung:"Anneke ist gefallen"},
+ {t:"tun", text:"Hat die Gruppe verstanden, dass Mirela <b>freiwillig</b> gegangen ist?", knopf:{art:"wissen", k:"freiwillig"}, beschriftung:"Sie wissen es"},
+ {t:"vorlesen", titel:"Die Karte — damit endet die Szene", text:[
+  `Greta reaches under the bar and puts down an old hunting map. She does not say a word while you look at it.`,
+  `Three ways are drawn on it. A wide road along the ridge. A black line going straight through the mountain — an old silver mine. And a third line with two words written next to it: “coach, midnight”.`]},
+ {t:"regie", text:"Zeig die Karte, sobald jemand nach dem Weg fragt oder sich umsieht. <b>Notfalls</b> legt Greta sie von selbst hin, wenn die Gruppe aufbrechen will: „You’ll need this.“ Ohne die Karte geht es nicht weiter."},
+ {t:"weiter", text:"Wenn jede Figur einmal gefragt hat und die Karte auf dem Tisch liegt."}]},
+
+/* ===== 3 ===== */
+{n:"Entscheidung 1", titel:"The Way Up", art:"ent", bloecke:[
+ {t:"ziel", text:"Die Gruppe wählt einen der drei Wege. Alle drei enden im Hof des Schlosses — sie unterscheiden sich nur im Preis.", zeit:"10 Min."},
+ {t:"sagen", text:[
+  "You have the map. There are three ways up that mountain.",
+  "One: the old road along the ridge. Wide, fast, and you can be seen from everywhere.",
+  "Two: the Kessler mine. Straight through the rock, and it comes out somewhere inside the castle walls. Dark, and the air down there is two hundred years old.",
+  "Three: the coach. Every night at midnight a coach takes food up to the castle. You could be on it.",
+  "What are you going to do?"]},
+ {t:"aufgabe", text:"Jede Figur sagt <b>einen vollständigen Satz</b> dazu, welchen Weg sie will und warum — bevor abgestimmt wird.", blatt:"Helfer-Blatt · Teil 3"},
+ {t:"regie", text:"Frag reihum: „And what do you think?“ Wenn sie sich nicht einigen: „One minute, then we vote.“ Klick danach die gewählte Karte an — die Folgen trägt die Seite selbst ein, und ab dann steht auf den nächsten Seiten nur noch euer Weg."},
+ {t:"optionen", id:"e1", optionen:[
+  {b:"A", name:"The old road", was:"Der breite Weg über den Grat, drei Stunden. Ihr steht vor Mitternacht am Tor.",
+   pro:["Schnell. Kein Schaden, keine schlechte Luft."], con:["Am alten Galgen warten zwei Wölfe des Grafen. Es gibt einen Kampf, und man hört ihn oben."],
+   wirkung:{gefahr:2, flaggen:["weg_a"]}},
+  {b:"B", name:"The Kessler mine", was:"Der alte Silberstollen führt unter dem Berg durch und endet in einem Schacht — dem Brunnen mitten im Hof des Schlosses.",
+   pro:["Niemand sieht euch. Die Gefahr steigt überhaupt nicht.","Ihr seid im Hof, ohne je durch das Tor zu gehen."], con:["Die Luft ist schlecht: jede Figur verliert 2 Lebenspunkte."],
+   wirkung:{gefahr:0, schadenAlle:2, flaggen:["weg_b"]}},
+  {b:"C", name:"The midnight coach", was:"Mitfahren — oder sich als die Lieferung ausgeben. Der Kutscher heisst Corvin Ash.",
+   pro:["Ihr rollt durch das Tor, ohne es zu öffnen. Kein Kampf, kein Schaden."], con:["Corvin sieht eure Gesichter. Er gehört dem Grafen, und er wird davon erzählen."],
+   wirkung:{gefahr:1, flaggen:["weg_c"]}}]},
+ {t:"weiter", text:"Sobald du eine der drei Karten angeklickt hast."}]},
+
+/* ===== 4 ===== */
+{n:"Aufstieg", titel:"Up the Mountain", art:"szene", bloecke:[
+ {t:"ziel", text:"Der Weg nach oben. Hier steht nur noch, was euren Weg betrifft — bis alle drei im selben Hof ankommen.", zeit:"15 Min."},
+
+ {t:"vorlesen", nur:"weg_a", titel:"Der alte Weg — der Galgen", text:[
+  `Two hours up, the road passes an old gallows. The wood is grey and the rope is long gone.`,
+  `Two wolves the size of ponies are sitting underneath it, side by side, watching you come. They are not barking. They are waiting for you to get closer.`]},
+ {t:"regie", nur:"weg_a", text:"Der erste Kampf des Abends. Geh ihn <b>langsam</b> durch: Jeder sagt zuerst auf Englisch, was er tut, dann drückt er seinen Knopf, dann liest er seinen gelben Satz vor. Fällt ein Wolf, läuft der andere weg — der Kampf muss nicht zu Ende gehen."},
+ {t:"kampf", nur:"weg_a", titel:"The wolves", text:"Zwei Wölfe, je 14 Lebenspunkte.", gegner:["wolf","wolf"]},
+ {t:"vorlesen", nur:"weg_a", titel:"Danach — ihr kommt am Tor an", text:[
+  `Above the gallows the road ends at the gate of Nachtfels. The gate stands open. It has probably stood open for two hundred years — nobody up here is afraid of burglars, and that is the first genuinely unpleasant thought of the night.`,
+  `You walk through it into a square courtyard of black stone.`]},
+
+ {t:"vorlesen", nur:"weg_b", titel:"Der Stollen", text:[
+  `The mine entrance is a hole behind a dead tree, and it is smaller than all of you.`,
+  `Four hours in the dark. After two, the air turns sweet and heavy and everybody’s head starts to hurt — you each lose two hit points.`,
+  `After three, you find what is left of the Kessler family: tools, a child’s shoe, and a lamp that somebody put down neatly before they stopped needing it.`]},
+ {t:"tun", nur:"weg_b", text:"Die schlechte Luft anwenden — dann stimmen die Werte rechts.", knopf:{art:"schaden", v:2}, beschriftung:"−2 HP für alle"},
+ {t:"vorlesen", nur:"weg_b", titel:"Wo der Stollen endet", text:[
+  `The tunnel ends at an iron ladder going straight up a stone shaft. Forty rungs. Cold air, and somewhere above you, wind.`,
+  `You come out through a round stone wall, into the open — and you understand where you are. You have just climbed out of the castle’s own well, in the middle of a square courtyard of black stone.`]},
+
+ {t:"vorlesen", nur:"weg_c", titel:"Die Kutsche", text:[
+  `The coach is waiting at the edge of the village at midnight, exactly as the map said. The driver is a thin man in a good coat who introduces himself as Corvin Ash, and who is very, very friendly.`,
+  `He drives without a lamp. He never looks at the road. And in two hours he asks you more questions than you ask him.`]},
+ {t:"regie", nur:"weg_c", text:`Spiel ihn <b>freundlich</b> und stell den Spielern seine Fragen: „And what are your names?“ — „And what do you want up there?“ — „You’re not from the village, are you?“
+ <p>Drei Dinge dürfen sie von selbst merken, wenn sie genau hinsehen: Er sagt nie Mirelas Namen. Seine Hände sind kalt. Und im Kutschenfenster spiegelt sich alles ausser ihm. Merkt es niemand, ist das kein Problem — die Gefahr ist schon eingetragen.</p>`},
+ {t:"vorlesen", nur:"weg_c", titel:"Am Tor", text:[
+  `At the gate Corvin stops the coach and says four words to somebody you cannot see: “I have three guests.”`,
+  `Then the gate opens, and the coach rolls into a square courtyard of black stone, and Corvin starts unloading boxes as if you were not there at all.`]},
+
+ {t:"weiter", text:"Wenn die Gruppe im Hof steht."}]},
+
+/* ===== 5 ===== */
+{n:"Kapitel II", titel:"The Courtyard", art:"szene", bloecke:[
+ {t:"ziel", text:"Die Gruppe sieht drei Türen, redet mit dem Raben und entscheidet sich für eine Tür.", zeit:"15 Min."},
+ {t:"vorlesen", titel:"Der Hof", text:[
+  `The cold in here is a different kind of cold: the cold of a room where a window has been open since 1804.`,
+  `In the middle of the courtyard a fountain has frozen in mid-fall, and the ice is not white — it is the colour of weak tea.`,
+  `Three ways lead on. On the left a chapel; its door has been broken inwards. In front of you a tall window, warm and yellow, with bookshelves behind it. And on the right a low stair going down, where it smells of onions and hot fat. Somebody down there is cooking. At two in the morning.`]},
+ {t:"regie", nur:"weg_b", text:"Ihr kamt durch den Brunnen herauf — <b>das eingefrorene Wasser ist der Rand des Schachts, aus dem ihr gerade geklettert seid.</b> Sag das ruhig: Es macht den Hof zu einem Ort, den sie schon kennen."},
+ {t:"vorlesen", titel:"Der Rabe", text:[
+  `On the edge of the fountain sits a raven. It looks at you for a long moment.`,
+  `Then it says one word, and the word is your name.`]},
+ {t:"regie", text:"Sag den <b>echten Figurennamen</b> einer Spielerin, so wie er rechts in der Gruppe steht. Nichts an diesem Abend erschreckt zuverlässiger. <p>Der Rabe gehört dem Bibliothekar und wiederholt nur, was er hört. Das dürfen sie ruhig erst später merken.</p>"},
+ {t:"aufgabe", text:"Jede Figur sagt dem Raben <b>einen ganzen Satz</b> — er spricht ihn nach. Wer deutlich spricht, bekommt seinen Satz sauber zurück; wer nuschelt, bekommt Unsinn zurück.", blatt:"Helfer-Blatt · Teil 4"},
+ {t:"fa", titel:"Wenn sie fragen — antworte so", paare:[
+  ["Was ist hinter der Kapellentür?","„Candles. And the door was broken from the outside in. Something came out of there.“"],
+  ["Was ist hinter dem Fenster?","„Bookshelves up to the ceiling. Somebody in there is awake — you can see a shadow moving.“"],
+  ["Was ist unten in der Küche?","„Warm air, onions, and somebody humming. It sounds like a boy.“"],
+  ["Wo ist Mirela?","„Look up.“ Ganz oben im Turm brennt das eine Fenster. Einen Turmeingang vom Hof aus gibt es nicht."],
+  ["Können wir alle drei Türen nehmen?","Nein — und sag auch warum: „You have one hour before this house wakes up. Choose one.“"]]},
+ {t:"weiter", text:"Wenn jede Figur einmal mit dem Raben gesprochen hat."}]},
+
+/* ===== 6 ===== */
+{n:"Entscheidung 2", titel:"Three Doors", art:"ent", bloecke:[
+ {t:"ziel", text:"Eine Tür. Alle drei enden vor derselben Turmtreppe — sie unterscheiden sich darin, was die Gruppe mitnimmt und was es kostet.", zeit:"10 Min."},
+ {t:"sagen", text:[
+  "Three doors. The chapel, broken open. The library, where somebody is awake. Or the kitchen stair, where somebody is cooking.",
+  "You have time for one of them. Which one?"]},
+ {t:"aufgabe", text:"Jede Figur nennt ihre Tür und <b>einen Grund dafür</b> — auf Englisch, ein ganzer Satz.", blatt:"Helfer-Blatt · Teil 3"},
+ {t:"optionen", id:"e2", optionen:[
+  {b:"A", name:"The library", was:"Dort sitzt Bellamy, seit 1790 Archivar des Hauses und heute ein sehr höflicher Ghul. Er greift nicht an — er handelt.",
+   pro:["Er verrät den <b>wahren Namen</b> des Grafen. Im Finale verliert Vaskir dadurch seine erste Runde."],
+   con:["Sein Preis: Jede Figur erzählt ihm etwas Wahres über sich — auf Englisch. Und es kostet eine Stunde."],
+   wirkung:{gefahr:1, flaggen:["bibliothek"]}},
+  {b:"B", name:"The chapel", was:"Kalt und offen. Im Taufbecken schläft etwas, das vor zwanzig Jahren ein Mädchen aus Dornwald war.",
+   pro:["Der direkteste Weg nach oben. Und wer den Namen Anneke kennt, braucht hier nicht zu kämpfen."],
+   con:["Wer den Namen nicht kennt, muss kämpfen. Der Kampf ist laut."],
+   wirkung:{gefahr:2, flaggen:["kapelle"]}},
+  {b:"C", name:"The kitchen stair", was:"Unten kocht ein Junge von vierzehn für niemanden. Er heisst Tam, ist seit sechs Jahren hier und kennt jeden Gang im Haus.",
+   pro:["Der leiseste Weg. Die Gefahr steigt gar nicht."],
+   con:["Kein Wissen, kein Vorteil für später — nur ein Versprechen, das Tam einfordert."],
+   wirkung:{gefahr:0, flaggen:["kueche"]}}]},
+ {t:"weiter", text:"Sobald du eine der drei Karten angeklickt hast."}]},
+
+/* ===== 7 ===== */
+{n:"Hinter der Tür", titel:"What You Find", art:"szene", bloecke:[
+ {t:"ziel", text:"Hier steht nur eure Tür. Am Ende steht die Gruppe in jedem Fall vor der Turmtreppe.", zeit:"20 Min."},
+
+ {t:"vorlesen", nur:"bibliothek", titel:"Die Bibliothek", text:[
+  `Bookshelves up to the ceiling, and a very thin man in a very good suit standing on a ladder, putting a book back.`,
+  `He says, without turning round: “Nobody has spoken to me since 1912. Say something. Anything — as long as it is true.”`,
+  `Then he climbs down, and you see his hands, and his teeth, and you understand what he is. He offers you a chair anyway.`]},
+ {t:"regie", nur:"bibliothek", text:"Bellamy ist <b>nicht gefährlich</b>, solange man höflich bleibt. Er will drei wahre Sätze von jeder Figur — er hört nicht auf den Inhalt, sondern auf die Stimme, und Lügen merkt er. <p>Danach gibt er, was er versprochen hat: den wahren Namen des Grafen, <b>Vasil Korrin Drage</b>. Und er bittet um einen Gefallen: einen Brief mit ins Dorf zu nehmen. Merk dir, ob sie es versprechen — im Epilog zählt es.</p>"},
+ {t:"aufgabe", nur:"bibliothek", text:"Jede Figur erzählt Bellamy <b>drei wahre Sätze</b> über sich. Gib dreissig Sekunden Bedenkzeit, dann reihum.", blatt:"Helfer-Blatt · Teil 5"},
+ {t:"tun", nur:"bibliothek", text:"Haben alle drei gesprochen? Dann gibt Bellamy den Namen heraus.", knopf:{art:"wissen", k:"name"}, beschriftung:"Sie kennen den wahren Namen"},
+ {t:"vorlesen", nur:"bibliothek", titel:"Der Weg zum Turm", text:[
+  `Bellamy walks you to the end of the west corridor and stops in front of a mirror. “The tower has no stair,” he says. “It has this. Walk backwards, and don’t look.”`,
+  `He does not come with you. “He forbade it in 1804, and I find I still care what he thinks. Isn’t that the saddest thing you have ever heard?”`]},
+
+ {t:"vorlesen", nur:"kapelle", titel:"Die Kapelle", text:[
+  `Candles, hundreds of them, all burnt down to nothing. The saint above the altar has no face left.`,
+  `Something sits up in the stone font. It is a girl of about nineteen, in a dress that was white twenty years ago. She looks at you without any anger at all, and that is worse.`]},
+ {t:"regie", nur:"kapelle", nicht:"anneke", text:"Die Gruppe kennt ihren Namen <b>nicht</b> — im Wirtshaus ist er nicht gefallen. Also kämpft sie. Bei 8 Lebenspunkten hört Anneke von selbst auf und fragt „Is Greta still alive?“ — lass den Kampf dort enden, nicht bei null."},
+ {t:"kampf", nur:"kapelle", nicht:"anneke", titel:"Anneke", text:"22 Lebenspunkte. Sie kämpft ohne Wut, was schlimmer ist.", gegner:["anneke"]},
+ {t:"wenn", nur:"kapelle", flagge:"anneke", titel:"Sie kennen ihren Namen — kein Kampf", text:`Ruft jemand <b>„Anneke!“</b>, hält sie mitten in der Bewegung an und setzt sich zurück ins Becken. Dann fragt sie: „Is Greta still alive?“
+ <p>Sie erzählt, was vor zwanzig Jahren geschah, und zeigt der Gruppe die Treppe hinter dem Altar. Sag laut, woran das lag: <em>„Because you listened to the old man in the tavern, this fight never happens.“</em></p>`},
+ {t:"tun", nur:"kapelle", flagge:"anneke", text:"Kein Kampf, keine Schreie — das war leiser als geplant.", knopf:{art:"gefahr", v:-1}, beschriftung:"Gefahr −1"},
+ {t:"vorlesen", nur:"kapelle", titel:"Der Weg zum Turm", text:[
+  `Behind the altar a narrow stair goes up inside the wall. At the top of it there is a mirror instead of a door, and written on the frame, in chalk, in a child’s handwriting: walk backwards.`]},
+
+ {t:"vorlesen", nur:"kueche", titel:"Die Küche", text:[
+  `A boy of about fourteen is cooking for nobody. There is enough food on that table for twenty people, and there has not been anybody to eat it for years.`,
+  `He sees you. He does not scream. He puts the knife down very slowly and says: “You’re here for the new one. The one in the tower.”`]},
+ {t:"regie", nur:"kueche", text:"Tam ist seit sechs Jahren hier und kennt jeden Gang. Er führt sie hinauf, wenn sie freundlich sind — er fragt <b>einmal</b>, und er will eine echte Antwort: „Will you take me with you? Say it. Promise.“ <p>Lass die Spieler wirklich antworten, und merk dir, was sie sagen. Im Epilog zählt es. Wer ihn anfährt oder an ihm vorbeigeht: Er schreit, und du nimmst rechts <b>+3 Gefahr</b>.</p>"},
+ {t:"aufgabe", nur:"kueche", text:"Die Gruppe antwortet Tam auf seine Frage — <b>eine echte Antwort</b>, kein Ausweichen. Ja oder Nein, auf Englisch, mit Begründung.", blatt:"Helfer-Blatt · Teil 5"},
+ {t:"vorlesen", nur:"kueche", titel:"Der Weg zum Turm", text:[
+  `Tam takes corridors that do not look like corridors. Twice he stops, puts up a hand, and you all wait forty seconds in the dark without knowing what for.`,
+  `Then he points at a mirror at the end of a corridor with no windows. “That’s the door. You have to walk backwards. Don’t look at it.” And then, quietly: “I’ll wait here.”`]},
+
+ {t:"weiter", text:"Wenn die Gruppe rückwärts durch den Spiegel gegangen ist."}]},
+
+/* ===== 8 ===== */
+{n:"Kapitel III", titel:"The Tower Room", art:"szene", bloecke:[
+ {t:"ziel", text:"Die Gruppe erfährt die Wahrheit und redet mit Mirela. Hier wird am meisten gesprochen — nimm dir Zeit.", zeit:"25 Min."},
+ {t:"vorlesen", text:[
+  `The room at the top is warm. There is a fire, and a pot of tea, and two cups.`,
+  `Mirela Vance sits in an armchair with a book on her knees. She is not tied up. She is not hurt. She is not even pale.`,
+  `She looks up and says: “You’re late. The coach comes at midnight — you could have taken the coach.”`]},
+ {t:"regie", titel:"Die Wahrheit, in dieser Reihenfolge", text:`<b>1.</b> 1604 schloss Dornwald einen Vertrag mit dem Grafen: alle zwanzig Jahre ein Gast. Dafür keine Pest, keine Wölfe, kein Verhungern im Winter. Vierhundert Jahre lang hat es funktioniert.
+ <p><b>2.</b> Die Namen auf dem Brett im Wirtshaus sind diese Gäste. Greta hat 2004 gewählt — sie wählte Anneke.</p>
+ <p><b>3.</b> Dieses Jahr sollte Lene gehen, neun Jahre alt, Tobias’ Schwester. Mirela hat sich an ihrer Stelle gemeldet. Bei Sonnenaufgang unterschreibt sie.</p>`},
+ {t:"fa", titel:"Wenn sie fragen — Mirela antwortet so", paare:[
+  ["Why don’t you just come with us?","„And in February, when the wolves come back — will you be here?“"],
+  ["Did they force you?","„Nobody forced anybody. That is the whole problem.“"],
+  ["Who chose you?","„I chose me. The village chose Lene. She is nine.“"],
+  ["What happens at sunrise?","„I sign the book downstairs. After that I am still me for a while. Then less.“"],
+  ["Can we just kill him?","„People have tried. There is a board in the tavern with their names on it too — on the back.“"],
+  ["Where is he right now?","„Asleep, two floors down, in the ice cellar. He will know you are here the moment you touch the book.“"]]},
+ {t:"tun", nur:"freiwillig", text:"Die Gruppe wusste es schon aus dem Dorf — niemand schreit hier, niemand rennt los.", knopf:{art:"gefahr", v:-1}, beschriftung:"Gefahr −1"},
+ {t:"aufgabe", text:"Jede Figur bringt <b>einen echten Einwand</b> gegen Mirelas Entscheidung — und hört sich ihre Antwort an. Mirela gibt erst nach, wenn ihr etwas Besseres angeboten wird als „wir retten dich“.", blatt:"Helfer-Blatt · Teil 6"},
+ {t:"weiter", text:"Wenn jede Figur einmal mit Mirela gestritten hat."}]},
+
+/* ===== 9 ===== */
+{n:"Entscheidung 3", titel:"The Blood Ledger", art:"ent", bloecke:[
+ {t:"ziel", text:"Die letzte Entscheidung. Keine ist sauber, und Mirela hört zu, während sie getroffen wird.", zeit:"10 Min."},
+ {t:"sagen", text:[
+  "One hour until sunrise. You can do three things.",
+  "You can take her out of here — now, whether she wants it or not.",
+  "You can burn the book downstairs. Every contract in it, four hundred years of them.",
+  "Or you can call him up here and make him a new offer.",
+  "What are you going to do?"]},
+ {t:"regie", text:"Lass sie <b>vor Mirela</b> entscheiden, nicht im Nebenzimmer. Sie widerspricht — das ist der beste Dialog des Abends."},
+ {t:"optionen", id:"e3", optionen:[
+  {b:"A", name:"Take her out", was:"Über die Schulter und hinunter. Das Dorf soll selbst sehen, wie es zurechtkommt.",
+   pro:["Sicher: Mirela lebt, egal wie der Abend sonst ausgeht."],
+   con:["Sie wehrt sich und schreit. Das ganze Haus wacht auf."],
+   wirkung:{gefahr:3, flaggen:["e3_raus"]}},
+  {b:"B", name:"Burn the book", was:"Das Blutbuch liegt eine Etage tiefer, aufgeschlagen, mit vierhundert Jahren Unterschriften darin.",
+   pro:["Jeder Vertrag erlischt — auch der von Anneke und der aller Diener. Im Finale steht Vaskir allein."],
+   con:["Er spürt es in der Sekunde, in der es brennt, und kommt wütend. Und der Schutz des Tals ist weg."],
+   wirkung:{gefahr:2, flaggen:["e3_buch"]}},
+  {b:"C", name:"Make him an offer", was:"Ihn heraufbitten und verhandeln. Er ist vierhundert Jahre alt und langweilt sich seit dreihundert davon.",
+   pro:["Der einzige Ausgang, bei dem alle lebend hier herauskommen — auch Anneke und Tam."],
+   con:["Es hängt allein daran, was die Gruppe sagt. Eine Drohung, und das Finale beginnt sofort und schlecht."],
+   wirkung:{gefahr:0, flaggen:["e3_pakt"]}}]},
+ {t:"weiter", text:"Sobald du eine der drei Karten angeklickt hast."}]},
+
+/* ===== 10 ===== */
+{n:"Finale", titel:"Count Vaskir", art:"kampf", bloecke:[
+ {t:"ziel", text:"Wie er auftritt, hängt am Barometer rechts. Es steht nur der Fall da, der bei euch gilt.", zeit:"30 Min."},
+ {t:"wenn", gefahrVon:0, gefahrBis:3, titel:"Er ist beeindruckt", text:`„You came up my mountain without waking a single one of my people. Do you know how long it has been since anyone did that?“ — Er ist allein und lässt bis zuletzt mit sich reden. <b>Der Knopf unten lädt ihn mit 40 statt 55 Lebenspunkten</b>, und die Gruppe darf einmal angreifen, bevor er reagiert.`},
+ {t:"wenn", gefahrVon:4, gefahrBis:7, titel:"Er hat gewartet", text:`Er weiss seit Stunden, dass sie da sind, und wollte sehen, wie weit sie kommen. Volle 55 Lebenspunkte, und zwei Thralls stehen mit im Raum — ausser das Blutbuch brennt bereits, dann kommt er allein.`},
+ {t:"wenn", gefahrVon:8, gefahrBis:10, titel:"Das Haus ist wach", text:`Jede Lampe brennt. 55 Lebenspunkte und zwei Thralls von der ersten Runde an. Sag der Gruppe vorher, woran das liegt — sie haben es sich verdient und wissen es.`},
+ {t:"vorlesen", text:[
+  `He does not come through the door. The door opens, and then he is simply sitting in the second chair, with the second cup of tea, which was never meant for Mirela.`,
+  `He is not tall. He is not pale. He looks like a tired man of fifty who has been doing the same job for far too long, and that is the frightening part.`,
+  `“Four hundred years,” he says, “and I never took a single one of them. They were brought to me. Every twenty years, up that road, with a bag packed. Ask her who packed hers.”`]},
+ {t:"tun", text:"Lade das Finale — die Seite nimmt die richtigen Gegner nach eurem Barometer und eurer letzten Entscheidung.", knopf:{art:"finale"}, beschriftung:"Finale laden"},
+ {t:"wenn", nur:"name", titel:"Sie kennen seinen wahren Namen", text:`Ruft jemand <b>Vasil Korrin Drage</b>, hält er mitten in der Bewegung an. <b>Er verliert seine erste Runde</b> — die Gruppe greift zweimal an, bevor er überhaupt reagiert. Sag ausdrücklich, dass das an der Bibliothek liegt.`},
+ {t:"aufgabe", text:"Vor jedem Angriff sagt die Figur <b>einen englischen Satz</b> zu Vaskir — eine Ansage, eine Drohung, eine Frage. Er antwortet immer, höflich und genau.", blatt:"Helfer-Blatt · Teil 7"},
+ {t:"kampf", titel:"Count Vaskir", text:"Trag den Schaden der Spieler rechts in seine Leiste ein. Für seinen Zug drückst du auf eine seiner Attacken — die Seite würfelt und du klickst an, wen es trifft.", gegner:["vaskir"], zusatz:["thrall"]},
+ {t:"regie", titel:"Wie der Kampf endet", text:`<b>Unter 15 Lebenspunkten hört Vaskir auf zu kämpfen und redet.</b> Lass ihn nicht stumm zu Staub zerfallen — das ist der Moment, in dem die Gruppe noch einmal wählen kann: töten oder ein neuer Vertrag.
+ <p>Fällt eine Figur auf 0, ist sie bewusstlos, nicht tot. Der Lightbearer holt sie mit Healing Light zurück.</p>`},
+ {t:"weiter", text:"Wenn Vaskir gefallen ist, aufgegeben hat oder ein neuer Vertrag steht."}]},
+
+/* ===== 11 ===== */
+{n:"Epilog", titel:"Six O’Clock", art:"szene", bloecke:[
+ {t:"ziel", text:"Es steht nur da, was bei euch eingetreten ist. Das letzte Wort haben die Schüler, nicht du.", zeit:"10 Min."},
+ {t:"wenn", nur:"e3_pakt", titel:"Es wurde verhandelt", text:`Bei Sonnenaufgang steht ein neuer Vertrag auf einem Blatt Papier, und er ist kurz. Vaskir liest ihn zweimal, sagt „This is worse for me than the old one“ und unterschreibt trotzdem. Er hatte seit dreihundert Jahren keinen Besuch, den er nicht selbst bestellt hat.`},
+ {t:"wenn", nur:"e3_buch", titel:"Das Blutbuch brannte", text:`Im ganzen Haus wachen Menschen auf, die nicht wissen, welches Jahr ist. Einer davon ist Corvin Ash und fragt nach seiner Tante Greta. Unten im Tal geht Dornwald ohne Schutz in den Winter — und weiss es noch nicht.`},
+ {t:"wenn", nur:"e3_raus", titel:"Mirela wurde hinausgetragen", text:`Sie spricht auf dem ganzen Weg hinunter kein Wort. Im Dorf öffnet sich keine einzige Tür. Erst Tobias kommt gelaufen — und Mirela sagt den Satz, der hängenbleibt: „So who is going instead of me?“`},
+ {t:"wenn", nur:"kueche", titel:"Tam bekam ein Versprechen", text:`Er steht am Tor mit einem Sack, in dem drei Töpfe und ein Messer sind. Haben sie Wort gehalten, kocht er ab heute im Wirtshaus, und Greta hat zum ersten Mal seit zwanzig Jahren jemanden im Haus, der redet. Haben sie es gebrochen: sag es beiläufig, ohne Vorwurf. Das wirkt stärker.`},
+ {t:"wenn", nur:"bibliothek", titel:"Bellamys Brief kam mit", text:`Die Adressatin ist seit 180 Jahren tot, ihr Haus steht noch. Wer den Brief dort durch den Schlitz wirft, hat Wort gehalten — und findet zwei Wochen später eine Antwort im eigenen Gepäck, in einer Handschrift von 1844.`},
+ {t:"wenn", nur:"anneke", titel:"Anneke", text:`Sie kommt nicht mit hinunter — aber sie steht am Tor, als die Gruppe geht, und sagt zum ersten Mal seit zwanzig Jahren ihren eigenen Namen laut.`},
+ {t:"wenn", gefahrVon:0, gefahrBis:3, titel:"Barometer 0–3", text:`Niemand im Tal erfährt je, dass jemand oben war. Das ist die seltenste Art, diesen Abend zu gewinnen — sag der Gruppe ausdrücklich, dass sie das geschafft hat.`},
+ {t:"wenn", gefahrVon:8, gefahrBis:10, titel:"Barometer 8–10", text:`Was auch immer sie erreicht haben, sie haben es unter Lärm erreicht. Eine Figur ihrer Wahl trägt etwas mit hinunter, das nicht mehr weggeht: einen weissen Streifen im Haar, eine Hand, die nicht mehr warm wird, oder einen Namen, den sie im Schlaf sagt.`},
+ {t:"aufgabe", text:"Drei Fragen in die Runde, reihum, auf Englisch: <b>What would you do differently? — Was the village wrong? — What do you tell Tobias?</b>", blatt:"Helfer-Blatt · Teil 8"},
+ {t:"weiter", text:"Fertig. Gut gemacht."}]}
+];
+
+/* ====================== ZUSTAND ====================== */
+const SCHLUESSEL = "nachtfels.dm.v4";
+let Z = { schritt:0, gefahr:0, gruppe:GRUPPE_VORLAGE.map(g=>({name:"", rolle:g.rolle, hp:g.max, max:g.max})),
+          wissen:{}, flaggen:{}, gewaehlt:{}, gegner:[], chronik:[], besucht:{0:true}, getan:{} };
+function laden(){ try{ const r=localStorage.getItem(SCHLUESSEL); if(r){const g=JSON.parse(r); if(g&&typeof g==="object") Z=Object.assign(Z,g);} }catch(e){} }
+function sichern(){ try{ localStorage.setItem(SCHLUESSEL, JSON.stringify(Z)); }catch(e){} }
+const $ = id => document.getElementById(id);
+const w = n => Math.floor(Math.random()*n)+1;
+function wuerfle(f){ const m=/^(\d+)d(\d+)(?:\+(\d+))?$/.exec(f); let s=m[3]?+m[3]:0; for(let i=0;i<+m[1];i++) s+=w(+m[2]); return s; }
+function notiere(text){
+  const t=new Date();
+  Z.chronik.unshift({z:t.getHours().toString().padStart(2,"0")+":"+t.getMinutes().toString().padStart(2,"0"), text});
+  if(Z.chronik.length>50) Z.chronik.length=50;
+  zeichneChronik(); sichern();
+}
+function hat(k){ return !!Z.flaggen[k] || !!Z.wissen[k]; }
+
+const STUFEN=[{bis:3,name:"Der Nebel deckt euch",folge:"Niemand im Schloss weiss, dass ihr da seid."},
+              {bis:7,name:"Das Haus horcht",folge:"Man hat euch gehört, aber nicht gefunden. Türen sind verriegelt."},
+              {bis:10,name:"Sie wissen, dass ihr hier seid",folge:"Jede Lampe brennt. Der Graf hat aufgehört zu warten."}];
+function setzeGefahr(d, grund){
+  const alt=Z.gefahr; Z.gefahr=Math.max(0,Math.min(10,Z.gefahr+d));
+  if(Z.gefahr!==alt) notiere("Gefahr "+(Z.gefahr>alt?"+":"")+(Z.gefahr-alt)+" → <b>"+Z.gefahr+"</b>"+(grund?" · "+grund:""));
+  zeichneBaro(); sichern();
+}
+function zeichneBaro(){
+  const s=STUFEN.find(x=>Z.gefahr<=x.bis)||STUFEN[2];
+  $("saeule").innerHTML=Array.from({length:10},(_,i)=>{const n=i+1;
+    return '<i class="'+(n<=Z.gefahr?"an"+(n<=3?1:n<=7?2:3):"")+'"></i>';}).join("");
+  $("b-zahl").textContent=Z.gefahr; $("b-stufe").textContent=s.name; $("b-folge").textContent=s.folge;
+  const kb=$("kgefahr"); kb.className="badge g"+(Z.gefahr<=3?0:Z.gefahr<=7?1:2);
+  kb.innerHTML="Gefahr <b>"+Z.gefahr+"</b>/10";
+}
+function zeichneGruppe(){
+  $("gruppe").innerHTML=Z.gruppe.map((h,i)=>{
+    const p=Math.max(0,(h.hp/h.max)*100);
+    return '<div class="held'+(h.hp<=0?" tot":"")+'">'+
+     '<div class="held-kopf"><input class="nm" id="nm'+i+'" value="'+(h.name||"").replace(/"/g,"&quot;")+'" placeholder="Name eintragen" data-nm="'+i+'"><span class="rolle">'+h.rolle+'</span></div>'+
+     '<div class="hpzeile"><span class="hpwert"><b>'+h.hp+'</b>/'+h.max+'</span><span class="bar"><i style="width:'+p+'%"></i></span></div>'+
+     '<div class="steuer"><input type="number" id="hpin'+i+'" value="5" min="1" max="99" aria-label="Punkte">'+
+     '<button class="minus" data-hpin="'+i+'" data-r="-1">Schaden</button>'+
+     '<button class="plus" data-hpin="'+i+'" data-r="1">Heilung</button></div></div>';}).join("");
+}
+function aendereHP(i,d,grund){
+  const h=Z.gruppe[i], alt=h.hp;
+  h.hp=Math.max(0,Math.min(h.max,h.hp+d));
+  if(h.hp!==alt) notiere("<b>"+(h.name||h.rolle)+"</b> "+(h.hp>alt?"+":"")+(h.hp-alt)+" → "+h.hp+"/"+h.max+(grund?" · "+grund:""));
+  zeichneGruppe(); sichern();
+}
+function ladeGegner(k, hp){
+  const v=BESTIARIUM[k]; if(!v) return;
+  Z.gegner.push({k, name:v.name, hp:hp||v.hp, max:hp||v.hp});
+  notiere("<b>"+v.name+"</b> im Kampf ("+(hp||v.hp)+" HP)");
+  zeichneGegner(); sichern();
+}
+function zeichneGegner(){
+  $("gegner-leer").hidden = Z.gegner.length>0;
+  $("gegner").innerHTML=Z.gegner.map((g,i)=>{
+    const v=BESTIARIUM[g.k], p=Math.max(0,(g.hp/g.max)*100);
+    return '<div class="gegner'+(g.hp<=0?" tot":"")+'">'+
+     '<div class="g-kopf"><h4>'+g.name+'</h4><button class="weg" data-weg="'+i+'" title="entfernen">×</button></div>'+
+     '<div class="hpzeile"><span class="hpwert"><b>'+g.hp+'</b>/'+g.max+'</span><span class="bar"><i style="width:'+p+'%;background:var(--gold-dim)"></i></span></div>'+
+     '<div class="steuer"><input type="number" id="gin'+i+'" value="8" min="1" max="99" aria-label="Schaden"><button class="minus" data-gdmg="'+i+'">Schaden</button></div>'+
+     '<div class="att">'+v.att.map((a,j)=>'<button data-att="'+i+'" data-j="'+j+'">'+a.n+'</button>').join("")+'</div>'+
+     '<div id="wurf'+i+'"></div></div>';}).join("");
+}
+function gegnerAngriff(i,j){
+  const g=Z.gegner[i], a=BESTIARIUM[g.k].att[j];
+  if(Math.random()>=0.65){
+    $("wurf"+i).innerHTML='<div class="wurfbox"><span class="erg">'+a.n+': <b>verfehlt</b></span></div>';
+    notiere("<b>"+g.name+"</b> "+a.n+" — verfehlt"); return;
+  }
+  const sch=wuerfle(a.d);
+  $("wurf"+i).innerHTML='<div class="wurfbox"><span class="erg">'+a.n+' trifft für <b>'+sch+'</b> Schaden — an wen?</span>'+
+    '<div class="an">'+Z.gruppe.map((h,k)=>'<button data-treffer="'+k+'" data-s="'+sch+'" data-q="'+g.name+'">'+(h.name||h.rolle)+'</button>').join("")+'</div></div>';
+  notiere("<b>"+g.name+"</b> "+a.n+" trifft für "+sch);
+}
+function zeichneWissen(){
+  $("wissen").innerHTML=WISSEN.map(e=>
+   '<button class="wisszeile'+(Z.wissen[e.k]?" hat":"")+'" data-wiss="'+e.k+'">'+
+   '<span class="haken">'+(Z.wissen[e.k]?"✓":"○")+'</span><span><b>'+e.txt+'</b><span>'+e.nutzen+'</span></span></button>').join("");
+}
+function setzeWissen(k, an){
+  const e=WISSEN.find(x=>x.k===k);
+  if(an===undefined) an=!Z.wissen[k];
+  if(!!Z.wissen[k]===an) return;
+  if(an) Z.wissen[k]=true; else delete Z.wissen[k];
+  notiere(an?("Erfahren: <b>"+e.txt+"</b>"):("Zurückgenommen: "+e.txt));
+  zeichneWissen(); zeichneSzene(); sichern();
+}
+function zeichneChronik(){
+  $("chronik").innerHTML = Z.chronik.length
+    ? Z.chronik.map(e=>'<li><span class="z">'+e.z+'</span><span>'+e.text+'</span></li>').join("")
+    : '<li style="border:none;color:var(--dim);font-style:italic">Noch nichts passiert.</li>';
+}
+
+/* ====================== SICHTBARKEIT ====================== */
+function gilt(b){
+  if(b.nur && !hat(b.nur)) return false;
+  if(b.nicht && hat(b.nicht)) return false;
+  if(b.t==="wenn"){
+    if(b.flagge && !hat(b.flagge)) return false;
+    if(b.gefahrVon!==undefined && !(Z.gefahr>=b.gefahrVon && Z.gefahr<=b.gefahrBis)) return false;
+  }
+  return true;
+}
+
+/* ====================== SZENE ====================== */
+function blockHTML(b, idx){
+  const t=b.t;
+  if(t==="ziel") return '<div class="ziel"><span class="label">Ziel</span><p>'+b.text+'</p><span class="zeit">'+b.zeit+'</span></div>';
+  if(t==="weiter") return '<div class="weiter"><span class="tat">Weiter, wenn</span><p>'+b.text+'</p></div>';
+  let innen="";
+  switch(t){
+    case "vorlesen": innen='<div class="vorlesen"><span class="tat">Vorlesen'+(b.titel?" · "+b.titel:"")+'</span>'+b.text.map(p=>"<p>"+p+"</p>").join("")+'</div>'; break;
+    case "sagen": innen='<div class="sagen"><span class="tat">Das sagst du</span>'+b.text.map(p=>"<p>„"+p+"“</p>").join("")+'</div>'; break;
+    case "aufgabe": innen='<div class="aufgabe"><span class="tat">Das sollen die Schüler jetzt tun</span><p>'+b.text+'</p>'+
+      (b.blatt?'<span class="blatt">→ '+b.blatt+'</span>':'')+'</div>'; break;
+    case "personen": innen='<div class="personen"><span class="tat">Wen man ansprechen kann</span>'+
+      b.leute.map(l=>'<div class="person"><div class="kopf"><h4>'+l.name+'</h4><span class="wer">'+l.wer+'</span></div>'+
+        '<p class="spielt">'+l.spielt+'</p><ul>'+l.sagt.map(s=>'<li>„'+s+'“</li>').join("")+'</ul>'+
+        '<p class="sonst" style="border:none;padding-top:8px;margin-top:8px"><b>Notfalls:</b> '+l.notfalls+'</p></div>').join("")+
+      (b.sonst?'<p class="sonst">'+b.sonst+'</p>':'')+'</div>'; break;
+    case "fa": innen='<div class="fa"><span class="tat">'+(b.titel||"Wenn sie fragen")+'</span><dl>'+
+      b.paare.map(p=>'<dt>'+p[0]+'</dt><dd>'+p[1]+'</dd>').join("")+'</dl></div>'; break;
+    case "tun": {
+      const fertig = b.knopf.art==="wissen" ? !!Z.wissen[b.knopf.k] : !!Z.getan[Z.schritt+"-"+idx];
+      innen='<div class="tun"><p>'+b.text+'</p><button class="'+(fertig?"getan":"")+'" data-tun="'+idx+'">'+
+        (fertig?"✓ "+b.beschriftung:b.beschriftung)+'</button></div>'; break; }
+    case "regie": innen='<div class="regie"><span class="tat">'+(b.titel||"Nur für dich")+'</span><p>'+b.text+'</p></div>'; break;
+    case "wenn": innen='<div class="wenn"><span class="tat">▸ das gilt bei euch</span><h4>'+b.titel+'</h4><p>'+b.text+'</p></div>'; break;
+    case "kampf": innen='<div class="kampfblock"><span class="tat">Kampf</span><h4>'+b.titel+'</h4><p>'+b.text+'</p>'+
+      b.gegner.map(k=>{const v=BESTIARIUM[k];
+        return '<div class="statblock"><b>'+v.name+'</b> — '+v.hp+' Lebenspunkte · '+v.att.map(a=>a.n+" "+a.d).join(", ")+'</div>';}).join("")+
+      '<button class="laden" data-laden="'+b.gegner.join(",")+'">In den Kampf laden</button>'+
+      (b.zusatz?'<div class="zufuegen">'+b.zusatz.map(k=>'<button data-laden="'+k+'">+ '+BESTIARIUM[k].name+'</button>').join("")+'</div>':'')+
+      '</div>'; break;
+    case "optionen": innen='<div class="optionen">'+b.optionen.map((o,i)=>{
+      const gew=Z.gewaehlt[b.id]===i, wk=o.wirkung, chips=[];
+      chips.push('<span class="chip '+(wk.gefahr>0?"gefahr":"ruhe")+'">Gefahr '+(wk.gefahr>0?"+"+wk.gefahr:"±0")+'</span>');
+      if(wk.schadenAlle) chips.push('<span class="chip gefahr">−'+wk.schadenAlle+' HP für alle</span>');
+      return '<article class="option'+(gew?" gewaehlt":"")+'"><div class="buchstabe">'+o.b+'</div><div class="kern">'+
+        '<h4>'+o.name+'</h4><p class="was">'+o.was+'</p><ul class="bil">'+
+        o.pro.map(p=>'<li class="pro">'+p+'</li>').join("")+o.con.map(p=>'<li class="con">'+p+'</li>').join("")+
+        '</ul><div class="chips">'+chips.join("")+'</div>'+
+        '<button class="waehlen" data-ent="'+b.id+'" data-opt="'+i+'">'+(gew?"✓ gewählt":"Diese Karte wählen")+'</button>'+
+        '</div></article>';}).join("")+'</div>'; break;
+  }
+  return '<div class="schritt"><span class="nr">'+idx+'</span><div class="kern">'+innen+'</div></div>';
+}
+function tunAusfuehren(idx){
+  const sichtbar = KAPITEL[Z.schritt].bloecke.filter(x=>x.t!=="ziel"&&x.t!=="weiter"&&gilt(x));
+  const b = sichtbar[idx-1];
+  if(!b || b.t!=="tun") return;
+  const kn=b.knopf;
+  if(kn.art==="wissen") return setzeWissen(kn.k);
+  const schl=Z.schritt+"-"+idx;
+  if(Z.getan[schl]) return;
+  Z.getan[schl]=true;
+  if(kn.art==="gefahr") setzeGefahr(kn.v, b.beschriftung);
+  if(kn.art==="schaden") Z.gruppe.forEach((h,i)=>aendereHP(i,-kn.v,"schlechte Luft"));
+  if(kn.art==="finale"){
+    Z.gegner=[];
+    ladeGegner("vaskir", Z.gefahr<=3?40:55);
+    if(Z.gefahr>=4 && !hat("e3_buch")){ ladeGegner("thrall"); ladeGegner("thrall"); }
+    notiere("<b>Finale</b> geladen (Gefahr "+Z.gefahr+")");
+  }
+  zeichneSzene(); sichern();
+}
+function waehle(entId, optIndex){
+  let block=null;
+  KAPITEL.forEach(k=>k.bloecke.forEach(b=>{ if(b.t==="optionen"&&b.id===entId) block=b; }));
+  const vorher=Z.gewaehlt[entId];
+  if(vorher===optIndex) return;
+  if(vorher!==undefined){
+    const alt=block.optionen[vorher].wirkung;
+    if(alt.gefahr) setzeGefahr(-alt.gefahr,"Wahl zurückgenommen");
+    (alt.flaggen||[]).forEach(f=>{ delete Z.flaggen[f]; });
+  }
+  const o=block.optionen[optIndex], wk=o.wirkung;
+  Z.gewaehlt[entId]=optIndex;
+  notiere("Entscheidung: <b>"+o.b+" — "+o.name+"</b>");
+  if(wk.gefahr) setzeGefahr(wk.gefahr, o.name);
+  (wk.flaggen||[]).forEach(f=>{ Z.flaggen[f]=true; });
+  if(wk.schadenAlle) Z.gruppe.forEach((h,i)=>aendereHP(i,-wk.schadenAlle,o.name));
+  zeichneSzene(); sichern();
+}
+function zeichnePfad(){
+  $("pfad").innerHTML=KAPITEL.map((k,i)=>
+   '<button class="'+(i===Z.schritt?"jetzt ":"")+(Z.besucht[i]&&i!==Z.schritt?"getan ":"")+
+   (k.art==="ent"?"ent ":"")+(k.art==="kampf"?"kampf ":"")+'" data-schritt="'+i+'">'+
+   '<span class="n">'+(k.art==="ent"?"◆ ":"")+(k.art==="kampf"?"⚔ ":"")+k.n+'</span>'+k.titel+'</button>').join("");
+  const j=$("pfad").querySelector(".jetzt"); if(j) j.scrollIntoView({block:"nearest",inline:"center"});
+}
+function zeichneSzene(){
+  const k=KAPITEL[Z.schritt];
+  $("s-n").textContent=k.n; $("s-titel").textContent=k.titel;
+  const kern = k.bloecke.filter(b=>b.t!=="ziel"&&b.t!=="weiter");
+  const sichtbar = kern.filter(gilt);
+  const bedingt = kern.filter(b=>b.nur);
+  let html = k.bloecke.filter(b=>b.t==="ziel").map(b=>blockHTML(b,0)).join("");
+  if(bedingt.length && !sichtbar.length){
+    html += '<div class="hinweisfehlt">Auf dieser Seite steht nur, was zu eurem Weg gehört — und der ist noch nicht gewählt. Geh eine Seite zurück und klick die Karte an, für die sich die Gruppe entschieden hat.</div>';
+  }
+  html += sichtbar.map((b,i)=>blockHTML(b,i+1)).join("");
+  html += k.bloecke.filter(b=>b.t==="weiter").map(b=>blockHTML(b,0)).join("");
+  $("bloecke").innerHTML = html;
+  $("kschritt").textContent="Schritt "+(Z.schritt+1)+"/"+KAPITEL.length;
+  $("zurueck").disabled=Z.schritt===0; $("vor").disabled=Z.schritt===KAPITEL.length-1;
+  $("zurueck-t").textContent=Z.schritt>0?KAPITEL[Z.schritt-1].titel:"—";
+  $("vor-t").textContent=Z.schritt<KAPITEL.length-1?KAPITEL[Z.schritt+1].titel:"Ende";
+  zeichnePfad();
+}
+function geheZu(i){
+  Z.schritt=Math.max(0,Math.min(KAPITEL.length-1,i)); Z.besucht[Z.schritt]=true;
+  zeichneSzene(); sichern(); window.scrollTo({top:0,behavior:"smooth"});
+}
+
+document.addEventListener("click", e=>{
+  const t=e.target;
+  const s=t.closest("[data-schritt]"); if(s) return geheZu(+s.dataset.schritt);
+  const g=t.closest("[data-gefahr]"); if(g) return setzeGefahr(+g.dataset.gefahr,"von Hand");
+  const ent=t.closest("[data-ent]"); if(ent) return waehle(ent.dataset.ent,+ent.dataset.opt);
+  const tu=t.closest("[data-tun]"); if(tu) return tunAusfuehren(+tu.dataset.tun);
+  const wi=t.closest("[data-wiss]"); if(wi) return setzeWissen(wi.dataset.wiss);
+  const l=t.closest("[data-laden]"); if(l){ l.dataset.laden.split(",").forEach(k=>ladeGegner(k)); return; }
+  const weg=t.closest("[data-weg]"); if(weg){ const g2=Z.gegner.splice(+weg.dataset.weg,1)[0];
+    notiere("<b>"+g2.name+"</b> verlässt den Kampf"); zeichneGegner(); sichern(); return; }
+  const gd=t.closest("[data-gdmg]"); if(gd){ const i=+gd.dataset.gdmg, v=Math.max(0,parseInt($("gin"+i).value,10)||0);
+    const m=Z.gegner[i]; m.hp=Math.max(0,m.hp-v);
+    notiere("<b>"+m.name+"</b> −"+v+" → "+m.hp+"/"+m.max+(m.hp===0?" · <b>fällt</b>":""));
+    zeichneGegner(); sichern(); return; }
+  const at=t.closest("[data-att]"); if(at) return gegnerAngriff(+at.dataset.att,+at.dataset.j);
+  const tr=t.closest("[data-treffer]"); if(tr) return aendereHP(+tr.dataset.treffer,-(+tr.dataset.s),tr.dataset.q);
+  const hi=t.closest("[data-hpin]"); if(hi){ const i=+hi.dataset.hpin, v=Math.max(0,parseInt($("hpin"+i).value,10)||0);
+    aendereHP(i,v*(+hi.dataset.r), +hi.dataset.r>0?"Heilung":"Schaden"); return; }
+});
+document.addEventListener("input", e=>{ if(e.target.dataset.nm!==undefined){ Z.gruppe[+e.target.dataset.nm].name=e.target.value; sichern(); } });
+$("vor").onclick=()=>geheZu(Z.schritt+1);
+$("zurueck").onclick=()=>geheZu(Z.schritt-1);
+$("vollheilung").onclick=()=>{ Z.gruppe.forEach(h=>h.hp=h.max); notiere("<b>Alle auf volle Lebenspunkte</b>"); zeichneGruppe(); sichern(); };
+$("zuruecksetzen").onclick=()=>{
+  if(!confirm("Neue Runde? Gefahr, Lebenspunkte, Entscheidungen und Chronik werden geleert. Die Namen bleiben stehen.")) return;
+  const namen=Z.gruppe.map(h=>h.name);
+  Z={schritt:0, gefahr:0, gruppe:GRUPPE_VORLAGE.map((g,i)=>({name:namen[i]||"", rolle:g.rolle, hp:g.max, max:g.max})),
+     wissen:{}, flaggen:{}, gewaehlt:{}, gegner:[], chronik:[], besucht:{0:true}, getan:{}};
+  alles(); sichern();
+};
+$("zufuegen").innerHTML=Object.keys(BESTIARIUM).map(k=>'<button data-laden="'+k+'">+ '+BESTIARIUM[k].name+'</button>').join("");
+
+function alles(){ zeichneBaro(); zeichneGruppe(); zeichneGegner(); zeichneWissen(); zeichneChronik(); zeichneSzene(); }
+laden(); alles();
+</script>
