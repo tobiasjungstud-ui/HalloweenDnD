@@ -115,7 +115,8 @@ T.KAPITEL.forEach((k,i)=>{
       case "personen":
         kinder.push(...kasten([[...etikett("WEN MAN ANSPRECHEN KANN (NUR DM)","555555")],
           ...b.leute.flatMap(l=>[[new TextRun({text:l.name+" — "+l.wer+". ",font:"Georgia",size:18,bold:true}),new TextRun({text:l.spielt,font:"Georgia",size:18,color:"333333"})],
-            [new TextRun({text:l.sagt.map(s=>"„"+s+"“").join("  ·  "),font:"Georgia",size:18,italics:true})],
+            ...(l.fragen ? l.fragen.map(f=>[new TextRun({text:f[0]+"  ",font:"Georgia",size:18,bold:true,color:"333333"}),new TextRun({text:ohneHtml(f[1]),font:"Georgia",size:18,italics:true,color:"333333"})])
+                         : [[new TextRun({text:l.sagt.map(s=>"„"+s+"“").join("  ·  "),font:"Georgia",size:18,italics:true})]]),
             [new TextRun({text:"Notfalls: "+ohneHtml(l.notfalls),font:"Georgia",size:17,color:"555555"})]]),
           ...(b.sonst?[[new TextRun({text:ohneHtml(b.sonst),font:"Georgia",size:17,color:"555555"})]]:[])],grau,"BFBFBF")); break;
       case "tun":

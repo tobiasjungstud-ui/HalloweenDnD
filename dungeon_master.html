@@ -83,6 +83,12 @@ input{font:inherit;color:inherit}
 .aufgabe .hinweis{font-size:13.5px;color:var(--ash);margin:8px 0 0;font-style:normal}
 .hak{font-size:15px;color:var(--gold);padding:0 4px 0 0;line-height:1}
 .person li.erledigt{opacity:.38;text-decoration:line-through}
+.person dl{margin:0;display:flex;flex-direction:column;gap:2px}
+.person dt{font-family:var(--mono);font-size:12.5px;color:var(--ash);padding-top:8px}
+.person dd{margin:3px 0 8px;font-size:16px;font-style:italic;padding-left:14px;border-left:2px solid var(--gold-dim)}
+.person dd em{font-style:normal;color:var(--ash);font-size:14px}
+.person dt.erledigt{opacity:.38;text-decoration:line-through}
+.person dd.erledigt{opacity:.38}
 .person.stumm h4{color:var(--dim)}
 .fa dt.erledigt,.fa dd.erledigt{opacity:.38}
 .fa dt.erledigt{text-decoration:line-through}
@@ -432,26 +438,26 @@ const KAPITEL = [
   `By the fire sits an old man with a bottle between his boots. He is the only person in the room who is grinning.`,
   `And at the door stands a boy, twelve maybe, who was clearly waiting for somebody — and who does not move out of your way.`,
   `The other eight look into their drinks.`]},
- {t:"aufgabe", sag:"Who do you want to talk to? Nobody in here will tell you anything you don’t ask for. So ask — every one of you. And when the answer is short, ask again.", hinweis:"Antwortmöglichkeiten unten abhaken, sobald eine Frage gestellt ist — jede nur einmal, egal von wem.", blatt:"Helfer-Blatt · Teil 2"},
- {t:"personen", leute:[
-  {name:"Greta", wer:"Wirtin, drei Finger", spielt:"Kurze Sätze. Sie lügt nie — sie wechselt das Thema. Freundlich, nicht feindlich.", sagt:[
-    "Mirela is gone. That is all there is.","We don’t go up there. That is the arrangement.","You want to help? Go home. That would help."],
+ {t:"aufgabe", sag:"Who do you want to talk to? Nobody in here will tell you anything you don’t ask for. So ask — every one of you. And when the answer is short, ask again.", hinweis:"Antwortmöglichkeiten stehen bei den drei Personen oben: abhaken, sobald eine Frage gestellt ist — jede nur einmal, egal von wem.", blatt:"Helfer-Blatt · Teil 2"},
+  {t:"personen", leute:[
+  {name:"Greta", wer:"Wirtin, drei Finger", spielt:"Kurze Sätze. Sie lügt nie — sie wechselt das Thema. Freundlich, nicht feindlich.", fragen:[
+    ["What happened to Mirela?","„She is gone. Three nights ago. That is all there is.“ — mehr nicht."],
+    ["Why is nobody looking for her?","„Because we know exactly where she is.“ <em>Der Satz, der sie stutzig machen soll.</em>"],
+    ["Who wrote the names on the board?","„I did. Both times.“ Die Namen stehen in Abständen von zwanzig Jahren. Der davor: ANNEKE KOLL."],
+    ["Will you help us? / Will you come with us?","„You want to help? Go home. That would help. We don’t go up there — that is the arrangement.“"],
+    ["How do we get up to the castle?","Sie holt eine alte Karte unter der Theke hervor. <em>→ Karte, vorletzter Block.</em>"]],
    notfalls:"Fragt sie niemand, stellt sie ungefragt drei Becher hin: „You’re going up there anyway, aren’t you.“"},
-  {name:"Old Pieter", wer:"Totengräber, betrunken", spielt:"Zu laut, lacht an den falschen Stellen. Er sagt die Wahrheit, darum glaubt ihm niemand.", sagt:[
-    "Twenty years! Ask her what happened twenty years ago!","Ask her about Anneke! Go on — ask her about Anneke!","I dug no grave for that girl. Because there was nothing to bury."],
+  {name:"Old Pieter", wer:"Totengräber, betrunken", spielt:"Zu laut, lacht an den falschen Stellen. Er sagt die Wahrheit, darum glaubt ihm niemand.", fragen:[
+    ["What happened twenty years ago?","Er lacht: „Twenty years! Ask her about Anneke! Go on — ask her about Anneke!“ <em>→ Knopf unten.</em>"],
+    ["Who is Anneke?","„I dug no grave for that girl. Because there was nothing to bury.“ Mehr sagt er nicht — er sieht zu Greta hinüber."],
+    ["Have you seen it? Is it a vampire?","„We don’t use that word in here,“ sagt Greta von der Theke. Pieter: „SHE used it!“ — und lacht."]],
    notfalls:"Spricht ihn niemand an, ruft er den Anneke-Satz nach fünf Minuten quer durch den Raum. Der Name muss fallen."},
-  {name:"Tobias", wer:"Junge an der Tür, 12", spielt:"Schnell, hoffnungsvoll, zu ehrlich. Er wartet seit drei Nächten auf jemanden wie euch.", sagt:[
-    "She wasn’t taken. She packed a bag.","She said it was her turn. She said it like it was a shopping list.","She said: tell them it’s for Lene. Lene is my sister. She’s nine."],
+  {name:"Tobias", wer:"Junge an der Tür, 12", spielt:"Schnell, hoffnungsvoll, zu ehrlich. Er wartet seit drei Nächten auf jemanden wie euch.", fragen:[
+    ["Was she taken? / Did she go by herself?","„She wasn’t taken. She packed a bag. She said it was her turn — like it was a shopping list.“"],
+    ["Why would she do that?","„She said: tell them it’s for Lene. Lene is my sister. She’s nine.“"],
+    ["Can you come with us?","„Yes! … Please?“ Er darf nicht mit — lass ihn fragen, und lass die Gruppe Nein sagen. Er bleibt im Dorf und wartet."]],
    notfalls:"Redet niemand mit ihm, läuft er ihnen an der Tür nach und sagt den Satz mit dem Koffer."}],
-  sonst:"Tobias ist Mirelas Lehrling. Er will mit ins Schloss. Er darf nicht mit — aber lass ihn fragen. Er bleibt im Dorf und wartet."},
- {t:"fa", abhaken:true, paare:[
-  ["What happened to Mirela?","<b>Greta:</b> „She is gone. Three nights ago.“ — mehr nicht."],
-  ["Why is nobody looking for her?","<b>Greta:</b> „Because we know exactly where she is.“ <em>Der Satz, der sie stutzig machen soll.</em>"],
-  ["What happened twenty years ago?","<b>Pieter</b> lacht: „Ask her about Anneke!“ <em>→ Knopf unten.</em>"],
-  ["What is that board? Who wrote the names?","<b>Greta:</b> „I did. Both times.“ Die Namen stehen in Abständen von zwanzig Jahren. Der davor: ANNEKE KOLL."],
-  ["Did she go by herself?","<b>Tobias:</b> „She packed a bag. She said it was her turn.“"],
-  ["How do we get up to the castle?","<b>Greta</b> holt eine alte Karte unter der Theke hervor. <em>→ vorletzter Block.</em>"],
-  ["Can we look around the room?","Ja: das Namensbrett, ein Koffer neben der Tür mit dem Anhänger <b>M. VANCE</b> (nie abgeholt), und hinter der Theke die Karte."]]},
+  sonst:"<b>Can we look around the room?</b> — Ja: das Namensbrett, ein Koffer neben der Tür mit dem Anhänger <b>M. VANCE</b> (nie abgeholt), und hinter der Theke die Karte."},
  {t:"tun", id:"w_anneke", text:"Hat jemand den Namen <b>Anneke</b> gehört?", knopf:{art:"wissen", k:"anneke"}, beschriftung:"Anneke ist gefallen"},
  {t:"regie", text:"Zeig die Karte, sobald jemand nach dem Weg fragt oder sich umsieht. <b>Notfalls</b> legt Greta sie von selbst hin, wenn die Gruppe aufbrechen will: „You’ll need this.“ Ohne die Karte geht es nicht weiter."},
  {t:"vorlesen", titel:"Die Karte — damit endet die Szene", text:[
@@ -919,10 +925,12 @@ function blockHTML(b, idx){
     case "vorlesen": innen='<div class="vorlesen"><span class="tat">Vorlesen'+(b.titel?" · "+b.titel:"")+'</span>'+b.text.map(p=>"<p>"+p+"</p>").join("")+'</div>'; break;
     case "sagen": innen='<div class="sagen"><span class="tat">Das sagst du</span>'+b.text.map(p=>"<p>„"+p+"“</p>").join("")+'</div>'; break;
     case "aufgabe": innen='<div class="vorlesen">'+aufgabeHTML(b)+'</div>'; break;
-    case "personen": innen='<div class="personen"><span class="tat">Wen man ansprechen kann · jeder Satz nur einmal</span>'+
-      b.leute.map(l=>{ const keys=l.sagt.map((_,j)=>(Z.schritt+":"+l.name+":"+j)); const stumm=keys.every(k=>Z.abgehakt[k]);
+    case "personen": innen='<div class="personen"><span class="tat">Wen man ansprechen kann · Antwortmöglichkeiten, jede nur einmal</span>'+
+      b.leute.map(l=>{ const keys=(l.fragen||l.sagt).map((_,j)=>(Z.schritt+":"+l.name+":"+j)); const stumm=keys.every(k=>Z.abgehakt[k]);
         return '<div class="person'+(stumm?" stumm":"")+'"><div class="kopf"><h4>'+l.name+'</h4><span class="wer">'+l.wer+'</span></div>'+
-        '<p class="spielt">'+l.spielt+'</p><ul>'+l.sagt.map((s,j)=>'<li class="'+(Z.abgehakt[keys[j]]?"erledigt":"")+'"><button class="hak" data-hak="'+keys[j].replace(/"/g,"&quot;")+'">'+(Z.abgehakt[keys[j]]?"☑":"☐")+'</button> „'+s+'“</li>').join("")+'</ul>'+
+        '<p class="spielt">'+l.spielt+'</p>'+
+        (l.fragen ? '<dl>'+l.fragen.map((f,j)=>'<dt class="'+(Z.abgehakt[keys[j]]?"erledigt":"")+'"><button class="hak" data-hak="'+keys[j].replace(/"/g,"&quot;")+'">'+(Z.abgehakt[keys[j]]?"☑":"☐")+'</button> '+f[0]+'</dt><dd'+(Z.abgehakt[keys[j]]?' class="erledigt"':'')+'>'+f[1]+'</dd>').join("")+'</dl>'
+                  : '<ul>'+l.sagt.map((s,j)=>'<li class="'+(Z.abgehakt[keys[j]]?"erledigt":"")+'"><button class="hak" data-hak="'+keys[j].replace(/"/g,"&quot;")+'">'+(Z.abgehakt[keys[j]]?"☑":"☐")+'</button> „'+s+'“</li>').join("")+'</ul>')+
         (stumm ? '<p class="sonst" style="border:none;padding-top:8px;margin-top:8px;color:var(--blood-hi)"><b>Ausgeredet.</b> '+l.name+' sagt nichts mehr und beachtet die Gruppe nicht — „'+l.name+' looks away and says nothing more.“</p>'
                : '<p class="sonst" style="border:none;padding-top:8px;margin-top:8px"><b>Notfalls:</b> '+l.notfalls+'</p>')+'</div>';}).join("")+
       (b.sonst?'<p class="sonst">'+b.sonst+'</p>':'')+'</div>'; break;
