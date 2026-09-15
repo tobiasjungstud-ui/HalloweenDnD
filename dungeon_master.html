@@ -430,8 +430,7 @@ const KAPITEL = [
   `By the fire sits an old man with a bottle between his boots. He is the only person in the room who is grinning.`,
   `And at the door stands a boy, twelve maybe, who was clearly waiting for somebody — and who does not move out of your way.`,
   `The other eight look into their drinks.`]},
- {t:"sagen", text:["Who do you want to talk to?"]},
- {t:"aufgabe", sag:"Nobody in here will tell you anything you don’t ask for. So ask — every one of you. And when the answer is short, ask again.", hinweis:"Antwortmöglichkeiten unten abhaken, sobald eine Frage gestellt ist — jede nur einmal, egal von wem.", blatt:"Helfer-Blatt · Teil 2"},
+ {t:"aufgabe", sag:"Who do you want to talk to? Nobody in here will tell you anything you don’t ask for. So ask — every one of you. And when the answer is short, ask again.", hinweis:"Antwortmöglichkeiten unten abhaken, sobald eine Frage gestellt ist — jede nur einmal, egal von wem.", blatt:"Helfer-Blatt · Teil 2"},
  {t:"personen", leute:[
   {name:"Greta", wer:"Wirtin, drei Finger", spielt:"Kurze Sätze. Sie lügt nie — sie wechselt das Thema. Freundlich, nicht feindlich.", sagt:[
     "Mirela is gone. That is all there is.","We don’t go up there. That is the arrangement.","You want to help? Go home. That would help."],
@@ -466,9 +465,8 @@ const KAPITEL = [
   "You have the map. There are three ways up that mountain.",
   "One: the old road along the ridge. Wide, fast, and you can be seen from everywhere.",
   "Two: the Kessler mine. Straight through the rock, and it comes out somewhere under the castle. Dark, and the air down there is two hundred years old.",
-  "Three: the coach. Every night at midnight a coach takes food up to the castle. You could be on it.",
-  "What are you going to do?"]},
- {t:"aufgabe", sag:"The candles are burning down. Everybody say it: which way, and why. Then you decide.", hinweis:"Reihum. Bei Streit: „One minute, then we vote.“", blatt:"Helfer-Blatt · Teil 3"},
+  "Three: the coach. Every night at midnight a coach takes food up to the castle. You could be on it."]},
+ {t:"aufgabe", sag:"What are you going to do? The candles are burning down. Everybody say it: which way, and why. Then you decide.", hinweis:"Reihum. Bei Streit: „One minute, then we vote.“", blatt:"Helfer-Blatt · Teil 3"},
  {t:"optionen", id:"e1", optionen:[
   {b:"A", name:"The old road", flagge:"weg_a", was:"Der lange Weg über den Grat: durch den Wald, über den Sumpf, an den Wachen vorbei. Das Abenteuer.",
    pro:["Der Weg mit den meisten Geschichten — und die Gruppe entscheidet unterwegs selbst, wie laut sie ist."], con:["Zwei Wölfe am Galgen (Kampf). Ein Sumpf, der an den Füssen zieht. Und zwei Wachen am Tor, an denen man vorbeimuss."],
@@ -548,8 +546,8 @@ const KAPITEL = [
 {n:"Entscheidung 2", titel:"Three Doors", art:"ent", braucht:"e1", ort:ORT.hof, nach:ORT.hof, bloecke:[
  {t:"ziel", text:"Eine Tür. Alle drei enden vor derselben Spiegeltür — sie unterscheiden sich darin, was die Gruppe mitnimmt und was es kostet.", zeit:"10 Min."},
  {t:"regie", titel:"Hintergrund", text:"Drei Türen, alle enden an der Spiegeltür im Westgang. <b>Bibliothek:</b> Bellamy, ein höflicher Ghul — er redet statt zu kämpfen, will drei wahre Sätze je Figur, Gefahr +1. <b>Kapelle:</b> Anneke im Taufbecken — Kampf, ausser jemand ruft ihren Namen, Gefahr +2 (mit Namen +1). <b>Küche:</b> Tam, vierzehn, kennt jeden Gang — will ein Versprechen, Gefahr ±0. Jede Figur nennt ihre Tür mit Grund, dann wird geklickt."},
- {t:"sagen", text:["Three doors. The chapel, broken open. The library, where somebody is awake. Or the kitchen stair, where somebody is cooking.","You have time for one of them. Which one?"]},
- {t:"aufgabe", sag:"One hour before this house wakes up. Everybody: which door, and why.", blatt:"Helfer-Blatt · Teil 3"},
+ {t:"sagen", text:["Three doors. The chapel, broken open. The library, where somebody is awake. Or the kitchen stair, where somebody is cooking. You have time for one of them."]},
+ {t:"aufgabe", sag:"Which one? One hour before this house wakes up. Everybody: which door, and why.", blatt:"Helfer-Blatt · Teil 3"},
  {t:"optionen", id:"e2", optionen:[
   {b:"A", name:"The library", flagge:"bibliothek", was:"Dort sitzt Bellamy, seit 1790 Archivar des Hauses und heute ein sehr höflicher Ghul. Er greift nicht an — er handelt.",
    pro:["Der ruhigste Weg: Bellamy kämpft nicht, er redet. Und er bringt euch selbst zur Spiegeltür."],
@@ -627,9 +625,8 @@ const KAPITEL = [
   "One hour until sunrise. You can do three things.",
   "You can take her out of here — now, whether she wants it or not.",
   "You can burn the book downstairs. Every contract in it, four hundred years of them.",
-  "Or you can call him up here and make him a new offer.",
-  "What are you going to do?"]},
- {t:"aufgabe", sag:"One hour until sunrise. Everybody: what do we do, and why. She’s listening.", blatt:"Helfer-Blatt · Teil 3"},
+  "Or you can call him up here and make him a new offer."]},
+ {t:"aufgabe", sag:"What are you going to do? Everybody: one sentence, and why. She’s listening.", blatt:"Helfer-Blatt · Teil 3"},
  {t:"optionen", id:"e3", optionen:[
   {b:"A", name:"Take her out", flagge:"e3_raus", was:"Über die Schulter und hinunter. Das Dorf soll selbst sehen, wie es zurechtkommt.",
    pro:["Sicher: Mirela lebt, egal wie der Abend sonst ausgeht."], con:["Sie wehrt sich und schreit. Das ganze Haus wacht auf."],
