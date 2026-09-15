@@ -7,7 +7,9 @@ drei Entscheidungen — und möglichst viel gesprochenes Englisch.
 Gebaut für **Vierzehnjährige ohne jedes Vorwissen**: kein Regelwerk, keine Rüstungsklasse,
 keine Zauberplätze, keine Absprachen darüber, ob ein Angriff trifft. Die Spielerblätter
 würfeln selbst, entscheiden selbst und schreiben jedem den englischen Satz hin, den er
-sagen soll. Die Spielleitung wird Satz für Satz geführt und muss nichts vorbereiten.
+sagen soll. Fällt eine Figur auf 0, würfelt sie einmal ihr Schicksal: eine 20 macht sie
+stärker, eine 1 macht ihren Schaden unberechenbar, alles dazwischen gibt eine Narbe. Die
+Spielleitung wird Satz für Satz geführt und muss nichts vorbereiten.
 
 Alles läuft in einer einzelnen HTML-Datei je Person. Kein Server, kein Build-Schritt zum
 Spielen, kein Konto, keine Daten verlassen das Gerät.
@@ -23,8 +25,16 @@ Spielen, kein Konto, keine Daten verlassen das Gerät.
 | `spieler_krieger.html` | The Blade, 30 HP | Sword Strike · Shield Bash · Reckless Charge |
 | `spieler_heiler.html` | The Lightbearer, 24 HP | Healing Light · Circle of Light · Radiant Strike |
 
-Dazu `helferblatt/Nachtfels_Helfer-Blatt.docx` — das Sprachgerüst für die Schüler auf Papier:
-alle Satzanfänge und Vokabeln, den acht Szenen einzeln zugeordnet. Einmal pro Schüler drucken.
+Dazu drei Word-Dateien in `helferblatt/`, alle zum Ausdrucken:
+
+| Datei | Für wen | Was drin ist |
+|---|---|---|
+| `Nachtfels_Helfer-Blatt.docx` | jeder Schüler | Satzanfänge und Vokabeln, neun Szenen einzeln zugeordnet |
+| `Nachtfels_Lesetext_Schueler.docx` | schwächere Schüler | der ganze Vorlesetext zum Mitlesen, schwierige Wörter direkt im Text übersetzt — `fog [Nebel]`; gelb, was der DM fragt; grün, was zu tun ist |
+| `Nachtfels_Lesetext_DM.docx` | Spielleitung | dasselbe plus alle grauen Kästen: Tipps, Antworten, Regie, Knöpfe, Kampfwerte — als Papier-Rückhalt neben dem Bildschirm |
+
+Die beiden Lesetexte werden **aus der Konsole erzeugt** (`node quelle/lesetext.js`, mit
+`--schueler` für die Schülerfassung) und sind damit immer auf demselben Stand wie der Bildschirm.
 
 `index.html` ist die Startseite, die auf alles verlinkt.
 
@@ -54,8 +64,16 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
 ## Wie es aufgebaut ist
 
 **Nur drei Dinge werden mitgeführt**, und alle drei ausschliesslich auf dem Bildschirm der
-Spielleitung: das Gefahrenbarometer (0–10), die Lebenspunkte, und drei Wissensstücke, die
-die Gruppe im Lauf des Abends erfahren kann. Die Schüler müssen nichts notieren.
+Spielleitung: das Gefahrenbarometer (0–10), die Lebenspunkte, und ein einziges Wissensstück,
+das die Gruppe im Wirtshaus aufschnappen kann — den Namen *Anneke*. Die Schüler müssen nichts
+notieren.
+
+Intern ist die Konsole eine kleine Zustandsmaschine mit einer einzigen Quelle der Wahrheit
+(`Z`): Gefahr, vier Entscheidungen (Weg, Tür, Wahl im Turm, Ausgang des Finales), ein Wissen,
+zwei einmalige Knöpfe. Jeder Schritt trägt seinen **Eintritts- und Austrittsort**; wo der Ort
+von einer Entscheidung abhängt, gibt es je einen Übergangstext, und der Prüfstand kontrolliert,
+dass Austritt und nächster Eintritt auf jedem Pfad zusammenpassen. Eine Entscheidung lässt sich
+umwählen — Gefahr, Lebenspunkte und Wissen der alten Wahl werden dabei zurückgenommen.
 
 Jede der drei Entscheidungen hat drei Optionen, die **alle zum selben nächsten Ort führen** —
 unterschiedlich ist nur der Preis. Kein Handlungsstrang wird übersprungen, keine Gruppe
@@ -78,6 +96,18 @@ Das liest `quelle/vorlage_spieler.html` (Aufbau, Gestaltung, Würfellogik und di
 gezeichneten Porträts) und schreibt die drei fertigen Dateien in die Wurzel. Die Werte der
 Klassen — Lebenspunkte, Aktionen, Trefferchancen, Signaturfarbe — stehen im Objekt `KLASSEN`
 ganz oben im `<script>` der Vorlage.
+
+Die Storylogik hat einen Prüfstand, der das echte Skript der Konsole lädt und alle 216
+Entscheidungspfade von Anfang bis Ende durchspielt — Ortskontinuität, Sichtbarkeit, Gefahr,
+Lebenspunkte, Gegner, Epilogkarten, Umwählen, vorzeitiges und doppeltes Auslösen:
+
+```bash
+node quelle/pruefe_dm.js          # „Keine Befunde.“ oder eine Liste
+node quelle/pruefe_dm.js --spur   # dazu sieben Durchläufe Schritt für Schritt
+```
+
+Wer an `KAPITEL` etwas ändert, lässt ihn danach laufen. Die Seite selbst prüft ihre Daten
+beim Laden ebenfalls (`pruefeStory`) und meldet Unstimmigkeiten in der Browser-Konsole.
 
 Das Helfer-Blatt entsteht aus `helferblatt/helferblatt.js`:
 

@@ -56,7 +56,14 @@ input{font:inherit;color:inherit}
 .hp-btns button:hover{background:var(--stone-hi);color:var(--bone)}
 .hp-btns button.heal:hover{color:var(--moss);border-color:#2f5a48}
 .hp-btns button.harm:hover{color:var(--blood-hi);border-color:#5a2721}
-.down{border:1px solid var(--blood);background:rgba(178,58,44,.1);padding:10px 12px;font-size:13.5px;color:var(--blood-hi)}
+.down{border:1px solid var(--blood);background:rgba(178,58,44,.1);padding:10px 12px;font-size:13.5px;color:var(--blood-hi);display:flex;flex-direction:column;gap:8px}
+.down button{border:1px solid var(--blood-hi);color:var(--bone);padding:9px;font-family:var(--display);font-size:16px;background:rgba(0,0,0,.3)}
+.down button:hover{background:var(--blood);}
+.narben{margin:6px 0 0;font-size:12.5px;color:var(--ash);line-height:1.45;text-align:center}
+.narben b{color:var(--gold);font-weight:400}
+.narben i{color:var(--blood-hi)}
+.frei{border:1px solid var(--line-hi);color:var(--ash);padding:5px 11px;font-size:12.5px;margin-left:auto}
+.frei:hover{border-color:var(--gold-dim);color:var(--gold)}
 
 /* ---------- So spielst du ---------- */
 .howto{border:1px solid var(--line);background:var(--crypt);padding:14px 16px}
@@ -148,6 +155,7 @@ footer.fine{font-size:12.5px;color:var(--dim);border-top:1px solid var(--line);p
     <div class="nameplate">
       <div class="engraved" id="gravur"></div>
       <p>__KLASSENNAME__</p>
+      <p class="narben" id="narben"></p>
     </div>
     <div class="vitals">
       <div class="vitals-head">
@@ -163,7 +171,7 @@ footer.fine{font-size:12.5px;color:var(--dim);border-top:1px solid var(--line);p
         <button class="heal" data-hp="3">+3</button>
         <button class="heal" data-hp="5">+5</button>
       </div>
-      <div class="down" id="downbox" hidden>You are down. You cannot act until someone heals you.</div>
+      <div class="down" id="downbox" hidden><span>You are down. You cannot act until someone heals you.</span><button id="schicksal" hidden>Roll your fate (d20)</button></div>
     </div>
     <div class="howto">
       <span class="label">How to play</span>
@@ -197,7 +205,7 @@ footer.fine{font-size:12.5px;color:var(--dim);border-top:1px solid var(--line);p
         <span class="face" id="wurfzahl">20</span>
       </div>
       <div class="readout">
-        <p class="what" id="was">Your turn</p>
+        <div style="display:flex;align-items:center;gap:10px"><p class="what" id="was" style="margin:0">Your turn</p><button class="frei" id="d20frei">Just roll a d20</button></div>
         <p class="verdict warten" id="verdict">Pick one of the three below.</p>
         <p class="detail" id="detail">The sheet rolls for you and tells you what happened.</p>
         <div class="dmgline" id="dmgline"></div>
@@ -257,7 +265,7 @@ const KLASSEN = {
 const K = KLASSEN["__ID__"];
 const SCHLUESSEL = "nachtfels.spieler2." + K.id;
 
-let S = { name:"", hp:K.hpmax, log:[], zaehler:0 };
+let S = { name:"", hp:K.hpmax, log:[], zaehler:0, narben:[], bonus:0, wahnsinn:false, schicksalOffen:false };
 function laden(){ try{ const r=localStorage.getItem(SCHLUESSEL); if(r){const g=JSON.parse(r); if(g&&typeof g==="object") S=Object.assign(S,g);} }catch(e){} }
 function sichern(){ try{ localStorage.setItem(SCHLUESSEL, JSON.stringify(S)); }catch(e){} }
 
@@ -289,6 +297,7 @@ function zeichneLog(){
 }
 function zeichneHP(){
   $("hp").textContent=S.hp; $("hpmax").textContent="/"+K.hpmax;
+  $("schicksal").hidden = !S.schicksalOffen;
   const p=(S.hp/K.hpmax)*100;
   $("hpfill").style.width=p+"%";
   $("hpbar").classList.toggle("low", S.hp>0 && p<=30);
@@ -299,13 +308,14 @@ function setzeHP(delta, grund){
   S.hp=Math.max(0,Math.min(K.hpmax,S.hp+delta));
   const echt=S.hp-vorher;
   if(echt===0){ $("detail").textContent = delta>0 ? "You are already at full health." : "You are already down at 0."; return; }
+  if(S.hp===0 && vorher>0) S.schicksalOffen=true;
   zeichneHP();
   notiere(grund||(echt<0?"Damage taken":"Healed"), (echt>0?"+":"")+echt+" HP → "+S.hp, echt<0?"harm":"heal");
 }
 function zeichneAktionen(){
   $("aktionen").innerHTML = K.aktionen.map((a,i)=>{
     const marken=[];
-    if(a.dmg) marken.push('<span>'+(a.art==="heilen"||a.art==="gruppe"?"Heals ":"Damage ")+a.dmg+'</span>');
+    if(a.dmg){ const heilt=a.art==="heilen"||a.art==="gruppe"; marken.push('<span>'+(heilt?"Heals "+a.dmg:(S.wahnsinn?"Damage ???":"Damage "+a.dmg+(S.bonus?" +"+S.bonus:"")))+'</span>'); }
     marken.push('<span class="'+(a.risiko==="Often misses"?"risiko":a.risiko==="Never misses"||a.risiko==="Always works"?"sicher":"")+'">'+
       (a.risiko||"Usually works")+'</span>');
     if(a.stun) marken.push('<span class="sicher">Stuns</span>');
@@ -384,7 +394,8 @@ function ende(a, augen){
       sag(a.selbstschaden ? "I missed — and I hurt myself doing it." : "I missed!");
       notiere("<b>"+a.name+"</b>", "miss", "miss");
     } else {
-      const d=wuerfle(a.dmg,krit);
+      const d=wuerfle(S.wahnsinn?"1d20":a.dmg,krit);
+      if(S.bonus){ d.mod+=S.bonus; d.summe+=S.bonus; }
       zeigeDice(d);
       $("die").classList.toggle("crit",krit);
       $("verdict").className="verdict "+(krit?"crit":"hit");
@@ -401,16 +412,82 @@ function ende(a, augen){
   laeuft=false;
 }
 
+
+/* ---------- Schicksal bei 0 HP und freier Wurf ---------- */
+const NARBEN=["a white streak in your hair","a hand that never gets warm again","a name you say in your sleep",
+  "you cannot stand the smell of tea any more","one eye that sees better in the dark now","a scar across your palm in the shape of a key"];
+function zeichneNarben(){
+  const t=[];
+  if(S.bonus) t.push("<b>Blessed: +"+S.bonus+" damage on every hit</b>");
+  if(S.wahnsinn) t.push("<i>Something broke: your damage is a mystery</i>");
+  S.narben.forEach(n=>t.push("Scar: "+n));
+  $("narben").innerHTML=t.join("<br>");
+}
+function dreheD20(danach){
+  if(laeuft) return; laeuft=true;
+  const augen=w(20);
+  $("after").innerHTML=""; $("dmgline").innerHTML=""; $("die").classList.remove("landed","crit","miss");
+  $("verdict").className="verdict warten"; $("verdict").textContent="Rolling…"; $("detail").textContent="";
+  $("sagbox").classList.add("leer"); $("sagtext").textContent="…";
+  const fertig=()=>{ $("wurfzahl").textContent=augen; danach(augen); laeuft=false; };
+  if(ruhig) return fertig();
+  $("die").classList.add("rolling");
+  const bis=performance.now()+850;
+  (function dreh(){ if(performance.now()<bis){ $("wurfzahl").textContent=w(20); setTimeout(dreh,58); }
+    else { $("die").classList.remove("rolling"); $("die").classList.add("landed"); fertig(); } })();
+}
+function freierWurf(){
+  $("was").textContent="d20";
+  dreheD20(augen=>{
+    $("die").classList.toggle("crit",augen===20); $("die").classList.toggle("miss",augen===1);
+    $("verdict").className="verdict "+(augen===20?"crit":augen===1?"miss":"hit");
+    $("verdict").textContent="You rolled "+augen;
+    $("detail").textContent="Your DM tells you what that means. Usually 10 or higher is good.";
+    sag("I rolled "+augen+".");
+    notiere("<b>d20</b>", ""+augen, augen===20?"hit":augen===1?"miss":"");
+  });
+}
+function schicksal(){
+  if(!S.schicksalOffen) return;
+  $("was").textContent="Your fate";
+  dreheD20(augen=>{
+    S.schicksalOffen=false;
+    if(augen===20){
+      S.bonus+=3;
+      $("die").classList.add("crit"); $("verdict").className="verdict crit"; $("verdict").textContent="You come back stronger";
+      $("detail").textContent="A natural 20. From now on, every hit you land does +3 damage.";
+      sag("I'm back — and I'm stronger. Plus three damage from now on!");
+      notiere("<b>Fate</b> — natural 20", "+3 dmg", "hit");
+    } else if(augen===1){
+      S.wahnsinn=true;
+      $("die").classList.add("miss"); $("verdict").className="verdict miss"; $("verdict").textContent="Something in you broke";
+      $("detail").textContent="A natural 1. Your damage is a mystery now: the sheet rolls a d20 instead of your dice — sometimes 1, sometimes 20.";
+      sag("I'm back… I think. Don't stand too close to me.");
+      notiere("<b>Fate</b> — natural 1", "madness", "miss");
+    } else {
+      const n=NARBEN[w(NARBEN.length)-1]; S.narben.push(n);
+      $("verdict").className="verdict hit"; $("verdict").textContent="You come back with a scar";
+      $("detail").textContent="It stays with you: "+n+".";
+      sag("I'm back — with a scar. "+n.charAt(0).toUpperCase()+n.slice(1)+".");
+      notiere("<b>Fate</b> — scar", ""+augen, "");
+    }
+    zeichneNarben(); zeichneAktionen(); zeichneHP(); sichern();
+  });
+}
+
 document.addEventListener("click", e=>{
   const go=e.target.closest(".go"); if(go){ rolle(+go.dataset.i); return; }
   const hp=e.target.closest("[data-hp]"); if(hp){ setzeHP(+hp.dataset.hp, +hp.dataset.hp<0?"Took damage":"Was healed"); return; }
   const heal=e.target.closest("[data-heal]"); if(heal){ setzeHP(+heal.dataset.heal,"Healing on myself"); $("after").innerHTML=""; return; }
   const weg=e.target.closest("[data-weg]"); if(weg){ notiere("<b>Healing</b> given to a friend","+"+weg.dataset.weg+" HP","heal"); $("after").innerHTML=""; return; }
 });
+$("schicksal").onclick=schicksal;
+$("d20frei").onclick=freierWurf;
 $("heldname").addEventListener("input", e=>{ S.name=e.target.value; $("gravur").textContent=S.name; sichern(); });
 $("neu").onclick=()=>{
   if(!confirm("Start a new game? Your hit points and the whole roll log are cleared.")) return;
-  S={name:S.name, hp:K.hpmax, log:[], zaehler:0};
+  S={name:S.name, hp:K.hpmax, log:[], zaehler:0, narben:[], bonus:0, wahnsinn:false, schicksalOffen:false};
+  zeichneNarben();
   zeichneHP(); zeichneLog(); sichern();
   $("verdict").className="verdict warten"; $("verdict").textContent="Pick one of the three below.";
   $("detail").textContent="The sheet rolls for you and tells you what happened.";
@@ -420,7 +497,7 @@ $("neu").onclick=()=>{
 
 laden();
 $("heldname").value=S.name; $("gravur").textContent=S.name;
-zeichneHP(); zeichneAktionen(); zeichneLog();
+zeichneHP(); zeichneAktionen(); zeichneLog(); zeichneNarben();
 </script>
 <template id="p-magier">
 <svg viewBox="0 0 300 400" role="img" aria-label="A hooded arcanist, face in shadow, holding a glowing rune sphere">

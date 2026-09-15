@@ -89,7 +89,17 @@ const TEILE = [
         ["to be seen","gesehen werden"],["dangerous — safe","gefährlich — sicher"],
         ["to decide","sich entscheiden"],["to agree","zustimmen"]] },
 
- { nr:"Teil 4", ort:"The courtyard", was:"The raven repeats every sentence it hears. Say one whole sentence to it — slowly and clearly.",
+ { nr:"Teil 4", ort:"On the way up", was:"In the cellar: convince the guard that you are guests — one calm sentence each. In the swamp: talk while you roll.",
+   saetze:[
+     "Good evening. We are guests of the Count.",
+     "He is expecting us. We came a long way.",
+     "Please — could you take us to him?",
+     "I'm stuck! Give me your hand!",
+     "Careful — the ground is soft here."],
+   vok:[["a guard","eine Wache"],["a guest","ein Gast"],["to expect somebody","jemanden erwarten"],
+        ["a cellar","ein Keller"],["a swamp, a bog","ein Sumpf"],["to be stuck","feststecken"],["to sneak","schleichen"]] },
+
+ { nr:"Teil 5", ort:"The courtyard", was:"The raven repeats every sentence it hears. Say one whole sentence to it — slowly and clearly.",
    saetze:[
      "Hello. Can you understand me?",
      "Where is the woman?",
@@ -99,7 +109,7 @@ const TEILE = [
         ["a chapel","eine Kapelle"],["a library","eine Bibliothek"],["to repeat","wiederholen"],
         ["a liar","ein Lügner"]] },
 
- { nr:"Teil 5", ort:"Behind the door", was:"In the library: tell Bellamy three true things about yourself. In the kitchen: answer Tam's question honestly.",
+ { nr:"Teil 6", ort:"Behind the door", was:"In the library: tell Bellamy three true things about yourself. In the kitchen: answer Tam's question honestly.",
    saetze:[
      "The thing I regret most is …",
      "I have never told anyone that …",
@@ -110,7 +120,7 @@ const TEILE = [
         ["true — to lie","wahr — lügen"],["to trust somebody","jemandem vertrauen"],
         ["a favour","ein Gefallen"]] },
 
- { nr:"Teil 6", ort:"The tower", was:"Mirela does not want to be rescued, and she has good reasons. Give her a real argument — then listen to her answer.",
+ { nr:"Teil 7", ort:"The tower", was:"Mirela does not want to be rescued, and she has good reasons. Give her a real argument — then listen to her answer.",
    saetze:[
      "You don't have to do this, because …",
      "Have you thought about what happens to …?",
@@ -122,7 +132,7 @@ const TEILE = [
         ["instead of","anstelle von"],["to protect","beschützen"],["It is not worth it.","Das ist es nicht wert."],
         ["to change your mind","es sich anders überlegen"]] },
 
- { nr:"Teil 7", ort:"The Count", was:"Before every attack, say one sentence to him. He always answers — politely.",
+ { nr:"Teil 8", ort:"The Count", was:"Before every attack, say one sentence to him. He always answers — politely.",
    saetze:[
      "What do you actually want?",
      "Let her go, and we leave. That is the offer.",
@@ -133,7 +143,7 @@ const TEILE = [
         ["innocent","unschuldig"],["to give up","aufgeben"],["a promise","ein Versprechen"],
         ["forever","für immer"]] },
 
- { nr:"Teil 8", ort:"Afterwards", was:"Three questions for the whole group. Everybody answers.",
+ { nr:"Teil 9", ort:"Afterwards", was:"Three questions for the whole group. Everybody answers.",
    saetze:[
      "What would you do differently?",
      "Was the village wrong? Four hundred years of safety for twenty lives.",
@@ -165,7 +175,8 @@ const kinder = [
   zwischen("In a fight"),
   ...[ "I attack the wolf with my sword.", "I hit for 9 damage.", "I missed.",
        "Critical hit! I hit for 18 damage!", "I heal you for 7 hit points.",
-       "How many hit points do you have left?", "I'm down — somebody help me!" ].map(satz),
+       "How many hit points do you have left?", "I'm down — somebody help me!",
+       "I roll for my fate.", "I rolled a 14." ].map(satz),
 
   new Paragraph({ children:[ new PageBreak() ] })
 ];
@@ -177,7 +188,7 @@ TEILE.forEach((t, i) => {
   t.saetze.forEach(s => kinder.push(satz(s)));
   kinder.push(zwischen("Words you might need"));
   kinder.push(vokabeln(t.vok));
-  if (i === 3) kinder.push(new Paragraph({ children:[ new PageBreak() ] }));
+  if (i === 4) kinder.push(new Paragraph({ children:[ new PageBreak() ] }));
 });
 
 const doc = new Document({
