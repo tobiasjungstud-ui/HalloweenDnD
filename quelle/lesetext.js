@@ -29,14 +29,16 @@ const GLOSSAR={
  "gate":"Tor","courtyard":"Innenhof","black stone":"schwarzer Stein","mine entrance":"Stolleneingang","dead tree":"toter Baum","sweet and heavy":"süss und schwer",
  "tools":"Werkzeuge","child’s shoe":"Kinderschuh","neatly":"ordentlich","rotten":"morsch","cellar":"Keller","barrels":"Fässer","wet stone":"nasser Stein",
  "stair":"Treppe","guard":"Wache","guests":"Gäste","unloading":"ausladen","boxes":"Kisten","fountain":"Brunnen","frozen":"gefroren","weak tea":"dünner Tee",
- "chapel":"Kapelle","broken inwards":"nach innen aufgebrochen","bookshelves":"Bücherregale","onions":"Zwiebeln","hot fat":"heisses Fett","raven":"Rabe",
+ "chapel":"Kapelle","bookshelves":"Bücherregale","onions":"Zwiebeln","hot fat":"heisses Fett","raven":"Rabe",
  "candles":"Kerzen","burnt down":"heruntergebrannt","saint":"Heiliger","altar":"Altar","stone font":"steinernes Taufbecken","anger":"Wut",
  "suit":"Anzug","ladder":"Leiter","teeth":"Zähne","corridor":"Gang, Korridor","windows":"Fenster","mirror":"Spiegel","backwards":"rückwärts",
  "chalk":"Kreide","handwriting":"Handschrift","humming":"summen","knife":"Messer","narrow":"schmal","armchair":"Sessel","tied up":"gefesselt",
  "hurt":"verletzt","late":"spät","screams":"schreit","study":"Arbeitszimmer","desk":"Schreibtisch","signatures":"Unterschriften","burns":"brennt",
  "doorway":"Türrahmen","tired":"müde","frightening":"beängstigend","stairwell":"Treppenhaus","second chair":"zweiter Stuhl","cup of tea":"Tasse Tee",
  "brought":"gebracht","bag packed":"gepackte Tasche","pass":"Pass (Bergübergang)","daylight":"Tageslicht","expecting":"erwarten","sunrise":"Sonnenaufgang",
- "offer":"Angebot","contract":"Vertrag","promise":"versprechen","scar":"Narbe","ice cellar":"Eiskeller","liar":"Lügner","taught":"beigebracht"
+ "offer":"Angebot","contract":"Vertrag","promise":"versprechen","scar":"Narbe","ice cellar":"Eiskeller","liar":"Lügner","taught":"beigebracht",
+ "deal":"Abmachung","plague":"Pest","starves":"verhungert","cold rooms":"Kühlräume","letter":"Brief","carry":"tragen","welcome":"willkommen heissen",
+ "outwards":"nach aussen","broken outwards":"nach aussen aufgebrochen","properly":"richtig, ordentlich","belongs to":"gehört zu","comfortable":"bequem"
 };
 const glossarSchluessel=Object.keys(GLOSSAR).sort((a,b)=>b.length-a.length);
 
@@ -130,6 +132,11 @@ T.KAPITEL.forEach((k,i)=>{
           ...b.optionen.map(o=>[new TextRun({text:o.b+" · "+o.name+"  ",font:"Georgia",size:18,bold:true}),new TextRun({text:ohneHtml(o.was)+(o.pro?"  + "+ohneHtml(o.pro.join(" ")):"")+(o.con?"  − "+ohneHtml(o.con.join(" ")):"")+"  [Gefahr "+(o.wirkung.gefahr>0?"+"+o.wirkung.gefahr:"±0")+"]",font:"Georgia",size:18,color:"333333"})])],grau,"BFBFBF")); break;
     }
   });
+  if(!schueler && (k.chancen||[]).length){
+    kinder.push(...kasten([[...etikett("OPTIONAL · GELEGENHEITEN FÜR EINZELNE FIGUREN (NUR DM) — nur, falls ein Spieler von selbst darauf kommt","555555")],
+      ...k.chancen.map(c=>[new TextRun({text:c.wer+" · "+c.talent+"  ",font:"Georgia",size:17,bold:true,color:"333333"}),
+        new TextRun({text:(bedingung(c)?bedingung(c).replace("▸ ","")+" — ":"")+c.text+"  → "+c.folge,font:"Georgia",size:17,color:"333333"})])],grau,"BFBFBF"));
+  }
 });
 
 const doc=new Document({sections:[{properties:{page:{margin:{top:1134,bottom:1134,left:1134,right:1134}}},children:kinder}]});

@@ -178,6 +178,10 @@ const kinder = [
        "How many hit points do you have left?", "I'm down — somebody help me!",
        "I roll for my fate.", "I rolled a 14.", "I drink my potion!", "The fight is over — I heal everyone." ].map(satz),
 
+  zwischen("Your talent — outside of fights"),
+  ...[ "Can I use my Magic Hand to …?  (Arcanist)", "I'm strong enough to … — let me try.  (Blade)",
+       "Wait — let me look at that wound.  (Lightbearer)", "Can I try something first?" ].map(satz),
+
   new Paragraph({ children:[ new PageBreak() ] })
 ];
 

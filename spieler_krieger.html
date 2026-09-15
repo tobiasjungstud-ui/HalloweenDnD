@@ -76,6 +76,8 @@ input{font:inherit;color:inherit}
 
 /* ---------- So spielst du ---------- */
 .howto{border:1px solid var(--line);background:var(--crypt);padding:14px 16px}
+.howto.talent p{margin:0;font-size:13.5px;line-height:1.5;color:var(--ash,#948fa2)}
+.howto.talent b{color:var(--klasse);font-weight:400}
 .howto .label{display:block;margin-bottom:9px;color:var(--klasse)}
 .howto ol{margin:0;padding-left:19px;display:flex;flex-direction:column;gap:7px}
 .howto li{font-size:14px;color:var(--ash);line-height:1.45}
@@ -219,6 +221,10 @@ footer.fine{font-size:12.5px;color:var(--dim);border-top:1px solid var(--line);p
       </div>
       <p class="hint">The potion works once: 10 hit points back — or back on your feet when you are down. After a fight, the Lightbearer heals everyone for free. Every change is logged below.</p>
       <div class="down" id="downbox" hidden><span>You are down. Drink your potion — or wait: after the fight, the Lightbearer heals everyone.</span><button id="schicksal" hidden>Roll your fate (d20)</button></div>
+    </div>
+    <div class="howto talent">
+      <span class="label">Your talent — outside of fights</span>
+      <p><b>Strength</b> — lift, hold, carry or break what nobody else can, or stand in front of somebody. No dice: say what you do; the DM decides.</p>
     </div>
     <div class="howto">
       <span class="label">How to play</span>

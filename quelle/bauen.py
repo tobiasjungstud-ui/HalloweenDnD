@@ -14,11 +14,14 @@ VORLAGE = (HIER / "vorlage_spieler.html").read_text(encoding="utf-8")
 
 KLASSEN = {
     "magier":  dict(datei="spieler_magier.html",  titel="Nachtfels Arcanist",
-                    farbe="#8f86e0", rolle="The <em>Arcanist</em>", platte="Arcanist · Level 3", nachkampf="After the fight: healed by the Lightbearer → full"),
+                    farbe="#8f86e0", rolle="The <em>Arcanist</em>", platte="Arcanist · Level 3", nachkampf="After the fight: healed by the Lightbearer → full",
+                    talent="<b>Magic Hand</b> — works outside fights too. Fetch, tip over, lift or light something from far away. Say what it should do; the DM decides whether you roll."),
     "krieger": dict(datei="spieler_krieger.html", titel="Nachtfels Blade",
-                    farbe="#c8763c", rolle="The <em>Blade</em>", platte="Blade · Level 3", nachkampf="After the fight: healed by the Lightbearer → full"),
+                    farbe="#c8763c", rolle="The <em>Blade</em>", platte="Blade · Level 3", nachkampf="After the fight: healed by the Lightbearer → full",
+                    talent="<b>Strength</b> — lift, hold, carry or break what nobody else can, or stand in front of somebody. No dice: say what you do; the DM decides."),
     "heiler":  dict(datei="spieler_heiler.html",  titel="Nachtfels Lightbearer",
-                    farbe="#6fae9a", rolle="The <em>Lightbearer</em>", platte="Lightbearer · Level 3", nachkampf="After the fight: I heal everyone → full"),
+                    farbe="#6fae9a", rolle="The <em>Lightbearer</em>", platte="Lightbearer · Level 3", nachkampf="After the fight: I heal everyone → full",
+                    talent="<b>Healing Touch</b> — close a wound or calm somebody who is hurt, friend or stranger. No dice: say what you do; the DM decides. Sometimes a healed stranger talks."),
 }
 
 PORTRAET = re.compile(r'<template id="p-(\w+)">(.*?)</template>\n?', re.S)
@@ -37,6 +40,7 @@ for kennung, k in KLASSEN.items():
              .replace("__ROLLE__", k["rolle"])
              .replace("__KLASSENNAME__", k["platte"])
              .replace("__NACHKAMPF__", k["nachkampf"])
+             .replace("__TALENT__", k["talent"])
              .replace("__ID__", kennung))
     offen = re.findall(r"__[A-ZÄÖÜ]+__", seite)
     if offen:

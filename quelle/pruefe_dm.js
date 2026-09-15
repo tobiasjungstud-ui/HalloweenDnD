@@ -22,7 +22,7 @@ const html = fs.readFileSync(path.join(__dirname, "..", "dungeon_master.html"), 
 const js = /<script>([\s\S]*)<\/script>/.exec(html)[1];
 vm.runInThisContext(js, {filename:"dungeon_master.html"});
 vm.runInThisContext(`globalThis.T = { Z:()=>Z, setZ:z=>{Z=z;}, KAPITEL, ENTSCHEIDUNGEN, WISSEN, BESTIARIUM, ORT, PATROUILLE,
-  frischerZustand, waehle, setzeWissen, tunAusfuehren, geheZu, gilt, hat, ortAufloesen, sichtbareBloecke, pruefeStory, finaleLaden, liste, alles,
+  frischerZustand, waehle, setzeWissen, tunAusfuehren, geheZu, gilt, hat, ortAufloesen, sichtbareBloecke, sichtbareChancen, pruefeStory, finaleLaden, liste, alles,
   ladeKampf, patrouilleFertig, setzeGefahr }`);
 console.warn = echtWarn;
 
@@ -51,6 +51,8 @@ for(const weg of WEGE) for(const anneke of [false,true]) for(const tuer of TUERE
 
 const gesehen = new Map();  /* Block → in wie vielen Pfaden sichtbar */
 K.forEach((k,i)=>k.bloecke.forEach((b,j)=>{ if(b.t!=="ziel"&&b.t!=="weiter") gesehen.set(i+"/"+j,0); }));
+const gesehenChancen = new Map();  /* Gelegenheit → in wie vielen Pfaden sichtbar (bei Gefahr wie gespielt) */
+K.forEach((k,i)=>(k.chancen||[]).forEach((c,j)=>gesehenChancen.set(i+"/"+j,0)));
 
 function erwarteteGefahr(p){
   let g = GEFAHR[p.weg] + (p.wache?1:0) + (p.tuer==="kapelle"&&p.anneke ? 1 : GEFAHR[p.tuer]) + GEFAHR[p.wahl] + (p.scheitert?4:0);
@@ -87,6 +89,19 @@ function spiele(p, protokoll){
     const sichtbar=T.sichtbareBloecke(k);
     sichtbar.forEach(b=>{ const j=k.bloecke.indexOf(b); gesehen.set(i+"/"+j, gesehen.get(i+"/"+j)+1); });
     const wo=`Pfad ${JSON.stringify(p)} Schritt ${i} (${k.titel})`;
+    /* Zweite Ebene: Gelegenheiten — leise, nie auf Entscheidungsseiten, nie mehr als die Szene selbst */
+    const chancen=T.sichtbareChancen(k);
+    chancen.forEach(c=>{ const j=k.chancen.indexOf(c); gesehenChancen.set(i+"/"+j, gesehenChancen.get(i+"/"+j)+1); });
+    pruefe(k.art!=="ent" || chancen.length===0, wo+": Gelegenheiten auf einer Entscheidungsseite");
+    pruefe(chancen.length<=3, wo+`: ${chancen.length} Gelegenheiten sichtbar — mehr als drei lenken ab`);
+    pruefe(chancen.length<=sichtbar.length, wo+": mehr Gelegenheiten als Szenenblöcke");
+    pruefe(text().includes("Gelegenheiten für einzelne Figuren")===(chancen.length>0), wo+": Optional-Zeile sichtbar/unsichtbar falsch");
+    for(const gruppe of [WEGE,TUEREN,WAHLEN,AUSGAENGE]){
+      const flags=new Set(); chancen.forEach(c=>T.liste(c.nur).concat(T.liste(c.alle)).forEach(f=>{ if(gruppe.includes(f)) flags.add(f); }));
+      pruefe(flags.size<=1, wo+": Gelegenheiten aus verschiedenen Zweigen gleichzeitig sichtbar: "+[...flags]);
+    }
+    if(i===10){ const heilerin=chancen.some(c=>c.wer==="Lightbearer");
+      pruefe(heilerin===(T.Z().gefahr>=4 && p.wahl!=="e3_buch"), wo+": Thrall-Gelegenheit widerspricht dem Thrall-Lader"); }
 
     /* Orientierung: nie eine leere Seite, nie ein „geh zurück“ auf einem gültigen Pfad */
     pruefe(!text().includes("hinweisfehlt"), wo+": Seite verlangt eine Vorentscheidung, die auf diesem Pfad längst da sein sollte");
@@ -153,6 +168,14 @@ pfade.forEach(p=>{ spiele(p); gefahrWerte.add(T.Z().gefahr); });
 /* ---------- 3 · Erreichbarkeit jedes Blocks ---------- */
 gesehen.forEach((n,key)=>{ const [i,j]=key.split("/").map(Number); const b=K[i].bloecke[j];
   pruefe(n>0, `Unerreichbar: Schritt ${i} Block ${j} (${b.t}${b.titel?" · "+b.titel:""}${b.id?" · "+b.id:""})`); });
+
+gesehenChancen.forEach((n,key)=>{ const [i,j]=key.split("/").map(Number); const c=K[i].chancen[j];
+  pruefe(n>0, `Unerreichbare Gelegenheit: Schritt ${i} · ${c.wer} · ${c.talent}`); });
+/* Gelegenheiten dürfen nur an Flaggen hängen, die vor ihrer Szene gesetzt werden */
+K.forEach((k,i)=>(k.chancen||[]).forEach(c=>T.liste(c.nur).concat(T.liste(c.alle),T.liste(c.nicht)).forEach(f=>{
+  const ent=Object.keys(T.ENTSCHEIDUNGEN).find(id=>T.ENTSCHEIDUNGEN[id].flaggen.includes(f));
+  if(ent){ const idx=K.findIndex(kk=>kk.bloecke.some(b=>b.t==="optionen"&&b.id===ent)); pruefe(idx<i, `Schritt ${i}: Gelegenheit hängt an ${f}, das erst in Schritt ${idx} gewählt wird`); }
+})));
 
 /* ---------- 4 · Vorzeitiges Auslösen ---------- */
 frisch();

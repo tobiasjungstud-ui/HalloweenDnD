@@ -23,9 +23,9 @@ Spielen, kein Konto, keine Daten verlassen das Gerät.
 | Datei | Für wen | Was darauf steht |
 |---|---|---|
 | `dungeon_master.html` | Spielleitung | Zwölf Seiten Ablauf, Gefahrenbarometer, Lebenspunkte, Kampf-Tracker |
-| `spieler_magier.html` | The Arcanist, 18 HP | Fireball · Magic Hand · Arcane Darts |
-| `spieler_krieger.html` | The Blade, 30 HP | Sword Strike · Shield Bash · Reckless Charge |
-| `spieler_heiler.html` | The Lightbearer, 24 HP | Radiant Strike · Blinding Light · Judgement — und nach jedem Kampf heilt sie alle umsonst |
+| `spieler_magier.html` | The Arcanist, 18 HP | Fireball · Magic Hand · Arcane Darts — Talent ausserhalb des Kampfs: *Magic Hand* |
+| `spieler_krieger.html` | The Blade, 30 HP | Sword Strike · Shield Bash · Reckless Charge — Talent: *Strength* |
+| `spieler_heiler.html` | The Lightbearer, 24 HP | Radiant Strike · Blinding Light · Judgement — Talent: *Healing Touch*; nach jedem Kampf heilt sie alle umsonst |
 
 Dazu drei Word-Dateien in `helferblatt/`, alle zum Ausdrucken:
 
@@ -60,7 +60,9 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
 2. Die Spielleitung liest Seite 1 der Konsole. Fünf Minuten, mehr braucht es nicht.
 3. Die Konsole führt durch zwölf Seiten:
    **gelb umrandet** = wörtlich vorlesen, **grün** = das sollen die Schüler jetzt tun,
-   **grau** = nur für die Spielleitung. Unten steht immer, wann es weitergeht.
+   **grau** = nur für die Spielleitung, **rot** = Kampf. Unten steht immer, wann es weitergeht.
+   Darüber, klein und gestrichelt: **Optional** — Gelegenheiten für eine einzelne Figur
+   (siehe unten). Blättern geht auch mit den Pfeiltasten.
 4. Etwa drei Stunden. Gut teilbar in zwei Doppelstunden — der Schnitt liegt beim Aufstieg.
 
 ## Wie es aufgebaut ist
@@ -85,6 +87,18 @@ den die Gruppe tatsächlich gewählt hat; alles andere wird ausgeblendet.
 Jeder Hinweis, den die Gruppe finden kann, ist an einen Satz gebunden, den eine Figur
 wirklich ausspricht — und jede Person trägt eine Zeile **„Notfalls“**, falls niemand danach
 fragt. Das Spiel kann nicht hängenbleiben.
+
+**Zwei Ebenen je Szene.** Oben steht, was die Spielleitung wirklich braucht: Ort, was die
+Gruppe sieht, wen sie ansprechen kann, was zu tun ist. Darunter, deutlich leiser, eine
+gestrichelte Zeile **Optional**: Gelegenheiten für *eine* Figur — der Arcanist mit *Magic
+Hand*, der Blade mit *Strength*, die Lightbearer mit *Healing Touch*. Sie sind als Möglichkeit
+formuliert, nie als Lösung (*„Magic Hand könnte den Raben heben“*), und jede Szene funktioniert
+ohne sie: Wer den Küchenjungen heilt, bekommt sein Vertrauen und einen Satz mehr — wer es
+nicht tut, kommt trotzdem weiter. Die Spieler sollen selbst auf die Idee kommen; die Zeile
+sagt der Spielleitung nur, was sie zulassen kann. Aufgeklappt zeigt jede Gelegenheit ihre
+Folge. Der Prüfstand kontrolliert, dass keine auf einer Entscheidungsseite steht, nie mehr
+als drei zugleich sichtbar sind, keine an eine spätere Entscheidung hängt und jede auf
+mindestens einem Pfad erreichbar ist.
 
 **Der Abend passt sich an.** Erreicht das Gefahrenbarometer 8, lädt jeder Kampfknopf einen
 Gegner mehr, und die Konsole schiebt einmal einen Zwischenakt vor den nächsten Akt: eine
