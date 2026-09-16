@@ -1,0 +1,128 @@
+<title>Nachtfels Spickzettel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=JetBrains+Mono:wght@400;700&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+:root{color-scheme:dark;--ink:#08080c;--crypt:#0e0e15;--stone:#14141e;--line:#262633;--line-hi:#3a3a4c;
+  --bone:#eae4d7;--ash:#948fa2;--dim:#5d5a6b;--gold:#d9a441;--blood:#b23a2c;--moss:#74b094;--moon:#7d9bc4;
+  --display:'IM Fell English SC',Georgia,serif;--body:'Spectral',Georgia,serif;--mono:'JetBrains Mono',ui-monospace,Menlo,monospace}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--body);font-size:16px;line-height:1.55;padding-block:32px 64px;padding-inline:clamp(16px,4vw,48px)}
+.wrap{max-width:1040px;margin:0 auto}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(30px,5vw,44px);line-height:1.05;margin:0 0 6px;text-wrap:balance}
+.sub{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin:0 0 28px}
+.satz{font-size:18px;max-width:60ch;margin:0 0 30px;color:var(--ash)}
+.satz b{color:var(--bone);font-weight:400}
+
+/* ---- der Bildschirm, stark reduziert ---- */
+.schirm{border:1px solid var(--line-hi);background:var(--crypt);font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:.06em}
+.kopf{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
+.kopf .t{font-family:var(--display);font-size:16px;color:var(--bone);letter-spacing:0}
+.kopf .b{display:flex;gap:6px}.kopf .b i{border:1px solid var(--line-hi);padding:3px 8px;font-style:normal}
+.pfad{display:flex;border-bottom:1px solid var(--line)}
+.pfad i{flex:1;padding:8px 10px;border-right:1px solid var(--line);font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pfad i.jetzt{color:var(--bone);border-bottom:2px solid var(--gold)}
+.pfad i.ent{color:var(--gold)}.pfad i.fin{color:#e0645a}
+.spalten{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,.9fr) minmax(0,.9fr)}
+.spalten>div{padding:14px;min-width:0}
+.spalten>div+div{border-left:1px solid var(--line)}
+.block{border-left:4px solid var(--line-hi);background:rgba(255,255,255,.03);padding:9px 11px;margin-bottom:8px;font-style:normal;color:var(--ash)}
+.block.gelb{border-color:var(--gold);background:rgba(217,164,65,.08);color:var(--bone)}
+.block.gruen{border-color:var(--moss);background:rgba(116,176,148,.1);margin:8px 0 0;color:var(--bone)}
+.block.rot{border-color:var(--blood);background:rgba(178,58,44,.08)}
+.block.weiss{border-color:var(--bone)}
+.block.regel{border-left:2px solid var(--moss);padding:6px 9px}
+.block.regel.s{border-color:var(--blood)}
+.block.dash{border:1px dashed var(--line-hi);border-left-width:1px;background:none}
+.fach{margin-bottom:12px}.fach .l{display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.16em;font-size:9.5px}
+.baro{display:flex;gap:2px;margin-bottom:6px}.baro i{flex:1;height:8px;border:1px solid var(--line)}.baro i.an{background:#2c4d6b}
+.hp{border:1px solid var(--line);padding:6px 8px;margin-bottom:5px;display:flex;justify-content:space-between;color:var(--ash)}
+.weiter{border-top:1px solid var(--line);padding-top:8px;color:var(--moss)}
+.num{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--gold);color:#07070b;font-family:var(--mono);font-size:11px;font-weight:700;margin-right:6px;vertical-align:1px;flex:none}
+.schirm .num{margin-right:7px}
+@media (max-width:760px){.spalten{grid-template-columns:1fr}.spalten>div+div{border-left:none;border-top:1px solid var(--line)}.pfad i:nth-child(n+5){display:none}}
+
+/* ---- Erklärungen ---- */
+h2{font-family:var(--display);font-weight:400;font-size:26px;margin:40px 0 14px}
+.erkl{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px 28px}
+.erkl li{display:flex;gap:10px;align-items:flex-start;font-size:15.5px;color:var(--ash)}
+.erkl li b{color:var(--bone);font-weight:400;display:block}
+.farben{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:14px}
+.farbe{border-left:4px solid;padding:10px 12px;background:rgba(255,255,255,.03);font-size:15px;color:var(--ash)}
+.farbe b{display:block;color:var(--bone);font-weight:400;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:3px}
+.ablauf{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:14px;counter-reset:s}
+.ablauf div{border:1px solid var(--line);padding:14px;font-size:15px;color:var(--ash);counter-increment:s}
+.ablauf div::before{content:counter(s);display:block;font-family:var(--display);font-size:26px;color:var(--gold);line-height:1;margin-bottom:6px}
+.ablauf div b{color:var(--bone);font-weight:400}
+.fuss{margin-top:44px;font-size:13.5px;color:var(--dim);border-top:1px solid var(--line);padding-top:14px}
+.fuss a{color:var(--ash)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+  <p class="sub">The Bride of Nachtfels · Spickzettel zur Spielleitung</p>
+  <h1>Der DM-Bildschirm auf einen Blick</h1>
+  <p class="satz"><b>Links liest du vor. In der Mitte siehst du, was von der Antwort der Gruppe abhängt. Rechts führst du Buch.</b> Mehr ist es nicht. Jede Seite ist gleich gebaut.</p>
+
+  <div class="schirm" role="img" aria-label="Schema des DM-Bildschirms mit sieben nummerierten Bereichen">
+    <div class="kopf"><span class="t">The Bride of Nachtfels</span><span class="b"><i><span class="num">1</span>Gefahr 2/10</i><i>Schritt 8/12</i><i>Neue Runde</i></span></div>
+    <div class="pfad"><i><span class="num">2</span>Prolog</i><i>Kapitel I</i><i class="ent">◆ Entscheidung 1</i><i>Aufstieg</i><i>Kapitel II</i><i class="ent">◆ Entscheidung 2</i><i class="jetzt">Hinter der Tür</i><i>Kapitel III</i><i class="fin">⚔ Finale</i></div>
+    <div class="spalten">
+      <div>
+        <div class="block" style="border:none;background:none;padding:0 0 6px"><span class="num">3</span>Ort · Weg · Tür · Wissen</div>
+        <div class="block weiss">Ziel dieser Seite · 20 Min.</div>
+        <div class="block">Hintergrund — nur du</div>
+        <div class="block gelb">Vorlesen — Erzähltext und Sätze der Figuren<div class="block gruen">Das sagst du den Schülern</div></div>
+        <div class="block">Antwortmöglichkeiten ☐ ☐ ☐ — jede nur einmal</div>
+        <div class="block rot">Kampf — Gegner laden</div>
+        <div class="weiter"><span class="num">4</span>Weiter, wenn …</div>
+      </div>
+      <div>
+        <div class="fach"><span class="l"><span class="num">5</span>Wenn … dann</span>
+          <div class="block regel">ehrliche Antwort → er führt euch</div>
+          <div class="block regel s">Lüge → kein Führer</div>
+          <div class="block regel s">Drohung → Gefahr +3</div></div>
+        <div class="fach"><span class="l"><span class="num">6</span>Stärken der Figuren</span>
+          <div class="block dash">Ilse · Healing Touch<br>„the left one he holds against his chest“</div>
+          <div class="block dash" style="opacity:.5">Rook · Strength — nichts</div></div>
+      </div>
+      <div>
+        <div class="fach"><span class="l"><span class="num">7</span>Gefahrenbarometer</span><div class="baro"><i class="an"></i><i class="an"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+        <div class="fach"><span class="l">Die Gruppe</span><div class="hp">Vesper<span>18/18</span></div><div class="hp">Rook<span>30/30</span></div><div class="hp">Ilse<span>24/24</span></div></div>
+        <div class="fach"><span class="l">Kampf</span><div class="block" style="margin:0">Kein Kampf im Gang.</div></div>
+        <div class="fach"><span class="l">Was die Gruppe weiss</span><div class="block" style="margin:0">○ Der Name Anneke</div></div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Die sieben Bereiche</h2>
+  <ul class="erkl">
+    <li><span class="num">1</span><span><b>Gefahr und Schritt</b>Wie laut die Gruppe war (0–10) und wo im Abend ihr seid. Steht überall.</span></li>
+    <li><span class="num">2</span><span><b>Die zwölf Seiten</b>Anklicken oder mit den Pfeiltasten blättern. ◆ ist eine Entscheidung, ⚔ das Finale.</span></li>
+    <li><span class="num">3</span><span><b>Die Lage</b>Wo die Gruppe ist, was sie gewählt hat, was sie weiss. Die Seite zeigt nur, was zu diesem Weg gehört.</span></li>
+    <li><span class="num">4</span><span><b>Weiter, wenn</b>Die Bedingung, ab der du umblätterst. Vorher fehlt noch etwas.</span></li>
+    <li><span class="num">5</span><span><b>Wenn … dann</b>Was in dieser Szene von der Antwort der Gruppe abhängt. Grün geht gut aus, Rot kostet etwas. Scrollt mit.</span></li>
+    <li><span class="num">6</span><span><b>Stärken der Figuren</b>Ein Satz aus dem gelben Text, der eine Gelegenheit ankündigt. Du liest ihn und wartest. Anklicken zeigt die Folge.</span></li>
+    <li><span class="num">7</span><span><b>Buchführung</b>Barometer, Lebenspunkte, Kampf-Tracker, Wissen. Alles, was du eintippst, steht im Log.</span></li>
+  </ul>
+
+  <h2>Vier Farben, eine Regel</h2>
+  <div class="farben">
+    <div class="farbe" style="border-color:var(--gold)"><b>Gelb</b>Wörtlich vorlesen.</div>
+    <div class="farbe" style="border-color:var(--moss)"><b>Grün</b>Das sagst du den Schülern. Ihre Aufgabe.</div>
+    <div class="farbe" style="border-color:var(--line-hi)"><b>Grau</b>Nur für dich. Hintergrund, Antworten, Knöpfe.</div>
+    <div class="farbe" style="border-color:var(--blood)"><b>Rot</b>Kampf. Ein Knopf lädt die Gegner rechts.</div>
+  </div>
+
+  <h2>So läuft jede Seite</h2>
+  <div class="ablauf">
+    <div><b>Grau überfliegen.</b> Zehn Sekunden. Dann weisst du, was in der Szene steckt.</div>
+    <div><b>Gelb vorlesen, Grün sagen.</b> Dann schweigen und die Gruppe reden lassen.</div>
+    <div><b>In die Mitte schauen.</b> Was sie gesagt haben, entscheidet, welche Zeile gilt.</div>
+    <div><b>Rechts eintragen.</b> Gefahr, Schaden, Wissen. Dann „Weiter, wenn“ prüfen und umblättern.</div>
+  </div>
+
+  <p class="fuss">Ergänzung zur Anleitung auf Seite 1 der DM-Konsole. Alle Dateien: <a href="https://github.com/tobiasjungstud-ui/HalloweenDnD">github.com/tobiasjungstud-ui/HalloweenDnD</a></p>
+</div>

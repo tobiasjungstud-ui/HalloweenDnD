@@ -23,6 +23,7 @@ Spielen, kein Konto, keine Daten verlassen das Gerät.
 | Datei | Für wen | Was darauf steht |
 |---|---|---|
 | `dungeon_master.html` | Spielleitung | Zwölf Seiten Ablauf, Gefahrenbarometer, Lebenspunkte, Kampf-Tracker |
+| `spickzettel.html` | Spielleitung | Eine Seite: der DM-Bildschirm auf einen Blick — sieben Bereiche, vier Farben, vier Handgriffe |
 | `spieler_magier.html` | The Arcanist, 18 HP | Fireball · Magic Hand · Arcane Darts — Talent ausserhalb des Kampfs: *Magic Hand* |
 | `spieler_krieger.html` | The Blade, 30 HP | Sword Strike · Shield Bash · Reckless Charge — Talent: *Strength* |
 | `spieler_heiler.html` | The Lightbearer, 24 HP | Radiant Strike · Blinding Light · Judgement — Talent: *Healing Touch*; nach jedem Kampf heilt sie alle umsonst |
