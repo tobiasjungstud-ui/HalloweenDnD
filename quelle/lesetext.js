@@ -132,6 +132,11 @@ T.KAPITEL.forEach((k,i)=>{
           ...b.optionen.map(o=>[new TextRun({text:o.b+" · "+o.name+"  ",font:"Georgia",size:18,bold:true}),new TextRun({text:ohneHtml(o.was)+(o.pro?"  + "+ohneHtml(o.pro.join(" ")):"")+(o.con?"  − "+ohneHtml(o.con.join(" ")):"")+"  [Gefahr "+(o.wirkung.gefahr>0?"+"+o.wirkung.gefahr:"±0")+"]",font:"Georgia",size:18,color:"333333"})])],grau,"BFBFBF")); break;
     }
   });
+  if(!schueler && (k.verlauf||[]).length){
+    kinder.push(...kasten([[...etikett("WENN … DANN (NUR DM)","555555")],
+      ...k.verlauf.map(r=>[new TextRun({text:(bedingung(r)?bedingung(r).replace("▸ ","")+" — ":"")+r.wenn+"  →  ",font:"Georgia",size:17,bold:true,color:"333333"}),
+        new TextRun({text:r.dann,font:"Georgia",size:17,color:"333333"})])],grau,"BFBFBF"));
+  }
   if(!schueler && (k.chancen||[]).length){
     kinder.push(...kasten([[...etikett("OPTIONAL · GELEGENHEITEN FÜR EINZELNE FIGUREN (NUR DM) — nur, falls ein Spieler von selbst darauf kommt","555555")],
       ...k.chancen.map(c=>[new TextRun({text:c.wer+" · "+c.talent+"  ",font:"Georgia",size:17,bold:true,color:"333333"}),

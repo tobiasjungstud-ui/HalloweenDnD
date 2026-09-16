@@ -61,8 +61,9 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
 3. Die Konsole führt durch zwölf Seiten:
    **gelb umrandet** = wörtlich vorlesen, **grün** = das sollen die Schüler jetzt tun,
    **grau** = nur für die Spielleitung, **rot** = Kampf. Unten steht immer, wann es weitergeht.
-   Rechts in der Karte jeder Figur, klein und gestrichelt: **Optional** — eine Gelegenheit
-   für genau diese Figur in dieser Szene (siehe unten). Blättern geht auch mit den Pfeiltasten.
+   In der mittleren Spalte, die mitscrollt: **Wenn … dann** — was in dieser Szene von der
+   Antwort der Gruppe abhängt („Tam angelogen → kein Führer“) — und darunter die **Stärken der
+   Figuren**. Blättern geht auch mit den Pfeiltasten.
 4. Etwa drei Stunden. Gut teilbar in zwei Doppelstunden — der Schnitt liegt beim Aufstieg.
 
 ## Wie es aufgebaut ist
@@ -88,9 +89,10 @@ Jeder Hinweis, den die Gruppe finden kann, ist an einen Satz gebunden, den eine 
 wirklich ausspricht — und jede Person trägt eine Zeile **„Notfalls“**, falls niemand danach
 fragt. Das Spiel kann nicht hängenbleiben.
 
-**Zwei Ebenen je Szene.** Links steht, was die Spielleitung wirklich braucht: Ort, was die
-Gruppe sieht, wen sie ansprechen kann, was zu tun ist. Rechts, in der Karte der Figur und
-deutlich leiser, eine gestrichelte Zeile **Optional**: eine Gelegenheit für *diese* Figur —
+**Drei Spalten je Szene.** Links steht, was die Spielleitung vorliest und sagt. In der
+Mitte, fest stehend und mitscrollend, die Abzweigungen dieser Szene als **Wenn … dann**
+(grün: es geht gut aus, rot: es kostet etwas) und darunter die **Stärken der Figuren**:
+eine Gelegenheit für *diese* Figur —
 der Arcanist mit *Magic Hand*, der Blade mit *Strength*, die Lightbearer mit *Healing Touch*. Sie sind als Möglichkeit
 formuliert, nie als Lösung, und jede Szene funktioniert ohne sie.
 

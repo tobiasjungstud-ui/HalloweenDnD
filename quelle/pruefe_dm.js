@@ -22,7 +22,7 @@ const html = fs.readFileSync(path.join(__dirname, "..", "dungeon_master.html"), 
 const js = /<script>([\s\S]*)<\/script>/.exec(html)[1];
 vm.runInThisContext(js, {filename:"dungeon_master.html"});
 vm.runInThisContext(`globalThis.T = { Z:()=>Z, setZ:z=>{Z=z;}, KAPITEL, ENTSCHEIDUNGEN, WISSEN, BESTIARIUM, ORT, PATROUILLE,
-  frischerZustand, waehle, setzeWissen, tunAusfuehren, geheZu, gilt, hat, ortAufloesen, sichtbareBloecke, sichtbareChancen, pruefeStory, finaleLaden, liste, alles,
+  frischerZustand, waehle, setzeWissen, tunAusfuehren, geheZu, gilt, hat, sichtbarerVerlauf, ortAufloesen, sichtbareBloecke, sichtbareChancen, pruefeStory, finaleLaden, liste, alles,
   ladeKampf, patrouilleFertig, setzeGefahr }`);
 console.warn = echtWarn;
 
@@ -95,7 +95,12 @@ function spiele(p, protokoll){
     pruefe(k.art!=="ent" || chancen.length===0, wo+": Gelegenheiten auf einer Entscheidungsseite");
     pruefe(chancen.length<=3, wo+`: ${chancen.length} Gelegenheiten sichtbar — mehr als drei lenken ab`);
     pruefe(chancen.length<=sichtbar.length, wo+": mehr Gelegenheiten als Szenenblöcke");
-    const st=el("staerken").innerHTML;
+    const st=el("staerken").innerHTML, vl=el("verlauf").innerHTML;
+    pruefe((k.verlauf||[]).filter(T.gilt).every(r=>vl.includes(r.wenn)&&vl.includes(r.dann)), wo+": Wenn-dann-Spalte unvollständig");
+    for(const gruppe of [WEGE,TUEREN,WAHLEN,AUSGAENGE]) (k.verlauf||[]).filter(T.gilt).forEach(r=>{
+      const nur=T.liste(r.nur).filter(f=>gruppe.includes(f));
+      pruefe(nur.length===0 || nur.some(T.hat), wo+": Regel „"+r.wenn+"“ sichtbar, obwohl ihr Zweig nicht gewählt ist"); });
+    pruefe((k.verlauf||[]).filter(T.gilt).length<=8, wo+": mehr als acht Regeln in der mittleren Spalte");
     pruefe(!text().includes('class="staerke'), wo+": Gelegenheiten stehen noch in der Hauptspalte");
     pruefe(["Magic Hand","Strength","Healing Touch"].every(t=>st.includes(t)), wo+": Stärken-Abschnitt nennt nicht alle drei Talente");
     chancen.forEach(c=>pruefe(st.includes(c.text) && st.includes(c.folge) && st.includes(c.cue), wo+": Gelegenheit fehlt rechts: "+c.wer+" · "+c.talent));

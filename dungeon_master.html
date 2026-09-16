@@ -50,8 +50,15 @@ input{font:inherit;color:inherit}
 .pfad button.ent .n{color:var(--gold)}
 .pfad button.kampf .n{color:var(--blood-hi)}
 
-.raum{display:grid;grid-template-columns:minmax(0,1fr) 330px}
-@media (max-width:1040px){.raum{grid-template-columns:1fr}}
+.raum{display:grid;grid-template-columns:minmax(0,1fr) 300px 330px;align-items:start}
+.mitte{border-left:1px solid var(--line);background:var(--ink);position:sticky;top:calc(env(safe-area-inset-top,0px) + 52px);max-height:calc(100vh - 52px);overflow-y:auto}
+@media (max-width:1380px){.raum{grid-template-columns:minmax(0,1fr) 330px;grid-template-rows:auto 1fr}.szene{grid-column:1;grid-row:1/span 2}.mitte{grid-column:2;grid-row:1;position:static;max-height:none}.leiste{grid-column:2;grid-row:2}}
+@media (max-width:1040px){.raum{grid-template-columns:1fr}.szene{grid-column:1;grid-row:auto}.mitte{grid-column:1;grid-row:auto;border-left:none;border-top:1px solid var(--line)}.leiste{grid-column:1;grid-row:auto}}
+.regel{border-left:2px solid var(--line-hi);padding:6px 10px;margin-bottom:6px;font-size:13px;line-height:1.45;color:var(--ash)}
+.regel b{color:var(--bone);font-weight:400}
+.regel .dann{color:var(--gold);font-family:var(--mono);font-size:11px;margin:0 5px}
+.regel.gut{border-color:var(--moss)}.regel.schlecht{border-color:var(--blood)}
+.regel.leer{border-color:var(--line);color:var(--dim);font-style:italic}
 .szene{padding-block:26px 60px;padding-inline:clamp(16px,3vw,38px);max-width:840px;min-width:0}
 .szenenkopf{border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:22px}
 .szenenkopf .n{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
@@ -225,7 +232,8 @@ input{font:inherit;color:inherit}
 
 /* ---- Seitenleiste ---- */
 .leiste{border-left:1px solid var(--line);background:var(--crypt);position:sticky;top:calc(env(safe-area-inset-top,0px) + 52px);max-height:calc(100vh - 52px);overflow-y:auto}
-@media (max-width:1040px){.leiste{position:static;max-height:none;border-left:none;border-top:1px solid var(--line)}}
+@media (max-width:1380px){.leiste{position:static;max-height:none}}
+@media (max-width:1040px){.leiste{border-left:none;border-top:1px solid var(--line)}}
 .fach{border-bottom:1px solid var(--line);padding:15px 17px}
 .fach>.label{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}
 .fach>.label button{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--line-hi)}
@@ -320,6 +328,18 @@ input{font:inherit;color:inherit}
     <p class="tasten">Blättern auch mit den Pfeiltasten ← →</p>
   </main>
 
+  <aside class="mitte" aria-label="Wenn – dann">
+    <section class="fach">
+      <span class="label">Wenn … dann <span class="labelzusatz">diese Szene</span></span>
+      <div id="verlauf"></div>
+    </section>
+    <section class="fach" id="staerken-fach">
+      <span class="label">Stärken der Figuren <span class="labelzusatz">optional</span></span>
+      <div id="staerken"></div>
+      <p class="staerken-hinweis">Jede steht als Satz im gelben Text — lies ihn und warte. Ob ein Spieler darauf eingeht, ist seine Sache. Anklicken zeigt die Folge.</p>
+    </section>
+  </aside>
+
   <aside class="leiste">
     <section class="fach">
       <span class="label">Gefahrenbarometer</span>
@@ -336,12 +356,6 @@ input{font:inherit;color:inherit}
         <button data-gefahr="1">+1</button>
         <button data-gefahr="2">+2</button>
       </div>
-    </section>
-
-    <section class="fach" id="staerken-fach">
-      <span class="label">Stärken der Figuren <span class="labelzusatz">diese Szene · optional</span></span>
-      <div id="staerken"></div>
-      <p class="staerken-hinweis">Jede steht als Satz im gelben Text — lies ihn und warte. Ob ein Spieler darauf eingeht, ist seine Sache. Anklicken zeigt die Folge.</p>
     </section>
 
     <section class="fach">
@@ -410,14 +424,19 @@ const ORT = {
 
 const KAPITEL = [
 /* ===== 0 ===== */
-{n:"Anleitung", titel:"So führst du den Abend", art:"info", bloecke:[
+{n:"Anleitung", verlauf:[
+  {wenn:"Ein ganzer deutscher Satz fällt", dann:"Gefahr +1 (rechts) — oder ein Thrall in den Kampf", art:"schlecht"},
+  {wenn:"Eine Figur fällt auf 0", dann:"eigener Trank, oder liegen bis nach dem Kampf; dann heilt die Lightbearer alle"},
+  {wenn:"Niemand sagt etwas", dann:"„Let’s go around. [Name], what does your character do?“"}],
+ titel:"So führst du den Abend", art:"info", bloecke:[
  {t:"ziel", text:"Diese Seite führt dich Satz für Satz. Du musst nichts vorbereiten und die Geschichte nicht kennen.", zeit:"5 Min. lesen"},
  {t:"regie", titel:"Was du brauchst", text:`Drei Spieler, jeder mit seinem eigenen Link auf einem Gerät: <b>Arcanist</b>, <b>Blade</b>, <b>Lightbearer</b>. Trag ihre Figurennamen rechts in die Gruppe ein.
  <p>Dazu das <b>Helfer-Blatt</b> als Ausdruck, einmal pro Schüler. Darauf stehen alle englischen Satzanfänge und Vokabeln, nach Szene geordnet. Teil es aus, bevor du anfängst.</p>`},
  {t:"regie", titel:"Wer die Gruppe ist", text:`Das ist vorgegeben, das müssen die Schüler nicht erfinden: <b>Sie sind Vampirjäger.</b> Nicht berühmt, noch nicht. Ein Gerücht hat sie hergeführt — in diesen Bergen liege ein Tal, in dem Menschen nach Plan verschwinden. Sie wollen wissen, ob es stimmt.
  <p>Erfinden dürfen sie: Namen, Herkunft, wie sie sich kennen, was sie können. Der Auftrag steht fest.</p>`},
  {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`<b>Gelb</b> heisst: wörtlich vorlesen — Erzähltext und die Sätze der Figuren stehen in einer Karte. <b>Grün</b> heisst: das sagst du den Schülern, ebenfalls wörtlich — es ist ihre Aufgabe. <b>Grau</b> heisst: nur für dich, und steht als Hintergrund oben. <b>Rot</b> heisst: Kampf. Ganz unten steht immer, <b>wann es weitergeht</b>.
- <p>Rechts unter dem Barometer steht <b>Stärken der Figuren</b>: je Figur eine Zeile mit ihrem Talent — Magic Hand, Strength, Healing Touch — und, wenn die Szene eine Gelegenheit dafür hat, der Satz aus dem gelben Text, der sie ankündigt (Tam hält die verbrannte Hand an die Brust; Marek hat die Hand verbunden). Du liest den Satz vor und wartest. Anklicken zeigt die Folge. Das sind keine Aufgaben und keine Lösungen: Die Zeile sagt dir nur, was du zulassen kannst, falls der Spieler von selbst darauf kommt. Jede Szene funktioniert auch ohne.</p>
+ <p>In der <b>mittleren Spalte</b> steht, was in dieser Szene abzweigt — <b>Wenn … dann</b>: „Tam angelogen → kein Führer“, „alle würfeln 10 oder mehr → an den Wachen vorbei“. Sie scrollt mit, damit du beim Vorlesen nie suchen musst, was als Nächstes von der Antwort der Gruppe abhängt.</p>
+ <p>Darunter <b>Stärken der Figuren</b>: je Figur eine Zeile mit ihrem Talent — Magic Hand, Strength, Healing Touch — und, wenn die Szene eine Gelegenheit dafür hat, der Satz aus dem gelben Text, der sie ankündigt (Tam hält die verbrannte Hand an die Brust; Marek hat die Hand verbunden). Du liest den Satz vor und wartest. Anklicken zeigt die Folge. Das sind keine Aufgaben und keine Lösungen: Die Zeile sagt dir nur, was du zulassen kannst, falls der Spieler von selbst darauf kommt. Jede Szene funktioniert auch ohne.</p>
  <p>Unter dem Titel jeder Seite steht die <b>Lage</b>: wo die Gruppe ist, was sie gewählt hat, was sie weiss. Auf der Seite steht immer nur, was zu diesem Weg gehört — das andere siehst du gar nicht erst. Und eine Entscheidung lässt sich erst anklicken, wenn die davor getroffen ist.</p>`},
  {t:"sagen", text:["You always have to speak English. If you don’t — who knows what consequences it might have… (evil laugh)","If you don’t know a word, ask me. In English. Nobody laughs."]},
  {t:"regie", titel:"Hintergrund zur Regel", text:`Du kannst den Grafen <b>deutschempfindlich</b> machen: Er hört jeden ganzen deutschen Satz, der am Tisch fällt — für ihn ein Geräusch im Haus. Folge: Die Gefahr steigt um 1 (Knopf rechts), oder er schickt einen Diener los — dafür einen <b>Thrall</b> in den Kampf laden. Hier darfst du improvisieren; die Drohung wirkt meist schon allein.
@@ -441,7 +460,10 @@ const KAPITEL = [
  {t:"weiter", text:"Wenn du das gelesen hast und jeder sein Helfer-Blatt vor sich liegen hat."}]},
 
 /* ===== 1 ===== */
-{n:"Prolog", chancen:[
+{n:"Prolog", verlauf:[
+  {wenn:"Jemand antwortet mit einem Satz", dann:"Marek hakt nach: „What, that’s all? Tell me a bit more.“", art:"schlecht"},
+  {wenn:"Alle drei haben zwei bis drei Sätze gesagt", dann:"Auftrag vorlesen, dann die Ankunft", art:"gut"}],
+ chancen:[
   {wer:"Lightbearer", talent:"Healing Touch", cue:"wrapped in a dirty bandage", text:"Mareks rechte Hand ist verbunden.", folge:"Fragt die Heilerin danach oder greift sie zu, bekommt sie einen Satz mehr als alle anderen: „Whatever you do up there — don’t take the coach.“ Mehr erklärt er nicht. Sagt niemand etwas: Er fährt einfach los."}],
  titel:"The Carriage", art:"szene", ort:ORT.strasse, nach:ORT.vorWirtshaus, bloecke:[
  {t:"ziel", text:"Die Gruppe stellt sich vor, erfährt ihren Auftrag und steigt vor dem Wirtshaus aus.", zeit:"15 Min."},
@@ -473,7 +495,12 @@ const KAPITEL = [
  {t:"weiter", text:"Wenn alle drei gesprochen haben und die Gruppe vor der Wirtshaustür steht."}]},
 
 /* ===== 2 ===== */
-{n:"Kapitel I", chancen:[
+{n:"Kapitel I", verlauf:[
+  {wenn:"Eine Frage ist gestellt", dann:"abhaken — jede nur einmal, egal von wem"},
+  {wenn:"Alle Fragen einer Person sind verbraucht", dann:"sie schweigt und beachtet die Gruppe nicht mehr", art:"schlecht"},
+  {wenn:"Fünf Minuten lang fragt niemand nach Anneke", dann:"Pieter ruft es quer durch den Raum — Knopf „Anneke ist gefallen“", art:"gut"},
+  {wenn:"Niemand fragt nach dem Weg", dann:"Greta legt die Karte hin: „You’ll need this.“", art:"gut"}],
+ chancen:[
   {wer:"Blade", talent:"Strength", cue:"on two iron hooks", text:"Das Namensbrett ist schwer und hängt an zwei Haken.", folge:"Wer es allein abhebt und umdreht, findet hinten mehr Namen — keine Dorfnamen, fremde. Zwölf. Greta sagt nur: „Hunters. Put it back.“ Eine deutlichere Warnung gibt es an diesem Abend nicht."}],
  titel:"The Inn", art:"szene", ort:ORT.vorWirtshaus, nach:ORT.wirtshaus, bloecke:[
  {t:"ziel", text:"Die Gruppe spricht mit drei Menschen, erfährt zwei Dinge und bekommt am Ende die Karte.", zeit:"25 Min."},
@@ -514,7 +541,10 @@ const KAPITEL = [
  {t:"weiter", text:"Wenn jede Figur einmal gefragt hat und die Karte auf dem Tisch liegt."}]},
 
 /* ===== 3 ===== */
-{n:"Entscheidung 1", titel:"The Way Up", art:"ent", ort:ORT.wirtshaus, nach:ORT.wirtshaus, bloecke:[
+{n:"Entscheidung 1", verlauf:[
+  {wenn:"Sie streiten", dann:"„One minute, then we vote.“"},
+  {wenn:"Die Karte ist geklickt", dann:"auf den nächsten Seiten steht nur noch dieser Weg", art:"gut"}],
+ titel:"The Way Up", art:"ent", ort:ORT.wirtshaus, nach:ORT.wirtshaus, bloecke:[
  {t:"ziel", text:"Die Gruppe wählt einen der drei Wege. Alle drei enden im Hof des Schlosses — sie unterscheiden sich nur im Preis.", zeit:"10 Min."},
  {t:"regie", titel:"Hintergrund", text:"Preis und Gefahr jedes Wegs stehen auf den drei Karten unten — du musst sie nicht vorher kennen. Frag reihum: „And what do you think?“ Bei Streit: „One minute, then we vote.“ Klick danach die gewählte Karte an — ab dann steht auf den nächsten Seiten nur noch euer Weg."},
  {t:"sagen", text:[
@@ -536,7 +566,16 @@ const KAPITEL = [
  {t:"weiter", text:"Sobald du eine der drei Karten angeklickt hast."}]},
 
 /* ===== 4 ===== */
-{n:"Aufstieg", chancen:[
+{n:"Aufstieg", verlauf:[
+  {nur:"weg_a", wenn:"Ein Wolf fällt", dann:"der andere läuft", art:"gut"},
+  {nur:"weg_a", wenn:"Sumpf: ein Wurf unter 10", dann:"−1 HP (rechts eintragen)", art:"schlecht"},
+  {nur:"weg_a", wenn:"Wachen: alle würfeln 10 oder mehr", dann:"vorbei — weiter bei „Im Hof“", art:"gut"},
+  {nur:"weg_a", wenn:"Wachen: einer unter 10, oder jemand greift an", dann:"Knopf: Kampf mit zwei Wachen, Gefahr +1", art:"schlecht"},
+  {nur:"weg_b", wenn:"Jeder sagt einen ganzen Satz, niemand droht", dann:"er glaubt euch: „Guests. Of course.“ — hinauf in den Hof", art:"gut"},
+  {nur:"weg_b", wenn:"Stottern, Drohung oder Angriff", dann:"Knopf: Kampf mit der Wache, Gefahr +1", art:"schlecht"},
+  {nur:"weg_c", wenn:"Jemand spricht Corvin an", dann:"er fragt freundlich zurück — die Gefahr +4 ist schon eingetragen"},
+  {nur:"weg_c", wenn:"Jemand merkt: kein Spiegelbild, kalte Hände, nie Mirelas Name", dann:"sag „Yes. You noticed.“ — mehr nicht"}],
+ chancen:[
   {wer:"Lightbearer", talent:"Healing Touch", nur:"weg_a", cue:"an old iron trap still on it", text:"Der kleinere Wolf hat ein Fangeisen am Hinterbein.", folge:"Wer sich ihm langsam nähert und das Eisen löst, hat einen Wolf weniger: Er humpelt in den Nebel. Es dauert — der andere Wolf greift währenddessen einmal an (drück seine Attacke). Dann Kampf gegen einen."},
   {wer:"Blade", talent:"Strength", nur:"weg_a", cue:"takes real strength", text:"Der Sumpf gibt Stiefel nur mit Kraft wieder her.", folge:"Wer feststeckt und den Blade neben sich hat, verliert den Punkt nicht — Blade zieht ihn heraus. Gilt für einen Fehlwurf je Figur, und nur, wenn der Blade-Spieler es sagt."},
   {wer:"Arcanist", talent:"Magic Hand", nur:"weg_a", cue:"Their lamps hang on the wall next to them", text:"Die Lampen der Wachen hängen an der Wand, nicht in ihren Händen.", folge:"Kippt Magic Hand eine der Lampen, sehen beide Wachen zur Lampe statt in den Nebel: Jeder, dem der Schleichwurf misslingt, darf einmal nachwürfeln. Der Spieler drückt Magic Hand auf seinem Blatt; misslingt der Zauber, passiert nichts."},
@@ -585,7 +624,11 @@ const KAPITEL = [
  {t:"weiter", text:"Wenn die Gruppe im Hof steht."}]},
 
 /* ===== 5 ===== */
-{n:"Kapitel II", chancen:[
+{n:"Kapitel II", verlauf:[
+  {wenn:"Jemand nuschelt", dann:"der Rabe nuschelt zurück — noch einmal, langsam", art:"schlecht"},
+  {wenn:"Sie wollen alle drei Türen", dann:"Nein: „One door. Every minute out here, somebody could look out of a window.“"},
+  {wenn:"Alle haben mit dem Raben gesprochen und die Türen angesehen", dann:"weiter zu Entscheidung 2", art:"gut"}],
+ chancen:[
   {wer:"Arcanist", talent:"Magic Hand", cue:"not even when you come close", text:"Der Rabe rührt sich nicht.", folge:"Hebt Magic Hand ihn hoch, sagt er den Namen noch einmal — und dann einen zweiten, den niemand am Tisch gesagt hat: „Vaskir.“ So fällt der Name des Grafen früher als geplant. Das ist in Ordnung; Mirela erklärt ihn oben."}],
  titel:"The Courtyard", art:"szene", braucht:"e1", ort:ORT.hof, nach:ORT.hof, bloecke:[
  {t:"ziel", text:"Die Gruppe sieht drei Türen, redet mit dem Raben und entscheidet sich danach für eine Tür.", zeit:"15 Min."},
@@ -611,7 +654,10 @@ const KAPITEL = [
  {t:"weiter", text:"Wenn jede Figur einmal mit dem Raben gesprochen hat und die Gruppe die drei Türen angesehen hat."}]},
 
 /* ===== 6 ===== */
-{n:"Entscheidung 2", titel:"Three Doors", art:"ent", braucht:"e1", ort:ORT.hof, nach:ORT.hof, bloecke:[
+{n:"Entscheidung 2", verlauf:[
+  {wenn:"Sie streiten", dann:"„One minute, then we vote.“"},
+  {wenn:"Die Karte ist geklickt", dann:"auf den nächsten Seiten steht nur noch diese Tür", art:"gut"}],
+ titel:"Three Doors", art:"ent", braucht:"e1", ort:ORT.hof, nach:ORT.hof, bloecke:[
  {t:"ziel", text:"Eine Tür. Alle drei führen zum selben Ziel — dem Spiegel am Ende des Westgangs, dem einzigen Weg in den Turm. Sie unterscheiden sich darin, wer euch hinbringt und was es kostet.", zeit:"10 Min."},
  {t:"regie", titel:"Hintergrund", text:"Der Turm hat vom Hof aus keine Tür (das hat die Gruppe gerade gehört). Sein Zugang ist ein hoher <b>Spiegel</b> am Ende des Westgangs: Man geht rückwärts hindurch, ohne hinzusehen. Das erfährt die Gruppe erst <em>hinter</em> ihrer Tür — von Bellamy, von der Kreideschrift in der Kapelle oder von Tam. Preis und Gefahr jeder Tür stehen auf den Karten unten. Jede Figur nennt ihre Tür mit Grund, dann wird geklickt."},
  {t:"sagen", text:["Three doors. The chapel, broken open. The library, where somebody is awake. Or the kitchen stair, where somebody is cooking. One of them — not three."]},
@@ -632,7 +678,18 @@ const KAPITEL = [
  {t:"weiter", text:"Sobald du eine der drei Karten angeklickt hast."}]},
 
 /* ===== 7 ===== */
-{n:"Hinter der Tür", chancen:[
+{n:"Hinter der Tür", verlauf:[
+  {nur:"bibliothek", wenn:"Drei wahre Sätze je Figur", dann:"Bellamy führt euch zum Spiegel und gibt euch den Brief", art:"gut"},
+  {nur:"bibliothek", wenn:"Jemand lügt oder beleidigt ihn", dann:"kein Führer, kein Brief — Block „Ohne Führung“", art:"schlecht"},
+  {nur:"kapelle", nicht:"anneke", wenn:"Anneke ist auf 8 HP", dann:"sie hört auf und fragt: „Is Greta still alive?“ — Kampf endet dort", art:"gut"},
+  {nur:"kapelle", alle:["anneke"], wenn:"Jemand ruft „Anneke!“", dann:"kein Kampf — sie zeigt die Treppe hinter dem Altar", art:"gut"},
+  {nur:"kueche", wenn:"Ehrliche Antwort auf Tams Frage — auch ein ehrliches Nein", dann:"Tam führt euch zum Spiegel", art:"gut"},
+  {nur:"kueche", wenn:"Jemand lügt ihn an oder fährt ihn an", dann:"„Find it yourselves.“ — kein Führer, Block „Ohne Führung“", art:"schlecht"},
+  {nur:"kueche", wenn:"Jemand bedroht ihn oder stösst ihn weg", dann:"er schreit: Gefahr +3 (rechts)", art:"schlecht"},
+  {nur:["bibliothek","kueche"], wenn:"Ohne Führung: mindestens eine 10 im Wurf", dann:"sie finden den Westgang leise", art:"gut"},
+  {nur:["bibliothek","kueche"], wenn:"Ohne Führung: keine 10", dann:"sie finden ihn trotzdem — Gefahr +1", art:"schlecht"},
+  {wenn:"Jemand sieht in den Spiegel", dann:"„Nobody who looked has ever told anyone.“ — kein Schaden"}],
+ chancen:[
   {wer:"Arcanist", talent:"Magic Hand", nur:"bibliothek", cue:"not quite reaching it", text:"Bellamy kommt mit dem Buch nicht ans oberste Regal.", folge:"Stellt Magic Hand es für ihn hinauf, nennt er das die erste Höflichkeit seit 1912 — und sagt einen Satz mehr: „His book lies one floor under her room. Everything he is, is written in it.“ Das ist die Vorlage für Karte B der letzten Entscheidung."},
   {wer:"Arcanist", talent:"Magic Hand", nur:"kapelle", nicht:"anneke", cue:"a thread of wick left in every one", text:"In jeder Kerze steckt noch ein Rest Docht.", folge:"Zündet Magic Hand sie alle auf einmal, hält Anneke sich die Augen zu: Ihr erster Angriff im Kampf geht ins Leere (drück ihn nicht). Danach kämpft sie wie sonst."},
   {wer:"Lightbearer", talent:"Healing Touch", nur:"kapelle", cue:"are torn open", text:"Annekes Hände sind am Steinbecken aufgerissen.", folge:"Wer sich ihr langsam nähert und sie schliesst — nach dem Kampf, oder statt der letzten Schläge —, hört den Satz, den sie für Greta hat: „Tell her I am not angry.“ Merk ihn dir für den Epilog."},
@@ -675,7 +732,11 @@ const KAPITEL = [
  {t:"weiter", text:"Wenn die Gruppe rückwärts durch den Spiegel gegangen ist."}]},
 
 /* ===== 8 ===== */
-{n:"Kapitel III", chancen:[
+{n:"Kapitel III", verlauf:[
+  {wenn:"Nur „wir retten dich“", dann:"Mirela bleibt sitzen und widerspricht", art:"schlecht"},
+  {wenn:"Ein echter Grund je Figur", dann:"sie hört zu — weiter zur letzten Entscheidung", art:"gut"},
+  {nur:"weg_c", wenn:"Sie sagen ihr, dass sie die Kutsche genommen haben", dann:"„Then Corvin has become slow.“"}],
+ chancen:[
   {wer:"Arcanist", talent:"Magic Hand", cue:"the other on the far side of the table", text:"Die zweite Tasse steht ausser Reichweite.", folge:"Hebt Magic Hand sie, ist sie warm. Jemand hat vor Minuten daraus getrunken. Mirela sieht zu und sagt nichts."},
   {wer:"Lightbearer", talent:"Healing Touch", cue:"with green stems sticking out of the top", text:"In Mirelas Tasche stecken Kräuter — ihre Medizin.", folge:"Wer als Heilerin danach fragt, bekommt eine Flasche: „Take it. I won’t need it after sunrise.“ Ein zweiter Heiltrank für die Gruppe — einer. Wer ihn trinkt, sagt es; du gibst rechts +10."}],
  titel:"The Tower Room", art:"szene", braucht:"e2", ort:ORT.spiegel, nach:ORT.turm, bloecke:[
@@ -704,7 +765,10 @@ const KAPITEL = [
  {t:"weiter", text:"Wenn jede Figur einmal mit Mirela gestritten hat."}]},
 
 /* ===== 9 ===== */
-{n:"Entscheidung 3", titel:"The Blood Ledger", art:"ent", braucht:"e2", ort:ORT.turm, nach:{e3_raus:ORT.treppe, e3_buch:ORT.studie, e3_pakt:ORT.turm}, bloecke:[
+{n:"Entscheidung 3", verlauf:[
+  {wenn:"Sie entscheiden vor Mirela", dann:"sie widerspricht — der beste Dialog des Abends", art:"gut"},
+  {wenn:"Die Karte ist geklickt", dann:"im Finale steht nur noch dieser Fall", art:"gut"}],
+ titel:"The Blood Ledger", art:"ent", braucht:"e2", ort:ORT.turm, nach:{e3_raus:ORT.treppe, e3_buch:ORT.studie, e3_pakt:ORT.turm}, bloecke:[
  {t:"ziel", text:"Die letzte Entscheidung. Keine ist sauber, und Mirela hört zu, während sie getroffen wird.", zeit:"10 Min."},
  {t:"regie", titel:"Hintergrund", text:"Eine Stunde bis Sonnenaufgang, Mirela im Sessel, das Blutbuch eine Etage tiefer. Preis und Gefahr stehen auf den Karten unten. Lass sie <b>vor Mirela</b> entscheiden, nicht im Nebenzimmer: Sie widerspricht, und das ist der beste Dialog des Abends."},
  {t:"sagen", text:[
@@ -726,7 +790,13 @@ const KAPITEL = [
  {t:"weiter", text:"Sobald du eine der drei Karten angeklickt hast."}]},
 
 /* ===== 10 ===== */
-{n:"Finale", chancen:[
+{n:"Finale", verlauf:[
+  {nur:"e3_pakt", wenn:"Das Angebot kostet die Gruppe etwas Echtes", dann:"er nimmt an — unten „Ein neuer Vertrag“, kein Kampf", art:"gut"},
+  {nur:"e3_pakt", wenn:"Drohung, Beleidigung, „we’ll kill you anyway“", dann:"Knopf: Gefahr +4, Kampf", art:"schlecht"},
+  {wenn:"Vaskir unter 15 HP", dann:"er hört auf und redet: töten, Vertrag oder gehen lassen", art:"gut"},
+  {wenn:"Eine Figur fällt auf 0", dann:"Trank — oder liegen bis nach dem Kampf"},
+  {wenn:"Der Kampf ist entschieden", dann:"unten eintragen, wie es ausging"}],
+ chancen:[
   {wer:"Blade", talent:"Strength", cue:"standing furthest back", text:"Der Graf sucht sich den aus, der hinten steht.", folge:"Stellt der Blade sich dazwischen und sagt es laut, gehen die Klauen auf ihn — du wählst Blade als Ziel, statt frei zu entscheiden, wen es trifft. Bis Blade zurücktritt oder fällt."},
   {wer:"Arcanist", talent:"Magic Hand", nur:"e3_pakt", cue:"still steaming", text:"Die Teekanne dampft noch.", folge:"Kippt Magic Hand ihm den Tee ins Gesicht: kein Schaden, aber sein nächster Angriff ist vertan — er wischt sich das Gesicht und lacht: „Manners.“"},
   {wer:"Arcanist", talent:"Magic Hand", nur:"e3_buch", cue:"hangs in the air", text:"Die Asche des Buches schwebt noch.", folge:"Wirft Magic Hand sie ihm in die Augen: kein Schaden, aber sein nächster Angriff ist vertan."},
@@ -768,7 +838,12 @@ const KAPITEL = [
  {t:"weiter", text:"Sobald du unten eingetragen hast, wie es ausging."}]},
 
 /* ===== 11 ===== */
-{n:"Epilog", titel:"Six O’Clock", art:"szene", braucht:"e4", ort:ORT.graf, nach:ORT.tor, bloecke:[
+{n:"Epilog", verlauf:[
+  {nur:"kueche", wenn:"Versprechen gehalten", dann:"Tam kocht ab heute im Wirtshaus", art:"gut"},
+  {nur:"kueche", wenn:"Versprechen gebrochen", dann:"beiläufig sagen, ohne Vorwurf", art:"schlecht"},
+  {nur:"bibliothek", wenn:"Brief eingeworfen", dann:"nach zwei Wochen eine Antwort im Gepäck", art:"gut"},
+  {wenn:"Die drei Fragen sind beantwortet", dann:"Fertig. Gut gemacht."}],
+ titel:"Six O’Clock", art:"szene", braucht:"e4", ort:ORT.graf, nach:ORT.tor, bloecke:[
  {t:"ziel", text:"Der Morgen danach: die Folgen eurer Entscheidungen, dann drei Fragen an die Gruppe. Das letzte Wort haben die Schüler.", zeit:"10 Min."},
  {t:"vorlesen", titel:"Der Weg hinaus", text:[
   `Six o’clock. The sun comes up over the pass, and the castle looks smaller in daylight — a tired old house on a rock. You walk down through the courtyard and out through the gate that nobody ever closed.`]},
@@ -887,7 +962,11 @@ function ladeKampf(gegner, extra){
 }
 
 /* ---- Zwischenakt: die Patrouille ---- */
-const PATROUILLE = {n:"Zwischenakt", titel:"The Patrol", art:"kampf", chancen:[
+const PATROUILLE = {n:"Zwischenakt", titel:"The Patrol", art:"kampf", verlauf:[
+  {wenn:"Der Hund ist gefallen und die Wachen stehen bei der Hälfte", dann:"sie ziehen sich zurück: „They don’t want to die for him.“", art:"gut"},
+  {wenn:"Jemand redet mit den Wachen", dann:"keine Antwort — sie haben Befehle", art:"schlecht"},
+  {wenn:"Die Patrouille ist vorbei", dann:"„Zurück zur Geschichte“ — die Lightbearer heilt alle"}],
+ chancen:[
   {wer:"Blade", talent:"Strength", cue:"on a long chain", text:"Der Hund hängt an einer langen Kette.", folge:"Fängt Blade die Kette, hängt der Hund eine Runde fest: kein Biss. Die Wachen müssen zu euch kommen."},
   {wer:"Arcanist", talent:"Magic Hand", cue:"One lamp — only one —", text:"Die Patrouille hat eine einzige Lampe.", folge:"Löscht Magic Hand sie, stehen drei Wachen im Dunkeln — eine davon läuft davon. Zwei bleiben (rechts eine ×)."}],
  bloecke:[
@@ -1116,7 +1195,18 @@ function sichtbareChancen(k){
 }
 /* Sie stehen rechts im Abschnitt „Stärken der Figuren“ — auf jeder Seite, je Figur eine Zeile */
 function aktuelleSzene(){ return Z.imZwischenakt ? PATROUILLE : KAPITEL[Z.schritt]; }
+function sichtbarerVerlauf(k){
+  if(k.braucht && entscheidungOffen(k.braucht)) return [];
+  return (k.verlauf||[]).filter(gilt);
+}
+function zeichneVerlauf(){
+  const v=sichtbarerVerlauf(aktuelleSzene());
+  $("verlauf").innerHTML = v.length
+    ? v.map(r=>'<div class="regel '+(r.art||"")+'"><b>'+r.wenn+'</b><span class="dann">→</span>'+r.dann+'</div>').join("")
+    : '<div class="regel leer">Hier zweigt nichts ab.</div>';
+}
 function zeichneStaerken(){
+  zeichneVerlauf();
   const cs=sichtbareChancen(aktuelleSzene());
   $("staerken").innerHTML=Z.gruppe.map(h=>{
     const name=(h.name||h.rolle), meine=cs.filter(c=>c.wer===h.rolle);
@@ -1225,6 +1315,10 @@ function pruefeStory(){
       if(c.gefahrVon!==undefined && !(c.gefahrVon>=0&&c.gefahrBis<=10&&c.gefahrVon<=c.gefahrBis)) p.push(`Schritt ${i} Gelegenheit ${j}: Gefahrenbereich ungültig`);
     });
     if(k.art==="ent" && (k.chancen||[]).length) p.push(`Schritt ${i}: Entscheidungsseite trägt Gelegenheiten — die gehören in Szenen`);
+    (k.verlauf||[]).forEach((r,j)=>{
+      if(!r.wenn||!r.dann) p.push(`Schritt ${i} Regel ${j}: wenn/dann fehlt`);
+      liste(r.nur).concat(liste(r.alle),liste(r.nicht)).forEach(f=>{ gelesen.add(f); if(!bekannt(f)) p.push(`Schritt ${i} Regel ${j}: unbekannte Flagge ${f}`); });
+    });
   });
   (PATROUILLE.chancen||[]).forEach((c,j)=>{ if(!c.wer||!c.talent||!c.text||!c.folge||!c.cue) p.push(`Patrouille Gelegenheit ${j}: Feld fehlt`);
     else if(!PATROUILLE.bloecke.some(b=>b.t==="vorlesen" && b.text.some(t=>t.includes(c.cue)))) p.push(`Patrouille Gelegenheit ${j}: Ankündigung fehlt im Text`); });
