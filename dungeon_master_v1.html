@@ -412,6 +412,7 @@ const ENTSCHEIDUNGEN = {
   e4:{name:"Ausgang", flaggen:["ausgang_tot","ausgang_vertrag","ausgang_flucht"], braucht:"e3"}
 };
 ENTSCHEIDUNGEN.e2.braucht="e1";
+ENTSCHEIDUNGEN.e5={name:"Danach", flaggen:["weiter_jagd","weiter_dorf","weiter_schloss"], braucht:"e4"};
 
 /* Orte — kurze, feste Namen. Ein Schritt hat ort (Eintritt) und nach (Austritt).
    Beides darf von Flaggen abhängen: {flagge: "Ort", …}                                  */
@@ -419,7 +420,7 @@ const ORT = {
   strasse:"Kutsche auf der Bergstrasse", vorWirtshaus:"Vor dem Wirtshaus", wirtshaus:"Im Wirtshaus",
   hof:"Im Hof von Nachtfels", keller:"Im Keller des Schlosses", spiegel:"Hinter der Spiegeltür", turm:"Im Turmzimmer",
   treppe:"Auf der Turmtreppe, mit Mirela", studie:"Im Arbeitszimmer, eine Etage tiefer",
-  graf:"Beim Grafen", tor:"Vor dem Tor, bei Sonnenaufgang"
+  graf:"Beim Grafen", tor:"Vor dem Tor, bei Sonnenaufgang", dornwald:"Unten in Dornwald"
 };
 
 const KAPITEL = [
@@ -860,7 +861,58 @@ const KAPITEL = [
  {t:"wenn", gefahrVon:0, gefahrBis:3, titel:"Barometer 0–3", text:`Niemand im Schloss hat euch kommen hören. Das ist die seltenste Art, diesen Abend zu gewinnen — sag der Gruppe ausdrücklich, dass sie das geschafft hat.`},
  {t:"wenn", gefahrVon:8, gefahrBis:10, titel:"Barometer 8–10", text:`Was auch immer sie erreicht haben, sie haben es unter Lärm erreicht. Eine Figur ihrer Wahl trägt etwas mit hinunter, das nicht mehr weggeht: einen weissen Streifen im Haar, eine Hand, die nicht mehr warm wird, oder einen Namen, den sie im Schlaf sagt.`},
  {t:"aufgabe", sag:"It’s morning. Three questions before you go: What would you do differently? Was the village wrong? What do you tell Tobias?", blatt:"Helfer-Blatt · Teil 9"},
- {t:"weiter", text:"Fertig. Gut gemacht."}]}
+ {t:"weiter", text:"Wenn jede Figur eine der drei Fragen beantwortet hat."}]},
+
+/* ===== 12 ===== */
+{n:"Danach", verlauf:[
+  {wenn:"Alle wollen dasselbe", dann:"Karte klicken, Schlusstext vorlesen, fertig", art:"gut"},
+  {wenn:"Sie sind sich nicht einig", dann:"auch gut — klick, was die Mehrheit will, und lass die anderen ihren Satz trotzdem sagen"},
+  {wenn:"Jemand will etwas, das nicht auf den Karten steht", dann:"sag Ja und lass ihn es ausmalen — es gibt nichts mehr zu verlieren", art:"gut"},
+  {wenn:"Jemand sagt nur ein Wort", dann:"„That’s not an answer. Why?“ — die letzte Sprechübung des Abends"}],
+ titel:"What Happens Now", art:"ent", braucht:"e4", ort:ORT.tor, nach:ORT.dornwald, bloecke:[
+ {t:"ziel", text:"Die letzte Entscheidung — und die einzige ohne Werte. Wie geht es weiter? Hier zählt nur, was die Schüler sagen.", zeit:"10 Min."},
+ {t:"regie", titel:"Hintergrund", text:`Der Abend ist gespielt. Das Barometer zählt nicht mehr, kein Wurf, kein Schaden. Das hier ist die freieste Sprechübung des Abends: Jede Figur sagt, was sie jetzt tun will — und <b>sie müssen sich nicht einigen</b>. Drei verschiedene Antworten sind ein gutes Ende, keine gescheiterte Runde.
+ <p>Die drei Karten sind Vorschläge, kein Katalog. Will jemand etwas anderes — heimfahren, Lene mitnehmen, Anneke suchen, Mirela fragen, ob sie mitkommt —, sag Ja und lass ihn zwei Sätze dazu sagen. Klick danach die Karte, die am nächsten liegt; unten steht dann der passende Schlusstext.</p>
+ <p><b>Marek ist da</b>, obwohl er im Prolog gesagt hat, er fährt noch in derselben Nacht heim. Das ist der Witz der Szene: Er hat die ganze Nacht unten am Hügel gewartet. Er erklärt es nicht.</p>`},
+ {t:"vorlesen", titel:"Der Weg hinunter", text:[
+  `The road down takes an hour, and for the first time since you got here you can see where you are going. Below you the valley is white with frost, and there is smoke coming out of every chimney in Dornwald.`,
+  `The village is awake. The door of the tavern stands open, and Greta is standing in it with her three fingers wrapped around a cup she is not drinking from. She does not go back inside when she sees you.`,
+  `Tobias gets to you first. He runs the last thirty metres and then stops, because he has not decided yet whether he is allowed to be happy.`,
+  `And at the bottom of the hill, where the road turns south, a coach is waiting with its lamp still burning. It has been there all night.`]},
+ {t:"sagen", text:[
+  "I said I'd be at the bottom of that hill and driving home. Well. I got as far as the bottom of the hill.",
+  "So. Where to?"]},
+ {t:"aufgabe", sag:"Marek is waiting, and so is half the village. Every one of you: what do you want to do now — and why? You don’t all have to want the same thing.", hinweis:"Wer nur „I want to go home“ sagt: „Where is home? And what do you do when you get there?“ Bei „I don’t know“: „Then guess. What would your character say?“", blatt:"Helfer-Blatt · Teil 10"},
+ {t:"optionen", id:"e5", titel:"Wie geht es weiter?", optionen:[
+  {b:"A", name:"The next name", flagge:"weiter_jagd", was:"Weiterziehen. In Bellamys Regalen stehen vierhundert Jahre Akten, und darin steht mehr als ein Tal. Eines heisst <b>Eisenbach</b>, zwei Täler östlich.",
+   pro:["Sie sind jetzt Jäger, die etwas vorweisen können — und Marek fährt, wenn man ihn bezahlt.","In Eisenbach ist seit neunzehn Jahren niemand verschwunden. Sie haben elf Monate."],
+   con:["Dornwald steht den Winter allein durch. Im Februar kommen die Wölfe, und die Gruppe ist zwei Täler weit weg."],
+   wirkung:{gefahr:0}},
+  {b:"B", name:"The winter", flagge:"weiter_dorf", was:"Bleiben, bis der Schnee weg ist. Wache halten, Holz schlagen — und Tobias und Lene beibringen, was drei Leute können, die einen Vertrag von 1604 gelesen haben.",
+   pro:["Die Einzigen, die wissen, was oben steht, sind dann unten. Und Tobias hat drei Nächte auf jemanden wie sie gewartet."],
+   con:["Fünf Monate in einem Dorf mit zwanzig Häusern. Und was sie in dieser Zeit draussen nicht tun, tut niemand."],
+   wirkung:{gefahr:0}},
+  {b:"C", name:"The house on the rock", flagge:"weiter_schloss", was:"Hinaufziehen. Oben steht ein Haus mit einer Bibliothek, einem Archivar, der nicht fort darf, einer Küche für zwanzig Leute und einem Raben, der Namen lernt. Wer dort einzieht, jagt nicht — er antwortet, wenn ein Dorf schreibt.",
+   pro:["Bellamys Regale sagen, wo die anderen Täler liegen. Und es ist warm, was in diesem Tal etwas heisst."],
+   con:["Vierhundert Jahre lang hat Dornwald zu diesem Fenster hinaufgesehen und die Läden geschlossen. Jetzt brennt dort euer Licht."],
+   wirkung:{gefahr:0}}]},
+ {t:"vorlesen", nur:"weiter_jagd", titel:"Schluss · Die nächste Jagd", text:[
+  `You take the coach. Nobody in Dornwald waves, because that is not what they do here — but Greta puts three loaves of bread on the seat and says nothing at all, and Tobias runs beside the wheels until the road turns.`,
+  `Two valleys east there is a place called Eisenbach. Nobody has gone missing there this year. Nobody has gone missing there for nineteen years.`,
+  `You have eleven months.`]},
+ {t:"vorlesen", nur:"weiter_dorf", titel:"Schluss · Der Winter", text:[
+  `You stay. You sleep through most of the first week, in the room above the tavern that has been empty since before Tobias was born.`,
+  `Then the snow comes and the valley closes, and for five months you are the only thing between twenty houses and whatever the winter brings. Lene learns to hold a knife properly. Tobias learns that most of this job is being awake at four in the morning.`,
+  `In April the road opens again. By then you know every name in this village — and the village knows yours.`]},
+ {t:"vorlesen", nur:"weiter_schloss", titel:"Schluss · Nachtfels", text:[
+  `You move in on the second day, because the second day is when the fire goes out and somebody has to light it again.`,
+  `Bellamy shows you the room where the letters arrive: a stone slot in the west wall, and behind it four hundred years of letters that nobody ever answered. The first one you open is dated 1809 and asks for help.`,
+  `In the spring a boy from the village walks all the way up the road with a basket, and he does not knock — because Tam has left the kitchen door open. That is how it starts.`]},
+ {t:"wenn", alle:["weiter_dorf","ausgang_tot"], titel:"Sie bleiben, und der Vertrag ist tot", text:`Darauf zeigt der ganze Abend: Sie haben dem Tal seinen Schutz genommen und stellen sich jetzt selbst an die Stelle. Sag es laut — sie haben es verdient, dass jemand ausspricht, was sie da gerade tun.`},
+ {t:"wenn", alle:["weiter_jagd","ausgang_vertrag"], titel:"Sie ziehen weiter, und der Vertrag steht", text:`Vaskir hält sein Wort, solange jemand kommt und ihn daran erinnert. Frag sie, wer das tut, wenn sie in Eisenbach sind. Eine Antwort genügt — und meistens fällt dabei Tobias’ Name.`},
+ {t:"wenn", alle:["weiter_schloss","e3_buch"], titel:"Sie ziehen ein, und das Buch ist verbrannt", text:`Im Haus wachen Menschen auf, die vierhundert Jahre gedient haben und jetzt frei sind — und nirgendwohin können. Die Gruppe erbt kein leeres Schloss, sondern ein volles. Das ist kein Happy End, das ist eine Aufgabe, und ein guter letzter Satz.`},
+ {t:"wenn", alle:["weiter_schloss","ausgang_flucht"], titel:"Sie ziehen ein, und er lebt noch", text:`Sie schlafen in seinem Haus, und er ist irgendwo da draussen. Kommentiere das nicht — leg nur, ganz am Ende, den Satz hin: <em>„And somewhere out there, he is still awake.“</em> Dann Licht an.`},
+ {t:"weiter", text:"Fertig. Sag ihnen, dass sie drei Stunden lang Englisch gesprochen haben, ohne es zu merken. Gut gemacht."}]}
 ];
 
 /* ====================== ZUSTAND ====================== */
@@ -1159,7 +1211,7 @@ function blockHTML(b, idx){
       if(fehlt){ innen='<div class="hinweisfehlt">Erst muss <b>'+ENTSCHEIDUNGEN[fehlt].name+'</b> gewählt sein — die Karten hier hängen daran.</div>'; break; }
       innen=(b.titel?'<h3 style="font-size:22px;margin-bottom:10px">'+b.titel+'</h3>':'')+'<div class="optionen">'+b.optionen.map((o,i)=>{
         const g=Z.gewaehlt[b.id], gew=g&&g.opt===i, wk=o.wirkung, chips=[];
-        if(b.id!=="e4") chips.push('<span class="chip '+(wk.gefahr>0?"gefahr":"ruhe")+'">Gefahr '+(wk.gefahr>0?"+"+wk.gefahr:"±0")+
+        if(b.id!=="e4" && b.id!=="e5") chips.push('<span class="chip '+(wk.gefahr>0?"gefahr":"ruhe")+'">Gefahr '+(wk.gefahr>0?"+"+wk.gefahr:"±0")+
           (wk.gefahrWenn?' · +'+wk.gefahrWenn.gefahr+' mit '+WISSEN.find(x=>x.k===wk.gefahrWenn.wissen).txt:'')+'</span>');
         if(o.preis) chips.push('<span class="chip gefahr">'+o.preis+'</span>');
         return '<article class="option'+(gew?" gewaehlt":"")+'"><div class="buchstabe">'+o.b+'</div><div class="kern">'+

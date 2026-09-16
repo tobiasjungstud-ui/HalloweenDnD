@@ -38,7 +38,9 @@ const GLOSSAR={
  "brought":"gebracht","bag packed":"gepackte Tasche","pass":"Pass (Bergübergang)","daylight":"Tageslicht","expecting":"erwarten","sunrise":"Sonnenaufgang",
  "offer":"Angebot","contract":"Vertrag","promise":"versprechen","scar":"Narbe","ice cellar":"Eiskeller","liar":"Lügner","taught":"beigebracht",
  "deal":"Abmachung","plague":"Pest","starves":"verhungert","cold rooms":"Kühlräume","letter":"Brief","carry":"tragen","welcome":"willkommen heissen",
- "outwards":"nach aussen","broken outwards":"nach aussen aufgebrochen","properly":"richtig, ordentlich","belongs to":"gehört zu","comfortable":"bequem"
+ "outwards":"nach aussen","broken outwards":"nach aussen aufgebrochen","properly":"richtig, ordentlich","belongs to":"gehört zu","comfortable":"bequem",
+ "frost":"Frost","chimney":"Schornstein","loaves":"Brotlaibe","valley closes":"das Tal ist abgeschnitten","slot":"Schlitz","basket":"Korb","to knock":"anklopfen",
+ "goes out":"erlischt","turns south":"biegt nach Süden","allowed":"erlaubt","awake":"wach"
 };
 const glossarSchluessel=Object.keys(GLOSSAR).sort((a,b)=>b.length-a.length);
 

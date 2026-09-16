@@ -22,7 +22,7 @@ Spielen, kein Konto, keine Daten verlassen das Gerät.
 
 | Datei | Für wen | Was darauf steht |
 |---|---|---|
-| `dungeon_master.html` | Spielleitung | **V2, Regiebuch:** zwölf Seiten Ablauf mit Randnotizen, rechts Wenn-dann, Stärken, Gruppe, Barometer; der Kampf als eigener Vollbildschirm |
+| `dungeon_master.html` | Spielleitung | **V2, Regiebuch:** dreizehn Seiten Ablauf mit Randnotizen, rechts Wenn-dann, Stärken, Gruppe, Barometer; der Kampf als eigener Vollbildschirm |
 | `dungeon_master_v1.html` | Spielleitung | **V1**, die frühere Darstellung (vier Farbbalken, drei Spalten, Kampf in der Seitenleiste) — gleiche Daten, gleiche Logik, weiterhin lauffähig |
 | `spickzettel.html` | Spielleitung | Eine Seite: der DM-Bildschirm auf einen Blick — sieben Bereiche, vier Farben, vier Handgriffe |
 | `spieler_magier.html` | The Arcanist, 18 HP | Fireball · Magic Hand · Arcane Darts — Talent ausserhalb des Kampfs: *Magic Hand* |
@@ -33,7 +33,7 @@ Dazu drei Word-Dateien in `helferblatt/`, alle zum Ausdrucken:
 
 | Datei | Für wen | Was drin ist |
 |---|---|---|
-| `Nachtfels_Helfer-Blatt.docx` | jeder Schüler | Satzanfänge und Vokabeln, neun Szenen einzeln zugeordnet |
+| `Nachtfels_Helfer-Blatt.docx` | jeder Schüler | Satzanfänge und Vokabeln, zehn Szenen einzeln zugeordnet |
 | `Nachtfels_Lesetext_Schueler.docx` | schwächere Schüler | der ganze Vorlesetext zum Mitlesen, schwierige Wörter direkt im Text übersetzt — `fog [Nebel]`; gelb, was der DM fragt; grün, was zu tun ist |
 | `Nachtfels_Lesetext_DM.docx` | Spielleitung | dasselbe plus alle grauen Kästen: Tipps, Antworten, Regie, Knöpfe, Kampfwerte — als Papier-Rückhalt neben dem Bildschirm |
 
@@ -60,7 +60,7 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
 
 1. Helfer-Blatt ausdrucken, drei Geräte bereitlegen, jedem seinen Link geben.
 2. Die Spielleitung liest Seite 1 der Konsole. Fünf Minuten, mehr braucht es nicht.
-3. Die Konsole führt durch zwölf Seiten. Am linken Rand steht bei jedem Absatz, was er
+3. Die Konsole führt durch dreizehn Seiten. Am linken Rand steht bei jedem Absatz, was er
    ist: **Vorlesen** (wörtlich), **An die Schüler** (wörtlich, ihre Aufgabe), **Für dich**
    (nur die Spielleitung), **Kampf**. Unten steht immer, wann es weitergeht. Rechts, beim
    Scrollen stehend: **Wenn … dann** — was in dieser Szene von der Antwort der Gruppe abhängt
@@ -80,7 +80,8 @@ das die Gruppe im Wirtshaus aufschnappen kann — den Namen *Anneke*. Die Schül
 notieren.
 
 Intern ist die Konsole eine kleine Zustandsmaschine mit einer einzigen Quelle der Wahrheit
-(`Z`): Gefahr, vier Entscheidungen (Weg, Tür, Wahl im Turm, Ausgang des Finales), ein Wissen,
+(`Z`): Gefahr, fünf Entscheidungen (Weg, Tür, Wahl im Turm, Ausgang des Finales und zuletzt,
+wie es weitergeht), ein Wissen,
 zwei einmalige Knöpfe. Jeder Schritt trägt seinen **Eintritts- und Austrittsort**; wo der Ort
 von einer Entscheidung abhängt, gibt es je einen Übergangstext, und der Prüfstand kontrolliert,
 dass Austritt und nächster Eintritt auf jedem Pfad zusammenpassen. Eine Entscheidung lässt sich
@@ -172,7 +173,7 @@ node helferblatt/helferblatt.js
 ```
 
 Die Geschichte selbst steht als Datenstruktur `KAPITEL` im `<script>` von
-`dungeon_master.html` — zwölf Objekte mit Blöcken vom Typ `vorlesen`, `sagen`, `aufgabe`,
+`dungeon_master.html` — dreizehn Objekte mit Blöcken vom Typ `vorlesen`, `sagen`, `aufgabe`,
 `personen`, `fa` (Frage/Antwort), `tun`, `optionen`, `kampf`, `wenn`. Wer eine Szene ändern
 oder eine eigene schreiben will, arbeitet dort und braucht kein Werkzeug.
 

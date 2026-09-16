@@ -150,7 +150,20 @@ const TEILE = [
      "What do you tell Tobias?",
      "The best moment for me was …"],
    vok:[["differently","anders"],["wrong — right","falsch — richtig"],["safety","Sicherheit"],
-        ["a life, lives","ein Leben, Leben"],["to be worth it","es wert sein"]] }
+        ["a life, lives","ein Leben, Leben"],["to be worth it","es wert sein"]] },
+
+ { nr:"Teil 10", ort:"What happens now", was:"The evening is over, and the coach is waiting. Say what you want to do next — and why. You don't all have to agree.",
+   saetze:[
+     "I want to … because …",
+     "I think we should stay here until the winter is over.",
+     "There is another valley. We're not finished.",
+     "I'd rather live up there, in the castle.",
+     "I'm not going with you. I'm staying — and here's why.",
+     "What about Lene? What about Tobias?",
+     "Ask me again in the spring."],
+   vok:[["to stay behind","zurückbleiben"],["to move in","einziehen"],["to protect somebody","jemanden beschützen"],
+        ["on the road","unterwegs"],["to make up your mind","sich entscheiden"],["to owe somebody something","jemandem etwas schulden"],
+        ["for good","für immer"],["It's up to you.","Das liegt bei dir."]] }
 ];
 
 const kinder = [
@@ -192,7 +205,7 @@ TEILE.forEach((t, i) => {
   t.saetze.forEach(s => kinder.push(satz(s)));
   kinder.push(zwischen("Words you might need"));
   kinder.push(vokabeln(t.vok));
-  if (i === 4) kinder.push(new Paragraph({ children:[ new PageBreak() ] }));
+  if (i === 4 || i === 7) kinder.push(new Paragraph({ children:[ new PageBreak() ] }));
 });
 
 const doc = new Document({
