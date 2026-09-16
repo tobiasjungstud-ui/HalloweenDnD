@@ -3,126 +3,155 @@
 <meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=JetBrains+Mono:wght@400;700&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
-:root{color-scheme:dark;--ink:#08080c;--crypt:#0e0e15;--stone:#14141e;--line:#262633;--line-hi:#3a3a4c;
-  --bone:#eae4d7;--ash:#948fa2;--dim:#5d5a6b;--gold:#d9a441;--blood:#b23a2c;--moss:#74b094;--moon:#7d9bc4;
-  --display:'IM Fell English SC',Georgia,serif;--body:'Spectral',Georgia,serif;--mono:'JetBrains Mono',ui-monospace,Menlo,monospace}
+:root{color-scheme:dark;--bg:#1c1d21;--panel:#232429;--line:#2b2c31;--line-hi:#3a3b41;--text:#d8d5cd;--muted:#9c9a93;--dim:#6f6d67;
+  --gold:#c9a457;--gold-soft:#e6d3a6;--green:#7fb694;--green-soft:#a9d6b8;--red:#d99a8f;--red-line:#5a2a24;
+  --serif:'Literata',Georgia,serif;--sans:'IBM Plex Sans',system-ui,sans-serif}
 *{box-sizing:border-box}[hidden]{display:none!important}
-body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--body);font-size:16px;line-height:1.55;padding-block:32px 64px;padding-inline:clamp(16px,4vw,48px)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--serif);font-size:17px;line-height:1.55;padding-block:36px 64px;padding-inline:clamp(16px,4vw,48px)}
 .wrap{max-width:1040px;margin:0 auto}
-h1{font-family:var(--display);font-weight:400;font-size:clamp(30px,5vw,44px);line-height:1.05;margin:0 0 6px;text-wrap:balance}
-.sub{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin:0 0 28px}
-.satz{font-size:18px;max-width:60ch;margin:0 0 30px;color:var(--ash)}
-.satz b{color:var(--bone);font-weight:400}
+h1{font-weight:400;font-size:clamp(30px,5vw,40px);line-height:1.1;margin:0 0 8px;text-wrap:balance}
+.sub{font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:0 0 24px}
+.satz{font-size:19px;max-width:60ch;margin:0 0 30px;color:var(--muted)}
+.satz b{color:var(--text);font-weight:400}
+h2{font-weight:400;font-size:24px;margin:44px 0 14px}
 
-/* ---- der Bildschirm, stark reduziert ---- */
-.schirm{border:1px solid var(--line-hi);background:var(--crypt);font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:.06em}
-.kopf{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
-.kopf .t{font-family:var(--display);font-size:16px;color:var(--bone);letter-spacing:0}
-.kopf .b{display:flex;gap:6px}.kopf .b i{border:1px solid var(--line-hi);padding:3px 8px;font-style:normal}
-.pfad{display:flex;border-bottom:1px solid var(--line)}
-.pfad i{flex:1;padding:8px 10px;border-right:1px solid var(--line);font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pfad i.jetzt{color:var(--bone);border-bottom:2px solid var(--gold)}
-.pfad i.ent{color:var(--gold)}.pfad i.fin{color:#e0645a}
-.spalten{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,.9fr) minmax(0,.9fr)}
-.spalten>div{padding:14px;min-width:0}
+/* ---- Schema ---- */
+.schirm{border:1px solid var(--line-hi);border-radius:6px;background:var(--bg);font-family:var(--sans);font-size:11.5px;color:var(--dim);overflow:hidden}
+.kopf{display:flex;justify-content:space-between;align-items:flex-end;padding:14px 18px;border-bottom:1px solid var(--line);gap:16px;flex-wrap:wrap}
+.kopf .t{font-family:var(--serif);font-size:18px;color:var(--text)}
+.kopf .t small{display:block;font-family:var(--sans);font-size:10.5px;color:var(--dim)}
+.kopf .st{display:flex;gap:16px;align-items:flex-end}
+.kopf .st span{display:flex;flex-direction:column;align-items:flex-end}
+.kopf .st span i{font-style:normal;font-family:var(--serif);font-size:15px;color:var(--text)}
+.kopf .kb{border:1px solid var(--red-line);color:var(--red);padding:4px 9px;border-radius:3px}
+.pfad{display:flex;border-bottom:1px solid var(--line);padding:0 10px}
+.pfad i{padding:8px 9px;font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.pfad i.jetzt{color:var(--text);border-bottom:2px solid var(--gold)}
+.pfad i.ent{color:var(--gold)}.pfad i.fin{color:var(--red)}
+.spalten{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+.spalten>div{padding:16px 18px;min-width:0}
 .spalten>div+div{border-left:1px solid var(--line)}
-.block{border-left:4px solid var(--line-hi);background:rgba(255,255,255,.03);padding:9px 11px;margin-bottom:8px;font-style:normal;color:var(--ash)}
-.block.gelb{border-color:var(--gold);background:rgba(217,164,65,.08);color:var(--bone)}
-.block.gruen{border-color:var(--moss);background:rgba(116,176,148,.1);margin:8px 0 0;color:var(--bone)}
-.block.rot{border-color:var(--blood);background:rgba(178,58,44,.08)}
-.block.weiss{border-color:var(--bone)}
-.block.regel{border-left:2px solid var(--moss);padding:6px 9px}
-.block.regel.s{border-color:var(--blood)}
-.block.dash{border:1px dashed var(--line-hi);border-left-width:1px;background:none}
-.fach{margin-bottom:12px}.fach .l{display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.16em;font-size:9.5px}
-.baro{display:flex;gap:2px;margin-bottom:6px}.baro i{flex:1;height:8px;border:1px solid var(--line)}.baro i.an{background:#2c4d6b}
-.hp{border:1px solid var(--line);padding:6px 8px;margin-bottom:5px;display:flex;justify-content:space-between;color:var(--ash)}
-.weiter{border-top:1px solid var(--line);padding-top:8px;color:var(--moss)}
-.num{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--gold);color:#07070b;font-family:var(--mono);font-size:11px;font-weight:700;margin-right:6px;vertical-align:1px;flex:none}
-.schirm .num{margin-right:7px}
-@media (max-width:760px){.spalten{grid-template-columns:1fr}.spalten>div+div{border-left:none;border-top:1px solid var(--line)}.pfad i:nth-child(n+5){display:none}}
+.zeilen{display:grid;grid-template-columns:78px 1fr;column-gap:12px;row-gap:12px}
+.zeilen .m{text-align:right;letter-spacing:.1em;text-transform:uppercase;font-size:9.5px;padding-top:2px}
+.zeilen .m.v{color:var(--gold)}.zeilen .m.s{color:var(--green)}.zeilen .m.k{color:var(--red)}
+.zeilen .i{color:var(--muted);font-family:var(--serif);font-size:12.5px}
+.zeilen .i.v{color:var(--text)}.zeilen .i.s{color:var(--green-soft)}.zeilen .i em{color:var(--gold-soft)}
+.zeilen .i.w{border-top:1px solid var(--line);padding-top:8px;color:var(--dim)}
+.f{margin-bottom:14px}.f .l{display:block;letter-spacing:.14em;text-transform:uppercase;font-size:9.5px;margin-bottom:6px}
+.regel{display:grid;grid-template-columns:1fr 12px 1fr;gap:5px;padding:4px 0;border-top:1px solid var(--line);color:var(--muted)}
+.regel:first-of-type{border-top:none}
+.regel.g{color:var(--green-soft)}.regel.r{color:var(--red)}
+.st1{padding:6px 8px;background:var(--panel);border-radius:3px;color:var(--muted);margin-bottom:4px}
+.st1 em{color:var(--gold)}
+.hp{display:flex;justify-content:space-between;padding:4px 0;border-top:1px solid var(--line);color:var(--muted)}
+.baro{display:flex;gap:2px;margin:6px 0}.baro i{flex:1;height:6px;border-radius:2px;background:var(--line)}.baro i.an{background:#3f5f80}
+.num{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--gold);color:#17181c;font-family:var(--sans);font-size:10.5px;font-weight:600;margin-right:6px;vertical-align:1px;flex:none}
+/* Kampf */
+.kampf{margin-top:18px}
+.kampf .kk{display:flex;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--line)}
+.kampf .kk b{font-family:var(--serif);font-weight:400;font-size:16px;color:var(--text)}
+.kampf .kf{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:16px 18px}
+.karte{background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:10px 12px;margin-bottom:8px;color:var(--muted)}
+.karte b{font-family:var(--serif);font-weight:400;font-size:15px;color:var(--text);display:flex;justify-content:space-between}
+.karte .bar{height:4px;background:var(--line);border-radius:2px;margin:8px 0}.karte .bar i{display:block;height:100%;width:64%;background:#b4463a;border-radius:2px}
+.karte.h .bar i{background:var(--green);width:80%}
+.karte .kn{display:flex;gap:5px}.karte .kn span{border:1px solid var(--line-hi);padding:3px 8px;border-radius:3px}
+.kampf .fu{display:flex;justify-content:center;padding:10px 18px;border-top:1px solid var(--line)}
+.kampf .fu span{border:1px solid #2f5a48;color:var(--green-soft);padding:6px 14px;border-radius:3px}
+@media (max-width:760px){.spalten{grid-template-columns:1fr}.spalten>div+div{border-left:none;border-top:1px solid var(--line)}.pfad i:nth-child(n+5){display:none}.kampf .kf{grid-template-columns:1fr}}
 
 /* ---- Erklärungen ---- */
-h2{font-family:var(--display);font-weight:400;font-size:26px;margin:40px 0 14px}
 .erkl{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px 28px}
-.erkl li{display:flex;gap:10px;align-items:flex-start;font-size:15.5px;color:var(--ash)}
-.erkl li b{color:var(--bone);font-weight:400;display:block}
-.farben{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:14px}
-.farbe{border-left:4px solid;padding:10px 12px;background:rgba(255,255,255,.03);font-size:15px;color:var(--ash)}
-.farbe b{display:block;color:var(--bone);font-weight:400;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:3px}
+.erkl li{display:flex;gap:10px;align-items:flex-start;font-size:15.5px;color:var(--muted)}
+.erkl li b{color:var(--text);font-weight:400;display:block}
+.rand{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:14px}
+.rand div{padding:10px 12px;background:var(--panel);border-radius:4px;font-size:15px;color:var(--muted)}
+.rand div b{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px;font-weight:500}
 .ablauf{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:14px;counter-reset:s}
-.ablauf div{border:1px solid var(--line);padding:14px;font-size:15px;color:var(--ash);counter-increment:s}
-.ablauf div::before{content:counter(s);display:block;font-family:var(--display);font-size:26px;color:var(--gold);line-height:1;margin-bottom:6px}
-.ablauf div b{color:var(--bone);font-weight:400}
-.fuss{margin-top:44px;font-size:13.5px;color:var(--dim);border-top:1px solid var(--line);padding-top:14px}
-.fuss a{color:var(--ash)}
+.ablauf div{border:1px solid var(--line);border-radius:4px;padding:14px;font-size:15px;color:var(--muted);counter-increment:s}
+.ablauf div::before{content:counter(s);display:block;font-size:24px;color:var(--gold);line-height:1;margin-bottom:6px}
+.ablauf div b{color:var(--text);font-weight:400}
+.fuss{margin-top:44px;font-family:var(--sans);font-size:13px;color:var(--dim);border-top:1px solid var(--line);padding-top:14px}
+.fuss a{color:var(--muted)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
 <div class="wrap">
   <p class="sub">The Bride of Nachtfels · Spickzettel zur Spielleitung</p>
   <h1>Der DM-Bildschirm auf einen Blick</h1>
-  <p class="satz"><b>Links liest du vor. In der Mitte siehst du, was von der Antwort der Gruppe abhängt. Rechts führst du Buch.</b> Mehr ist es nicht. Jede Seite ist gleich gebaut.</p>
+  <p class="satz"><b>Links liest du. Rechts siehst du, was von der Antwort der Gruppe abhängt. Der Kampf hat seinen eigenen Bildschirm.</b> Jede Seite ist gleich gebaut.</p>
 
-  <div class="schirm" role="img" aria-label="Schema des DM-Bildschirms mit sieben nummerierten Bereichen">
-    <div class="kopf"><span class="t">The Bride of Nachtfels</span><span class="b"><i><span class="num">1</span>Gefahr 2/10</i><i>Schritt 8/12</i><i>Neue Runde</i></span></div>
-    <div class="pfad"><i><span class="num">2</span>Prolog</i><i>Kapitel I</i><i class="ent">◆ Entscheidung 1</i><i>Aufstieg</i><i>Kapitel II</i><i class="ent">◆ Entscheidung 2</i><i class="jetzt">Hinter der Tür</i><i>Kapitel III</i><i class="fin">⚔ Finale</i></div>
+  <div class="schirm" role="img" aria-label="Schema des DM-Bildschirms mit acht nummerierten Bereichen">
+    <div class="kopf">
+      <div class="t"><small><span class="num">2</span>Hinter der Tür · Seite 8 von 12</small>What You Find</div>
+      <div class="st"><span><span class="num">1</span>Gefahr <i>2</i></span><span>Ort <i>Im Hof</i></span><span>Weg <i>A</i></span><span>Tür <i>C</i></span><span>Wissen <i>—</i></span><span class="kb"><span class="num">8</span>⚔ Kampf</span></div>
+    </div>
+    <div class="pfad"><i>Prolog</i><i>Kapitel I</i><i class="ent">◆ Entscheidung 1</i><i>Aufstieg</i><i>Kapitel II</i><i class="ent">◆ Entscheidung 2</i><i class="jetzt">Hinter der Tür</i><i>Kapitel III</i><i class="fin">⚔ Finale</i></div>
     <div class="spalten">
-      <div>
-        <div class="block" style="border:none;background:none;padding:0 0 6px"><span class="num">3</span>Ort · Weg · Tür · Wissen</div>
-        <div class="block weiss">Ziel dieser Seite · 20 Min.</div>
-        <div class="block">Hintergrund — nur du</div>
-        <div class="block gelb">Vorlesen — Erzähltext und Sätze der Figuren<div class="block gruen">Das sagst du den Schülern</div></div>
-        <div class="block">Antwortmöglichkeiten ☐ ☐ ☐ — jede nur einmal</div>
-        <div class="block rot">Kampf — Gegner laden</div>
-        <div class="weiter"><span class="num">4</span>Weiter, wenn …</div>
+      <div class="zeilen">
+        <div class="m">Ziel</div><div class="i">Durch die Tür, am Ende hinter dem Spiegel · 20 Min.</div>
+        <div class="m"><span class="num">3</span>Für dich</div><div class="i">Tam hält die verbrannte Hand an die Brust und wartet.</div>
+        <div class="m v">Vorlesen</div><div class="i v">He puts the knife down very slowly … <em>“Will you take me with you? Say it. Promise.”</em></div>
+        <div class="m s">An die Schüler</div><div class="i s">“He asked you a question. Yes or no — and why.”</div>
+        <div class="m k">Kampf</div><div class="i">Gegner, Lebenspunkte, Knopf „Kampf laden und öffnen“</div>
+        <div class="m"><span class="num">4</span>Weiter</div><div class="i w">wenn die Gruppe rückwärts durch den Spiegel gegangen ist</div>
       </div>
       <div>
-        <div class="fach"><span class="l"><span class="num">5</span>Wenn … dann</span>
-          <div class="block regel">ehrliche Antwort → er führt euch</div>
-          <div class="block regel s">Lüge → kein Führer</div>
-          <div class="block regel s">Drohung → Gefahr +3</div></div>
-        <div class="fach"><span class="l"><span class="num">6</span>Stärken der Figuren</span>
-          <div class="block dash">Ilse · Healing Touch<br>„the left one he holds against his chest“</div>
-          <div class="block dash" style="opacity:.5">Rook · Strength — nichts</div></div>
-      </div>
-      <div>
-        <div class="fach"><span class="l"><span class="num">7</span>Gefahrenbarometer</span><div class="baro"><i class="an"></i><i class="an"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
-        <div class="fach"><span class="l">Die Gruppe</span><div class="hp">Vesper<span>18/18</span></div><div class="hp">Rook<span>30/30</span></div><div class="hp">Ilse<span>24/24</span></div></div>
-        <div class="fach"><span class="l">Kampf</span><div class="block" style="margin:0">Kein Kampf im Gang.</div></div>
-        <div class="fach"><span class="l">Was die Gruppe weiss</span><div class="block" style="margin:0">○ Der Name Anneke</div></div>
+        <div class="f"><span class="l"><span class="num">5</span>Wenn … dann</span>
+          <div class="regel g"><span>Ehrliche Antwort</span><span>→</span><span>Tam führt euch</span></div>
+          <div class="regel r"><span>Lüge</span><span>→</span><span>kein Führer</span></div>
+          <div class="regel r"><span>Drohung</span><span>→</span><span>Gefahr +3</span></div></div>
+        <div class="f"><span class="l"><span class="num">6</span>Stärken der Figuren</span>
+          <div class="st1">Ilse · Healing Touch<br><em>„the left one he holds against his chest“</em></div>
+          <div class="st1" style="opacity:.55">Rook · Strength — nichts</div></div>
+        <div class="f"><span class="l"><span class="num">7</span>Gruppe · Barometer · Wissen</span>
+          <div class="hp">Vesper<span>18 / 18</span></div><div class="hp">Rook<span>24 / 30</span></div><div class="hp">Ilse<span>24 / 24</span></div>
+          <div class="baro"><i class="an"></i><i class="an"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="hp">○ Der Name Anneke</div></div>
       </div>
     </div>
   </div>
 
-  <h2>Die sieben Bereiche</h2>
+  <div class="schirm kampf" role="img" aria-label="Schema des Kampfbildschirms">
+    <div class="kk"><b><span class="num">8</span>⚔ The wolves</b><span>← Szene (Kampf bleibt offen)</span></div>
+    <div class="kf">
+      <div><div class="karte"><b>Dire Wolf<span>9 / 14</span></b><div class="bar"><i></i></div><div class="kn"><span>8</span><span>Schaden</span><span style="margin-left:auto">Bite 1d6+2</span></div></div>
+           <div class="karte" style="opacity:.7"><b>Dire Wolf<span>14 / 14</span></b><div class="bar"><i style="width:100%"></i></div><div class="kn"><span>8</span><span>Schaden</span><span style="margin-left:auto">Bite 1d6+2</span></div></div></div>
+      <div><div class="karte h"><b>Rook<span>24 / 30</span></b><div class="bar"><i></i></div><div class="kn"><span>5</span><span>Schaden</span><span>Heilung</span></div></div>
+           <div class="karte h" style="opacity:.7"><b>Ilse<span>24 / 24</span></b><div class="bar"><i style="width:100%"></i></div><div class="kn"><span>5</span><span>Schaden</span><span>Heilung</span></div></div></div>
+    </div>
+    <div class="fu"><span>Kampf vorbei — alle heilen, zurück zur Szene</span></div>
+  </div>
+
+  <h2>Die acht Bereiche</h2>
   <ul class="erkl">
-    <li><span class="num">1</span><span><b>Gefahr und Schritt</b>Wie laut die Gruppe war (0–10) und wo im Abend ihr seid. Steht überall.</span></li>
+    <li><span class="num">1</span><span><b>Die Lage</b>Gefahr (0–10), Ort, was die Gruppe gewählt hat, was sie weiss. Die Seite zeigt nur, was zu diesem Weg gehört.</span></li>
     <li><span class="num">2</span><span><b>Die zwölf Seiten</b>Anklicken oder mit den Pfeiltasten blättern. ◆ ist eine Entscheidung, ⚔ das Finale.</span></li>
-    <li><span class="num">3</span><span><b>Die Lage</b>Wo die Gruppe ist, was sie gewählt hat, was sie weiss. Die Seite zeigt nur, was zu diesem Weg gehört.</span></li>
+    <li><span class="num">3</span><span><b>Randnotizen</b>Sagen bei jedem Absatz, was er ist: Vorlesen, An die Schüler, Für dich, Kampf. Keine Farbbalken, nur der Rand.</span></li>
     <li><span class="num">4</span><span><b>Weiter, wenn</b>Die Bedingung, ab der du umblätterst. Vorher fehlt noch etwas.</span></li>
-    <li><span class="num">5</span><span><b>Wenn … dann</b>Was in dieser Szene von der Antwort der Gruppe abhängt. Grün geht gut aus, Rot kostet etwas. Scrollt mit.</span></li>
-    <li><span class="num">6</span><span><b>Stärken der Figuren</b>Ein Satz aus dem gelben Text, der eine Gelegenheit ankündigt. Du liest ihn und wartest. Anklicken zeigt die Folge.</span></li>
-    <li><span class="num">7</span><span><b>Buchführung</b>Barometer, Lebenspunkte, Kampf-Tracker, Wissen. Alles, was du eintippst, steht im Log.</span></li>
+    <li><span class="num">5</span><span><b>Wenn … dann</b>Was in dieser Szene von der Antwort der Gruppe abhängt. Grün geht gut aus, Rot kostet etwas. Bleibt beim Scrollen stehen.</span></li>
+    <li><span class="num">6</span><span><b>Stärken der Figuren</b>Der Satz aus dem Vorlesetext, der eine Gelegenheit ankündigt. Du liest ihn und wartest. Anklicken zeigt die Folge.</span></li>
+    <li><span class="num">7</span><span><b>Buchführung</b>Lebenspunkte, Barometer, Wissen, Chronik. Alles, was du eintippst, steht im Log.</span></li>
+    <li><span class="num">8</span><span><b>Kampfbildschirm</b>Öffnet sich beim Laden eines Kampfs oder über „⚔ Kampf“. Links Gegner, rechts Gruppe. „Kampf vorbei“ heilt alle und führt zurück.</span></li>
   </ul>
 
-  <h2>Vier Farben, eine Regel</h2>
-  <div class="farben">
-    <div class="farbe" style="border-color:var(--gold)"><b>Gelb</b>Wörtlich vorlesen.</div>
-    <div class="farbe" style="border-color:var(--moss)"><b>Grün</b>Das sagst du den Schülern. Ihre Aufgabe.</div>
-    <div class="farbe" style="border-color:var(--line-hi)"><b>Grau</b>Nur für dich. Hintergrund, Antworten, Knöpfe.</div>
-    <div class="farbe" style="border-color:var(--blood)"><b>Rot</b>Kampf. Ein Knopf lädt die Gegner rechts.</div>
+  <h2>Vier Randnotizen, eine Regel</h2>
+  <div class="rand">
+    <div><b style="color:var(--gold)">Vorlesen</b>Wörtlich. Die Sätze der Figuren stehen in Gold.</div>
+    <div><b style="color:var(--green)">An die Schüler</b>Das sagst du ihnen, wörtlich. Ihre Aufgabe.</div>
+    <div><b style="color:var(--muted)">Für dich</b>Nur du. Hintergrund, Personen, Antworten.</div>
+    <div><b style="color:var(--red)">Kampf</b>Lädt die Gegner und öffnet den Kampfbildschirm.</div>
   </div>
 
   <h2>So läuft jede Seite</h2>
   <div class="ablauf">
-    <div><b>Grau überfliegen.</b> Zehn Sekunden. Dann weisst du, was in der Szene steckt.</div>
-    <div><b>Gelb vorlesen, Grün sagen.</b> Dann schweigen und die Gruppe reden lassen.</div>
-    <div><b>In die Mitte schauen.</b> Was sie gesagt haben, entscheidet, welche Zeile gilt.</div>
-    <div><b>Rechts eintragen.</b> Gefahr, Schaden, Wissen. Dann „Weiter, wenn“ prüfen und umblättern.</div>
+    <div><b>„Für dich“ überfliegen.</b> Zehn Sekunden. Dann weisst du, was in der Szene steckt.</div>
+    <div><b>Vorlesen, dann „An die Schüler“ sagen.</b> Dann schweigen und die Gruppe reden lassen.</div>
+    <div><b>Rechts schauen.</b> Was sie gesagt haben, entscheidet, welche Wenn-dann-Zeile gilt.</div>
+    <div><b>Eintragen und umblättern.</b> Gefahr, Schaden, Wissen. Dann „Weiter, wenn“ prüfen.</div>
   </div>
 
-  <p class="fuss">Ergänzung zur Anleitung auf Seite 1 der DM-Konsole. Alle Dateien: <a href="https://github.com/tobiasjungstud-ui/HalloweenDnD">github.com/tobiasjungstud-ui/HalloweenDnD</a></p>
+  <p class="fuss">Ergänzung zur Anleitung auf Seite 1 der DM-Konsole (V2). Alle Dateien: <a href="https://github.com/tobiasjungstud-ui/HalloweenDnD">github.com/tobiasjungstud-ui/HalloweenDnD</a></p>
 </div>

@@ -22,7 +22,8 @@ Spielen, kein Konto, keine Daten verlassen das Gerät.
 
 | Datei | Für wen | Was darauf steht |
 |---|---|---|
-| `dungeon_master.html` | Spielleitung | Zwölf Seiten Ablauf, Gefahrenbarometer, Lebenspunkte, Kampf-Tracker |
+| `dungeon_master.html` | Spielleitung | **V2, Regiebuch:** zwölf Seiten Ablauf mit Randnotizen, rechts Wenn-dann, Stärken, Gruppe, Barometer; der Kampf als eigener Vollbildschirm |
+| `dungeon_master_v1.html` | Spielleitung | **V1**, die frühere Darstellung (vier Farbbalken, drei Spalten, Kampf in der Seitenleiste) — gleiche Daten, gleiche Logik, weiterhin lauffähig |
 | `spickzettel.html` | Spielleitung | Eine Seite: der DM-Bildschirm auf einen Blick — sieben Bereiche, vier Farben, vier Handgriffe |
 | `spieler_magier.html` | The Arcanist, 18 HP | Fireball · Magic Hand · Arcane Darts — Talent ausserhalb des Kampfs: *Magic Hand* |
 | `spieler_krieger.html` | The Blade, 30 HP | Sword Strike · Shield Bash · Reckless Charge — Talent: *Strength* |
@@ -59,13 +60,17 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
 
 1. Helfer-Blatt ausdrucken, drei Geräte bereitlegen, jedem seinen Link geben.
 2. Die Spielleitung liest Seite 1 der Konsole. Fünf Minuten, mehr braucht es nicht.
-3. Die Konsole führt durch zwölf Seiten:
-   **gelb umrandet** = wörtlich vorlesen, **grün** = das sollen die Schüler jetzt tun,
-   **grau** = nur für die Spielleitung, **rot** = Kampf. Unten steht immer, wann es weitergeht.
-   In der mittleren Spalte, die mitscrollt: **Wenn … dann** — was in dieser Szene von der
-   Antwort der Gruppe abhängt („Tam angelogen → kein Führer“) — und darunter die **Stärken der
-   Figuren**. Blättern geht auch mit den Pfeiltasten.
-4. Etwa drei Stunden. Gut teilbar in zwei Doppelstunden — der Schnitt liegt beim Aufstieg.
+3. Die Konsole führt durch zwölf Seiten. Am linken Rand steht bei jedem Absatz, was er
+   ist: **Vorlesen** (wörtlich), **An die Schüler** (wörtlich, ihre Aufgabe), **Für dich**
+   (nur die Spielleitung), **Kampf**. Unten steht immer, wann es weitergeht. Rechts, beim
+   Scrollen stehend: **Wenn … dann** — was in dieser Szene von der Antwort der Gruppe abhängt
+   („Tam angelogen → kein Führer“) —, die **Stärken der Figuren**, die Gruppe, das Barometer.
+   Blättern geht auch mit den Pfeiltasten.
+4. **Der Kampf ist ein eigener Bildschirm.** Er öffnet sich, sobald ein Kampf geladen wird,
+   oder jederzeit über „⚔ Kampf“ oben rechts (freier Kampf, Gegner von Hand). Links die
+   Gegner mit Attacken, rechts die Gruppe, unten das Log; „Kampf vorbei“ heilt alle und
+   kehrt zur Szene zurück, „← Szene“ lässt den Kampf offen. Esc schliesst ihn.
+5. Etwa drei Stunden. Gut teilbar in zwei Doppelstunden — der Schnitt liegt beim Aufstieg.
 
 ## Wie es aufgebaut ist
 
@@ -90,9 +95,10 @@ Jeder Hinweis, den die Gruppe finden kann, ist an einen Satz gebunden, den eine 
 wirklich ausspricht — und jede Person trägt eine Zeile **„Notfalls“**, falls niemand danach
 fragt. Das Spiel kann nicht hängenbleiben.
 
-**Drei Spalten je Szene.** Links steht, was die Spielleitung vorliest und sagt. In der
-Mitte, fest stehend und mitscrollend, die Abzweigungen dieser Szene als **Wenn … dann**
-(grün: es geht gut aus, rot: es kostet etwas) und darunter die **Stärken der Figuren**:
+**Zwei Spalten je Szene, dazu der Kampfbildschirm.** Links steht, was die Spielleitung
+vorliest und sagt, mit Randnotizen statt Farbbalken. Rechts, fest stehend und mitscrollend,
+die Abzweigungen dieser Szene als **Wenn … dann** (grün: es geht gut aus, rot: es kostet
+etwas) und darunter die **Stärken der Figuren**:
 eine Gelegenheit für *diese* Figur —
 der Arcanist mit *Magic Hand*, der Blade mit *Strength*, die Lightbearer mit *Healing Touch*. Sie sind als Möglichkeit
 formuliert, nie als Lösung, und jede Szene funktioniert ohne sie.
@@ -117,6 +123,21 @@ Gegner mehr, und die Konsole schiebt einmal einen Zwischenakt vor den nächsten 
 Patrouille aus drei Wachen und einem Wachhund — gerade noch zu schaffen, mit Rückzugsregel.
 Sinkt die Gefahr vorher wieder unter 8, wird die Patrouille abgeblasen. Die Spielleitung muss
 dafür nichts tun; der Prüfstand testet beides auf allen Pfaden.
+
+## V1 und V2
+
+`dungeon_master_v1.html` ist die frühere Darstellung, unverändert und lauffähig. V2
+(`dungeon_master.html`) ist eine Neufassung der Darstellung: gleiche Daten, gleicher
+Zustand, gleiche Logik, gleicher Prüfstand. Beide Fassungen laufen durch dieselbe Prüfung:
+
+```bash
+node quelle/pruefe_dm.js                                  # V2
+node quelle/pruefe_dm.js --datei dungeon_master_v1.html   # V1
+```
+
+Was V2 zusätzlich prüft: Der Kampfbildschirm ist beim Start zu, öffnet sich beim Laden
+eines Kampfs, bleibt beim Schliessen erhalten, und „Kampf vorbei“ heilt alle, entfernt die
+Gegner und lässt die Gefahr unverändert.
 
 ## Die Spielerblätter ändern
 

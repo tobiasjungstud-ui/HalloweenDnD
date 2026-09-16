@@ -18,12 +18,15 @@ global.confirm = () => true;
 const warnungen = []; const echtWarn = console.warn; console.warn = (...a)=>warnungen.push(a);
 
 /* ---------- Seite laden ---------- */
-const html = fs.readFileSync(path.join(__dirname, "..", "dungeon_master.html"), "utf8");
+const dateiArg = process.argv.indexOf("--datei"); const DATEI = dateiArg>=0 ? process.argv[dateiArg+1] : "dungeon_master.html";
+const html = fs.readFileSync(path.join(__dirname, "..", DATEI), "utf8");
 const js = /<script>([\s\S]*)<\/script>/.exec(html)[1];
 vm.runInThisContext(js, {filename:"dungeon_master.html"});
 vm.runInThisContext(`globalThis.T = { Z:()=>Z, setZ:z=>{Z=z;}, KAPITEL, ENTSCHEIDUNGEN, WISSEN, BESTIARIUM, ORT, PATROUILLE,
   frischerZustand, waehle, setzeWissen, tunAusfuehren, geheZu, gilt, hat, sichtbarerVerlauf, ortAufloesen, sichtbareBloecke, sichtbareChancen, pruefeStory, finaleLaden, liste, alles,
-  ladeKampf, patrouilleFertig, setzeGefahr }`);
+  ladeKampf, patrouilleFertig, setzeGefahr,
+  oeffneKampf: typeof oeffneKampf==="function" ? oeffneKampf : null, schliesseKampf: typeof schliesseKampf==="function" ? schliesseKampf : null,
+  kampfVorbei: typeof kampfVorbei==="function" ? kampfVorbei : null }`);
 console.warn = echtWarn;
 
 /* ---------- Hilfen ---------- */
@@ -251,6 +254,25 @@ pruefe(T.Z().gegner.length===2, "Verstärkung kam schon bei Gefahr 7");
 frisch(); T.setzeGefahr(8,"Test"); T.waehle("e1",optIdx("e1","weg_b")); T.tunAusfuehren("keller_kampf");
 pruefe(T.Z().gegner.filter(g=>g.k==="wache").length===2, "Kellerwache ohne Verstärkung bei Gefahr 8: "+T.Z().gegner.length);
 T.waehle("e1",optIdx("e1","weg_c")); pruefe(T.Z().gegner.length===0, "Umwahl nahm die verstärkte Wache nicht mit zurück: "+T.Z().gegner.length);
+
+/* ---------- 6b · Kampfbildschirm (nur V2) ---------- */
+if(T.oeffneKampf){
+  frisch(); pruefe(T.Z().kampfOffen===false && el("kampfmodus").hidden===true, "Kampfbildschirm ist beim Start offen");
+  T.waehle("e1",optIdx("e1","weg_b")); T.tunAusfuehren("keller_kampf");
+  pruefe(T.Z().kampfOffen===true && el("kampfmodus").hidden===false, "Laden aus der Szene öffnet den Kampfbildschirm nicht");
+  pruefe(el("k-titel").textContent==="Freier Kampf" || el("k-titel").textContent.length>0, "Kampftitel leer");
+  T.schliesseKampf(); pruefe(!T.Z().kampfOffen && el("kampfmodus").hidden===true && T.Z().gegner.length===1, "Schliessen verliert den Kampf");
+  T.oeffneKampf(); T.Z().gruppe[1].hp=4; T.kampfVorbei();
+  pruefe(!T.Z().kampfOffen && T.Z().gegner.length===0 && T.Z().gruppe.every(h=>h.hp===h.max), "Kampf vorbei heilt nicht oder räumt nicht auf");
+  pruefe(T.Z().gefahr===1, "Kampf vorbei hat die Gefahr verändert");
+  frisch(); T.geheZu(4); T.waehle("e1",optIdx("e1","weg_a")); T.geheZu(4);
+  pruefe(el("k-titel").textContent==="The wolves", "Kampftitel zeigt nicht den vorbereiteten Kampf der Szene: "+el("k-titel").textContent);
+  pruefe(el("k-hinweis").innerHTML.includes("Zwei Wölfe"), "Kampfhinweis fehlt");
+  pruefe(el("gruppe-kampf").innerHTML.includes("Arcanist") && el("gruppe").innerHTML.includes("Arcanist"), "Gruppe fehlt in Szene oder Kampfbildschirm");
+  frisch(); T.waehle("e1",0); T.waehle("e2",0); T.waehle("e3",optIdx("e3","e3_pakt")); T.geheZu(10); T.tunAusfuehren("finale_laden");
+  pruefe(T.Z().kampfOffen===true && T.Z().gegner.some(g=>g.k==="vaskir"), "Finale laden öffnet den Kampfbildschirm nicht");
+  T.kampfVorbei(); pruefe(T.Z().gegner.length===0, "Finale: Kampf vorbei räumt nicht auf");
+}
 
 /* ---------- 7 · Neue Runde ---------- */
 frisch(); T.waehle("e1",0); T.setzeWissen("anneke",true); T.Z().gruppe[0].name="Vesper";

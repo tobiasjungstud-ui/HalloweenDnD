@@ -3,278 +3,310 @@
 <meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=JetBrains+Mono:wght@400;700&family=Spectral:ital,wght@0,300;0,400;0,600;1,400&display=swap">
 <style>
 :root{
   color-scheme: dark;
-  --bg:#1c1d21; --panel:#232429; --panel2:#26272d; --line:#2b2c31; --line-hi:#3a3b41;
-  --text:#d8d5cd; --muted:#9c9a93; --dim:#6f6d67;
-  --gold:#c9a457; --gold-soft:#e6d3a6; --green:#7fb694; --green-soft:#a9d6b8; --red:#d99a8f; --red-line:#5a2a24; --red-bar:#b4463a; --blue:#8fb0d1;
-  --serif:'Literata',Georgia,'Times New Roman',serif; --sans:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
-  /* Aliasse für ältere Bezeichner */
-  --bone:var(--text); --ash:var(--muted); --gold-dim:var(--gold); --blood:var(--red-bar); --blood-hi:var(--red); --moss:var(--green); --moon:var(--blue);
+  --ink:#08080c; --crypt:#0e0e15; --stone:#14141e; --stone-hi:#1f1f2c;
+  --line:#262633; --line-hi:#3a3a4c;
+  --bone:#eae4d7; --ash:#948fa2; --dim:#5d5a6b;
+  --gold:#d9a441; --gold-dim:#8a6a2c;
+  --blood:#b23a2c; --blood-hi:#e0645a;
+  --moon:#7d9bc4; --moss:#74b094;
+  --display:'IM Fell English SC','Iowan Old Style',Georgia,serif;
+  --body:'Spectral',Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--text);font-family:var(--serif);font-size:18px;line-height:1.6}
-h1,h2,h3,h4{font-weight:400;margin:0}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--body);font-size:16px;line-height:1.6}
+h1,h2,h3,h4{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance}
 button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 input{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-small,.klein{font-family:var(--sans)}
-.leise{font-family:var(--sans);font-size:13px;color:var(--muted);border:1px solid var(--line-hi);padding:8px 14px;border-radius:4px}
-.leise:hover{color:var(--text);border-color:var(--dim)}
+.label{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ash)}
 
-/* ---- Kopf ---- */
-.kopf{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;padding:22px 48px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
-.krume{font-family:var(--sans);font-size:13px;color:var(--muted)}
-.krume .app{color:var(--dim)}
-.kopf h1{font-size:28px;margin-top:4px}
-.kopf-rechts{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
-.lage{display:flex;gap:26px;flex-wrap:wrap;justify-content:flex-end;font-family:var(--sans)}
-.lage span{display:flex;flex-direction:column;align-items:flex-end}
-.lage span small{font-size:12px;color:var(--dim)}
-.lage span b{font-weight:500;font-size:20px;line-height:1.15;color:var(--text);font-family:var(--serif)}
-.lage span.ort b{font-size:16px;font-family:var(--sans);font-weight:400;color:var(--muted)}
-.lage span.mittel b{color:var(--gold)}
-.lage span.warn b{color:var(--red);font-size:15px;font-family:var(--sans)}
-.kopf-knoepfe{display:flex;gap:8px}
-.kampfknopf{font-family:var(--sans);font-size:13px;color:var(--red);border:1px solid var(--red-line);padding:8px 14px;border-radius:4px}
-.kampfknopf:hover{background:rgba(180,70,58,.12)}
-.kampfknopf.aktiv{background:rgba(180,70,58,.16);color:#f0b3a9}
+.krone{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(8,8,12,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:11px clamp(16px,2.5vw,28px)}
+.krone h1{font-size:20px;line-height:1.1}
+.krone .sub{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);display:block}
+.krone .rechts{margin-left:auto;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:12px;border:1px solid var(--line);padding:6px 11px;color:var(--ash);white-space:nowrap}
+.badge b{font-size:15px;font-weight:700}
+.badge.g0{border-color:#2c4460;color:var(--moon)}
+.badge.g1{border-color:var(--gold-dim);color:var(--gold)}
+.badge.g2{border-color:var(--blood);color:var(--blood-hi)}
+.krone button.klein{font-size:12px;color:var(--dim);border:1px solid var(--line);padding:6px 11px}
+.krone button.klein:hover{color:var(--bone);border-color:var(--line-hi)}
 
-/* ---- Seitenleiste der Szenen ---- */
-.pfad{display:flex;overflow-x:auto;border-bottom:1px solid var(--line);padding:0 40px;font-family:var(--sans)}
-.pfad button{flex:none;padding:10px 12px;color:var(--dim);font-size:12.5px;text-align:left;position:relative;white-space:nowrap}
-.pfad button:hover{color:var(--muted)}
-.pfad button .n{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:1px}
-.pfad button.jetzt{color:var(--text)}
-.pfad button.jetzt::after{content:"";position:absolute;left:12px;right:12px;bottom:0;height:2px;background:var(--gold)}
-.pfad button.getan .n{color:var(--green)}
+.pfad{display:flex;overflow-x:auto;border-bottom:1px solid var(--line);background:var(--crypt)}
+.pfad button{flex:none;padding:9px 15px;border-right:1px solid var(--line);color:var(--dim);font-size:13px;text-align:left;min-width:120px;position:relative}
+.pfad button:hover{background:var(--stone);color:var(--ash)}
+.pfad button .n{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px}
+.pfad button.jetzt{background:var(--stone-hi);color:var(--bone)}
+.pfad button.jetzt::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--gold)}
+.pfad button.getan .n{color:var(--moss)}
 .pfad button.ent .n{color:var(--gold)}
-.pfad button.kampf .n{color:var(--red)}
+.pfad button.kampf .n{color:var(--blood-hi)}
 
-/* ---- Raum ---- */
-.raum{display:grid;grid-template-columns:minmax(0,1fr) 400px;column-gap:44px;padding:36px 48px 60px;align-items:start}
-.szene{min-width:0}
-.bloecke{display:grid;grid-template-columns:150px minmax(0,1fr);column-gap:40px}
-.marg{text-align:right;font-family:var(--sans);font-weight:500;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding-top:7px;margin-bottom:30px}
-.marg small{display:block;font-weight:400;font-size:10.5px;letter-spacing:.04em;text-transform:none;color:var(--dim);margin-top:4px;line-height:1.35}
-.marg.vorlesen,.marg.sagen{color:var(--gold)}
-.marg.aufgabe{color:var(--green)}
-.marg.kampf{color:var(--red)}
-.marg.ziel{color:var(--muted)}
-.inhalt{margin-bottom:30px;min-width:0;max-width:62ch}
-.inhalt p{margin:0 0 14px}
-.inhalt p:last-child{margin-bottom:0}
-.inhalt.ziel p,.inhalt.weiter p{font-size:16px;color:var(--muted)}
-.inhalt.weiter{border-top:1px solid var(--line);padding-top:14px}
-.inhalt .rede{font-style:italic;color:var(--gold-soft)}
-.inhalt.sagen p{font-style:italic;color:var(--gold-soft);font-size:19px}
-.inhalt.aufgabe p{color:var(--green-soft)}
-.inhalt.aufgabe .hinweis{font-family:var(--sans);font-size:13.5px;color:var(--muted);font-style:normal}
-.inhalt.aufgabe .blatt{display:inline-block;margin-top:8px;font-family:var(--sans);font-size:12px;color:var(--green);border:1px solid #2f5a48;padding:4px 10px;border-radius:3px}
-.inhalt.regie p,.inhalt.wenn p,.inhalt.tun p,.inhalt.personen,.inhalt.fa{font-size:16px;color:var(--muted)}
-.inhalt.regie b,.inhalt.wenn b,.inhalt.tun b{color:var(--text);font-weight:400}
-.inhalt .rt{display:block;font-family:var(--sans);font-size:13px;font-weight:500;color:var(--muted);margin-bottom:6px;letter-spacing:.02em}
-.inhalt.regie em{color:var(--gold-soft)}
-.hinweisfehlt{border:1px dashed var(--line-hi);padding:14px 18px;color:var(--muted);font-size:16px;border-radius:4px;grid-column:1 / -1;margin-bottom:30px}
+.raum{display:grid;grid-template-columns:minmax(0,1fr) 300px 330px;align-items:start}
+.mitte{border-left:1px solid var(--line);background:var(--ink);position:sticky;top:calc(env(safe-area-inset-top,0px) + 52px);max-height:calc(100vh - 52px);overflow-y:auto}
+@media (max-width:1380px){.raum{grid-template-columns:minmax(0,1fr) 330px;grid-template-rows:auto 1fr}.szene{grid-column:1;grid-row:1/span 2}.mitte{grid-column:2;grid-row:1;position:static;max-height:none}.leiste{grid-column:2;grid-row:2}}
+@media (max-width:1040px){.raum{grid-template-columns:1fr}.szene{grid-column:1;grid-row:auto}.mitte{grid-column:1;grid-row:auto;border-left:none;border-top:1px solid var(--line)}.leiste{grid-column:1;grid-row:auto}}
+.regel{border-left:2px solid var(--line-hi);padding:6px 10px;margin-bottom:6px;font-size:13px;line-height:1.45;color:var(--ash)}
+.regel b{color:var(--bone);font-weight:400}
+.regel .dann{color:var(--gold);font-family:var(--mono);font-size:11px;margin:0 5px}
+.regel.gut{border-color:var(--moss)}.regel.schlecht{border-color:var(--blood)}
+.regel.leer{border-color:var(--line);color:var(--dim);font-style:italic}
+.szene{padding-block:26px 60px;padding-inline:clamp(16px,3vw,38px);max-width:840px;min-width:0}
+.szenenkopf{border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:22px}
+.szenenkopf .n{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.szenenkopf h2{font-size:clamp(28px,4.4vw,42px);line-height:1.04;margin:5px 0}
+.lage{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px;font-family:var(--mono);font-size:11.5px;color:var(--ash)}
+.lage span b{color:var(--bone);font-weight:400}
+.lage span.ort b{color:var(--gold)}
+.lage span.warn{color:var(--blood-hi)}
+.bloecke{display:flex;flex-direction:column;gap:18px}
 
-/* Personen, Antworten */
-.person{padding:12px 0;border-top:1px solid var(--line)}
-.person:first-of-type{border-top:none;padding-top:0}
-.person .kopf-p{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
-.person h4{font-size:19px;color:var(--text)}
-.person .wer{font-family:var(--sans);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
-.person .spielt{font-family:var(--sans);font-size:13.5px;color:var(--muted);margin:3px 0 8px}
-.person dl,.fa dl{margin:0;display:flex;flex-direction:column;gap:2px}
-dt{font-family:var(--sans);font-size:13.5px;color:var(--text);padding-top:8px}
-dd{margin:3px 0 8px 22px;font-size:16px;font-style:italic;color:var(--muted)}
-dd em{font-style:normal;color:var(--dim);font-family:var(--sans);font-size:13px;display:block;margin-top:3px}
+/* ---- Schritt-Nummerierung: jeder Block ist ein Handgriff ---- */
+.schritt{display:grid;grid-template-columns:34px minmax(0,1fr);gap:14px;align-items:start}
+.schritt>.nr{font-family:var(--mono);font-size:12px;color:var(--dim);border:1px solid var(--line);width:34px;height:34px;display:grid;place-items:center;margin-top:2px}
+.schritt>.kern{min-width:0}
+.tat{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;display:block;margin-bottom:7px}
+
+/* ---- Ziel ---- */
+.ziel{border-left:4px solid var(--bone);background:var(--stone);padding:14px 18px;display:flex;gap:18px;flex-wrap:wrap;align-items:baseline}
+.legende{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:10px}
+.legende span::before{content:"";display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:-1px}
+.legende .g::before{background:var(--gold)}.legende .s::before{background:var(--moss)}.legende .d::before{background:var(--line-hi)}.legende .k::before{background:var(--blood)}
+/* ---- Zweite Ebene: Stärken der Figuren — eigener Abschnitt rechts, auf jeder Seite ---- */
+.labelzusatz{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:none;color:var(--dim)}
+.staerke{border:1px dashed var(--line-hi);padding:7px 10px;margin-bottom:6px;font-size:13px;line-height:1.45}
+.staerke b{font-weight:400;color:var(--bone);display:block;font-size:13px}
+.staerke span{display:block;color:var(--ash)}
+.staerke.leer{border-color:var(--line);opacity:.55}
+.staerke.leer span{font-style:italic;color:var(--dim)}
+.staerke span.cue{font-style:italic;color:var(--gold);font-size:12.5px}
+.staerke p b{display:inline;color:var(--bone)}
+.staerke summary{cursor:pointer;list-style:none;display:block}
+.staerke summary::-webkit-details-marker{display:none}
+.staerke summary b::before{content:"▸ ";color:var(--gold-dim);font-family:var(--mono);font-size:11px}
+.staerke[open] summary b::before{content:"▾ "}
+.staerke[open]{border-style:solid;border-color:var(--gold-dim);background:rgba(217,164,65,.05)}
+.staerke p{margin:6px 0 2px;color:var(--ash);border-left:2px solid var(--gold-dim);padding-left:9px;font-size:12.5px}
+.staerken-hinweis{margin:2px 0 0;font-size:11.5px;color:var(--dim);line-height:1.4}
+.tasten{font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:.06em;text-align:right;margin:10px 0 0}
+.vonhand summary{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);cursor:pointer;list-style:none;padding:6px 0 2px}
+.vonhand summary::-webkit-details-marker{display:none}
+.vonhand summary::before{content:"+ ";color:var(--dim)}
+.vonhand[open] summary::before{content:"− "}
+.ziel .label{color:var(--gold);flex:none}
+.ziel p{margin:0;font-size:15.5px;flex:1;min-width:220px}
+.ziel .zeit{font-family:var(--mono);font-size:12px;color:var(--dim);white-space:nowrap}
+
+/* ---- Vorlesen ---- */
+.vorlesen{border-left:4px solid var(--gold);background:linear-gradient(90deg,rgba(217,164,65,.08),rgba(217,164,65,.02));padding:18px 22px}
+.vorlesen .tat{color:var(--gold)}
+.vorlesen p{margin:0 0 11px;font-size:18px;line-height:1.62;max-width:60ch}
+.vorlesen p:last-child{margin:0}
+.vorlesen p.rede{font-style:italic;border-left:2px solid var(--gold-dim);padding-left:14px;margin-left:2px}
+.aufgabe p.rede{font-size:17.5px;font-style:italic;line-height:1.5}
+.aufgabe .hinweis{font-size:13.5px;color:var(--ash);margin:8px 0 0;font-style:normal}
 .hak{font-size:15px;color:var(--gold);padding:0 4px 0 0;line-height:1}
-dt.erledigt{opacity:.38;text-decoration:line-through}dd.erledigt{opacity:.38}
 .person li.erledigt{opacity:.38;text-decoration:line-through}
-.person ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px}
-.person li{font-style:italic;padding-left:12px;border-left:1px solid var(--line-hi)}
+.person dl{margin:0;display:flex;flex-direction:column;gap:2px}
+.person dt{font-family:var(--mono);font-size:12.5px;color:var(--ash);padding-top:8px}
+.person dd{margin:3px 0 8px;font-size:16px;font-style:italic;padding-left:14px;border-left:2px solid var(--gold-dim)}
+.person dd em{font-style:normal;color:var(--ash);font-size:14px}
+.person dt.erledigt{opacity:.38;text-decoration:line-through}
+.person dd.erledigt{opacity:.38}
 .person.stumm h4{color:var(--dim)}
-.sonst{margin:12px 0 0;font-family:var(--sans);font-size:13.5px;color:var(--muted);border-top:1px dotted var(--line);padding-top:10px}
-.sonst b{color:var(--text);font-weight:500}
-.sonst.aus{color:var(--red)}
+.fa dt.erledigt,.fa dd.erledigt{opacity:.38}
+.fa dt.erledigt{text-decoration:line-through}
 
-/* Knopf, Kampf, Optionen */
-.tun{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
-.tun p{flex:1;min-width:220px}
-.tun button,.laden{font-family:var(--sans);font-size:14px;border:1px solid var(--gold);color:var(--gold);padding:9px 16px;border-radius:4px;white-space:nowrap}
-.tun button:hover,.laden:hover{background:rgba(201,164,87,.12)}
-.tun button.getan{border-color:var(--green);color:var(--green)}
-.laden{border-color:var(--red-line);color:var(--red);margin-top:6px}
-.laden:hover{background:rgba(180,70,58,.12)}
-.inhalt.kampf h4{font-size:22px;margin-bottom:6px}
-.statblock{font-family:var(--sans);font-size:14px;color:var(--muted);padding:7px 0;border-top:1px solid var(--line)}
-.statblock b{color:var(--text);font-weight:500}
-.statblock.rot{color:var(--red)}
-.zufuegen{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-.zufuegen button{font-family:var(--sans);font-size:13px;border:1px dashed var(--line-hi);padding:6px 12px;border-radius:4px;color:var(--dim)}
-.zufuegen button:hover{border-style:solid;color:var(--text)}
-.optionen{display:flex;flex-direction:column;gap:10px}
-.option{border:1px solid var(--line);background:var(--panel);border-radius:6px;display:grid;grid-template-columns:44px minmax(0,1fr)}
-.option.gewaehlt{border-color:var(--gold)}
-.option .buchstabe{display:flex;justify-content:center;padding-top:16px;font-size:24px;color:var(--dim);border-right:1px solid var(--line)}
-.option.gewaehlt .buchstabe{color:var(--gold)}
-.option .kern{padding:14px 18px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+/* ---- Sagen: ein einzelner Satz, wörtlich ---- */
+.sagen{border-left:4px solid var(--gold);background:rgba(217,164,65,.06);padding:16px 20px}
+.sagen .tat{color:var(--gold)}
+.sagen p{margin:0;font-size:19px;font-style:italic;line-height:1.4;max-width:58ch}
+.sagen p+p{margin-top:9px}
+
+/* ---- Personen im Raum ---- */
+.personen{border-left:4px solid var(--line-hi);background:rgba(255,255,255,.025);padding:14px 18px}
+.personen .tat{color:var(--ash)}
+.person{border-top:1px solid var(--line);padding:12px 0 2px}
+.person:first-of-type{border-top:none;padding-top:4px}
+.person .kopf{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.person h4{font-size:19px}
+.person .wer{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.person .spielt{font-size:13.5px;color:var(--ash);margin:3px 0 8px}
+.person ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px}
+.person li{font-size:16px;border-left:1px solid var(--line-hi);padding-left:12px;font-style:italic}
+.sonst{margin:14px 0 0;font-size:13.5px;color:var(--ash);border-top:1px dotted var(--line);padding-top:10px}
+.sonst b{color:var(--bone);font-weight:400}
+
+/* ---- Wenn sie fragen ---- */
+.fa{border-left:4px solid var(--line-hi);background:rgba(255,255,255,.025);padding:14px 18px}
+.fa .tat{color:var(--ash)}
+.fa dl{margin:0;display:flex;flex-direction:column;gap:2px}
+.fa dt{font-size:14px;color:var(--ash);font-family:var(--mono);font-size:12.5px;padding-top:10px;border-top:1px solid var(--line)}
+.fa dt:first-of-type{border-top:none;padding-top:0}
+.fa dd{margin:3px 0 10px;font-size:16.5px;font-style:italic;padding-left:14px;border-left:2px solid var(--gold-dim)}
+.fa dd em{font-style:normal;color:var(--ash);font-size:14px;display:block;margin-top:4px;padding-left:2px}
+
+/* ---- Tun: ein Knopf, eine Wirkung ---- */
+.tun{border-left:4px solid var(--line-hi);border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);padding:12px 18px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:none}
+.tun p{margin:0;flex:1;min-width:200px;font-size:15px}
+.tun p b{color:var(--gold)}
+.tun button{border:1px solid var(--gold);color:var(--gold);padding:10px 18px;font-size:15px;white-space:nowrap}
+.tun button:hover{background:var(--gold);color:#07070b}
+.tun button.getan{border-color:var(--moss);color:var(--moss)}
+
+/* ---- Sprechaufgabe ---- */
+.aufgabe{border-left:4px solid var(--moss);border-top:1px solid #2f5a48;border-bottom:1px solid #2f5a48;background:rgba(116,176,148,.08);padding:13px 16px;margin-top:16px}
+.vorlesen .aufgabe p{font-size:17px;margin:0}
+.aufgabe .tat{color:var(--moss)}
+.aufgabe p{margin:0;font-size:16.5px}
+.aufgabe .blatt{display:inline-flex;align-items:center;gap:7px;margin-top:9px;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--moss);border:1px solid #3a5a4c;padding:5px 10px}
+
+/* ---- Regie / Wortschatz ---- */
+.regie{font-size:14.5px;color:var(--ash);line-height:1.6;border-left:4px solid var(--line-hi);background:rgba(255,255,255,.025);padding:14px 18px}
+.regie .tat{color:var(--ash)}
+.regie p{margin:0 0 8px}.regie p:last-child{margin:0}
+.regie b{color:var(--bone);font-weight:400}
+
+
+/* ---- Bedingte Karte ---- */
+.wenn{border-left:4px solid var(--line-hi);background:rgba(255,255,255,.025);padding:14px 18px}
+.wenn .tat{color:var(--gold)}
+.wenn p{color:var(--ash);font-size:15px}
+.wenn h4{font-size:19px;margin-bottom:6px}
+.wenn p{margin:0;font-size:16px}
+.wenn p+p{margin-top:8px}
+.hinweisfehlt{border:1px dashed var(--line-hi);padding:14px 18px;color:var(--ash);font-size:15px}
+
+/* ---- Entscheidung ---- */
+.optionen{display:flex;flex-direction:column;gap:12px}
+.option{border:1px solid var(--line);background:var(--crypt);display:grid;grid-template-columns:48px minmax(0,1fr)}
+.option:hover{border-color:var(--line-hi)}
+.option.gewaehlt{border-color:var(--gold);background:rgba(217,164,65,.05)}
+.option .buchstabe{border-right:1px solid var(--line);display:flex;align-items:flex-start;justify-content:center;padding-top:15px;font-family:var(--display);font-size:25px;color:var(--dim)}
+.option.gewaehlt .buchstabe{color:var(--gold);border-color:var(--gold-dim)}
+.option .kern{padding:14px 18px 15px;display:flex;flex-direction:column;gap:9px;min-width:0}
 .option h4{font-size:20px}
-.option .was{margin:0;font-size:16px}
-.option .bil{margin:0;padding:0;list-style:none;display:grid;gap:3px;font-family:var(--sans);font-size:13.5px;color:var(--muted)}
+.option .was{margin:0;font-size:15.5px}
+.option .bil{margin:0;padding:0;list-style:none;display:grid;gap:4px}
 .option .bil:empty{display:none}
-.option .bil li{padding-left:18px;position:relative}
-.option .bil li.pro::before{content:"+";position:absolute;left:3px;color:var(--green)}
-.option .bil li.con::before{content:"−";position:absolute;left:3px;color:var(--red)}
+.option .bil li{font-size:14.5px;color:var(--ash);padding-left:19px;position:relative}
+.option .bil li.pro::before{content:"+";position:absolute;left:4px;color:var(--moss);font-family:var(--mono)}
+.option .bil li.con::before{content:"−";position:absolute;left:4px;color:var(--blood-hi);font-family:var(--mono)}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
-.chip{font-family:var(--sans);font-size:11px;letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--line-hi);padding:3px 8px;border-radius:3px;color:var(--muted)}
-.chip.gefahr{border-color:var(--red-line);color:var(--red)}
-.chip.ruhe{color:var(--blue);border-color:#2f4457}
-.option .waehlen{font-family:var(--sans);font-size:14px;border:1px solid var(--line-hi);padding:9px 0;border-radius:4px;color:var(--muted)}
-.option .waehlen:hover{border-color:var(--gold);color:var(--gold)}
-.option.gewaehlt .waehlen{border-color:var(--gold);color:var(--gold)}
+.chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line-hi);padding:4px 9px;color:var(--ash)}
+.chip.gefahr{border-color:var(--blood);color:var(--blood-hi)}
+.chip.ruhe{border-color:#2c4460;color:var(--moon)}
+.chip.wissen{border-color:#3a5a4c;color:var(--moss)}
+.option .waehlen{border:1px solid var(--line-hi);padding:9px 0;font-family:var(--display);font-size:16px}
+.option .waehlen:hover{background:var(--gold);color:#07070b;border-color:var(--gold)}
+.option.gewaehlt .waehlen{background:rgba(217,164,65,.12);border-color:var(--gold);color:var(--gold)}
 
-/* Blättern */
-.blaettern{display:flex;justify-content:space-between;gap:14px;margin-top:10px;padding-left:190px}
-.blaettern button{border:1px solid var(--line-hi);padding:12px 20px;border-radius:4px;font-size:17px;max-width:48%;text-align:left}
+/* ---- Kampf ---- */
+.kampfblock{border-left:4px solid var(--blood);background:rgba(178,58,44,.06);padding:14px 18px;display:flex;flex-direction:column;gap:11px}
+.kampfblock .tat{color:var(--blood-hi)}
+.kampfblock h4{font-size:20px}
+.kampfblock>p{margin:0;font-size:15.5px}
+.statblock{border-top:1px solid var(--line);padding-top:10px;font-size:14.5px;color:var(--ash)}
+.statblock b{color:var(--bone);font-weight:400}
+.laden{border:1px solid var(--blood);color:var(--blood-hi);padding:10px 17px;font-size:15px;align-self:flex-start}
+.laden:hover{background:var(--blood);color:var(--bone)}
+
+/* ---- Weiter ---- */
+.weiter{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:13px 0;display:flex;gap:14px;align-items:baseline}
+.weiter .tat{color:var(--moss);flex:none;margin:0}
+.weiter p{margin:0;font-size:15.5px}
+.blaettern{display:flex;justify-content:space-between;gap:14px;margin-top:30px}
+.blaettern button{border:1px solid var(--line-hi);padding:13px 22px;font-family:var(--display);font-size:18px;max-width:48%;text-align:left}
 .blaettern button:hover{border-color:var(--gold);color:var(--gold)}
 .blaettern button:disabled{opacity:.3;cursor:not-allowed}
-.blaettern button span{display:block;font-family:var(--sans);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.blaettern button span{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
 .blaettern .vor{text-align:right;margin-left:auto}
-.tasten{font-family:var(--sans);font-size:11.5px;color:var(--dim);text-align:right;margin:10px 0 0}
 
-/* ---- rechte Spalte ---- */
-.leiste{border-left:1px solid var(--line);padding-left:32px;position:sticky;top:0;max-height:100vh;overflow-y:auto;font-family:var(--sans);font-size:13.5px;line-height:1.5;color:var(--muted)}
-.fach{padding:4px 0 22px}
-.fach h4{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:0 0 10px;font-weight:500;font-family:var(--sans);display:flex;justify-content:space-between;align-items:baseline;gap:10px}
-.fach h4 small{font-size:10px;letter-spacing:.06em;text-transform:none;color:var(--dim)}
-.fach h4 button{font-size:11px;letter-spacing:.06em;text-transform:none;color:var(--muted);border-bottom:1px solid var(--line-hi);padding:0}
-.fach h4 button:hover{color:var(--gold)}
-.fach .hinweis{margin:8px 0 0;font-size:12px;color:var(--dim)}
-.regel{display:grid;grid-template-columns:minmax(0,1fr) 16px minmax(0,1.1fr);gap:8px;padding:8px 0;border-top:1px solid var(--line)}
-.regel:first-child{border-top:none;padding-top:0}
-.regel i{font-style:normal;color:var(--dim)}
-.regel.gut{color:var(--green-soft)}.regel.schlecht{color:var(--red)}
-.regel.leer{display:block;color:var(--dim);font-style:italic}
-.staerke{padding:10px 12px;background:var(--panel);border-radius:4px;margin-bottom:6px}
-.staerke b{font-weight:500;color:var(--text);display:block;font-size:13px}
-.staerke span{display:block}
-.staerke.leer{background:none;border:1px dashed var(--line);color:var(--dim)}
-.staerke.leer span{font-style:italic}
-.staerke span.cue{font-style:italic;color:var(--gold);margin-top:2px}
-.staerke summary{cursor:pointer;list-style:none}
-.staerke summary::-webkit-details-marker{display:none}
-.staerke summary b::before{content:"▸ ";color:var(--gold)}
-.staerke[open] summary b::before{content:"▾ "}
-.staerke p{margin:8px 0 2px;color:var(--muted);border-left:2px solid var(--gold);padding-left:9px}
-.staerke p b{display:inline;color:var(--text)}
-.held{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:11px 13px;margin-bottom:8px;display:flex;flex-direction:column;gap:7px}
-.held.tot{opacity:.45}
-.held-kopf{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.held input.nm{background:none;border:none;border-bottom:1px solid var(--line);font-family:var(--serif);font-size:17px;width:100%;min-width:0;padding:1px 0;color:var(--text)}
-.held input.nm::placeholder{font-family:var(--sans);font-size:13px;color:var(--dim)}
-.held .rolle{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
-.hpzeile{display:flex;align-items:center;gap:8px}
-.hpwert{font-variant-numeric:tabular-nums;min-width:58px;color:var(--text)}
-.hpwert b{font-weight:600;font-size:17px}
-.bar{flex:1;height:5px;background:var(--line);border-radius:3px;overflow:hidden}
-.bar i{display:block;height:100%;background:var(--green);border-radius:3px;transition:width .3s}
-.gegner .bar i{background:var(--red-bar)}
-.steuer{display:flex;gap:6px}
-.steuer input{width:100%;min-width:0;background:var(--bg);border:1px solid var(--line-hi);padding:6px;border-radius:4px;text-align:center;font-size:14px}
-.steuer button{border:1px solid var(--line-hi);padding:6px 10px;border-radius:4px;font-size:13px;flex:none;color:var(--text)}
-.steuer button.minus:hover{border-color:var(--red-line);color:var(--red)}
-.steuer button.plus:hover{border-color:#2f5a48;color:var(--green)}
-.baro{display:flex;flex-direction:column;gap:8px}
-.baro .zahl{font-family:var(--serif);font-size:30px;color:var(--text);line-height:1}
-.baro .zahl small{font-size:13px;color:var(--dim);font-family:var(--sans)}
-.baro .stufe{font-family:var(--serif);font-size:16px;color:var(--text)}
-.baro .folge{margin:0;font-size:12.5px;color:var(--muted)}
-.saeule{display:flex;gap:3px}
-.saeule i{flex:1;height:8px;border-radius:2px;background:var(--line)}
-.saeule i.an1{background:#3f5f80}.saeule i.an2{background:var(--gold)}.saeule i.an3{background:var(--red-bar)}
-.barobtn{display:flex;gap:6px}
-.barobtn button{flex:1;border:1px solid var(--line-hi);padding:7px 0;border-radius:4px;font-size:13px;color:var(--muted)}
-.barobtn button:hover{color:var(--text);border-color:var(--dim)}
-.wisszeile{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:4px;padding:9px 10px;margin-bottom:6px;width:100%;text-align:left}
-.wisszeile.hat{border-color:#2f5a48}
-.wisszeile .haken{color:var(--dim);flex:none}
-.wisszeile.hat .haken{color:var(--green)}
-.wisszeile b{font-weight:500;font-size:13.5px;display:block;color:var(--text)}
-.wisszeile span{font-size:12px;color:var(--muted);display:block;margin-top:2px}
-.wisszeile.hat span{color:var(--green)}
-.leerfach{font-size:13px;color:var(--dim);font-style:italic;margin:0}
-details.fach summary{cursor:pointer;list-style:none;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);font-weight:500}
-details.fach summary::-webkit-details-marker{display:none}
-details.fach summary::after{content:" — aufklappen";letter-spacing:0;text-transform:none;font-weight:400}
-details.fach[open] summary::after{content:" — zuklappen"}
-.chronik{list-style:none;margin:10px 0 0;padding:0;max-height:220px;overflow-y:auto;font-size:12.5px}
-.chronik li{display:flex;gap:9px;padding:5px 0;border-bottom:1px solid var(--line);color:var(--muted)}
-.chronik li .z{font-size:10.5px;color:var(--dim);flex:none}
-.chronik li b{color:var(--text);font-weight:500}
-
-/* ---- Kampfbildschirm ---- */
-.kampfmodus{position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;grid-template-rows:auto 1fr auto;font-family:var(--sans);font-size:15px;overflow:hidden}
-.k-kopf{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:18px 48px;border-bottom:1px solid var(--line);flex-wrap:wrap}
-.k-kopf h2{font-family:var(--serif);font-size:26px}
-.k-kopf .krume{margin-top:2px}
-.k-rechts{display:flex;gap:10px;align-items:center}
-.badge{font-family:var(--sans);font-size:13px;border:1px solid var(--line-hi);padding:7px 12px;border-radius:4px;color:var(--muted)}
-.badge b{font-weight:600;color:var(--text)}
-.badge.g1 b{color:var(--gold)}.badge.g2 b{color:var(--red)}
-.k-feld{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding:30px 48px;overflow-y:auto;align-items:start}
-.k-feld h4{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:0 0 14px;font-weight:500}
-.k-feld .hinweis{font-size:13px;color:var(--dim);margin:10px 0 0;line-height:1.5}
-.k-feld .held{padding:16px 20px}
-.k-feld .held input.nm{font-size:22px}
-.k-feld .hpwert b{font-size:26px}
-.k-feld .steuer input{width:64px;flex:none;font-size:16px;padding:9px}
-.k-feld .steuer button{font-size:14px;padding:9px 14px}
-.gegner{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px 20px;margin-bottom:12px;display:flex;flex-direction:column;gap:10px}
-.gegner.tot{opacity:.45}
-.g-kopf{display:flex;justify-content:space-between;align-items:baseline}
-.gegner h4{font-family:var(--serif);font-size:24px;color:var(--text);letter-spacing:0;text-transform:none;margin:0}
-.gegner .weg{font-size:13px;color:var(--dim);padding:2px 8px}
-.gegner .weg:hover{color:var(--red)}
-.att{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
-.att button{border:1px solid var(--line-hi);background:var(--panel2);padding:9px 14px;border-radius:4px;font-size:14px;color:var(--text)}
-.att button:hover{border-color:var(--red-line);color:var(--red)}
-.gegner .steuer{align-items:center}
-.wurfbox{background:var(--panel2);border-radius:4px;padding:10px 12px;font-size:14px;color:var(--muted)}
-.wurfbox .erg{display:block;margin-bottom:8px}
-.wurfbox .erg b{color:var(--gold-soft);font-size:18px}
-.wurfbox .an{display:flex;gap:6px;flex-wrap:wrap}
-.wurfbox .an button{border:1px solid var(--line-hi);padding:5px 12px;border-radius:4px;color:var(--text)}
-.wurfbox .an button:hover{border-color:var(--red-line);color:var(--red)}
-.k-fuss{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px;padding:14px 48px;border-top:1px solid var(--line)}
-.k-log{list-style:none;margin:0;padding:0;display:flex;gap:18px;overflow:hidden;white-space:nowrap;font-size:13px;color:var(--muted)}
-.k-log li .z{color:var(--dim);margin-right:6px}
-.k-log li b{color:var(--text);font-weight:500}
-.gruenknopf{font-family:var(--sans);font-size:14px;border:1px solid #2f5a48;color:var(--green-soft);padding:11px 20px;border-radius:4px}
-.gruenknopf:hover{background:rgba(127,182,148,.12)}
-
-@media (max-width:1100px){.raum{grid-template-columns:1fr}.leiste{position:static;max-height:none;border-left:none;border-top:1px solid var(--line);padding:24px 0 0;margin-top:20px}}
-@media (max-width:760px){
-  .kopf,.raum,.k-kopf,.k-feld,.k-fuss{padding-left:16px;padding-right:16px}.pfad{padding:0 8px}
-  .kopf-rechts{align-items:flex-start}.lage{justify-content:flex-start}.lage span{align-items:flex-start}
-  .bloecke{grid-template-columns:1fr;column-gap:0}.marg{text-align:left;margin-bottom:6px;padding-top:0}.inhalt{margin-bottom:26px}
-  .blaettern{padding-left:0}.k-feld{grid-template-columns:1fr}.k-fuss{grid-template-columns:1fr;justify-items:stretch}
-}
+/* ---- Seitenleiste ---- */
+.leiste{border-left:1px solid var(--line);background:var(--crypt);position:sticky;top:calc(env(safe-area-inset-top,0px) + 52px);max-height:calc(100vh - 52px);overflow-y:auto}
+@media (max-width:1380px){.leiste{position:static;max-height:none}}
+@media (max-width:1040px){.leiste{border-left:none;border-top:1px solid var(--line)}}
+.fach{border-bottom:1px solid var(--line);padding:15px 17px}
+.fach>.label{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}
+.fach>.label button{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--line-hi)}
+.fach>.label button:hover{color:var(--gold)}
+.baro{display:grid;grid-template-columns:40px 1fr;gap:13px}
+.saeule{display:flex;flex-direction:column-reverse;gap:3px}
+.saeule i{height:13px;background:#12121b;border:1px solid var(--line)}
+.saeule i.an1{background:linear-gradient(90deg,#1f3346,#2c4d6b);border-color:#3a5f80}
+.saeule i.an2{background:linear-gradient(90deg,#4a3714,var(--gold-dim));border-color:var(--gold-dim)}
+.saeule i.an3{background:linear-gradient(90deg,#5e1d16,var(--blood));border-color:var(--blood)}
+.barotext .zahl{font-family:var(--mono);font-size:38px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.barotext .zahl small{font-size:14px;color:var(--dim);font-weight:400}
+.barotext .stufe{font-family:var(--display);font-size:17px;line-height:1.2;margin-top:3px}
+.barotext .folge{font-size:12.5px;color:var(--ash);line-height:1.45;margin:6px 0 0}
+.barobtn{display:flex;gap:5px;margin-top:11px}
+.barobtn button{flex:1;border:1px solid var(--line);padding:7px 0;font-family:var(--mono);font-size:12px;color:var(--ash)}
+.barobtn button:hover{border-color:var(--line-hi);color:var(--bone)}
+.held,.gegner{border:1px solid var(--line);background:var(--stone);padding:10px 11px;display:flex;flex-direction:column;gap:7px;margin-bottom:7px}
+.held.tot,.gegner.tot{opacity:.45}
+.held-kopf,.g-kopf{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.held input.nm{background:none;border:none;border-bottom:1px solid var(--line);font-family:var(--display);font-size:16px;width:100%;min-width:0;padding:1px 0}
+.held input.nm::placeholder{font-family:var(--body);font-size:13px;color:var(--dim)}
+.held .rolle,.gegner .werte{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
+.gegner h4{font-size:16px}
+.gegner .weg{font-family:var(--mono);font-size:12px;color:var(--dim)}
+.gegner .weg:hover{color:var(--blood-hi)}
+.hpzeile{display:flex;align-items:center;gap:7px}
+.hpwert{font-family:var(--mono);font-size:15px;font-variant-numeric:tabular-nums;min-width:54px}
+.hpwert b{font-weight:700}
+.bar{flex:1;height:7px;background:#0f0f16;border:1px solid var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--blood);transition:width .3s}
+.steuer{display:flex;gap:4px}
+.steuer input{width:100%;min-width:0;background:var(--crypt);border:1px solid var(--line);padding:5px 6px;font-family:var(--mono);font-size:13px;text-align:center}
+.steuer button{border:1px solid var(--line);padding:5px 9px;font-family:var(--mono);font-size:12px;flex:none}
+.steuer button.minus:hover{border-color:var(--blood);color:var(--blood-hi)}
+.steuer button.plus:hover{border-color:var(--moss);color:var(--moss)}
+.att{display:flex;gap:5px;flex-wrap:wrap}
+.att button{border:1px solid var(--line-hi);padding:5px 9px;font-size:12px;color:var(--ash)}
+.att button:hover{border-color:var(--blood);color:var(--blood-hi)}
+.wurfbox{border:1px solid var(--gold-dim);background:rgba(217,164,65,.06);padding:9px 10px;font-size:13px}
+.wurfbox .erg{font-family:var(--mono);font-size:13.5px;display:block;margin-bottom:7px}
+.wurfbox .erg b{color:var(--gold);font-size:16px}
+.wurfbox .an{display:flex;gap:5px;flex-wrap:wrap}
+.wurfbox .an button{border:1px solid var(--line-hi);padding:4px 9px;font-size:11.5px;color:var(--ash)}
+.wurfbox .an button:hover{border-color:var(--blood);color:var(--blood-hi)}
+.zufuegen{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.zufuegen button{border:1px dashed var(--line-hi);padding:6px 10px;font-size:12px;color:var(--dim)}
+.zufuegen button:hover{border-color:var(--gold-dim);color:var(--gold);border-style:solid}
+.wisszeile{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);padding:9px 10px;margin-bottom:6px;width:100%;text-align:left}
+.wisszeile:hover{border-color:var(--line-hi)}
+.wisszeile.hat{border-color:var(--moss);background:rgba(116,176,148,.07)}
+.wisszeile .haken{font-family:var(--mono);font-size:13px;color:var(--dim);flex:none}
+.wisszeile.hat .haken{color:var(--moss)}
+.wisszeile b{font-weight:400;font-size:14px;display:block}
+.wisszeile span{font-size:12px;color:var(--ash);display:block;margin-top:2px}
+.wisszeile.hat span{color:var(--moss)}
+.leerfach{font-size:12.5px;color:var(--dim);font-style:italic;margin:0}
+.chronik{list-style:none;margin:0;padding:0;max-height:180px;overflow-y:auto;font-size:12.5px}
+.chronik li{display:flex;gap:9px;padding:5px 0;border-bottom:1px solid var(--line);color:var(--ash)}
+.chronik li .z{font-family:var(--mono);font-size:10px;color:var(--dim);flex:none}
+.chronik li b{color:var(--bone);font-weight:400}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 
-<header class="kopf">
-  <div class="kopf-links">
-    <div class="krume"><span id="s-n">Anleitung</span> · <span id="kschritt">Seite 1 von 12</span> · <span class="app">The Bride of Nachtfels</span></div>
-    <h1 id="s-titel">…</h1>
+<header class="krone">
+  <div>
+    <span class="sub">Dungeon Master · Ein Abend, drei Spieler</span>
+    <h1>The Bride of Nachtfels</h1>
   </div>
-  <div class="kopf-rechts">
-    <div class="lage" id="lage"></div>
-    <div class="kopf-knoepfe"><button id="kampfknopf" class="kampfknopf" title="Kampfbildschirm öffnen — freier Kampf oder der geladene">⚔ Kampf</button><button class="leise" id="zuruecksetzen">Neue Runde</button></div>
+  <div class="rechts">
+    <span class="badge g0" id="kgefahr">Gefahr <b>0</b>/10</span>
+    <span class="badge" id="kschritt">Schritt 1/12</span>
+    <button class="klein" id="zuruecksetzen">Neue Runde</button>
   </div>
 </header>
 
@@ -282,74 +314,73 @@ details.fach[open] summary::after{content:" — zuklappen"}
 
 <div class="raum">
   <main class="szene">
+    <div class="szenenkopf">
+      <span class="n" id="s-n">Anleitung</span>
+      <h2 id="s-titel">…</h2>
+      <div class="lage" id="lage"></div>
+      <div class="legende"><span class="g">Gelb · vorlesen</span><span class="s">Grün · an die Schüler</span><span class="d">Grau · nur du</span><span class="k">Rot · Kampf</span></div>
+    </div>
     <div class="bloecke" id="bloecke"></div>
     <div class="blaettern">
       <button id="zurueck"><span>zurück</span><em id="zurueck-t" style="font-style:normal">—</em></button>
       <button id="vor" class="vor"><span>weiter</span><em id="vor-t" style="font-style:normal">—</em></button>
     </div>
-    <p class="tasten">Blättern mit den Pfeiltasten ← → · Esc schliesst den Kampfbildschirm</p>
+    <p class="tasten">Blättern auch mit den Pfeiltasten ← →</p>
   </main>
 
-  <aside class="leiste">
+  <aside class="mitte" aria-label="Wenn – dann">
     <section class="fach">
-      <h4>Wenn … dann <small>diese Szene</small></h4>
+      <span class="label">Wenn … dann <span class="labelzusatz">diese Szene</span></span>
       <div id="verlauf"></div>
     </section>
     <section class="fach" id="staerken-fach">
-      <h4>Stärken der Figuren <small>optional</small></h4>
+      <span class="label">Stärken der Figuren <span class="labelzusatz">optional</span></span>
       <div id="staerken"></div>
-      <p class="hinweis">Jede steht als Satz im Vorlesetext — lies ihn und warte. Ob ein Spieler darauf eingeht, ist seine Sache. Anklicken zeigt die Folge.</p>
+      <p class="staerken-hinweis">Jede steht als Satz im gelben Text — lies ihn und warte. Ob ein Spieler darauf eingeht, ist seine Sache. Anklicken zeigt die Folge.</p>
     </section>
+  </aside>
+
+  <aside class="leiste">
     <section class="fach">
-      <h4>Die Gruppe <button id="vollheilung">nach dem Kampf: alle voll</button></h4>
-      <div id="gruppe"></div>
-    </section>
-    <section class="fach">
-      <h4>Gefahrenbarometer</h4>
+      <span class="label">Gefahrenbarometer</span>
       <div class="baro">
-        <div><span class="zahl" id="b-zahl">0</span><small> / 10</small></div>
         <div class="saeule" id="saeule"></div>
-        <div class="stufe" id="b-stufe">—</div>
-        <p class="folge" id="b-folge">—</p>
-        <div class="barobtn"><button data-gefahr="-1">−1</button><button data-gefahr="1">+1</button><button data-gefahr="2">+2</button></div>
+        <div class="barotext">
+          <div><span class="zahl" id="b-zahl">0</span><small> / 10</small></div>
+          <div class="stufe" id="b-stufe">—</div>
+          <p class="folge" id="b-folge">—</p>
+        </div>
+      </div>
+      <div class="barobtn">
+        <button data-gefahr="-1">−1</button>
+        <button data-gefahr="1">+1</button>
+        <button data-gefahr="2">+2</button>
       </div>
     </section>
+
     <section class="fach">
-      <h4>Was die Gruppe weiss</h4>
+      <span class="label">Die Gruppe <button id="vollheilung">nach dem Kampf: alle voll</button></span>
+      <div id="gruppe"></div>
+    </section>
+
+    <section class="fach">
+      <span class="label">Kampf</span>
+      <div id="gegner"></div>
+      <p class="leerfach" id="gegner-leer">Kein Kampf im Gang.</p>
+      <details class="vonhand"><summary>Gegner von Hand hinzufügen</summary><div class="zufuegen" id="zufuegen"></div></details>
+    </section>
+
+    <section class="fach">
+      <span class="label">Was die Gruppe weiss</span>
       <div id="wissen"></div>
     </section>
-    <details class="fach">
-      <summary>Chronik</summary>
-      <ul class="chronik" id="chronik"></ul>
+
+    <details class="fach" style="padding:0">
+      <summary class="label" style="padding:15px 17px;cursor:pointer;list-style:none">Chronik <span style="color:var(--dim);letter-spacing:0;text-transform:none;font-family:var(--body);font-size:12px">— aufklappen</span></summary>
+      <ul class="chronik" id="chronik" style="padding:0 17px 15px"></ul>
     </details>
   </aside>
 </div>
-
-<section class="kampfmodus" id="kampfmodus" hidden aria-label="Kampfbildschirm">
-  <header class="k-kopf">
-    <div><h2>⚔ <span id="k-titel">Kampf</span></h2><div class="krume" id="k-krume"></div></div>
-    <div class="k-rechts"><span class="badge g0" id="kgefahr">Gefahr <b>0</b>/10</span><button class="leise" id="kampf-zu">← Szene (Kampf bleibt offen)</button></div>
-  </header>
-  <div class="k-feld">
-    <div>
-      <h4>Gegner · dein Zug: Attacke drücken</h4>
-      <div id="gegner"></div>
-      <p class="leerfach" id="gegner-leer">Kein Gegner geladen. Unten einen dazunehmen — oder in der Szene den vorbereiteten Kampf laden.</p>
-      <div class="zufuegen" id="zufuegen"></div>
-      <p class="hinweis" id="k-hinweis"></p>
-    </div>
-    <div>
-      <h4>Gruppe · der Spieler liest seinen Satz, du trägst ein</h4>
-      <div id="gruppe-kampf"></div>
-      <p class="hinweis">Auf 0: eigener Trank, oder liegen bis nach dem Kampf. <span id="k-staerken"></span></p>
-    </div>
-  </div>
-  <footer class="k-fuss">
-    <ul class="k-log" id="chronik-kampf"></ul>
-    <button class="gruenknopf" id="kampf-vorbei">Kampf vorbei — alle heilen, zurück zur Szene</button>
-    <span></span>
-  </footer>
-</section>
 
 <script>
 "use strict";
@@ -403,11 +434,10 @@ const KAPITEL = [
  <p>Dazu das <b>Helfer-Blatt</b> als Ausdruck, einmal pro Schüler. Darauf stehen alle englischen Satzanfänge und Vokabeln, nach Szene geordnet. Teil es aus, bevor du anfängst.</p>`},
  {t:"regie", titel:"Wer die Gruppe ist", text:`Das ist vorgegeben, das müssen die Schüler nicht erfinden: <b>Sie sind Vampirjäger.</b> Nicht berühmt, noch nicht. Ein Gerücht hat sie hergeführt — in diesen Bergen liege ein Tal, in dem Menschen nach Plan verschwinden. Sie wollen wissen, ob es stimmt.
  <p>Erfinden dürfen sie: Namen, Herkunft, wie sie sich kennen, was sie können. Der Auftrag steht fest.</p>`},
- {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`Am <b>linken Rand</b> steht bei jedem Absatz, was er ist. <b>Vorlesen</b> heisst: wörtlich — Erzähltext und die Sätze der Figuren; die Sätze stehen in Gold. <b>An die Schüler</b> heisst: das sagst du ihnen, ebenfalls wörtlich — es ist ihre Aufgabe. <b>Für dich</b> heisst: nur du — Hintergrund, Personen, Antworten. <b>Kampf</b> lädt die Gegner und öffnet den Kampfbildschirm. Ganz unten steht immer, <b>wann es weitergeht</b>.
- <p>Rechts oben steht <b>Wenn … dann</b>: was in dieser Szene abzweigt — „Tam angelogen → kein Führer“, „alle würfeln 10 oder mehr → an den Wachen vorbei“. Die rechte Spalte bleibt beim Scrollen stehen, damit du beim Vorlesen nie suchen musst, was als Nächstes von der Antwort der Gruppe abhängt.</p>
- <p>Darunter <b>Stärken der Figuren</b>: je Figur eine Zeile mit ihrem Talent — Magic Hand, Strength, Healing Touch — und, wenn die Szene eine Gelegenheit dafür hat, der Satz aus dem Vorlesetext, der sie ankündigt (Tam hält die verbrannte Hand an die Brust; Marek hat die Hand verbunden). Du liest den Satz vor und wartest. Anklicken zeigt die Folge. Das sind keine Aufgaben und keine Lösungen: Die Zeile sagt dir nur, was du zulassen kannst, falls der Spieler von selbst darauf kommt. Jede Szene funktioniert auch ohne.</p>
- <p>Oben rechts steht die <b>Lage</b>: Gefahr, wo die Gruppe ist, was sie gewählt hat, was sie weiss. Auf der Seite steht immer nur, was zu diesem Weg gehört — das andere siehst du gar nicht erst. Und eine Entscheidung lässt sich erst anklicken, wenn die davor getroffen ist.</p>
- <p>Der <b>Kampf</b> ist ein eigener Bildschirm. Er öffnet sich, sobald du in einer Szene einen Kampf lädst — oder jederzeit über „⚔ Kampf“ oben rechts, für einen freien Kampf mit Gegnern von Hand. Links stehen die Gegner, rechts die Gruppe, unten das Log. „Kampf vorbei“ heilt alle und bringt dich zur Szene zurück; „← Szene“ lässt den Kampf offen, falls du zwischendurch nachlesen willst.</p>`},
+ {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`<b>Gelb</b> heisst: wörtlich vorlesen — Erzähltext und die Sätze der Figuren stehen in einer Karte. <b>Grün</b> heisst: das sagst du den Schülern, ebenfalls wörtlich — es ist ihre Aufgabe. <b>Grau</b> heisst: nur für dich, und steht als Hintergrund oben. <b>Rot</b> heisst: Kampf. Ganz unten steht immer, <b>wann es weitergeht</b>.
+ <p>In der <b>mittleren Spalte</b> steht, was in dieser Szene abzweigt — <b>Wenn … dann</b>: „Tam angelogen → kein Führer“, „alle würfeln 10 oder mehr → an den Wachen vorbei“. Sie scrollt mit, damit du beim Vorlesen nie suchen musst, was als Nächstes von der Antwort der Gruppe abhängt.</p>
+ <p>Darunter <b>Stärken der Figuren</b>: je Figur eine Zeile mit ihrem Talent — Magic Hand, Strength, Healing Touch — und, wenn die Szene eine Gelegenheit dafür hat, der Satz aus dem gelben Text, der sie ankündigt (Tam hält die verbrannte Hand an die Brust; Marek hat die Hand verbunden). Du liest den Satz vor und wartest. Anklicken zeigt die Folge. Das sind keine Aufgaben und keine Lösungen: Die Zeile sagt dir nur, was du zulassen kannst, falls der Spieler von selbst darauf kommt. Jede Szene funktioniert auch ohne.</p>
+ <p>Unter dem Titel jeder Seite steht die <b>Lage</b>: wo die Gruppe ist, was sie gewählt hat, was sie weiss. Auf der Seite steht immer nur, was zu diesem Weg gehört — das andere siehst du gar nicht erst. Und eine Entscheidung lässt sich erst anklicken, wenn die davor getroffen ist.</p>`},
  {t:"sagen", text:["You always have to speak English. If you don’t — who knows what consequences it might have… (evil laugh)","If you don’t know a word, ask me. In English. Nobody laughs."]},
  {t:"regie", titel:"Hintergrund zur Regel", text:`Du kannst den Grafen <b>deutschempfindlich</b> machen: Er hört jeden ganzen deutschen Satz, der am Tisch fällt — für ihn ein Geräusch im Haus. Folge: Die Gefahr steigt um 1 (Knopf rechts), oder er schickt einen Diener los — dafür einen <b>Thrall</b> in den Kampf laden. Hier darfst du improvisieren; die Drohung wirkt meist schon allein.
  <p>Das Barometer hat drei Stufen. <b>Blau (0–3):</b> nichts passiert. <b>Orange (4–7):</b> du entscheidest selbst, ob du in einem Kampf einen Gegner hinzufügst — jeder Kampfblock bietet dir dafür einen Knopf an. <b>Rot (8–10):</b> Sobald die dritte Stufe erreicht ist, beginnt als Zwischenakt eine <b>Patrouille</b> (drei Wachen, ein Hund) vor dem nächsten Akt, und jeder Kampf bekommt von selbst einen Gegner mehr.</p>`},
@@ -424,9 +454,9 @@ const KAPITEL = [
    ["Die Gefahr wird rot (8–10)","Das Haus ist wach: Ab jetzt lädt jeder Kampfknopf <b>einen Gegner mehr</b>, und die Seite schiebt <b>einmal</b> einen Zwischenakt vor den nächsten Akt — eine Patrouille, drei Wachen und ein Hund. Du musst nichts tun; oben in der Leiste erscheint „⚠ Zwischenakt“, und beim Weiterklicken kommt er von selbst. Sinkt die Gefahr vorher wieder unter 8, wird er abgeblasen."],
    ["Du hast dich verklickt","Jede Entscheidung lässt sich umwählen — die Seite nimmt Gefahr, Lebenspunkte und Wissen der alten Wahl selbst zurück."]]},
  {t:"regie", titel:"Ein Kampf in drei Handgriffen", text:`<b>1.</b> Der Spieler liest seinen gelben Satz vor: „I hit for 9 damage.“
- <p><b>2.</b> Du tippst die 9 im Kampfbildschirm in die Karte des Monsters und drückst <em>Schaden</em>.</p>
+ <p><b>2.</b> Du tippst die 9 in die Karte des Monsters und drückst <em>Schaden</em>.</p>
  <p><b>3.</b> Das Monster ist dran: Du drückst auf seine Attacke. Die Seite würfelt und sagt dir, ob es trifft. Dann klickst du an, wen es erwischt hat.</p>
- <p><b>Im Kampf heilt niemand</b> — ausser mit dem eigenen Trank. Danach heilt die Lightbearer alle: „Kampf vorbei“ unten im Kampfbildschirm, oder rechts „alle voll“.</p>`},
+ <p><b>Im Kampf heilt niemand</b> — ausser mit dem eigenen Trank. Danach heilt die Lightbearer alle: rechts „alle voll“.</p>`},
  {t:"weiter", text:"Wenn du das gelesen hast und jeder sein Helfer-Blatt vor sich liegen hat."}]},
 
 /* ===== 1 ===== */
@@ -771,7 +801,7 @@ const KAPITEL = [
   {wer:"Arcanist", talent:"Magic Hand", nur:"e3_pakt", cue:"still steaming", text:"Die Teekanne dampft noch.", folge:"Kippt Magic Hand ihm den Tee ins Gesicht: kein Schaden, aber sein nächster Angriff ist vertan — er wischt sich das Gesicht und lacht: „Manners.“"},
   {wer:"Arcanist", talent:"Magic Hand", nur:"e3_buch", cue:"hangs in the air", text:"Die Asche des Buches schwebt noch.", folge:"Wirft Magic Hand sie ihm in die Augen: kein Schaden, aber sein nächster Angriff ist vertan."},
   {wer:"Arcanist", talent:"Magic Hand", nur:"e3_raus", cue:"the only light there is", text:"Die Lampe über ihm ist das einzige Licht im Gang.", folge:"Reisst Magic Hand sie herunter: einen Moment Dunkelheit — sein nächster Angriff ist vertan."},
-  {wer:"Lightbearer", talent:"Healing Touch", gefahrVon:4, gefahrBis:10, nicht:"e3_buch", cue:"Their eyes are open and see nothing", text:"Die beiden Thralls sind Menschen aus dem Tal — unter Vertrag.", folge:"Wer einen von ihnen berührt, statt ihn zu schlagen, weckt ihn: Er setzt sich an die Wand und schläft. Ein Thrall weniger (im Kampfbildschirm ×). Der zweite bleibt, und Vaskir bleibt."}],
+  {wer:"Lightbearer", talent:"Healing Touch", gefahrVon:4, gefahrBis:10, nicht:"e3_buch", cue:"Their eyes are open and see nothing", text:"Die beiden Thralls sind Menschen aus dem Tal — unter Vertrag.", folge:"Wer einen von ihnen berührt, statt ihn zu schlagen, weckt ihn: Er setzt sich an die Wand und schläft. Ein Thrall weniger (rechts ×). Der zweite bleibt, und Vaskir bleibt."}],
  titel:"Count Vaskir", art:"kampf", braucht:"e3", ort:{e3_raus:ORT.treppe, e3_buch:ORT.studie, e3_pakt:ORT.turm}, nach:ORT.graf, bloecke:[
  {t:"ziel", text:"Die Begegnung mit dem Grafen — Verhandlung, Kampf oder beides. Am Ende trägst du unten ein, wie es ausging.", zeit:"30 Min."},
  {t:"regie", titel:"Hintergrund", text:`Der Graf sieht aus wie ein müder Mann von fünfzig. Wie er auftritt, hängt an eurer Wahl (Übergang) und am Barometer (Lebenspunkte, Thralls) — es steht nur der Fall da, der bei euch gilt. <b>Unter 15 Lebenspunkten hört er auf zu kämpfen und redet:</b> Dann kann die Gruppe noch einmal wählen — töten, Vertrag, oder ihn gehen lassen. Fällt eine Figur auf 0, ist sie bewusstlos, nicht tot — Trank, oder sie liegt bis nach dem Kampf. <b>Am Ende trägst du unten ein, wie es ausging.</b>`},
@@ -800,7 +830,7 @@ const KAPITEL = [
  {t:"wenn", gefahrVon:4, gefahrBis:10, nicht:"e3_buch", titel:"Zwei Thralls kommen dazu", text:`Zwei Diener des Hauses stehen mit im Raum, je 9 Lebenspunkte — gelb oben: „Seine Leute“. Der Knopf unten lädt sie mit.`},
  {t:"wenn", gefahrVon:4, gefahrBis:10, nur:"e3_buch", titel:"Keine Thralls", text:`Das Buch hat die Diener befreit — sie liegen irgendwo im Haus und schlafen zum ersten Mal seit Jahren. <b>Vaskir kommt allein.</b>`},
  {t:"tun", id:"finale_laden", wiederholbar:true, text:"Lade den Kampf — die Seite nimmt die richtigen Gegner nach Barometer und eurer Wahl. Bei geglückter Verhandlung brauchst du das nicht.", knopf:{art:"finale"}, beschriftung:"Kampf laden"},
- {t:"kampf", titel:"Count Vaskir", ohneKnopf:true, text:"Geladen wird mit dem Knopf darüber; er öffnet den Kampfbildschirm. Trag den Schaden der Spieler dort in seine Leiste ein. Für seinen Zug drückst du auf eine seiner Attacken — die Seite würfelt und du klickst an, wen es trifft.", gegner:["vaskir"], zusatz:["thrall"]},
+ {t:"kampf", titel:"Count Vaskir", ohneKnopf:true, text:"Geladen wird mit dem Knopf darüber. Trag den Schaden der Spieler rechts in seine Leiste ein. Für seinen Zug drückst du auf eine seiner Attacken — die Seite würfelt und du klickst an, wen es trifft.", gegner:["vaskir"], zusatz:["thrall"]},
  {t:"optionen", id:"e4", titel:"Wie ist es ausgegangen?", optionen:[
   {b:"A", name:"Vaskir ist tot", flagge:"ausgang_tot", was:"Sie haben ihn erledigt. Zu Staub, im Licht der ersten Sonne.", wirkung:{gefahr:0}},
   {b:"B", name:"Ein neuer Vertrag", flagge:"ausgang_vertrag", was:"Verhandelt — ob vor dem Kampf oder mit dem Schwert an seiner Kehle. Er unterschreibt.", wirkung:{gefahr:0}},
@@ -839,7 +869,7 @@ function frischerZustand(namen){
   return { schritt:0, gefahr:0,
     gruppe:GRUPPE_VORLAGE.map((g,i)=>({name:(namen&&namen[i])||"", rolle:g.rolle, hp:g.max, max:g.max})),
     wissen:{}, flaggen:{}, gewaehlt:{}, getan:{}, abgehakt:{}, gegner:[], chronik:[], besucht:{0:true},
-    patrouille:{status:"keine", vor:null}, imZwischenakt:false, zwischenaktZiel:null, kampfOffen:false };
+    patrouille:{status:"keine", vor:null}, imZwischenakt:false, zwischenaktZiel:null };
 }
 let Z = frischerZustand();
 function laden(){ try{ const r=localStorage.getItem(SCHLUESSEL); if(r){const g=JSON.parse(r); if(g&&typeof g==="object") Z=Object.assign(frischerZustand(),g);} }catch(e){} }
@@ -896,22 +926,18 @@ function zeichneBaro(){
   $("b-zahl").textContent=Z.gefahr; $("b-stufe").textContent=s.name; $("b-folge").textContent=s.folge;
   const kb=$("kgefahr"); kb.className="badge g"+(Z.gefahr<=3?0:Z.gefahr<=7?1:2);
   kb.innerHTML="Gefahr <b>"+Z.gefahr+"</b>/10";
-  $("lage").innerHTML=lage();
 }
 
 /* ---- Gruppe ---- */
-function heldHTML(h,i,praefix){
-  const p=Math.max(0,(h.hp/h.max)*100);
-  return '<div class="held'+(h.hp<=0?" tot":"")+'">'+
-   '<div class="held-kopf"><input class="nm" id="'+praefix+'nm'+i+'" value="'+(h.name||"").replace(/"/g,"&quot;")+'" placeholder="Name eintragen" data-nm="'+i+'"><span class="rolle">'+h.rolle+'</span></div>'+
-   '<div class="hpzeile"><span class="hpwert"><b>'+h.hp+'</b>/'+h.max+'</span><span class="bar"><i style="width:'+p+'%"></i></span></div>'+
-   '<div class="steuer"><input type="number" id="'+praefix+'hpin'+i+'" value="5" min="1" max="99" aria-label="Punkte">'+
-   '<button class="minus" data-hpin="'+i+'" data-r="-1">Schaden</button>'+
-   '<button class="plus" data-hpin="'+i+'" data-r="1">Heilung</button></div></div>';
-}
 function zeichneGruppe(){
-  $("gruppe").innerHTML=Z.gruppe.map((h,i)=>heldHTML(h,i,"")).join("");
-  $("gruppe-kampf").innerHTML=Z.gruppe.map((h,i)=>heldHTML(h,i,"k")).join("");
+  $("gruppe").innerHTML=Z.gruppe.map((h,i)=>{
+    const p=Math.max(0,(h.hp/h.max)*100);
+    return '<div class="held'+(h.hp<=0?" tot":"")+'">'+
+     '<div class="held-kopf"><input class="nm" id="nm'+i+'" value="'+(h.name||"").replace(/"/g,"&quot;")+'" placeholder="Name eintragen" data-nm="'+i+'"><span class="rolle">'+h.rolle+'</span></div>'+
+     '<div class="hpzeile"><span class="hpwert"><b>'+h.hp+'</b>/'+h.max+'</span><span class="bar"><i style="width:'+p+'%"></i></span></div>'+
+     '<div class="steuer"><input type="number" id="hpin'+i+'" value="5" min="1" max="99" aria-label="Punkte">'+
+     '<button class="minus" data-hpin="'+i+'" data-r="-1">Schaden</button>'+
+     '<button class="plus" data-hpin="'+i+'" data-r="1">Heilung</button></div></div>';}).join("");
   zeichneStaerken();
 }
 function aendereHP(i,d,grund){
@@ -942,7 +968,7 @@ const PATROUILLE = {n:"Zwischenakt", titel:"The Patrol", art:"kampf", verlauf:[
   {wenn:"Die Patrouille ist vorbei", dann:"„Zurück zur Geschichte“ — die Lightbearer heilt alle"}],
  chancen:[
   {wer:"Blade", talent:"Strength", cue:"on a long chain", text:"Der Hund hängt an einer langen Kette.", folge:"Fängt Blade die Kette, hängt der Hund eine Runde fest: kein Biss. Die Wachen müssen zu euch kommen."},
-  {wer:"Arcanist", talent:"Magic Hand", cue:"One lamp — only one —", text:"Die Patrouille hat eine einzige Lampe.", folge:"Löscht Magic Hand sie, stehen drei Wachen im Dunkeln — eine davon läuft davon. Zwei bleiben (im Kampfbildschirm eine ×)."}],
+  {wer:"Arcanist", talent:"Magic Hand", cue:"One lamp — only one —", text:"Die Patrouille hat eine einzige Lampe.", folge:"Löscht Magic Hand sie, stehen drei Wachen im Dunkeln — eine davon läuft davon. Zwei bleiben (rechts eine ×)."}],
  bloecke:[
  {t:"ziel", text:"Das Haus hat genug gehört. Eine Patrouille stellt die Gruppe — drei Wachen und ein Hund. Zu schaffen, aber es kostet.", zeit:"15 Min."},
  {t:"regie", titel:"Hintergrund", text:"Dieser Zwischenakt kommt nur, wenn das Barometer <b>8 oder mehr</b> erreicht — einmal pro Abend, vor dem nächsten Akt. Drei Wachen (je 9 HP) und ein Wachhund (14 HP): zusammen 41 Lebenspunkte gegen eure 72. <b>Gerade noch zu schaffen:</b> Ist der Hund gefallen und stehen die Wachen bei der Hälfte, ziehen sie sich zurück — „They don’t want to die for him.“ Die Tränke sind für genau diesen Kampf da; danach heilt die Lightbearer alle. Reden hilft hier nicht — die Wachen antworten nicht, sie haben Befehle. Danach geht die Geschichte weiter, wo sie war."},
@@ -950,7 +976,7 @@ const PATROUILLE = {n:"Zwischenakt", titel:"The Patrol", art:"kampf", verlauf:[
   `Boots. Somewhere close, and getting closer — three pairs, in step. One lamp — only one — swings round the corner, and behind it comes something on a long chain that is too big to be a dog and too quiet to be a wolf.`,
   `The man with the lamp does not ask who you are. He already knows. “There you are,” he says — and lets go of the chain.`]},
  {t:"aufgabe", sag:"No talking your way out of this one. But talk to each other: who takes the hound? Who covers the healer?", blatt:"Helfer-Blatt · Teil 8"},
- {t:"kampf", titel:"The patrol", text:"Drei Wachen und der Hund — der Knopf lädt alle vier und öffnet den Kampfbildschirm.", gegner:["wache","wache","wache","hund"]},
+ {t:"kampf", titel:"The patrol", text:"Drei Wachen und der Hund — der Knopf lädt alle vier.", gegner:["wache","wache","wache","hund"]},
  {t:"weiter", text:"Wenn die Patrouille gefallen ist oder sich zurückgezogen hat — dann „Zurück zur Geschichte“."}]};
 function naechsterAkt(){ for(let i=Z.schritt+1;i<KAPITEL.length;i++) if(KAPITEL[i].art!=="ent") return i; return null; }
 function pruefePatrouille(){
@@ -976,12 +1002,11 @@ function zeichneGegner(){
   $("gegner").innerHTML=Z.gegner.map((g,i)=>{
     const v=BESTIARIUM[g.k], p=Math.max(0,(g.hp/g.max)*100);
     return '<div class="gegner'+(g.hp<=0?" tot":"")+'">'+
-     '<div class="g-kopf"><h4>'+g.name+'</h4><span class="hpwert"><b>'+g.hp+'</b>/'+g.max+'</span></div>'+
-     '<div class="hpzeile"><span class="bar"><i style="width:'+p+'%"></i></span><button class="weg" data-weg="'+i+'" title="aus dem Kampf entfernen">×</button></div>'+
-     '<div class="steuer"><input type="number" id="gin'+i+'" value="8" min="1" max="99" aria-label="Schaden"><button class="minus" data-gdmg="'+i+'">Schaden</button>'+
-     '<span class="att">'+v.att.map((a,j)=>'<button data-att="'+i+'" data-j="'+j+'">'+a.n+' '+a.d+'</button>').join("")+'</span></div>'+
+     '<div class="g-kopf"><h4>'+g.name+'</h4><button class="weg" data-weg="'+i+'" title="entfernen">×</button></div>'+
+     '<div class="hpzeile"><span class="hpwert"><b>'+g.hp+'</b>/'+g.max+'</span><span class="bar"><i style="width:'+p+'%;background:var(--gold-dim)"></i></span></div>'+
+     '<div class="steuer"><input type="number" id="gin'+i+'" value="8" min="1" max="99" aria-label="Schaden"><button class="minus" data-gdmg="'+i+'">Schaden</button></div>'+
+     '<div class="att">'+v.att.map((a,j)=>'<button data-att="'+i+'" data-j="'+j+'">'+a.n+'</button>').join("")+'</div>'+
      '<div id="wurf'+i+'"></div></div>';}).join("");
-  const kk=$("kampfknopf"); if(kk){ kk.textContent="⚔ Kampf"+(Z.gegner.length?" · "+Z.gegner.length+" Gegner":""); kk.className="kampfknopf"+(Z.gegner.length?" aktiv":""); }
 }
 function gegnerAngriff(i,j){
   const g=Z.gegner[i], a=BESTIARIUM[g.k].att[j];
@@ -1016,7 +1041,6 @@ function zeichneChronik(){
   $("chronik").innerHTML = Z.chronik.length
     ? Z.chronik.map(e=>'<li><span class="z">'+e.z+'</span><span>'+e.text+'</span></li>').join("")
     : '<li style="border:none;color:var(--dim);font-style:italic">Noch nichts passiert.</li>';
-  $("chronik-kampf").innerHTML = Z.chronik.slice(0,4).map(e=>'<li><span class="z">'+e.z+'</span>'+e.text+'</li>').join("");
 }
 
 /* ---- Knöpfe mit fester Kennung ---- */
@@ -1025,11 +1049,11 @@ function tunAusfuehren(id){
   const b=tunBlock(id); if(!b||!gilt(b)) return;
   const kn=b.knopf;
   if(kn.art==="wissen") return setzeWissen(kn.k);
-  if(kn.art==="finale"){ finaleLaden(); oeffneKampf(); zeichneSzene(); return; }
+  if(kn.art==="finale"){ finaleLaden(); zeichneSzene(); return; }
   if(Z.getan[id]) return;
   if(kn.art==="gefahr"){ const d=setzeGefahr(kn.v, b.beschriftung); Z.getan[id]={art:"gefahr", v:d}; }
   if(kn.art==="schaden"){ Z.gruppe.forEach((h,i)=>aendereHP(i,-kn.v,"schlechte Luft")); Z.getan[id]={art:"schaden", v:kn.v}; }
-  if(kn.art==="laden"){ const geladen=ladeKampf(kn.gegner, kn.extra||null); const d=kn.gefahr?setzeGefahr(kn.gefahr, b.beschriftung):0; Z.getan[id]={art:"laden", gegner:geladen, v:d}; oeffneKampf(); }
+  if(kn.art==="laden"){ const geladen=ladeKampf(kn.gegner, kn.extra||null); const d=kn.gefahr?setzeGefahr(kn.gefahr, b.beschriftung):0; Z.getan[id]={art:"laden", gegner:geladen, v:d}; }
   zeichneSzene(); sichern();
 }
 function tunZurueck(id){
@@ -1075,71 +1099,65 @@ function waehle(entId, i){
 function lage(){
   const k=KAPITEL[Z.schritt];
   const teile=[];
-  const stat=(l,v,kl)=>'<span class="'+(kl||"")+'"><small>'+l+'</small><b>'+v+'</b></span>';
-  teile.push(stat("Gefahr", Z.gefahr, Z.gefahr>=8?"warn":Z.gefahr>=4?"mittel":""));
   const ort=ortAufloesen(k.ort);
-  if(k.ort) teile.push(stat("Ort", ort||"hängt an der offenen Entscheidung", "ort"));
+  if(k.ort) teile.push('<span class="ort">Ort: <b>'+(ort||"hängt an der offenen Entscheidung")+'</b></span>');
   Object.keys(ENTSCHEIDUNGEN).forEach(id=>{
     const g=Z.gewaehlt[id]; if(!g) return;
     const o=optionenBlock(id).optionen[g.opt];
-    teile.push(stat(ENTSCHEIDUNGEN[id].name, o.b+' · '+o.name));
+    teile.push('<span>'+ENTSCHEIDUNGEN[id].name+': <b>'+o.b+' · '+o.name+'</b></span>');
   });
   const wiss=WISSEN.filter(e=>Z.wissen[e.k]).map(e=>e.txt);
-  teile.push(stat("Wissen", wiss.length?wiss.join(", "):"—"));
-  if(Z.patrouille.status==="steht_bevor") teile.push(stat("Zwischenakt", "⚠ Patrouille vor „"+KAPITEL[Z.patrouille.vor].titel+"“", "warn"));
-  if(Z.gefahr>=8) teile.push(stat("Gefahr 8+", "jeder Kampf +1 Gegner", "warn"));
+  teile.push('<span>Wissen: <b>'+(wiss.length?wiss.join(", "):"noch nichts")+'</b></span>');
+  if(Z.patrouille.status==="steht_bevor") teile.push('<span class="warn">⚠ Patrouille vor „'+KAPITEL[Z.patrouille.vor].titel+'“</span>');
+  if(Z.gefahr>=8) teile.push('<span class="warn">Gefahr 8+: jeder Kampf +1 Gegner</span>');
   const fehlt=k.braucht && entscheidungOffen(k.braucht) ? k.braucht : null;
-  if(fehlt) teile.push(stat("offen", "⚠ "+ENTSCHEIDUNGEN[fehlt].name+" noch nicht gewählt", "warn"));
+  if(fehlt) teile.push('<span class="warn">⚠ '+ENTSCHEIDUNGEN[fehlt].name+' noch nicht gewählt</span>');
   return teile.join("");
 }
 
 /* ====================== SZENE ====================== */
 function aufgabeHTML(b){
-  return '<p class="rede">„'+(b.sag||b.text)+'“</p>'+
-    (b.hinweis?'<p class="hinweis">'+b.hinweis+'</p>':'')+(b.blatt?'<span class="blatt">→ '+b.blatt+'</span>':'');
-}
-/* Eine Zeile des Regiebuchs: links die Randnotiz, rechts der Inhalt */
-function zeile(label, klasse, innen, sub){
-  return '<div class="marg '+klasse+'">'+label+(sub?'<small>'+sub+'</small>':'')+'</div><div class="inhalt '+klasse+'">'+innen+'</div>';
+  return '<div class="aufgabe"><span class="tat">Das sagst du den Schülern</span><p class="rede">„'+(b.sag||b.text)+'“</p>'+
+    (b.hinweis?'<p class="hinweis">'+b.hinweis+'</p>':'')+(b.blatt?'<span class="blatt">→ '+b.blatt+'</span>':'')+'</div>';
 }
 function blockHTML(b, idx){
   const t=b.t;
-  if(t==="ziel") return zeile("Ziel","ziel",'<p>'+b.text+'</p>', b.zeit);
-  if(t==="weiter") return zeile("Weiter","weiter",'<p>'+b.text+'</p>');
+  if(t==="ziel") return '<div class="ziel"><span class="label">Ziel</span><p>'+b.text+'</p><span class="zeit">'+b.zeit+'</span></div>';
+  if(t==="weiter") return '<div class="weiter"><span class="tat">Weiter, wenn</span><p>'+b.text+'</p></div>';
+  let innen="";
   switch(t){
-    case "vorlesen": return zeile("Vorlesen","vorlesen", b.text.map(p=>"<p>"+p+"</p>").join(""), b.titel);
-    case "sagen": return zeile("Das sagst du","sagen", b.text.map(p=>"<p>„"+p+"“</p>").join(""));
-    case "aufgabe": return zeile("An die Schüler","aufgabe", aufgabeHTML(b));
-    case "gruppe": return zeile("Vorlesen","vorlesen", b.text.map(p=>"<p>"+p+"</p>").join("")+b.rede.map(p=>'<p class="rede">„'+p+'“</p>').join(""), b.titel)+
-      (b.aufgabe?zeile("An die Schüler","aufgabe", aufgabeHTML(b.aufgabe)):"");
-    case "personen": return zeile("Für dich","personen",
+    case "vorlesen": innen='<div class="vorlesen"><span class="tat">Vorlesen'+(b.titel?" · "+b.titel:"")+'</span>'+b.text.map(p=>"<p>"+p+"</p>").join("")+'</div>'; break;
+    case "sagen": innen='<div class="sagen"><span class="tat">Das sagst du</span>'+b.text.map(p=>"<p>„"+p+"“</p>").join("")+'</div>'; break;
+    case "aufgabe": innen='<div class="vorlesen">'+aufgabeHTML(b)+'</div>'; break;
+    case "personen": innen='<div class="personen"><span class="tat">Wen man ansprechen kann · Antwortmöglichkeiten, jede nur einmal</span>'+
       b.leute.map(l=>{ const keys=(l.fragen||l.sagt).map((_,j)=>(Z.schritt+":"+l.name+":"+j)); const stumm=keys.every(k=>Z.abgehakt[k]);
-        return '<div class="person'+(stumm?" stumm":"")+'"><div class="kopf-p"><h4>'+l.name+'</h4><span class="wer">'+l.wer+'</span></div>'+
+        return '<div class="person'+(stumm?" stumm":"")+'"><div class="kopf"><h4>'+l.name+'</h4><span class="wer">'+l.wer+'</span></div>'+
         '<p class="spielt">'+l.spielt+'</p>'+
         (l.fragen ? '<dl>'+l.fragen.map((f,j)=>'<dt class="'+(Z.abgehakt[keys[j]]?"erledigt":"")+'"><button class="hak" data-hak="'+keys[j].replace(/"/g,"&quot;")+'">'+(Z.abgehakt[keys[j]]?"☑":"☐")+'</button> '+f[0]+'</dt><dd'+(Z.abgehakt[keys[j]]?' class="erledigt"':'')+'>'+f[1]+'</dd>').join("")+'</dl>'
                   : '<ul>'+l.sagt.map((s,j)=>'<li class="'+(Z.abgehakt[keys[j]]?"erledigt":"")+'"><button class="hak" data-hak="'+keys[j].replace(/"/g,"&quot;")+'">'+(Z.abgehakt[keys[j]]?"☑":"☐")+'</button> „'+s+'“</li>').join("")+'</ul>')+
-        (stumm ? '<p class="sonst aus"><b>Ausgeredet.</b> '+l.name+' sagt nichts mehr und beachtet die Gruppe nicht — „'+l.name+' looks away and says nothing more.“</p>'
-               : '<p class="sonst"><b>Notfalls:</b> '+l.notfalls+'</p>')+'</div>';}).join("")+
-      (b.sonst?'<p class="sonst">'+b.sonst+'</p>':''), "Wen man ansprechen kann · jede Antwort nur einmal");
-    case "fa": return zeile(b.titel||"Antworten","fa", '<dl>'+
+        (stumm ? '<p class="sonst" style="border:none;padding-top:8px;margin-top:8px;color:var(--blood-hi)"><b>Ausgeredet.</b> '+l.name+' sagt nichts mehr und beachtet die Gruppe nicht — „'+l.name+' looks away and says nothing more.“</p>'
+               : '<p class="sonst" style="border:none;padding-top:8px;margin-top:8px"><b>Notfalls:</b> '+l.notfalls+'</p>')+'</div>';}).join("")+
+      (b.sonst?'<p class="sonst">'+b.sonst+'</p>':'')+'</div>'; break;
+    case "fa": innen='<div class="fa"><span class="tat">'+(b.titel||"Antwortmöglichkeiten")+(b.abhaken?' · jede Frage nur einmal':'')+'</span><dl>'+
       b.paare.map(p=>{ const k=Z.schritt+":"+p[0], weg=b.abhaken&&Z.abgehakt[k];
-        return '<dt class="'+(weg?"erledigt":"")+'">'+(b.abhaken?'<button class="hak" data-hak="'+k.replace(/"/g,"&quot;")+'">'+(weg?"☑":"☐")+'</button> ':'')+p[0]+'</dt><dd'+(weg?' class="erledigt"':'')+'>'+p[1]+'</dd>';}).join("")+'</dl>',
-      b.abhaken?"jede nur einmal":"");
+        return '<dt class="'+(weg?"erledigt":"")+'">'+(b.abhaken?'<button class="hak" data-hak="'+k.replace(/"/g,"&quot;")+'">'+(weg?"☑":"☐")+'</button> ':'')+p[0]+'</dt><dd'+(weg?' class="erledigt"':'')+'>'+p[1]+'</dd>';}).join("")+'</dl></div>'; break;
     case "tun": {
       const fertig = b.knopf.art==="wissen" ? !!Z.wissen[b.knopf.k] : (b.wiederholbar ? false : !!Z.getan[b.id]);
-      return zeile("Knopf","tun",'<div class="tun"><p>'+b.text+'</p><button class="'+(fertig?"getan":"")+'" data-tun="'+b.id+'">'+(fertig?"✓ "+b.beschriftung:b.beschriftung)+'</button></div>'); }
-    case "regie": return zeile("Für dich","regie", (b.titel?'<b class="rt">'+b.titel+'</b>':'')+'<p>'+b.text+'</p>');
-    case "wenn": return zeile("Bei euch","wenn", '<b class="rt">'+b.titel+'</b><p>'+b.text+'</p>');
-    case "kampf": return zeile("Kampf","kampf", '<h4>'+b.titel+'</h4><p>'+b.text+'</p>'+
+      innen='<div class="tun"><p>'+b.text+'</p><button class="'+(fertig?"getan":"")+'" data-tun="'+b.id+'">'+(fertig?"✓ "+b.beschriftung:b.beschriftung)+'</button></div>'; break; }
+    case "regie": innen='<div class="regie"><span class="tat">'+(b.titel||"Hintergrund · nur für dich")+'</span><p>'+b.text+'</p></div>'; break;
+    case "gruppe": innen='<div class="vorlesen"><span class="tat">Vorlesen'+(b.titel?" · "+b.titel:"")+'</span>'+b.text.map(p=>"<p>"+p+"</p>").join("")+
+      b.rede.map(p=>'<p class="rede">„'+p+'“</p>').join("")+(b.aufgabe?aufgabeHTML(b.aufgabe):"")+'</div>'; break;
+    case "wenn": innen='<div class="wenn"><span class="tat">▸ das gilt bei euch</span><h4>'+b.titel+'</h4><p>'+b.text+'</p></div>'; break;
+    case "kampf": innen='<div class="kampfblock"><span class="tat">Kampf</span><h4>'+b.titel+'</h4><p>'+b.text+'</p>'+
       b.gegner.map(k=>{const v=BESTIARIUM[k]; return '<div class="statblock"><b>'+v.name+'</b> — '+v.hp+' Lebenspunkte · '+v.att.map(a=>a.n+" "+a.d).join(", ")+'</div>';}).join("")+
-      (b.extra?'<div class="statblock rot">'+(Z.gefahr>=8?'Gefahr rot: <b>+1 '+BESTIARIUM[b.extra].name+'</b> kommt von selbst dazu.':Z.gefahr>=4?'Gefahr orange: <b>+1 '+BESTIARIUM[b.extra].name+'</b> ist deine Entscheidung — Knopf unten.':'Bei Gefahr 8–10 käme +1 '+BESTIARIUM[b.extra].name+' dazu; bei Orange nach deiner Wahl.')+'</div>':'')+
-      (b.ohneKnopf?'':'<button class="laden" data-laden="'+b.gegner.join(",")+'" data-extra="'+(b.extra||"")+'" data-oeffnen="1">Kampf laden und öffnen</button>')+
-      (b.extra&&Z.gefahr>=4&&Z.gefahr<=7?'<div class="zufuegen"><button data-laden="'+b.extra+'" data-oeffnen="1">+1 '+BESTIARIUM[b.extra].name+' dazu — deine Entscheidung</button></div>':'')+
-      (b.zusatz?'<div class="zufuegen">'+b.zusatz.map(k=>'<button data-laden="'+k+'" data-oeffnen="1">+ '+BESTIARIUM[k].name+'</button>').join("")+'</div>':''));
+      (b.extra?'<div class="statblock" style="color:var(--blood-hi)">'+(Z.gefahr>=8?'Gefahr rot: <b>+1 '+BESTIARIUM[b.extra].name+'</b> kommt von selbst dazu.':Z.gefahr>=4?'Gefahr orange: <b>+1 '+BESTIARIUM[b.extra].name+'</b> ist deine Entscheidung — Knopf unten.':'Bei Gefahr 8–10 käme +1 '+BESTIARIUM[b.extra].name+' dazu; bei Orange nach deiner Wahl.')+'</div>':'')+
+      (b.ohneKnopf?'':'<button class="laden" data-laden="'+b.gegner.join(",")+'" data-extra="'+(b.extra||"")+'">In den Kampf laden</button>')+
+      (b.extra&&Z.gefahr>=4&&Z.gefahr<=7?'<div class="zufuegen"><button data-laden="'+b.extra+'">+1 '+BESTIARIUM[b.extra].name+' dazu — deine Entscheidung</button></div>':'')+
+      (b.zusatz?'<div class="zufuegen">'+b.zusatz.map(k=>'<button data-laden="'+k+'">+ '+BESTIARIUM[k].name+'</button>').join("")+'</div>':'')+'</div>'; break;
     case "optionen": {
       const fehlt=voraussetzungFehlt(b.id);
-      if(fehlt) return '<div class="hinweisfehlt">Erst muss <b>'+ENTSCHEIDUNGEN[fehlt].name+'</b> gewählt sein — die Karten hier hängen daran.</div>';
-      return zeile(b.titel||"Entscheidung","optionen",'<div class="optionen">'+b.optionen.map((o,i)=>{
+      if(fehlt){ innen='<div class="hinweisfehlt">Erst muss <b>'+ENTSCHEIDUNGEN[fehlt].name+'</b> gewählt sein — die Karten hier hängen daran.</div>'; break; }
+      innen=(b.titel?'<h3 style="font-size:22px;margin-bottom:10px">'+b.titel+'</h3>':'')+'<div class="optionen">'+b.optionen.map((o,i)=>{
         const g=Z.gewaehlt[b.id], gew=g&&g.opt===i, wk=o.wirkung, chips=[];
         if(b.id!=="e4") chips.push('<span class="chip '+(wk.gefahr>0?"gefahr":"ruhe")+'">Gefahr '+(wk.gefahr>0?"+"+wk.gefahr:"±0")+
           (wk.gefahrWenn?' · +'+wk.gefahrWenn.gefahr+' mit '+WISSEN.find(x=>x.k===wk.gefahrWenn.wissen).txt:'')+'</span>');
@@ -1148,9 +1166,9 @@ function blockHTML(b, idx){
           '<h4>'+o.name+'</h4><p class="was">'+o.was+'</p><ul class="bil">'+
           liste(o.pro).map(p=>'<li class="pro">'+p+'</li>').join("")+liste(o.con).map(p=>'<li class="con">'+p+'</li>').join("")+
           '</ul>'+(chips.length?'<div class="chips">'+chips.join("")+'</div>':'')+
-          '<button class="waehlen" data-ent="'+b.id+'" data-opt="'+i+'">'+(gew?"✓ gewählt":"Diese Karte wählen")+'</button></div></article>';}).join("")+'</div>'); }
+          '<button class="waehlen" data-ent="'+b.id+'" data-opt="'+i+'">'+(gew?"✓ gewählt":"Diese Karte wählen")+'</button></div></article>';}).join("")+'</div>'; break; }
   }
-  return "";
+  return '<div class="schritt"><span class="nr">'+idx+'</span><div class="kern">'+innen+'</div></div>';
 }
 /* Vorlesen + direkt folgende wörtliche Rede = eine gelbe Karte */
 function karten(bloecke){
@@ -1215,31 +1233,12 @@ function zeichneSzene(){
     $("zurueck-t").textContent="Zurück zu "+KAPITEL[Z.schritt].titel;
     $("vor-t").textContent="Patrouille überstanden → "+KAPITEL[Z.zwischenaktZiel].titel;
   } else {
-    $("kschritt").textContent="Seite "+(Z.schritt+1)+" von "+KAPITEL.length;
+    $("kschritt").textContent="Schritt "+(Z.schritt+1)+"/"+KAPITEL.length;
     $("zurueck").disabled=Z.schritt===0; $("vor").disabled=Z.schritt===KAPITEL.length-1;
     $("zurueck-t").textContent=Z.schritt>0?KAPITEL[Z.schritt-1].titel:"—";
     $("vor-t").textContent=Z.schritt<KAPITEL.length-1?KAPITEL[Z.schritt+1].titel:"Ende";
   }
-  zeichnePfad(); zeichneKampf();
-}
-/* ---- Kampfbildschirm: eigener Vollbild-Modus über der Szene ---- */
-function zeichneKampf(){
-  const k=aktuelleSzene();
-  const kb=(k.braucht && entscheidungOffen(k.braucht)) ? null : k.bloecke.find(b=>b.t==="kampf" && gilt(b));
-  $("k-titel").textContent = kb ? kb.titel : "Freier Kampf";
-  $("k-krume").textContent = k.n+" · "+k.titel+(kb?"":" · Gegner von Hand");
-  $("k-hinweis").innerHTML = kb ? (kb.text+(kb.extra?" "+(Z.gefahr>=8?"Gefahr rot: +1 "+BESTIARIUM[kb.extra].name+" ist schon mitgeladen.":Z.gefahr>=4?"Gefahr orange: +1 "+BESTIARIUM[kb.extra].name+" ist deine Entscheidung (unten).":""):"")) : "";
-  const st=sichtbareChancen(k);
-  $("k-staerken").innerHTML = st.length ? "Stärken hier: "+st.map(c=>"<b>"+c.wer+"</b> · "+c.talent+" — "+c.text).join(" · ") : "";
-  $("kampfmodus").hidden = !Z.kampfOffen;
-}
-function oeffneKampf(){ Z.kampfOffen=true; zeichneKampf(); sichern(); }
-function schliesseKampf(){ Z.kampfOffen=false; zeichneKampf(); sichern(); }
-function kampfVorbei(){
-  Z.gruppe.forEach(h=>h.hp=h.max);
-  const n=Z.gegner.length; Z.gegner=[];
-  notiere("<b>Kampf vorbei</b> — alle auf volle Lebenspunkte"+(n?", "+n+" Gegner entfernt":""));
-  Z.kampfOffen=false; zeichneGruppe(); zeichneGegner(); zeichneKampf(); sichern();
+  zeichnePfad();
 }
 function zeichnePfad(){
   const chip=(i)=> (Z.patrouille.status==="steht_bevor" && Z.patrouille.vor===i)
@@ -1247,7 +1246,7 @@ function zeichnePfad(){
   $("pfad").innerHTML=KAPITEL.map((k,i)=>chip(i)+
    '<button class="'+(i===Z.schritt&&!Z.imZwischenakt?"jetzt ":"")+(Z.besucht[i]&&i!==Z.schritt?"getan ":"")+(k.art==="ent"?"ent ":"")+(k.art==="kampf"?"kampf ":"")+'" data-schritt="'+i+'">'+
    '<span class="n">'+(k.art==="ent"?"◆ ":"")+(k.art==="kampf"?"⚔ ":"")+k.n+'</span>'+k.titel+'</button>').join("");
-  const j=$("pfad").querySelector(".jetzt"); if(j&&j.scrollIntoView) j.scrollIntoView({block:"nearest",inline:"nearest"});
+  const j=$("pfad").querySelector(".jetzt"); if(j&&j.scrollIntoView) j.scrollIntoView({block:"nearest",inline:"center"});
 }
 function geheZu(i){
   i=Math.max(0,Math.min(KAPITEL.length-1,i));
@@ -1341,21 +1340,16 @@ document.addEventListener("click", e=>{
   const tu=t.closest("[data-tun]"); if(tu) return tunAusfuehren(tu.dataset.tun);
   const wi=t.closest("[data-wiss]"); if(wi) return setzeWissen(wi.dataset.wiss);
   const hk=t.closest("[data-hak]"); if(hk){ const k=hk.dataset.hak; if(Z.abgehakt[k]) delete Z.abgehakt[k]; else Z.abgehakt[k]=true; zeichneSzene(); sichern(); return; }
-  const l=t.closest("[data-laden]"); if(l){ ladeKampf(l.dataset.laden.split(","), l.dataset.extra||null); if(l.dataset.oeffnen) oeffneKampf(); return; }
-  if(t.closest("#kampfknopf")) return oeffneKampf();
-  if(t.closest("#kampf-zu")) return schliesseKampf();
-  if(t.closest("#kampf-vorbei")) return kampfVorbei();
+  const l=t.closest("[data-laden]"); if(l){ ladeKampf(l.dataset.laden.split(","), l.dataset.extra||null); return; }
   const weg=t.closest("[data-weg]"); if(weg){ const g2=Z.gegner.splice(+weg.dataset.weg,1)[0]; notiere("<b>"+g2.name+"</b> verlässt den Kampf"); zeichneGegner(); sichern(); return; }
   const gd=t.closest("[data-gdmg]"); if(gd){ const i=+gd.dataset.gdmg, v=Math.max(0,parseInt($("gin"+i).value,10)||0);
     const m=Z.gegner[i]; m.hp=Math.max(0,m.hp-v); notiere("<b>"+m.name+"</b> −"+v+" → "+m.hp+"/"+m.max+(m.hp===0?" · <b>fällt</b>":"")); zeichneGegner(); sichern(); return; }
   const at=t.closest("[data-att]"); if(at) return gegnerAngriff(+at.dataset.att,+at.dataset.j);
   const tr=t.closest("[data-treffer]"); if(tr) return aendereHP(+tr.dataset.treffer,-(+tr.dataset.s),tr.dataset.q);
-  const hi=t.closest("[data-hpin]"); if(hi){ const i=+hi.dataset.hpin, feld=hi.closest(".steuer").querySelector("input"), v=Math.max(0,parseInt(feld.value,10)||0); aendereHP(i,v*(+hi.dataset.r), +hi.dataset.r>0?"Heilung":"Schaden"); return; }
+  const hi=t.closest("[data-hpin]"); if(hi){ const i=+hi.dataset.hpin, v=Math.max(0,parseInt($("hpin"+i).value,10)||0); aendereHP(i,v*(+hi.dataset.r), +hi.dataset.r>0?"Heilung":"Schaden"); return; }
 });
 document.addEventListener("keydown", e=>{
   const tag=(e.target&&e.target.tagName)||""; if(tag==="INPUT"||tag==="TEXTAREA"||e.altKey||e.ctrlKey||e.metaKey) return;
-  if(e.key==="Escape" && Z.kampfOffen){ schliesseKampf(); e.preventDefault(); return; }
-  if(Z.kampfOffen) return;
   if(e.key==="ArrowRight"){ $("vor").click(); e.preventDefault(); } else if(e.key==="ArrowLeft"){ $("zurueck").click(); e.preventDefault(); }
 });
 document.addEventListener("input", e=>{ if(e.target.dataset&&e.target.dataset.nm!==undefined){ Z.gruppe[+e.target.dataset.nm].name=e.target.value; zeichneStaerken(); sichern(); } });
@@ -1368,7 +1362,7 @@ $("zuruecksetzen").onclick=()=>{
 };
 $("zufuegen").innerHTML=Object.keys(BESTIARIUM).map(k=>'<button data-laden="'+k+'">+ '+BESTIARIUM[k].name+'</button>').join("");
 
-function alles(){ zeichneBaro(); zeichneGruppe(); zeichneGegner(); zeichneWissen(); zeichneChronik(); zeichneSzene(); zeichneKampf(); }
+function alles(){ zeichneBaro(); zeichneGruppe(); zeichneGegner(); zeichneWissen(); zeichneChronik(); zeichneSzene(); }
 laden(); alles();
 { const befunde=pruefeStory(); if(befunde.length) console.warn("Story-Prüfung:", befunde); }
 </script>
