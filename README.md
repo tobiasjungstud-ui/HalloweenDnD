@@ -68,6 +68,8 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
    von der Antwort der Gruppe abhängt („Tam angelogen → kein Führer“) —, die **Stärken der
    Figuren**, das Barometer, das Wissen. Ganz unten sammelt eine Aktionsleiste alle Knöpfe der
    Szene und die Bedingung zum Weiterblättern. Blättern geht auch mit den Pfeiltasten.
+   Der Schalter **Stimmen** in der Leiste blendet hinter jedem Sprechernamen drei Wörter ein,
+   wie die Figur klingt, etwa *Marek — tief, wortkarg, langsam*. Er merkt sich seinen Zustand.
 4. **Der Kampf ist ein eigener Bildschirm.** Er öffnet sich, sobald ein Kampf geladen wird,
    oder jederzeit über „⚔ Kampf“ oben rechts (freier Kampf, Gegner von Hand). Links die
    Gegner mit Attacken, rechts die Gruppe, unten das Log; „Kampf vorbei“ heilt alle und
