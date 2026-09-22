@@ -101,7 +101,17 @@ input{font:inherit;color:inherit}
 .redezeile{color:var(--gold-soft);font-style:italic}
 .wer{font-family:var(--sans);font-style:normal;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
   color:var(--gold);border:1px solid rgba(201,164,87,.35);border-radius:3px;padding:1px 6px;margin-right:9px;
-  vertical-align:2px;white-space:nowrap}
+  vertical-align:2px;white-space:normal;display:inline-flex;align-items:baseline;gap:8px}
+.wer .st{font-family:var(--serif);font-style:italic;font-size:13.5px;letter-spacing:0;text-transform:none;
+  color:var(--gold-soft);border-left:1px solid rgba(201,164,87,.3);padding-left:8px}
+.pstimme{font-family:var(--serif);font-style:italic;font-size:13.5px;color:var(--gold-soft);
+  border-left:1px solid var(--line-hi);padding-left:10px}
+.knopf.schalter{display:inline-flex;align-items:center;gap:8px;padding:5px 11px 5px 8px}
+.knopf.schalter .w{width:24px;height:13px;border-radius:7px;background:var(--line);position:relative;flex:none}
+.knopf.schalter .w::after{content:"";position:absolute;top:2px;left:2px;width:9px;height:9px;border-radius:50%;background:var(--dim)}
+.knopf.schalter.an{border-color:rgba(201,164,87,.45);color:var(--gold)}
+.knopf.schalter.an .w{background:rgba(201,164,87,.28)}
+.knopf.schalter.an .w::after{left:13px;background:var(--gold)}
 
 /* Hintergrund: Fliesstext, eingeklappt mit Anriss */
 .inhalt.regie{font-family:var(--sans);font-size:15px;line-height:1.6;color:var(--muted)}
@@ -355,6 +365,7 @@ details.fach[open] summary::after{content:"zuklappen"}
       <span class="meter" id="barmeter"></span><span class="zahl" id="barzahl">0</span>
       <span class="stell"><button data-gefahr="-1">−1</button><button data-gefahr="1">+1</button><button data-gefahr="2">+2</button></span>
     </span>
+    <button id="stimmschalter" class="knopf schalter" aria-pressed="false" title="Stimmangaben einblenden"><span class="w"></span>Stimmen</button>
     <button id="kampfknopf" class="knopf kampfknopf" title="Kampfbildschirm öffnen">⚔ Kampf</button>
     <button class="knopf pfeil" id="zurueck" title="zurück"><span>←</span><em id="zurueck-t"></em></button>
     <button class="knopf pfeil" id="vor" title="weiter"><span>→</span><em id="vor-t"></em></button>
@@ -439,6 +450,20 @@ details.fach[open] summary::after{content:"zuklappen"}
 const GRUPPE_VORLAGE = [{rolle:"Arcanist", max:18},{rolle:"Blade", max:30},{rolle:"Lightbearer", max:24}];
 /* Das Talent jeder Figur ausserhalb des Kampfs — steht so auch auf ihrem Blatt */
 const TALENTE = {Arcanist:"Magic Hand", Blade:"Strength", Lightbearer:"Healing Touch"};
+/* Wie eine Figur klingt: drei Wörter, mehr nicht. Schaltbar über „Stimmen“ in der Leiste. */
+const STIMMEN = {
+  "Marek":"tief, wortkarg, langsam",
+  "Greta":"flach, ruhig, ohne Betonung",
+  "Old Pieter":"laut, verschliffen, lacht falsch",
+  "Tobias":"hoch, schnell, atemlos",
+  "Die Wache":"rau, müde, gelangweilt",
+  "Corvin Ash":"warm, glatt, zu freundlich",
+  "Bellamy":"gepflegt, langsam, altmodisch",
+  "Anneke":"leise, freundlich, ohne Wut",
+  "Tam":"leise, schnell, sachlich",
+  "Mirela":"klar, geduldig, entschieden",
+  "Vaskir":"leise, freundlich, sehr langsam"
+};
 
 /* Wissen: k = Schlüssel, braucht = Flagge, ohne die es nicht erreichbar ist */
 const WISSEN = [
@@ -486,6 +511,7 @@ const KAPITEL = [
  {t:"regie", titel:"Wer die Gruppe ist", text:`Das ist vorgegeben, das müssen die Schüler nicht erfinden: <b>Sie sind Vampirjäger.</b> Nicht berühmt, noch nicht. Ein Gerücht hat sie hergeführt — in diesen Bergen liege ein Tal, in dem Menschen nach Plan verschwinden. Sie wollen wissen, ob es stimmt.
  <p>Erfinden dürfen sie: Namen, Herkunft, wie sie sich kennen, was sie können. Der Auftrag steht fest.</p>`},
  {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`Am <b>linken Rand</b> steht bei jedem Absatz, was er ist. <b>Vorlesen</b> heisst: wörtlich — Erzähltext und die Sätze der Figuren; die Sätze stehen in Gold. <b>An die Schüler</b> heisst: das sagst du ihnen, ebenfalls wörtlich — es ist ihre Aufgabe. <b>Für dich</b> heisst: nur du — Hintergrund, Personen, Antworten. <b>Kampf</b> lädt die Gegner und öffnet den Kampfbildschirm. Ganz unten steht immer, <b>wann es weitergeht</b>.
+ <p>Der Schalter <b>Stimmen</b> oben blendet hinter jedem Sprechernamen drei Wörter ein, die sagen, wie die Figur klingt: <em>Marek — tief, wortkarg, langsam</em>. Sie stehen in Gold wie die Rede, aber kursiv und ohne Anführungszeichen; vorgelesen wird nur, was in Anführungszeichen steht. Der Schalter merkt sich, wie du ihn zuletzt hattest.</p>
  <p>Rechts oben steht <b>Wenn … dann</b>: was in dieser Szene abzweigt — „Tam angelogen → kein Führer“, „alle würfeln 10 oder mehr → an den Wachen vorbei“. Die rechte Spalte bleibt beim Scrollen stehen, damit du beim Vorlesen nie suchen musst, was als Nächstes von der Antwort der Gruppe abhängt.</p>
  <p>Darunter <b>Stärken der Figuren</b>: je Figur eine Zeile mit ihrem Talent — Magic Hand, Strength, Healing Touch — und, wenn die Szene eine Gelegenheit dafür hat, der Satz aus dem Vorlesetext, der sie ankündigt (Tam hält die verbrannte Hand an die Brust; Marek hat die Hand verbunden). Du liest den Satz vor und wartest. Anklicken zeigt die Folge. Das sind keine Aufgaben und keine Lösungen: Die Zeile sagt dir nur, was du zulassen kannst, falls der Spieler von selbst darauf kommt. Jede Szene funktioniert auch ohne.</p>
  <p>Oben rechts steht die <b>Lage</b>: Gefahr, wo die Gruppe ist, was sie gewählt hat, was sie weiss. Auf der Seite steht immer nur, was zu diesem Weg gehört — das andere siehst du gar nicht erst. Und eine Entscheidung lässt sich erst anklicken, wenn die davor getroffen ist.</p>
@@ -670,7 +696,7 @@ const KAPITEL = [
  {t:"vorlesen", nur:"weg_c", titel:"Die Kutsche", text:[
   `The coach is waiting at the edge of the village at midnight, exactly as the map said. The driver is a thin man in a good coat who introduces himself as Corvin Ash, and who is very, very friendly.`,
   `He helps you up with a hand as cold as the door handle. He drives without a lamp. He never looks at the road. And in two hours he asks you more questions than you ask him.`]},
- {t:"vorlesen", nur:"weg_c", titel:"Am Tor", text:[
+ {t:"vorlesen", spricht:"Corvin Ash", nur:"weg_c", titel:"Am Tor", text:[
   `At the gate Corvin stops the coach and says four words to the two guards with lamps: “I have three guests.” Somewhere above you, a window lights up. Then another.`,
   `The coach rolls on through the gate — it stands open; it always does — into a square courtyard of black stone. Corvin starts unloading boxes as if you were not there at all, and you climb down.`]},
  {t:"weiter", text:"Wenn die Gruppe im Hof steht."}]},
@@ -749,12 +775,12 @@ const KAPITEL = [
  titel:"What You Find", art:"szene", braucht:"e2", ort:ORT.hof, nach:ORT.spiegel, bloecke:[
  {t:"ziel", text:"Die Gruppe geht durch ihre Tür, erlebt, was dahinter wartet (Bellamy, Anneke oder Tam), und steht am Ende hinter der Spiegeltür am Ende des Westgangs.", zeit:"20 Min."},
  {t:"regie", nur:"bibliothek", text:"Bellamy ist <b>nicht gefährlich</b>, solange man höflich bleibt. Er will drei wahre Sätze von jeder Figur — er hört nicht auf den Inhalt, sondern auf die Stimme, und Lügen merkt er. Wer lügt oder ihn beleidigt, bekommt weder Führung noch Brief: Er steigt auf seine Leiter zurück — „The west corridor. Find it yourselves.“ — und die Gruppe sucht den Weg selbst (Block <b>Ohne Führung</b> unten). <p>Sonst führt er sie selbst zum Spiegel — und bittet um einen Gefallen (steht im Text): einen Brief mit ins Dorf zu nehmen. Merk dir, ob sie Ja sagen; im Epilog zählt es.</p>"},
- {t:"vorlesen", nur:"bibliothek", titel:"Die Bibliothek", text:[
+ {t:"vorlesen", spricht:"Bellamy", nur:"bibliothek", titel:"Die Bibliothek", text:[
   `You cross the courtyard and open the door under the warm window. Bookshelves up to the ceiling, and a very thin man in a very good suit on a wobbling ladder, trying to put a book back on the top shelf — and not quite reaching it.`,
   `He says, without turning round: “Nobody has spoken to me since 1912. Say something. Anything — as long as it is true.”`,
   `Then he climbs down, and you see his hands, and his teeth, and you understand what he is. He offers you a chair anyway.`]},
  {t:"aufgabe", nur:"bibliothek", sag:"Three true things about yourself. He can wait — he’s been waiting since 1912. Take thirty seconds, then talk.", hinweis:"Er hört auf die Stimme, nicht auf den Inhalt — Lügen merkt er.", blatt:"Helfer-Blatt · Teil 6"},
- {t:"vorlesen", nur:"bibliothek", titel:"Der Weg zum Spiegel — Bellamy führt euch", text:[
+ {t:"vorlesen", spricht:"Bellamy", nur:"bibliothek", titel:"Der Weg zum Spiegel — Bellamy führt euch", text:[
   `Bellamy walks you out of the library and along a corridor with no windows — the west corridor — and stops at the end of it, in front of a tall mirror. “The tower has no stair,” he says. “It has this. Walk backwards through it, and don’t look.”`,
   `Then he takes a letter out of his coat. “Would you carry this down to the village for me? The house is still there. Say yes or no — I will know which one you mean.”`,
   `He does not come with you. “He forbade it in 1804, and I find I still care what he thinks. Isn’t that the saddest thing you have ever heard?”`]},
@@ -769,12 +795,12 @@ const KAPITEL = [
  {t:"vorlesen", nur:"kapelle", titel:"Der Weg zum Spiegel — die Treppe hinter dem Altar", text:[
   `Behind the altar a narrow stair goes up inside the wall and comes out in a corridor with no windows — the west corridor. At the end of it stands a tall mirror instead of a door. Written on the frame, in chalk, in a child’s handwriting: walk backwards.`]},
  {t:"regie", nur:"kueche", text:"Tam ist seit sechs Jahren hier und kennt jeden Gang. Er hält die verbrannte Hand an die Brust und wartet — ob jemand etwas dazu sagt, ist ihre Sache (rechts: Stärken). Dann fragt er <b>einmal</b> (gelb unten), und er will eine echte Antwort. <p>Antworten sie ehrlich — auch ein ehrliches Nein —, führt er sie hinauf. Merk dir, was sie sagen; im Epilog zählt es. Lügen sie oder fahren ihn an: Er stellt den Topf ab — „Find it yourselves.“ — und die Gruppe sucht den Weg selbst (Block <b>Ohne Führung</b> unten). Wer ihn bedroht oder wegstösst: Er schreit, und du nimmst rechts <b>+3 Gefahr</b>.</p>"},
- {t:"vorlesen", nur:"kueche", titel:"Die Küche", text:[
+ {t:"vorlesen", spricht:"Tam", nur:"kueche", titel:"Die Küche", text:[
   `You go down the low stair on the right. A boy of about fourteen is cooking for nobody. There is enough food on that table for twenty people, and there has not been anybody to eat it for years.`,
   `He sees you. He does not scream. He puts the knife down very slowly — with his right hand; the left one he holds against his chest, red from the pot — and says: “You’re here for the new one. The one in the tower.”`]},
  {t:"sagen", wer:"Tam", nur:"kueche", text:["Will you take me with you? When you go. Say it. Promise."]},
  {t:"aufgabe", nur:"kueche", sag:"He asked you a question. He’s fourteen, and he’ll know if you lie. Yes or no — and why.", blatt:"Helfer-Blatt · Teil 6"},
- {t:"vorlesen", nur:"kueche", titel:"Der Weg zum Spiegel — Tam führt euch", text:[
+ {t:"vorlesen", spricht:"Tam", nur:"kueche", titel:"Der Weg zum Spiegel — Tam führt euch", text:[
   `Tam takes corridors that do not look like corridors. Twice he stops, puts up a hand, and you all wait forty seconds in the dark without knowing what for.`,
   `Then he points down a corridor with no windows — the west corridor — at a tall mirror at the end of it. “That’s the door. You have to walk backwards. Don’t look at it.” And then, quietly: “I’ll wait here.”`]},
  {t:"regie", nur:["bibliothek","kueche"], titel:"Ohne Führung — wenn niemand euch bringt", text:"Nur, wenn Bellamy oder Tam die Gruppe hat stehen lassen. Dann: jeder würfelt einmal (<b>Just roll a d20</b>). Mindestens eine 10 → sie finden den Westgang leise (gelb unten). Keine 10 → sie finden ihn auch, aber nach zwei falschen Türen: <b>Gefahr +1</b> rechts. Die Geschichte bleibt nie stehen."},
@@ -797,11 +823,11 @@ const KAPITEL = [
  {t:"regie", titel:"Hintergrund", text:`Hier fällt zum ersten Mal der Name des Grafen: <b>Vaskir</b>. Mirela erzählt die Wahrheit selbst (gelb unten), in dieser Reihenfolge: der Vertrag von 1604, die Namen auf dem Brett, Lene. Greta schreibt die Namen aufs Brett; 2004 war es der ihrer Schwester Anneke. Mirela ist nicht gefangen und will nicht gerettet werden — das ist der Streit dieser Szene.`},
  {t:"vorlesen", titel:"Die Treppe", text:[
   `Behind the mirror there is a narrow stair, and it goes up for a long time. Nobody says anything. At the top there is a door with light under it.`]},
- {t:"vorlesen", titel:"Das Turmzimmer", text:[
+ {t:"vorlesen", spricht:"Mirela", titel:"Das Turmzimmer", text:[
   `The room at the top is warm. There is a fire, and a pot of tea, and two cups — one at her elbow, the other on the far side of the table.`,
   `Mirela Vance sits in an armchair with a book on her knees. She is not tied up. She is not hurt. She is not even pale. Beside the chair stands a small bag, packed, with green stems sticking out of the top.`,
   `She looks up and says: “You’re late. The coach comes at midnight — you could have taken the coach.”`]},
- {t:"vorlesen", titel:"Was sie euch erzählt", text:[
+ {t:"vorlesen", spricht:"Mirela", titel:"Was sie euch erzählt", text:[
   `She closes the book. “Sit down. You came a long way, so you can hear it once, properly.”`,
   `“Four hundred years ago this village made a deal with the man who lives here. His name is Vaskir. Count Vaskir. Every twenty years, one guest goes up to him — and stays. In return: no plague, no wolves in the village, nobody starves in winter. It has worked. For four hundred years, it has worked.”`,
   `“The names on the board in the tavern? Those are the guests. Greta writes them. Twenty years ago she wrote her sister’s name.”`,
@@ -868,7 +894,7 @@ const KAPITEL = [
  {t:"vorlesen", nur:"e3_pakt", von:ORT.turm, titel:"Der Ruf", text:[
   `You call his name down the stairwell. Nothing happens for a long minute.`,
   `Then the door opens, and he is simply sitting in the second chair, with the second cup of tea, which was never meant for Mirela. The pot is still steaming on the table between you.`]},
- {t:"vorlesen", titel:"Der Graf", text:[
+ {t:"vorlesen", spricht:"Vaskir", titel:"Der Graf", text:[
   `He is not tall. He is not pale. He looks like a tired man of fifty who has been doing the same job for far too long, and that is the frightening part.`,
   `“Four hundred years,” he says, “and I never took a single one of them. They were brought to me. Every twenty years, up that road, with a bag packed. Ask her who packed hers.”`,
   `Then he looks at the three of you, one after the other — and his eyes stop on the one who is standing furthest back.`]},
@@ -968,6 +994,26 @@ const KAPITEL = [
 
 /* ====================== ZUSTAND ====================== */
 const SCHLUESSEL = "nachtfels.dm.v5";
+const STIMM_SCHLUESSEL = "nachtfels.dm.stimmen";
+let ZEIGE_STIMMEN = false;
+try{ ZEIGE_STIMMEN = localStorage.getItem(STIMM_SCHLUESSEL)==="1"; }catch(e){}
+function schalteStimmen(){
+  ZEIGE_STIMMEN = !ZEIGE_STIMMEN;
+  try{ localStorage.setItem(STIMM_SCHLUESSEL, ZEIGE_STIMMEN?"1":"0"); }catch(e){}
+  zeichneStimmschalter(); zeichneSzene();
+}
+function zeichneStimmschalter(){
+  const b=$("stimmschalter"); if(!b) return;
+  b.className = "knopf schalter"+(ZEIGE_STIMMEN?" an":"");
+  b.setAttribute("aria-pressed", ZEIGE_STIMMEN?"true":"false");
+  b.title = ZEIGE_STIMMEN ? "Stimmangaben ausblenden" : "Stimmangaben einblenden";
+}
+/* Sprechermarke: Name, und bei eingeschaltetem Schalter die drei Wörter dahinter */
+function sprecherHTML(name){
+  if(!name) return "";
+  const st = ZEIGE_STIMMEN && STIMMEN[name] ? '<span class="st">'+STIMMEN[name]+'</span>' : "";
+  return '<span class="wer">'+name+st+'</span>';
+}
 function frischerZustand(namen){
   return { schritt:0, gefahr:0,
     gruppe:GRUPPE_VORLAGE.map((g,i)=>({name:(namen&&namen[i])||"", rolle:g.rolle, hp:g.max, max:g.max})),
@@ -1081,7 +1127,7 @@ const PATROUILLE = {n:"Zwischenakt", titel:"The Patrol", art:"kampf", verlauf:[
  bloecke:[
  {t:"ziel", text:"Das Haus hat genug gehört. Eine Patrouille stellt die Gruppe — drei Wachen und ein Hund. Zu schaffen, aber es kostet.", zeit:"15 Min."},
  {t:"regie", titel:"Hintergrund", text:"Dieser Zwischenakt kommt nur, wenn das Barometer <b>8 oder mehr</b> erreicht — einmal pro Abend, vor dem nächsten Akt. Drei Wachen (je 9 HP) und ein Wachhund (14 HP): zusammen 41 Lebenspunkte gegen eure 72. <b>Gerade noch zu schaffen:</b> Ist der Hund gefallen und stehen die Wachen bei der Hälfte, ziehen sie sich zurück — „They don’t want to die for him.“ Die Tränke sind für genau diesen Kampf da; danach heilt die Lightbearer alle. Reden hilft hier nicht — die Wachen antworten nicht, sie haben Befehle. Danach geht die Geschichte weiter, wo sie war."},
- {t:"vorlesen", titel:"Schritte", text:[
+ {t:"vorlesen", spricht:"Die Wache", titel:"Schritte", text:[
   `Boots. Somewhere close, and getting closer — three pairs, in step. One lamp — only one — swings round the corner, and behind it comes something on a long chain that is too big to be a dog and too quiet to be a wolf.`,
   `The man with the lamp does not ask who you are. He already knows. “There you are,” he says — and lets go of the chain.`]},
  {t:"aufgabe", sag:"No talking your way out of this one. But talk to each other: who takes the hound? Who covers the healer?", blatt:"Helfer-Blatt · Teil 8"},
@@ -1248,7 +1294,19 @@ function rede(t){
   return String(t).replace(/“([^”]+)”/g, '<em class="rede">“$1”</em>')
                   .replace(/„([^“]+)“/g, '<em class="rede">„$1“</em>');
 }
-function ohneTags(t){ return String(t).replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim(); }
+/* Absätze eines Vorlesetextes; steht ein Sprecher fest, trägt das erste Zitat seine Marke. */
+function redeAbsaetze(absaetze, sprecher){
+  let gesetzt=false;
+  return absaetze.map(p=>{
+    let out=String(p).replace(/“([^”]+)”/g, (m,innen)=>{
+      const marke = (!gesetzt && sprecher) ? (gesetzt=true, sprecherHTML(sprecher)) : "";
+      return marke+'<em class="rede">“'+innen+'”</em>';
+    });
+    out=out.replace(/„([^“]+)“/g, '<em class="rede">„$1“</em>');
+    return "<p>"+out+"</p>";
+  }).join("");
+}
+function ohneTags(t){ return String(t).replace(/<\/p>\s*<p>/g," ").replace(/<br\s*\/?>/g," ").replace(/<[^>]+>/g,"").replace(/\s+/g," ").trim(); }
 function anriss(t, max){
   const r=ohneTags(t); if(r.length<=max) return r;
   const schnitt=r.slice(0,max), p=Math.max(schnitt.lastIndexOf(". "), schnitt.lastIndexOf("? "), schnitt.lastIndexOf("! "));
@@ -1261,7 +1319,7 @@ function aufgabeHTML(b){
 function redeZeilen(eintraege){
   return eintraege.map(e=>{
     const txt=(typeof e==="string")?e:e.t, wer=(typeof e==="string")?null:e.wer;
-    return '<p class="redezeile">'+(wer?'<span class="wer">'+wer+'</span>':'')+'„'+txt+'“</p>';
+    return '<p class="redezeile">'+sprecherHTML(wer)+'„'+txt+'“</p>';
   }).join("");
 }
 function hakHTML(k, an){ return '<button class="hak" data-hak="'+k.replace(/"/g,"&quot;")+'" aria-label="abhaken">'+(an?"☑":"☐")+'</button>'; }
@@ -1276,9 +1334,9 @@ function zeile(label, klasse, innen, sub){
 function blockHTML(b, idx){
   switch(b.t){
     case "ziel": return zeile("Ziel","ziel",'<p>'+b.text+'</p>', b.zeit);
-    case "vorlesen": return zeile("Vorlesen","vorlesen", b.text.map(p=>"<p>"+rede(p)+"</p>").join(""), b.titel);
+    case "vorlesen": return zeile("Vorlesen","vorlesen", redeAbsaetze(b.text, b.spricht), b.titel);
     case "sagen": return zeile("Das sagst du","sagen", redeZeilen(b.text.map(t=>({t, wer:b.wer||null}))));
-    case "gruppe": return zeile("Vorlesen","vorlesen", b.text.map(p=>"<p>"+rede(p)+"</p>").join("")+redeZeilen(b.rede), b.titel)+
+    case "gruppe": return zeile("Vorlesen","vorlesen", redeAbsaetze(b.text, b.spricht)+redeZeilen(b.rede), b.titel)+
       (b.aufgabe?zeile("An die Schüler","aufgabe", aufgabeHTML(b.aufgabe)):"");
     case "aufgabe": return zeile("An die Schüler","aufgabe", aufgabeHTML(b));
     case "regie": {
@@ -1291,7 +1349,8 @@ function blockHTML(b, idx){
       return zeile("Für dich","personen", b.leute.map(l=>{
         const eintraege=l.fragen||l.sagt, keys=eintraege.map((_,j)=>(Z.schritt+":"+l.name+":"+j));
         const offen=keys.filter(k=>!Z.abgehakt[k]).length, stumm=offen===0;
-        const kopf='<div class="pk"><h4>'+l.name+'</h4><span class="rolle">'+l.wer+'</span>'+
+        const pst = ZEIGE_STIMMEN && STIMMEN[l.name] ? '<span class="pstimme">'+STIMMEN[l.name]+'</span>' : "";
+        const kopf='<div class="pk"><h4>'+l.name+'</h4><span class="rolle">'+l.wer+'</span>'+pst+
           '<span class="spielt">'+(stumm?"Ausgeredet. Sagt nichts mehr und beachtet die Gruppe nicht — „"+l.name+" looks away and says nothing more.“":l.spielt)+'</span>'+
           '<span class="zaehler">'+(eintraege.length-offen)+" von "+eintraege.length+' gefragt</span></div>';
         if(stumm) return '<article class="person stumm">'+kopf+'</article>';
@@ -1360,7 +1419,7 @@ function karten(bloecke){
   bloecke.forEach(b=>{
     const letzte=out[out.length-1];
     const gelb = letzte && (letzte.t==="vorlesen"||letzte.t==="gruppe"||letzte.t==="sagen") && !letzte.aufgabe;
-    const alsGruppe = ()=>{ if(letzte.t==="vorlesen") out[out.length-1]={t:"gruppe", titel:letzte.titel, text:letzte.text, rede:[]};
+    const alsGruppe = ()=>{ if(letzte.t==="vorlesen") out[out.length-1]={t:"gruppe", titel:letzte.titel, text:letzte.text, spricht:letzte.spricht, rede:[]};
                             if(letzte.t==="sagen") out[out.length-1]={t:"gruppe", text:[], rede:letzte.text.map(t=>({t, wer:letzte.wer||null}))}; return out[out.length-1]; };
     if(b.t==="sagen" && gelb){ alsGruppe().rede.push(...b.text.map(t=>({t, wer:b.wer||null}))); }
     else if(b.t==="aufgabe" && gelb){ alsGruppe().aufgabe=b; }
@@ -1493,7 +1552,14 @@ function pruefeStory(){
         if(b.knopf.art==="wissen"){ const e=WISSEN.find(x=>x.k===b.knopf.k); if(e.braucht && !liste(b.nur).includes(e.braucht)) p.push(`tun ${b.id}: Wissen ${e.k} braucht ${e.braucht}, Knopf ist nicht darauf beschränkt`); }
       }
       if(b.t==="aufgabe" && !b.sag) p.push(`Schritt ${i} Block ${j}: Aufgabe ohne wörtliche Rede (sag)`);
+      if(b.t==="personen") b.leute.forEach(l=>{ if(!STIMMEN[l.name]) p.push(`Schritt ${i}: keine Stimme für ${l.name}`); });
       if(b.wer!==undefined && (b.t!=="sagen" || typeof b.wer!=="string")) p.push(`Schritt ${i} Block ${j}: wer nur bei sagen und nur als Text`);
+      if(b.wer!==undefined && !STIMMEN[b.wer]) p.push(`Schritt ${i} Block ${j}: keine Stimme für ${b.wer}`);
+      if(b.spricht!==undefined){
+        if(b.t!=="vorlesen") p.push(`Schritt ${i} Block ${j}: spricht nur bei vorlesen`);
+        else if(!STIMMEN[b.spricht]) p.push(`Schritt ${i} Block ${j}: keine Stimme für ${b.spricht}`);
+        else if(!b.text.some(t=>/“[^”]+”/.test(t))) p.push(`Schritt ${i} Block ${j}: spricht gesetzt, aber keine Rede im Text`);
+      }
       if(b.t==="kampf") b.gegner.concat(liste(b.zusatz),liste(b.extra)).forEach(g=>{ if(!BESTIARIUM[g]) p.push(`Schritt ${i}: unbekannter Gegner ${g}`); });
       if(b.t==="tun" && b.knopf.extra && !BESTIARIUM[b.knopf.extra]) p.push(`tun ${b.id}: unbekannte Verstärkung ${b.knopf.extra}`);
       if(b.t==="optionen"){
@@ -1548,6 +1614,7 @@ document.addEventListener("click", e=>{
   const wi=t.closest("[data-wiss]"); if(wi) return setzeWissen(wi.dataset.wiss);
   const hk=t.closest("[data-hak]"); if(hk){ const k=hk.dataset.hak; if(Z.abgehakt[k]) delete Z.abgehakt[k]; else Z.abgehakt[k]=true; zeichneSzene(); sichern(); return; }
   const l=t.closest("[data-laden]"); if(l){ ladeKampf(l.dataset.laden.split(","), l.dataset.extra||null); if(l.dataset.oeffnen) oeffneKampf(); return; }
+  if(t.closest("#stimmschalter")) return schalteStimmen();
   if(t.closest("#kampfknopf")) return oeffneKampf();
   if(t.closest("#kampf-zu")) return schliesseKampf();
   if(t.closest("#kampf-vorbei")) return kampfVorbei();
@@ -1575,7 +1642,7 @@ $("zuruecksetzen").onclick=()=>{
 };
 $("zufuegen").innerHTML=Object.keys(BESTIARIUM).map(k=>'<button data-laden="'+k+'">+ '+BESTIARIUM[k].name+'</button>').join("");
 
-function alles(){ zeichneBaro(); zeichneGruppe(); zeichneGegner(); zeichneWissen(); zeichneChronik(); zeichneSzene(); zeichneKampf(); }
+function alles(){ zeichneStimmschalter(); zeichneBaro(); zeichneGruppe(); zeichneGegner(); zeichneWissen(); zeichneChronik(); zeichneSzene(); zeichneKampf(); }
 laden(); alles();
 { const befunde=pruefeStory(); if(befunde.length) console.warn("Story-Prüfung:", befunde); }
 </script>

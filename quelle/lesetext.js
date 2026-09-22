@@ -9,11 +9,11 @@ const d=require("docx");
 const {Document,Packer,Paragraph,TextRun,HeadingLevel,AlignmentType,ShadingType,BorderStyle,PageBreak}=d;
 
 /* ---- Konsole laden, ohne Browser ---- */
-const el=()=>({innerHTML:"",textContent:"",className:"",hidden:false,disabled:false,value:"",style:{},dataset:{},classList:{toggle(){},add(){},remove(){}},querySelector(){return null;}});
+const el=()=>({innerHTML:"",textContent:"",className:"",hidden:false,disabled:false,value:"",style:{},dataset:{},classList:{toggle(){},add(){},remove(){}},querySelector(){return null;},setAttribute(){},getAttribute(){return null;}});
 global.document={getElementById:el,addEventListener(){}}; global.window={scrollTo(){}}; global.confirm=()=>true; console.warn=()=>{};
 const html=fs.readFileSync(path.join(__dirname,"..","dungeon_master.html"),"utf8");
 vm.runInThisContext(/<script>([\s\S]*)<\/script>/.exec(html)[1]);
-vm.runInThisContext("globalThis.T={KAPITEL:KAPITEL.concat([PATROUILLE]),ENTSCHEIDUNGEN,WISSEN,BESTIARIUM,liste}");
+vm.runInThisContext("globalThis.T={KAPITEL:KAPITEL.concat([PATROUILLE]),ENTSCHEIDUNGEN,WISSEN,BESTIARIUM,liste,STIMMEN}");
 
 const schueler=process.argv.includes("--schueler");
 
@@ -104,10 +104,11 @@ T.KAPITEL.forEach((k,i)=>{
     if(bed) letzteBedingung=bed; else letzteBedingung="";
     switch(b.t){
       case "vorlesen":
-        if(b.titel) kinder.push(new Paragraph({spacing:{before:100,after:40},children:[new TextRun({text:b.titel,font:"Georgia",size:19,bold:true,color:"555555"})]}));
+        if(b.titel) kinder.push(new Paragraph({spacing:{before:100,after:40},children:[new TextRun({text:b.titel,font:"Georgia",size:19,bold:true,color:"555555"}),
+          ...(!schueler&&b.spricht?[new TextRun({text:"   "+b.spricht.toUpperCase()+" ("+T.STIMMEN[b.spricht]+")",font:"Georgia",size:17,color:"8A6A2C"})]:[])]}));
         b.text.forEach(t=>kinder.push(new Paragraph({spacing:{after:110,line:320},children:glossiere(t,gesehen,22)}))); break;
       case "sagen":
-        kinder.push(...kasten(b.text.map((t,j)=>[...(j===0?etikett((b.wer?b.wer.toUpperCase():"DM")+":","8A6A2C"):[]),...glossiere(t,gesehen,21).map(r=>{r.root; return r;})]),gelb,"D9A441")); break;
+        kinder.push(...kasten(b.text.map((t,j)=>[...(j===0?etikett((b.wer?b.wer.toUpperCase()+(!schueler&&T.STIMMEN[b.wer]?" ("+T.STIMMEN[b.wer]+")":""):"DM")+":","8A6A2C"):[]),...glossiere(t,gesehen,21).map(r=>{r.root; return r;})]),gelb,"D9A441")); break;
       case "aufgabe":
         kinder.push(...kasten([[...etikett("DM SAGT DEN SCHÜLERN:","3A5A4C"),...glossiere("“"+(b.sag||b.text)+"”",gesehen,19)],
           ...((!schueler&&b.hinweis)?[[new TextRun({text:ohneHtml(b.hinweis)+(b.blatt?"  →  "+b.blatt:""),font:"Georgia",size:17,color:"555555"})]]:(b.blatt?[[new TextRun({text:"→  "+b.blatt,font:"Georgia",size:17,color:"555555"})]]:[]))],gruen,"74B094")); break;

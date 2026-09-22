@@ -9,7 +9,7 @@ const fs = require("fs"), path = require("path"), vm = require("vm");
 const elemente = {};
 function el(id){
   if(!elemente[id]) elemente[id] = { id, innerHTML:"", textContent:"", className:"", hidden:false, disabled:false, value:"",
-    style:{}, dataset:{}, onclick:null, classList:{ toggle(){}, add(){}, remove(){} }, querySelector(){ return null; } };
+    style:{}, dataset:{}, onclick:null, classList:{ toggle(){}, add(){}, remove(){} }, querySelector(){ return null; }, setAttribute(){}, getAttribute(){ return null; } };
   return elemente[id];
 }
 global.document = { getElementById: el, addEventListener(){}, };
@@ -26,7 +26,10 @@ vm.runInThisContext(`globalThis.T = { Z:()=>Z, setZ:z=>{Z=z;}, KAPITEL, ENTSCHEI
   frischerZustand, waehle, setzeWissen, tunAusfuehren, geheZu, gilt, hat, sichtbarerVerlauf, ortAufloesen, sichtbareBloecke, sichtbareChancen, pruefeStory, finaleLaden, liste, alles,
   ladeKampf, patrouilleFertig, setzeGefahr,
   oeffneKampf: typeof oeffneKampf==="function" ? oeffneKampf : null, schliesseKampf: typeof schliesseKampf==="function" ? schliesseKampf : null,
-  kampfVorbei: typeof kampfVorbei==="function" ? kampfVorbei : null }`);
+  kampfVorbei: typeof kampfVorbei==="function" ? kampfVorbei : null,
+  STIMMEN: typeof STIMMEN!=="undefined" ? STIMMEN : null,
+  schalteStimmen: typeof schalteStimmen==="function" ? schalteStimmen : null,
+  stimmenAn: ()=>typeof ZEIGE_STIMMEN!=="undefined" && ZEIGE_STIMMEN }`);
 console.warn = echtWarn;
 
 /* ---------- Hilfen ---------- */
@@ -300,6 +303,37 @@ if(T.oeffneKampf){
   frisch(); T.waehle("e1",0); T.waehle("e2",0); T.waehle("e3",optIdx("e3","e3_pakt")); T.geheZu(10); T.tunAusfuehren("finale_laden");
   pruefe(T.Z().kampfOffen===true && T.Z().gegner.some(g=>g.k==="vaskir"), "Finale laden öffnet den Kampfbildschirm nicht");
   T.kampfVorbei(); pruefe(T.Z().gegner.length===0, "Finale: Kampf vorbei räumt nicht auf");
+}
+
+/* ---------- 6c · Stimmen (nur V2) ---------- */
+if(T.STIMMEN){
+  const sprechend = k => T.sichtbareBloecke(k).flatMap(b =>
+    (b.t==="sagen" && b.wer) ? [b.wer] : (b.t==="vorlesen" && b.spricht) ? [b.spricht] : []);
+  /* Schalter aus: keine Stimmangabe im Text */
+  if(T.stimmenAn()) T.schalteStimmen();
+  frisch(); T.waehle("e1",optIdx("e1","weg_a")); T.geheZu(1);
+  pruefe(text().includes('class="wer"'), "Sprechermarke fehlt im Prolog");
+  pruefe(!text().includes('class="st"'), "Stimmangabe erscheint, obwohl der Schalter aus ist");
+  /* Schalter an: jede sichtbare Sprechermarke trägt ihre drei Wörter */
+  T.schalteStimmen();
+  pruefe(T.stimmenAn(), "Schalter liess sich nicht einschalten");
+  for(const [i,weg,tuer] of [[1,"weg_a","bibliothek"],[4,"weg_c","bibliothek"],[7,"weg_a","bibliothek"],[7,"weg_a","kueche"],[8,"weg_a","kueche"],[10,"weg_a","kueche"]]){
+    frisch(); T.schalteStimmen(); T.schalteStimmen();
+    T.waehle("e1",optIdx("e1",weg)); T.waehle("e2",optIdx("e2",tuer));
+    T.waehle("e3",optIdx("e3","e3_pakt")); T.geheZu(i);
+    const k=T.KAPITEL[i], namen=[...new Set(sprechend(k))];
+    namen.forEach(nm=>pruefe(text().includes(T.STIMMEN[nm]),
+      `Schritt ${i} (${weg}/${tuer}): Stimme von ${nm} fehlt im Text`));
+  }
+  /* Personenkarten tragen die Stimme ihrer Figur */
+  frisch(); T.geheZu(2);
+  ["Greta","Old Pieter","Tobias"].forEach(nm=>pruefe(text().includes(T.STIMMEN[nm]), "Stimme fehlt in der Personenkarte: "+nm));
+  /* Jede Figur, die spricht, hat eine Stimme */
+  T.KAPITEL.concat([T.PATROUILLE]).forEach((k,i)=>k.bloecke.forEach(b=>{
+    if(b.t==="sagen" && b.wer) pruefe(!!T.STIMMEN[b.wer], `Schritt ${i}: keine Stimme für ${b.wer}`);
+    if(b.t==="vorlesen" && b.spricht) pruefe(!!T.STIMMEN[b.spricht], `Schritt ${i}: keine Stimme für ${b.spricht}`);
+  }));
+  T.schalteStimmen(); frisch();
 }
 
 /* ---------- 7 · Neue Runde ---------- */
