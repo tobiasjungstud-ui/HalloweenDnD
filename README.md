@@ -173,6 +173,7 @@ Welche Szene welches Bild hat:
 |---|---|---|
 | Prolog · *The Carriage* | die Fahrt bergauf, und was im Wald mitläuft | immer |
 | Kapitel I · *The Inn* | das Wirtshaus mit dem Brett und den Namen | immer |
+| Entscheidung 1 · *The Way Up* | Gretas Karte, die drei Wege nummeriert | immer |
 | Aufstieg · *Up the Mountain* | der Galgen über dem Sumpf, mit den zwei Wölfen | nur auf Weg A, der alten Strasse |
 | Aufstieg · *Up the Mountain* | der Kessler-Stollen unter dem Berg | nur auf Weg B, dem Stollen |
 | Aufstieg · *Up the Mountain* | die Kutsche des Grafen | nur auf Weg C, dem Mitternachtswagen |
