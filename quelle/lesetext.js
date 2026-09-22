@@ -110,12 +110,12 @@ T.KAPITEL.forEach((k,i)=>{
       case "sagen":
         kinder.push(...kasten(b.text.map((t,j)=>[...(j===0?etikett((b.wer?b.wer.toUpperCase()+(!schueler&&T.STIMMEN[b.wer]?" ("+T.STIMMEN[b.wer]+")":""):"DM")+":","8A6A2C"):[]),...glossiere(t,gesehen,21).map(r=>{r.root; return r;})]),gelb,"D9A441")); break;
       case "aufgabe":
-        kinder.push(...kasten([[...etikett("DM SAGT DEN SCHÜLERN:","3A5A4C"),...glossiere("“"+(b.sag||b.text)+"”",gesehen,19)],
+        kinder.push(...kasten([[...etikett("GESPRÄCHSAUFFORDERUNG — DAS SAGST DU DEN SCHÜLERN:","3A5A4C"),...glossiere("“"+(b.sag||b.text)+"”",gesehen,19)],
           ...((!schueler&&b.hinweis)?[[new TextRun({text:ohneHtml(b.hinweis)+(b.blatt?"  →  "+b.blatt:""),font:"Georgia",size:17,color:"555555"})]]:(b.blatt?[[new TextRun({text:"→  "+b.blatt,font:"Georgia",size:17,color:"555555"})]]:[]))],gruen,"74B094")); break;
       case "regie":
-        kinder.push(...kasten([[...etikett(b.titel?b.titel.toUpperCase()+" (NUR DM):":"NUR DM:","555555"),new TextRun({text:ohneHtml(b.text),font:"Georgia",size:18,color:"333333"})]],grau,"BFBFBF")); break;
+        kinder.push(...kasten([[...etikett((b.titel?b.titel.toUpperCase():"HINTERGRUND")+" (NUR DM):","555555"),new TextRun({text:ohneHtml(b.text),font:"Georgia",size:18,color:"333333"})]],grau,"BFBFBF")); break;
       case "fa":
-        kinder.push(...kasten([[...etikett((b.titel||"ANTWORTMÖGLICHKEITEN").toUpperCase()+" (NUR DM)","555555")],
+        kinder.push(...kasten([[...etikett(("MÖGLICHE ANTWORTEN"+(b.wer?" · CHARAKTER: "+b.wer.toUpperCase():b.titel?" · "+b.titel.toUpperCase():""))+" (NUR DM)","555555")],
           ...b.paare.map(p=>[new TextRun({text:p[0]+"  ",font:"Georgia",size:18,bold:true,color:"333333"}),new TextRun({text:ohneHtml(p[1]),font:"Georgia",size:18,italics:true,color:"333333"})])],grau,"BFBFBF")); break;
       case "personen":
         kinder.push(...kasten([[...etikett("WEN MAN ANSPRECHEN KANN (NUR DM)","555555")],

@@ -29,7 +29,11 @@ vm.runInThisContext(`globalThis.T = { Z:()=>Z, setZ:z=>{Z=z;}, KAPITEL, ENTSCHEI
   kampfVorbei: typeof kampfVorbei==="function" ? kampfVorbei : null,
   STIMMEN: typeof STIMMEN!=="undefined" ? STIMMEN : null,
   schalteStimmen: typeof schalteStimmen==="function" ? schalteStimmen : null,
-  stimmenAn: ()=>typeof ZEIGE_STIMMEN!=="undefined" && ZEIGE_STIMMEN }`);
+  stimmenAn: ()=>typeof ZEIGE_STIMMEN!=="undefined" && ZEIGE_STIMMEN,
+  TALENTE: typeof TALENTE!=="undefined" ? TALENTE : null,
+  karten: typeof karten==="function" ? karten : null,
+  blockAnker: typeof blockAnker==="function" ? blockAnker : null,
+  hilfeVerteilen: typeof hilfeVerteilen==="function" ? hilfeVerteilen : null }`);
 console.warn = echtWarn;
 
 /* ---------- Hilfen ---------- */
@@ -105,25 +109,44 @@ function spiele(p, protokoll){
     pruefe(k.art!=="ent" || chancen.length===0, wo+": Gelegenheiten auf einer Entscheidungsseite");
     pruefe(chancen.length<=3, wo+`: ${chancen.length} Gelegenheiten sichtbar — mehr als drei lenken ab`);
     pruefe(chancen.length<=sichtbar.length, wo+": mehr Gelegenheiten als Szenenblöcke");
-    const st=el("staerken").innerHTML, vl=el("verlauf").innerHTML;
+    /* V1 hatte dafür eine eigene Leiste; in V2 stehen Regeln und Stärken als Kästen im Regiebuch */
+    const st=NEU?el("talente").innerHTML:el("staerken").innerHTML, vl=NEU?text():el("verlauf").innerHTML;
     pruefe((k.verlauf||[]).filter(T.gilt).every(r=>vl.includes(r.wenn)&&vl.includes(r.dann)), wo+": Wenn-dann-Spalte unvollständig");
     for(const gruppe of GRUPPEN) (k.verlauf||[]).filter(T.gilt).forEach(r=>{
       const nur=T.liste(r.nur).filter(f=>gruppe.includes(f));
       pruefe(nur.length===0 || nur.some(T.hat), wo+": Regel „"+r.wenn+"“ sichtbar, obwohl ihr Zweig nicht gewählt ist"); });
     pruefe((k.verlauf||[]).filter(T.gilt).length<=8, wo+": mehr als acht Regeln in der mittleren Spalte");
-    pruefe(!text().includes('class="staerke'), wo+": Gelegenheiten stehen noch in der Hauptspalte");
+    if(!NEU) pruefe(!text().includes('class="staerke'), wo+": Gelegenheiten stehen noch in der Hauptspalte");
     pruefe(["Magic Hand","Strength","Healing Touch"].every(t=>st.includes(t)), wo+": Stärken-Abschnitt nennt nicht alle drei Talente");
-    chancen.forEach(c=>pruefe(st.includes(c.text) && st.includes(c.folge) && st.includes(c.cue), wo+": Gelegenheit fehlt rechts: "+c.wer+" · "+c.talent));
+    const gz=NEU?text():st;
+    chancen.forEach(c=>pruefe(gz.includes(c.text) && gz.includes(c.folge) && gz.includes(c.cue), wo+": Gelegenheit fehlt rechts: "+c.wer+" · "+c.talent));
     const gelb=sichtbar.filter(b=>b.t==="vorlesen"||b.t==="sagen").flatMap(b=>b.text);
     chancen.forEach(c=>pruefe(gelb.some(t=>t.includes(c.cue)), wo+": Ankündigung „"+c.cue+"“ wird auf diesem Pfad nicht vorgelesen"));
     if(!NEU){
       const leerZeilen=(st.match(/staerke leer/g)||[]).length, belegt=new Set(chancen.map(c=>c.wer)).size;
       pruefe(leerZeilen===3-belegt, wo+`: ${leerZeilen} leere Stärken-Zeilen bei ${belegt} belegten Figuren`);
     } else {
-    /* Figuren ohne Gelegenheit stehen in einer gesammelten Zeile, mit Namen und Talent */
+    /* Die Übersicht nennt jede Figur mit ihrem Talent und sagt, ob die Szene eine Gelegenheit hat */
     const ohneFiguren=T.Z().gruppe.filter(x=>!chancen.some(c=>c.wer===x.rolle)).map(x=>x.rolle);
-    pruefe((st.match(/staerke leer/g)||[]).length===(ohneFiguren.length?1:0), wo+": Sammelzeile für Figuren ohne Gelegenheit fehlt oder ist doppelt");
+    pruefe((st.match(/tz leer/g)||[]).length===ohneFiguren.length, wo+": Zeile „hier nichts vorbereitet“ stimmt nicht mit den Figuren ohne Gelegenheit überein");
+    pruefe((st.match(/tz da/g)||[]).length===3-ohneFiguren.length, wo+": Zeile „Gelegenheit in dieser Szene“ stimmt nicht");
     ohneFiguren.forEach(r=>pruefe(st.includes(r), wo+": Figur ohne Gelegenheit wird rechts nicht genannt: "+r));
+    /* Gefahrenkarte steht auf jeder Seite rechts neben dem Ziel */
+    pruefe(text().includes('class="hbox gefahrkarte"'), wo+": Gefahrenkarte fehlt rechts");
+    /* Anker: jede Regel mit „bei“ landet im Fach ihres Blocks, nicht im Sammelfach oben */
+    const bl=T.karten(sichtbar), faecher=T.hilfeVerteilen(k, bl).map(f=>f.vor+f.nach);
+    (k.verlauf||[]).filter(T.gilt).forEach(r=>{
+      if(!r.bei) return;
+      const j=bl.findIndex(b=>T.blockAnker(b)===r.bei);
+      if(j<0) return;
+      pruefe(faecher[j].includes(r.wenn), wo+": Regel „"+r.wenn+"“ steht nicht beim Anker "+r.bei);
+    });
+    /* Stärken stehen im Fach des Blocks, in dem ihr angekündigter Satz vorgelesen wird */
+    chancen.forEach(c=>{
+      const j=bl.findIndex(b=>(T.blockAnker(b), (b.text?[].concat(b.text).join(" "):"")+(b.rede?b.rede.map(x=>x.t).join(" "):"")).includes(c.cue));
+      if(j<0) return;
+      pruefe(faecher[j].includes(c.cue), wo+": Stärke „"+c.talent+"“ steht nicht neben ihrer Ankündigung");
+    });
     /* Knöpfe der Szene erscheinen auch in der Aktionsleiste */
     const akt=el("aktionen").innerHTML;
     sichtbar.filter(b=>b.t==="tun").forEach(b=>pruefe(akt.includes('data-tun="'+b.id+'"'), wo+": Knopf fehlt in der Aktionsleiste: "+b.id));
@@ -299,7 +322,8 @@ if(T.oeffneKampf){
   frisch(); T.geheZu(4); T.waehle("e1",optIdx("e1","weg_a")); T.geheZu(4);
   pruefe(el("k-titel").textContent==="The wolves", "Kampftitel zeigt nicht den vorbereiteten Kampf der Szene: "+el("k-titel").textContent);
   pruefe(el("k-hinweis").innerHTML.includes("Zwei Wölfe"), "Kampfhinweis fehlt");
-  pruefe(el("gruppe-kampf").innerHTML.includes("Arcanist") && el("gruppe").innerHTML.includes("Arcanist"), "Gruppe fehlt in Szene oder Kampfbildschirm");
+  pruefe(el("gruppe-kampf").innerHTML.includes("Arcanist"), "Gruppe fehlt im Reiter Charakter-Übersicht / Kampf");
+  if(NEU) pruefe(!html.includes('id="gruppe"'), "Lebenspunkte stehen noch auf dem Hauptschirm");
   frisch(); T.waehle("e1",0); T.waehle("e2",0); T.waehle("e3",optIdx("e3","e3_pakt")); T.geheZu(10); T.tunAusfuehren("finale_laden");
   pruefe(T.Z().kampfOffen===true && T.Z().gegner.some(g=>g.k==="vaskir"), "Finale laden öffnet den Kampfbildschirm nicht");
   T.kampfVorbei(); pruefe(T.Z().gegner.length===0, "Finale: Kampf vorbei räumt nicht auf");

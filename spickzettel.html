@@ -30,22 +30,30 @@ h2{font-weight:400;font-size:24px;margin:44px 0 14px}
 .zahl{font-weight:600;color:var(--text);font-size:13px}
 .kn{border:1px solid var(--line-hi);border-radius:3px;padding:3px 8px;color:var(--muted)}
 .kn.rot{border-color:var(--red-line);color:var(--red)}
-.spalten{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)}
-.spalten>div{padding:14px 16px;min-width:0}
-.spalten>div+div{border-left:1px solid var(--line)}
+.flaeche{padding:14px 16px;min-width:0}
 .tz{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px}
 .tz b{font-family:var(--serif);font-weight:400;font-size:19px;color:var(--text)}
 .tz span{color:var(--dim)}
 .auf{border-left:2px solid var(--line-hi);padding:5px 0 5px 10px;margin-bottom:10px;color:var(--muted);line-height:1.5}
 .auf i{font-style:normal;letter-spacing:.12em;text-transform:uppercase;font-size:9.5px;color:var(--dim);margin-right:7px}
 .auf u{text-decoration:none;color:var(--dim);border-bottom:1px dotted var(--line-hi);margin-left:4px}
-.zeilen{display:grid;grid-template-columns:86px 1fr;column-gap:16px}
+.zeilen{display:grid;grid-template-columns:86px minmax(0,1fr) 160px;column-gap:16px;align-items:start}
 .zeilen .m{text-align:right;letter-spacing:.11em;text-transform:uppercase;font-size:9.5px;color:var(--dim);padding-top:2px;margin-bottom:14px}
 .zeilen .m small{display:block;letter-spacing:.03em;text-transform:none;font-size:9px;margin-top:2px}
 .zeilen .m.v{color:var(--gold)}.zeilen .m.s{color:var(--green)}
 .zeilen .i{margin-bottom:14px;font-family:var(--serif);font-size:13px;color:var(--text);line-height:1.5}
 .zeilen .i.grau{font-family:var(--sans);font-size:11.5px;color:var(--muted)}
 .zeilen .i.gruen{color:var(--green-soft);font-style:italic}
+.zeilen .h{margin-bottom:14px}
+.hk{border:1px solid var(--line);border-radius:4px;background:var(--panel);padding:8px 10px;color:var(--muted);line-height:1.4}
+.hk+.hk{margin-top:6px}
+.hk .l{display:block;letter-spacing:.14em;text-transform:uppercase;font-size:9px;color:var(--dim);margin-bottom:5px}
+.hk .gz{display:flex;align-items:baseline;gap:4px;font-family:var(--serif);color:var(--text);font-size:15px;margin-bottom:5px}
+.hk .gz small{font-size:9px;color:var(--dim);white-space:nowrap}
+.hk .regel{display:block;grid-template-columns:none;padding:5px 0}
+.hk .regel b{display:block}
+.hk .regel span:empty{display:none}
+.hk .gz i{font-style:normal;margin-left:auto;font-family:var(--sans);font-size:9px;letter-spacing:.06em;color:var(--muted)}
 .zeilen .i u{text-decoration:none;color:var(--dim);border-bottom:1px dotted var(--line-hi);margin-left:4px}
 .rede{color:var(--gold-soft);font-style:italic}
 .wer{font-family:var(--sans);font-style:normal;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);
@@ -88,7 +96,7 @@ h2{font-weight:400;font-size:24px;margin:44px 0 14px}
 .kampf{margin-top:18px}
 .kampf .kk{display:flex;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--line)}
 .kampf .kk b{font-family:var(--serif);font-weight:400;font-size:15px;color:var(--text)}
-.kampf .kf{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:14px 16px}
+.kampf .kf{display:grid;grid-template-columns:1fr 1fr .8fr;gap:16px;padding:14px 16px}
 .karte{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:9px 11px;margin-bottom:7px;color:var(--muted)}
 .karte b{font-family:var(--serif);font-weight:400;font-size:14px;color:var(--text);display:flex;justify-content:space-between}
 .karte .bal{height:3px;background:var(--line);border-radius:2px;margin:7px 0}.karte .bal i{display:block;height:100%;width:64%;background:#b4463a;border-radius:2px}
@@ -96,7 +104,7 @@ h2{font-weight:400;font-size:24px;margin:44px 0 14px}
 .karte .kn2{display:flex;gap:5px}.karte .kn2 span{border:1px solid var(--line-hi);padding:2px 7px;border-radius:3px}
 .kampf .fu{display:flex;justify-content:center;padding:9px 16px;border-top:1px solid var(--line)}
 .kampf .fu span{border:1px solid #2f5a48;color:var(--green-soft);padding:5px 12px;border-radius:3px}
-@media (max-width:820px){.spalten{grid-template-columns:1fr}.spalten>div+div{border-left:none;border-top:1px solid var(--line)}.kampf .kf{grid-template-columns:1fr}.pk .gr{grid-template-columns:1fr}}
+@media (max-width:820px){.zeilen{grid-template-columns:86px minmax(0,1fr)}.zeilen .h{grid-column:2}.kampf .kf{grid-template-columns:1fr}.pk .gr{grid-template-columns:1fr}}
 
 /* ---- Erklärungen ---- */
 .erkl{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px 28px}
@@ -117,7 +125,7 @@ h2{font-weight:400;font-size:24px;margin:44px 0 14px}
 <div class="wrap">
   <p class="sub">The Bride of Nachtfels · Spickzettel zur Spielleitung</p>
   <h1>Der DM-Bildschirm auf einen Blick</h1>
-  <p class="satz"><b>Oben steht, was sich ändert. Links steht, was du sagst. Rechts steht, was von der Antwort der Gruppe abhängt.</b> Der Kampf hat seinen eigenen Bildschirm. Jede Seite ist gleich gebaut.</p>
+  <p class="satz"><b>Oben steht, was sich ändert. In der Mitte steht, was du sagst. Rechts daneben steht die Hilfe — auf der Höhe der Stelle, zu der sie gehört.</b> Lebenspunkte und Kampf haben einen eigenen Bildschirm. Jede Seite ist gleich gebaut.</p>
 
   <div class="schirm" role="img" aria-label="Schema des DM-Bildschirms mit acht nummerierten Bereichen">
     <div class="leiste">
@@ -127,90 +135,91 @@ h2{font-weight:400;font-size:24px;margin:44px 0 14px}
         <span class="num">2</span>
         <span class="meter"><i class="an"></i><i class="an"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
         <span class="zahl">2</span><span class="kn">−1</span><span class="kn">+1</span><span class="kn">+2</span>
-        <span class="kn rot">⚔ Kampf</span><span class="kn">←</span><span class="kn">→ The Way Up</span><span class="kn">Lage</span>
+        <span class="kn rot">⚔ Charaktere / Kampf</span><span class="kn">←</span><span class="kn">→ The Way Up</span><span class="kn">Lage</span>
       </span>
     </div>
 
-    <div class="spalten">
-      <div>
-        <div class="tz"><span class="num">3</span><b>The Inn</b><span>Ziel: Drei Menschen ansprechen, am Ende die Karte. 25 Min.</span></div>
+    <div class="flaeche">
+      <div class="tz"><span class="num">3</span><b>The Inn</b></div>
 
-        <div class="zeilen">
-          <div class="m"><span class="num">4</span>Für dich</div>
-          <div class="i grau">Elf Menschen im Raum, drei sind ansprechbar. Der Name Anneke muss fallen …<u>mehr</u></div>
-          <div class="m v"><span class="num">5</span>Vorlesen<small>Der Raum</small></div>
-          <div class="i">Above the fireplace hangs a long, heavy board of oak, on two iron hooks, with names carved into it. It says: MIRELA VANCE.</div>
-          <div class="m v">Vorlesen<small>Der Graf</small></div>
-          <div class="i"><span class="rede"><span class="wer">Vaskir</span>“Four hundred years, and I never took a single one of them.”</span></div>
-          <div class="m s"><span class="num">6</span>An die Schüler</div>
-          <div class="i gruen">“Who do you want to talk to? Ask — every one of you.”</div>
+      <div class="zeilen">
+        <div class="m">Ziel</div>
+        <div class="i"><span class="wer">25 Min.</span>Drei Menschen ansprechen, zwei Dinge erfahren, am Ende die Karte.</div>
+        <div class="h"><span class="num">7</span><div class="hk"><div class="gz">2<small>/ 10</small><i>Der Nebel deckt euch</i></div>
+          <span class="meter"><i class="an"></i><i class="an"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div></div>
+
+        <div class="m"><span class="num">4</span>Hintergrund</div>
+        <div class="i grau">Elf Menschen im Raum, drei sind ansprechbar. Der Name Anneke muss fallen …<u>mehr</u></div>
+        <div class="h"></div>
+
+        <div class="m v"><span class="num">5</span>Vorlesen<small>Der Raum</small></div>
+        <div class="i">Above the fireplace hangs a long, heavy board of oak, <b>on two iron hooks</b>, with names carved into it. It says: MIRELA VANCE.</div>
+        <div class="h"><span class="num">8</span><div class="hk st1"><b>▸ Rook · Strength</b><em>„on two iron hooks“</em></div></div>
+
+        <div class="m s"><span class="num">6</span>Gesprächs-<br>aufforderung</div>
+        <div class="i gruen">“Who do you want to talk to? Ask — every one of you. And when the answer is short, ask again.”</div>
+        <div class="h"><div class="hk"><span class="l">Wenn … dann</span>
+          <div class="regel g"><b>Eine Frage ist gestellt</b><span></span><span>→ abhaken</span></div>
+          <div class="regel r"><b>Alle Fragen verbraucht</b><span></span><span>→ sie schweigt</span></div></div></div>
+
+        <div class="m">Mögliche<br>Antworten<small>Wen man ansprechen kann</small></div>
+        <div class="i" style="font-family:var(--sans);font-size:11.5px">
+          <div class="pk"><div class="kopf"><b>Greta</b><i>Wirtin, drei Finger</i><u>1 von 5 gefragt</u></div>
+            <div class="gr">
+              <div class="weg f">☑ What happened to Mirela?</div><div class="a weg">„She is gone. Three nights ago.“</div>
+              <div>☐ Why is nobody looking for her?</div><div class="a">„Because we know exactly where she is.“</div>
+            </div></div>
+          <div class="pk zu"><div class="kopf"><b>Old Pieter</b><i>Totengräber</i><u>ausgeredet · aufklappen</u></div></div>
         </div>
-
-        <div class="pk"><div class="kopf"><b>Greta</b><i>Wirtin, drei Finger</i><u>1 von 5 gefragt</u></div>
-          <div class="gr">
-            <div class="weg f">☑ What happened to Mirela?</div><div class="a weg">„She is gone. Three nights ago.“</div>
-            <div>☐ Why is nobody looking for her?</div><div class="a">„Because we know exactly where she is.“</div>
-          </div></div>
-        <div class="pk zu"><div class="kopf"><b>Old Pieter</b><i>Totengräber</i><u>ausgeredet · aufklappen</u></div></div>
-      </div>
-
-      <div>
-        <div class="f"><span class="l"><span class="num">7</span>Die Gruppe</span>
-          <div class="hp"><span class="nm">Vesper</span><span class="rl">Arcanist</span><span class="bal"><i style="width:100%"></i></span></div>
-          <div class="hp"><span class="nm">Rook</span><span class="rl">Blade</span><span class="bal"><i style="width:80%"></i></span></div>
-          <div class="hp"><span class="nm">Ilse</span><span class="rl">Lightbearer</span><span class="bal"><i style="width:100%"></i></span></div></div>
-        <div class="f"><span class="l">Wenn … dann</span>
-          <div class="regel g"><b>Ehrliche Antwort</b><span>→</span><span>Tam führt euch</span></div>
-          <div class="regel r"><b>Lüge</b><span>→</span><span>kein Führer</span></div>
-          <div class="regel r"><b>Drohung</b><span>→</span><span>Gefahr +3</span></div></div>
-        <div class="f"><span class="l">Stärken der Figuren</span>
-          <div class="st1"><b>▸ Ilse · Healing Touch</b><em>„the left one he holds against his chest“</em></div>
-          <div class="st1 leer">Nichts vorbereitet für Vesper · Magic Hand und Rook · Strength</div></div>
-        <div class="f"><span class="l">Barometer · Wissen · Chronik</span>
-          <div class="regel"><span>2 / 10</span><span></span><span>Der Nebel deckt euch</span></div></div>
+        <div class="h"></div>
       </div>
     </div>
 
-    <div class="strip"><span class="num">8</span><span class="l">Knöpfe</span><span class="b">Anneke ist gefallen</span>
+    <div class="strip"><span class="num">9</span><span class="l">Knöpfe</span><span class="b">Anneke ist gefallen</span>
       <span class="w"><b>Weiter</b>wenn jede Figur einmal gefragt hat und die Karte auf dem Tisch liegt.</span></div>
   </div>
 
-  <div class="schirm kampf" role="img" aria-label="Schema des Kampfbildschirms">
-    <div class="kk"><b>⚔ The wolves</b><span>← Szene (Kampf bleibt offen)</span></div>
+  <div class="schirm kampf" role="img" aria-label="Schema des Bildschirms Charakter-Übersicht und Kampf">
+    <div class="kk"><b>Charakter-Übersicht / Kampf</b><span>← Szene (Kampf bleibt offen)</span></div>
     <div class="kf">
-      <div><div class="karte"><b>Dire Wolf<span>9 / 14</span></b><div class="bal"><i></i></div><div class="kn2"><span>8</span><span>Schaden</span><span style="margin-left:auto">Bite 1d6+2</span></div></div>
-           <div class="karte" style="opacity:.7"><b>Dire Wolf<span>14 / 14</span></b><div class="bal"><i style="width:100%"></i></div><div class="kn2"><span>8</span><span>Schaden</span><span style="margin-left:auto">Bite 1d6+2</span></div></div></div>
       <div><div class="karte h"><b>Rook<span>24 / 30</span></b><div class="bal"><i></i></div><div class="kn2"><span>5</span><span>Schaden</span><span>Heilung</span></div></div>
            <div class="karte h" style="opacity:.7"><b>Ilse<span>24 / 24</span></b><div class="bal"><i style="width:100%"></i></div><div class="kn2"><span>5</span><span>Schaden</span><span>Heilung</span></div></div></div>
+      <div><div class="karte"><b>Dire Wolf<span>9 / 14</span></b><div class="bal"><i></i></div><div class="kn2"><span>8</span><span>Schaden</span><span style="margin-left:auto">Bite 1d6+2</span></div></div>
+           <div class="karte" style="opacity:.7"><b>Dire Wolf<span>14 / 14</span></b><div class="bal"><i style="width:100%"></i></div><div class="kn2"><span>8</span><span>Schaden</span><span style="margin-left:auto">Bite 1d6+2</span></div></div></div>
+      <div><div class="hk"><span class="l">Wenn … dann</span>
+        <div class="regel g"><b>Ein Wolf fällt</b><span></span><span>→ der andere läuft</span></div>
+        <div class="regel r"><b>Sumpf: Wurf unter 10</b><span></span><span>→ −1 HP</span></div></div></div>
     </div>
     <div class="fu"><span>Kampf vorbei — alle heilen, zurück zur Szene</span></div>
   </div>
 
-  <h2>Die acht Bereiche</h2>
+  <h2>Die neun Bereiche</h2>
   <ul class="erkl">
-    <li><span class="num">1</span><span><b>Szene und Lage</b>Klick auf den Namen öffnet alle dreizehn Seiten. Daneben der Ort. „Lage“ ganz rechts zeigt Weg, Tür, Wahl und Wissen.</span></li>
-    <li><span class="num">2</span><span><b>Gefahr und Steuerung</b>Barometer, die Knöpfe −1 +1 +2, der Kampf und das Blättern. Diese Leiste bleibt beim Scrollen stehen.</span></li>
-    <li><span class="num">3</span><span><b>Titel und Ziel</b>Was in dieser Szene passieren soll, und wie lange sie dauert.</span></li>
-    <li><span class="num">4</span><span><b>Hintergrund</b>Nur für dich, auf einen Satz eingeklappt. „mehr“ zeigt alles.</span></li>
+    <li><span class="num">1</span><span><b>Szene und Lage</b>Klick auf den Namen öffnet alle dreizehn Seiten. Daneben der Ort. „Lage“ ganz rechts zeigt Weg, Tür, Wahl, die drei Talente, das Wissen und die Chronik.</span></li>
+    <li><span class="num">2</span><span><b>Gefahr und Steuerung</b>Barometer, die Knöpfe −1 +1 +2, der Reiter Charakter-Übersicht / Kampf und das Blättern. Diese Leiste bleibt beim Scrollen stehen.</span></li>
+    <li><span class="num">3</span><span><b>Titel und Ziel</b>Was in dieser Szene passieren soll, mit der Zeitmarke daneben.</span></li>
+    <li><span class="num">4</span><span><b>Hintergrund</b>Nur für dich, auf einen Satz eingeklappt. „mehr“ zeigt alles. Am Rand steht, zu welchem Weg er gehört.</span></li>
     <li><span class="num">5</span><span><b>Vorlesen</b>Die Randbeschriftung sagt, was der Absatz ist. Was in Anführungszeichen steht, ist Rede und steht farbig da, mit dem Namen der Figur davor.</span></li>
-    <li><span class="num">6</span><span><b>An die Schüler</b>Grün, direkt unter dem Absatz, zu dem es gehört. Wörtlich sagen, dann schweigen.</span></li>
-    <li><span class="num">7</span><span><b>Rechte Spalte</b>Lebenspunkte zuoberst, dann die Verzweigungen, die Stärken, das Barometer, das Wissen, die Chronik. Bleibt stehen.</span></li>
-    <li><span class="num">8</span><span><b>Aktionsleiste</b>Alle Knöpfe der Szene, immer am unteren Rand, daneben die Bedingung zum Weiterblättern.</span></li>
+    <li><span class="num">6</span><span><b>Gesprächsaufforderung</b>Grün, direkt unter dem Absatz, zu dem sie gehört. Wörtlich sagen, dann schweigen. Sie endet immer mit einer klaren Aufforderung.</span></li>
+    <li><span class="num">7</span><span><b>Gefahr, rechts oben</b>Balken, Zahl, Stufe und was sie bedeutet. Verstellt wird sie oben in der Leiste.</span></li>
+    <li><span class="num">8</span><span><b>Hilfe auf gleicher Höhe</b>Wenn-dann-Regeln und Stärken der Figuren stehen neben der Stelle, zu der sie gehören. Steht daneben nichts, gibt es dort nichts zu beachten.</span></li>
+    <li><span class="num">9</span><span><b>Aktionsleiste</b>Alle Knöpfe der Szene, immer am unteren Rand, daneben die Bedingung zum Weiterblättern.</span></li>
   </ul>
 
   <h2>Was am Rand steht</h2>
   <div class="rand">
     <div><b style="color:var(--gold)">Vorlesen</b>Wörtlich. Rede steht farbig und kursiv.</div>
-    <div><b style="color:var(--green)">An die Schüler</b>Das sagst du ihnen. Ihre Aufgabe.</div>
-    <div><b style="color:var(--muted)">Für dich</b>Hintergrund, Personen, Antworten. Eingeklappt.</div>
-    <div><b style="color:var(--red)">Kampf</b>Der Knopf öffnet den Kampfbildschirm.</div>
+    <div><b style="color:var(--green)">Gesprächsaufforderung</b>Das sagst du ihnen. Endet mit einer klaren Aufforderung.</div>
+    <div><b style="color:var(--muted)">Hintergrund</b>Nur für dich. Eingeklappt; der Zusatz am Rand sagt, wozu er gehört.</div>
+    <div><b style="color:var(--muted)">Mögliche Antworten</b>Vorbereitete Antworten. Am Rand steht, welcher Charakter antwortet.</div>
+    <div><b style="color:var(--red)">Kampf</b>Ein Knopf und ein Satz. Werte und Regeln stehen im Kampf-Reiter.</div>
   </div>
 
   <h2>So läuft jede Seite</h2>
   <div class="ablauf">
     <div><b>Hintergrund überfliegen.</b> Ein Satz reicht meistens. Bei Bedarf aufklappen.</div>
     <div><b>Vorlesen, dann Grün sagen.</b> Danach schweigen und die Gruppe reden lassen.</div>
-    <div><b>Rechts schauen.</b> Was sie gesagt haben, entscheidet, welche Wenn-dann-Zeile gilt.</div>
+    <div><b>Auf gleicher Höhe rechts schauen.</b> Was sie gesagt haben, entscheidet, welche Wenn-dann-Zeile gilt.</div>
     <div><b>Unten drücken und blättern.</b> Knöpfe in der Aktionsleiste, dann „Weiter, wenn“ prüfen.</div>
   </div>
 
