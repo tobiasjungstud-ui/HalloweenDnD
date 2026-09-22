@@ -31,6 +31,27 @@ h2{font-weight:400;font-size:24px;margin:44px 0 14px}
 .kn{border:1px solid var(--line-hi);border-radius:3px;padding:3px 8px;color:var(--muted)}
 .kn.rot{border-color:var(--red-line);color:var(--red)}
 .flaeche{padding:14px 16px;min-width:0}
+.unten{display:flex;align-items:stretch}
+.hauptteil{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between}
+.gsaeule{flex:none;width:62px;display:flex;flex-direction:column;
+  align-items:center;gap:7px;padding:12px 0;border-left:1px solid var(--line);
+  background:linear-gradient(to left,rgba(0,0,0,.3),transparent)}
+.gsaeule b{font-family:var(--serif);font-weight:400;font-size:20px;color:var(--text)}
+.gsaeule i{font-style:normal;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:-4px}
+.gsaeule .rohr{flex:1;width:13px;border:1px solid var(--line-hi);border-radius:7px;background:#15161a;
+  position:relative;outline:1px solid rgba(201,164,87,.14);outline-offset:3px}
+.gsaeule .fuell{position:absolute;left:2px;right:2px;bottom:2px;height:19%;border-radius:4px;background:#3f5f80}
+.gsaeule em{font-style:normal;writing-mode:vertical-rl;transform:rotate(180deg);font-size:8.5px;
+  letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
+.kopfband{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:8px 20px;align-items:start;
+  margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.kopfband b{font-family:var(--serif);font-weight:400;font-size:19px;color:var(--text);line-height:1.15}
+.kopfband .num{margin-right:0}
+.zielb{min-width:0}
+.zielb i{font-style:normal;letter-spacing:.12em;text-transform:uppercase;font-size:9px;color:var(--dim);margin-right:8px}
+.zielb u{text-decoration:none;border:1px solid rgba(201,164,87,.35);border-radius:3px;padding:2px 7px;
+  font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.zielb span{display:block;margin-top:5px;font-family:var(--serif);font-size:13px;color:var(--text)}
 .tz{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px}
 .tz b{font-family:var(--serif);font-weight:400;font-size:19px;color:var(--text)}
 .tz span{color:var(--dim)}
@@ -125,29 +146,26 @@ h2{font-weight:400;font-size:24px;margin:44px 0 14px}
 <div class="wrap">
   <p class="sub">The Bride of Nachtfels · Spickzettel zur Spielleitung</p>
   <h1>Der DM-Bildschirm auf einen Blick</h1>
-  <p class="satz"><b>Oben steht, was sich ändert. In der Mitte steht, was du sagst. Rechts daneben steht die Hilfe — auf der Höhe der Stelle, zu der sie gehört.</b> Lebenspunkte und Kampf haben einen eigenen Bildschirm. Jede Seite ist gleich gebaut.</p>
+  <p class="satz"><b>Oben steht, was sich ändert. In der Mitte steht, was du sagst. Rechts daneben steht die Hilfe — auf der Höhe der Stelle, zu der sie gehört. Ganz rechts läuft der Gefahrenbalken.</b> Lebenspunkte und Kampf haben einen eigenen Bildschirm. Jede Seite ist gleich gebaut.</p>
 
-  <div class="schirm" role="img" aria-label="Schema des DM-Bildschirms mit acht nummerierten Bereichen">
+  <div class="schirm mitsaeule" role="img" aria-label="Schema des DM-Bildschirms mit neun nummerierten Bereichen">
     <div class="leiste">
       <span class="wo"><span class="num">1</span><em>Kapitel I</em> · The Inn<span>Seite 3 von 13 ▾</span></span>
       <span class="kurz">Ort <b>Vor dem Wirtshaus</b></span>
       <span class="rechts">
         <span class="num">2</span>
-        <span class="meter"><i class="an"></i><i class="an"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
         <span class="zahl">2</span><span class="kn">−1</span><span class="kn">+1</span><span class="kn">+2</span>
         <span class="kn rot">⚔ Charaktere / Kampf</span><span class="kn">←</span><span class="kn">→ The Way Up</span><span class="kn">Lage</span>
       </span>
     </div>
 
+    <div class="unten">
+    <div class="hauptteil">
     <div class="flaeche">
-      <div class="tz"><span class="num">3</span><b>The Inn</b></div>
+      <div class="kopfband"><span class="num">3</span><b>The Inn</b>
+        <span class="zielb"><i>Ziel</i><u>25 Min.</u><span>Drei Menschen ansprechen, zwei Dinge erfahren, am Ende die Karte.</span></span></div>
 
       <div class="zeilen">
-        <div class="m">Ziel</div>
-        <div class="i"><span class="wer">25 Min.</span>Drei Menschen ansprechen, zwei Dinge erfahren, am Ende die Karte.</div>
-        <div class="h"><span class="num">7</span><div class="hk"><div class="gz">2<small>/ 10</small><i>Der Nebel deckt euch</i></div>
-          <span class="meter"><i class="an"></i><i class="an"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div></div>
-
         <div class="m"><span class="num">4</span>Hintergrund</div>
         <div class="i grau">Elf Menschen im Raum, drei sind ansprechbar. Der Name Anneke muss fallen …<u>mehr</u></div>
         <div class="h"></div>
@@ -177,6 +195,10 @@ h2{font-weight:400;font-size:24px;margin:44px 0 14px}
 
     <div class="strip"><span class="num">9</span><span class="l">Knöpfe</span><span class="b">Anneke ist gefallen</span>
       <span class="w"><b>Weiter</b>wenn jede Figur einmal gefragt hat und die Karte auf dem Tisch liegt.</span></div>
+    </div>
+    <span class="gsaeule"><span class="num">7</span><b>2</b><i>von 10</i>
+      <span class="rohr"><span class="fuell"></span></span><em>Gefahr</em></span>
+    </div>
   </div>
 
   <div class="schirm kampf" role="img" aria-label="Schema des Bildschirms Charakter-Übersicht und Kampf">
@@ -196,12 +218,12 @@ h2{font-weight:400;font-size:24px;margin:44px 0 14px}
   <h2>Die neun Bereiche</h2>
   <ul class="erkl">
     <li><span class="num">1</span><span><b>Szene und Lage</b>Klick auf den Namen öffnet alle dreizehn Seiten. Daneben der Ort. „Lage“ ganz rechts zeigt Weg, Tür, Wahl, die drei Talente, das Wissen und die Chronik.</span></li>
-    <li><span class="num">2</span><span><b>Gefahr und Steuerung</b>Barometer, die Knöpfe −1 +1 +2, der Reiter Charakter-Übersicht / Kampf und das Blättern. Diese Leiste bleibt beim Scrollen stehen.</span></li>
-    <li><span class="num">3</span><span><b>Titel und Ziel</b>Was in dieser Szene passieren soll, mit der Zeitmarke daneben.</span></li>
+    <li><span class="num">2</span><span><b>Gefahr und Steuerung</b>Der Stand, die Knöpfe −1 +1 +2, der Reiter Charakter-Übersicht / Kampf und das Blättern. Diese Leiste bleibt beim Scrollen stehen.</span></li>
+    <li><span class="num">3</span><span><b>Titel und Ziel</b>Das Ziel steht rechts neben dem Titel, auf gleicher Höhe, mit der Zeitmarke davor.</span></li>
     <li><span class="num">4</span><span><b>Hintergrund</b>Nur für dich, auf einen Satz eingeklappt. „mehr“ zeigt alles. Am Rand steht, zu welchem Weg er gehört.</span></li>
     <li><span class="num">5</span><span><b>Vorlesen</b>Die Randbeschriftung sagt, was der Absatz ist. Was in Anführungszeichen steht, ist Rede und steht farbig da, mit dem Namen der Figur davor.</span></li>
     <li><span class="num">6</span><span><b>Gesprächsaufforderung</b>Grün, direkt unter dem Absatz, zu dem sie gehört. Wörtlich sagen, dann schweigen. Sie endet immer mit einer klaren Aufforderung.</span></li>
-    <li><span class="num">7</span><span><b>Gefahr, rechts oben</b>Balken, Zahl, Stufe und was sie bedeutet. Verstellt wird sie oben in der Leiste.</span></li>
+    <li><span class="num">7</span><span><b>Gefahrenbalken, ganz rechts</b>Senkrecht über die ganze Seitenhöhe, füllt sich von unten: blau bis 3, gold bis 7, rot darüber. Daneben steht, was die Stufe bedeutet. Verstellt wird sie oben in der Leiste.</span></li>
     <li><span class="num">8</span><span><b>Hilfe auf gleicher Höhe</b>Wenn-dann-Regeln und Stärken der Figuren stehen neben der Stelle, zu der sie gehören. Steht daneben nichts, gibt es dort nichts zu beachten.</span></li>
     <li><span class="num">9</span><span><b>Aktionsleiste</b>Alle Knöpfe der Szene, immer am unteren Rand, daneben die Bedingung zum Weiterblättern.</span></li>
   </ul>

@@ -132,7 +132,7 @@ function spiele(p, protokoll){
     pruefe((st.match(/tz da/g)||[]).length===3-ohneFiguren.length, wo+": Zeile „Gelegenheit in dieser Szene“ stimmt nicht");
     ohneFiguren.forEach(r=>pruefe(st.includes(r), wo+": Figur ohne Gelegenheit wird rechts nicht genannt: "+r));
     /* Gefahrenkarte steht auf jeder Seite rechts neben dem Ziel */
-    pruefe(text().includes('class="hbox gefahrkarte"'), wo+": Gefahrenkarte fehlt rechts");
+    pruefe(el("gefahrsaeule")!==null, wo+": Gefahrenbalken fehlt");
     /* Anker: jede Regel mit „bei“ landet im Fach ihres Blocks, nicht im Sammelfach oben */
     const bl=T.karten(sichtbar), faecher=T.hilfeVerteilen(k, bl).map(f=>f.vor+f.nach);
     (k.verlauf||[]).filter(T.gilt).forEach(r=>{
@@ -154,7 +154,9 @@ function spiele(p, protokoll){
     const wB=k.bloecke.find(b=>b.t==="weiter");
     pruefe(!wB || akt.includes(wB.text), wo+": „Weiter, wenn“ fehlt in der Aktionsleiste");
     const zB=k.bloecke.find(b=>b.t==="ziel");
-    pruefe(!zB || text().includes(zB.text), wo+": Ziel fehlt auf der Seite");
+    pruefe(!zB || el("zielband").innerHTML.includes(zB.text), wo+": Ziel fehlt neben dem Titel");
+    pruefe(!zB || !zB.zeit || el("zielband").innerHTML.includes(zB.zeit), wo+": Zeitangabe fehlt neben dem Titel");
+    pruefe(!text().includes('class="marg ziel"'), wo+": Ziel steht noch im Raster der Blöcke");
     }
     for(const gruppe of GRUPPEN) chancen.forEach(c=>{
       const nur=T.liste(c.nur).filter(f=>gruppe.includes(f));

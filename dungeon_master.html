@@ -80,10 +80,17 @@ input{font:inherit;color:inherit}
 .knopf:disabled{opacity:.3;cursor:not-allowed}
 
 /* ═══════════ Raum ═══════════ */
-.raum{padding:26px 32px 0}
+.raum{padding:26px 104px 0 32px}
 .szene{min-width:0;max-width:1180px;margin:0 auto;padding-bottom:70px}
-.titel{margin-bottom:22px}
-.titel h1{font-size:32px;line-height:1.1}
+.titel{display:grid;grid-template-columns:300px minmax(0,1fr);column-gap:36px;align-items:start;
+  margin-bottom:30px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.titel h1{font-size:32px;line-height:1.08;padding-top:1px}
+.zielband{min-width:0;font-family:var(--sans)}
+.zielband .zk-kopf{display:flex;align-items:baseline;gap:10px;margin-bottom:5px}
+.zielband .lab{font-size:11.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.zielband .zeit{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);
+  border:1px solid rgba(201,164,87,.35);border-radius:3px;padding:2px 8px;white-space:nowrap}
+.zielband p{margin:0;font-family:var(--serif);font-size:16.5px;line-height:1.5;color:var(--text);max-width:52ch}
 .bloecke{display:grid;grid-template-columns:150px minmax(0,1fr) 252px;column-gap:36px;align-items:start}
 
 /* Randbeschriftung links, Inhalt rechts. Prosa bekommt keinen Rahmen. */
@@ -101,11 +108,7 @@ input{font:inherit;color:inherit}
 .hilfe{grid-column:3;margin-bottom:30px;min-width:0;display:flex;flex-direction:column;gap:8px}
 .inhalt p{margin:0 0 14px;line-height:1.62}
 .inhalt p:last-child{margin-bottom:0}
-.inhalt.ziel{max-width:58ch}
-.zielkarte{display:flex;gap:14px;align-items:baseline;border-left:2px solid var(--line-hi);padding:2px 0 2px 14px}
-.zielkarte .zeit{flex:none;font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--gold);border:1px solid rgba(201,164,87,.35);border-radius:3px;padding:3px 8px;white-space:nowrap}
-.zielkarte p{margin:0;font-size:16.5px;color:var(--text);line-height:1.5}
+
 .rede{color:var(--gold-soft);font-style:italic}
 .redezeile{color:var(--gold-soft);font-style:italic}
 .wer{font-family:var(--sans);font-style:normal;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
@@ -253,6 +256,47 @@ input{font:inherit;color:inherit}
 .hbox.gefahrkarte .gzeile b{margin-left:auto;text-align:right;font-family:var(--sans);font-size:11px;
   letter-spacing:.06em;font-weight:500;color:var(--muted);line-height:1.2}
 .hbox.gefahrkarte .folge{margin:6px 0 0;color:var(--dim);font-size:11.5px;line-height:1.35}
+/* ── Gefahrenbalken: senkrecht, ganz rechts, vom Menü bis zum Fuss ── */
+.gefahrsaeule{position:fixed;right:0;top:var(--barhoehe);bottom:0;width:84px;z-index:25;
+  display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px 0 14px;
+  font-family:var(--sans);border-left:1px solid var(--line);
+  background:linear-gradient(to left,rgba(0,0,0,.34),rgba(0,0,0,0))}
+.gefahrsaeule::before{content:"";position:absolute;left:-1px;top:6%;bottom:6%;width:1px;
+  background:linear-gradient(to bottom,transparent,rgba(201,164,87,.3),transparent)}
+.gs-zier{position:relative;display:block;width:44px;text-align:center;font-style:normal;
+  color:var(--gold);opacity:.6;font-size:10px;line-height:1}
+.gs-zier::before,.gs-zier::after{content:"";position:absolute;top:50%;width:15px;height:1px;
+  background:linear-gradient(to right,transparent,rgba(201,164,87,.45))}
+.gs-zier::before{left:0}
+.gs-zier::after{right:0;background:linear-gradient(to left,transparent,rgba(201,164,87,.45))}
+.gs-kopf{flex:none;display:flex;flex-direction:column;align-items:center;gap:7px;line-height:1}
+.gs-kopf b{font-family:var(--serif);font-weight:400;font-size:30px;color:var(--text);
+  font-variant-numeric:tabular-nums;transition:color .35s}
+.gs-kopf b.g1{color:var(--gold)}
+.gs-kopf b.g2{color:var(--red)}
+.gs-kopf small{font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.gs-fuss{flex:none;padding-top:4px}
+.gs-koerper{flex:1;min-height:60px;display:flex;align-items:stretch;gap:9px}
+.gs-text{writing-mode:vertical-rl;transform:rotate(180deg);display:flex;align-items:flex-start;
+  justify-content:flex-start;gap:12px;overflow:hidden}
+.gs-text em{font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gs-lab{font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);flex:none}
+.gs-stufe{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--muted);min-height:0}
+.gs-rohr{position:relative;width:19px;flex:none;border:1px solid var(--line-hi);border-radius:10px;
+  background:#15161a;box-shadow:inset 0 0 10px rgba(0,0,0,.8);
+  outline:1px solid rgba(201,164,87,.14);outline-offset:4px}
+.gs-rohr::after{content:"";position:absolute;inset:0;border-radius:10px;pointer-events:none;
+  background:linear-gradient(to right,rgba(255,255,255,.07),transparent 45%)}
+.gefahrsaeule .saeule{position:absolute;inset:3px;display:flex;flex-direction:column-reverse;gap:2px}
+.gefahrsaeule .saeule i{flex:1;width:100%;height:auto;border-radius:2px;background:#232429;transition:background .35s}
+.gefahrsaeule .saeule i.an1{background:#3f5f80;box-shadow:0 0 6px rgba(63,95,128,.55)}
+.gefahrsaeule .saeule i.an2{background:var(--gold);box-shadow:0 0 6px rgba(201,164,87,.5)}
+.gefahrsaeule .saeule i.an3{background:var(--red-bar);box-shadow:0 0 7px rgba(180,70,58,.62)}
+.gs-schwelle{position:absolute;left:calc(100% + 6px);display:flex;align-items:center;gap:4px;pointer-events:none}
+.gs-schwelle i{display:block;width:6px;height:1px;background:var(--line-hi)}
+.gs-schwelle em{font-style:normal;font-size:9px;color:var(--dim);font-variant-numeric:tabular-nums}
+.gs-schwelle.s4{bottom:30%}
+.gs-schwelle.s8{bottom:70%}
 .hinweisfehlt{grid-column:1/-1;border:1px dashed var(--line-hi);padding:14px 18px;color:var(--muted);font-size:16px;border-radius:5px;margin-bottom:30px}
 
 /* ── Aktionsleiste ── */
@@ -392,6 +436,7 @@ details.fach[open] summary::after{content:"zuklappen"}
 
 @media (max-width:1180px){.lagekurz{display:none}}
 @media (max-width:1240px){
+  .titel{grid-template-columns:260px minmax(0,1fr);row-gap:16px}
   .bloecke{grid-template-columns:150px minmax(0,1fr)}
   .hilfe{grid-column:2;margin-bottom:26px;max-width:64ch}
   .hilfe .hbox{max-width:340px}
@@ -402,11 +447,15 @@ details.fach[open] summary::after{content:"zuklappen"}
   .aktionen{margin-bottom:0}
 }
 @media (max-width:760px){
-  .kopfbar{padding:0 16px}.raum{padding:18px 16px 0}
+  .kopfbar{padding:0 16px}.raum{padding:18px 74px 0 16px}
+  .gefahrsaeule{width:58px;gap:8px}
+  .gs-stufe{display:none}
+  .gs-schwelle{display:none}
   .aktionen{margin-left:-16px;margin-right:-16px;padding-left:16px;padding-right:16px}
   .aktionen .weiterwenn{margin-left:0;text-align:left;max-width:none;width:100%}
   .bloecke{grid-template-columns:1fr;column-gap:0}
   .hilfe{grid-column:1}
+  .titel{grid-template-columns:1fr;row-gap:14px}
   .marg{text-align:left;margin-bottom:7px;padding-top:0}
   .inhalt{margin-bottom:26px}
   .fragen{grid-template-columns:1fr}
@@ -417,7 +466,7 @@ details.fach[open] summary::after{content:"zuklappen"}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 
-<header class="kopfbar">
+<header class="kopfbar" id="kopfbar">
   <details class="szenenwahl" id="szenenfach">
     <summary><span id="s-n">Anleitung</span> · <span id="s-titel-kurz"></span><span id="kschritt">Seite 1 von 13</span></summary>
     <div class="klappe"><nav class="pfad" id="pfad" aria-label="Szenen"></nav></div>
@@ -426,7 +475,7 @@ details.fach[open] summary::after{content:"zuklappen"}
   <span class="warnbox" id="warnbox"></span>
   <span class="barrechts">
     <span class="gefahrbar" title="Gefahrenbarometer">
-      <span class="meter" id="barmeter"></span><span class="zahl" id="barzahl">0</span>
+      <span class="zahl" id="barzahl">0</span>
       <span class="stell"><button data-gefahr="-1">−1</button><button data-gefahr="1">+1</button><button data-gefahr="2">+2</button></span>
     </span>
     <button id="stimmschalter" class="knopf schalter" aria-pressed="false" title="Stimmangaben einblenden"><span class="w"></span>Stimmen</button>
@@ -444,9 +493,25 @@ details.fach[open] summary::after{content:"zuklappen"}
   </span>
 </header>
 
+<aside class="gefahrsaeule" id="gefahrsaeule" aria-label="Gefahrenbalken">
+  <span class="gs-kopf"><i class="gs-zier">✦</i><b id="b-zahl">0</b><small>von 10</small></span>
+  <span class="gs-koerper">
+    <span class="gs-text"><em class="gs-lab">Gefahr</em><em class="gs-stufe" id="b-stufe">—</em></span>
+    <span class="gs-rohr">
+      <span class="saeule" id="saeule"></span>
+      <span class="gs-schwelle s8"><em>8</em><i></i></span>
+      <span class="gs-schwelle s4"><em>4</em><i></i></span>
+    </span>
+  </span>
+  <span class="gs-fuss"><i class="gs-zier">✦</i></span>
+</aside>
+
 <div class="raum">
   <main class="szene">
-    <div class="titel"><h1 id="s-titel">…</h1></div>
+    <div class="titel">
+      <h1 id="s-titel">…</h1>
+      <div class="zielband" id="zielband"></div>
+    </div>
     <div class="bloecke" id="bloecke"></div>
     <div class="aktionen" id="aktionen"></div>
   </main>
@@ -554,7 +619,7 @@ const KAPITEL = [
  {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`Die Seite hat drei Spalten. Am <b>linken Rand</b> steht bei jedem Absatz, was er ist. <b>Vorlesen</b> heisst: wörtlich — Erzähltext und die Sätze der Figuren; die Sätze stehen in Gold. <b>Gesprächsaufforderung</b> heisst: das sagst du den Schülern, ebenfalls wörtlich — sie endet immer mit einer klaren Aufforderung, damit niemand raten muss, was jetzt zu tun ist. <b>Hintergrund</b> heisst: nur für dich. <b>Mögliche Antworten</b> steht über den vorbereiteten Antworten einer Figur; ganz oben am Rand steht dann, welcher Charakter antwortet. <b>Kampf</b> ist ein Knopf und ein Satz, mehr nicht. Ganz unten steht immer, <b>wann es weitergeht</b>.
  <p>Der Schalter <b>Stimmen</b> oben blendet hinter jedem Sprechernamen drei Wörter ein, die sagen, wie die Figur klingt: <em>Marek — tief, wortkarg, langsam</em>. Sie stehen in Gold wie die Rede, aber kursiv und ohne Anführungszeichen; vorgelesen wird nur, was in Anführungszeichen steht. Der Schalter merkt sich, wie du ihn zuletzt hattest.</p>
  <p><b>Rechts neben dem Text</b> stehen die Hilfen — und zwar auf der Höhe der Stelle, zu der sie gehören. <b>Wenn … dann</b>: was hier abzweigt, sobald die Gruppe geantwortet hat („alle würfeln 10 oder mehr → an den Wachen vorbei“). Und <b>Stärken der Figuren</b>: neben dem Absatz, in dem die Gelegenheit angekündigt wird, steht ein Kasten mit dem Satz aus dem Vorlesetext (Tam hält die verbrannte Hand an die Brust; Marek hat die Hand verbunden). Du liest den Satz vor und wartest. Anklicken zeigt die Folge. Das sind keine Aufgaben und keine Lösungen: Der Kasten sagt dir nur, was du zulassen kannst, falls der Spieler von selbst darauf kommt. Jede Szene funktioniert auch ohne. Steht neben einem Absatz nichts, gibt es dort nichts zu beachten.</p>
- <p>Ganz oben rechts, neben dem Ziel, steht die <b>Gefahr</b>: Balken, Zahl, Stufe und was sie bedeutet. Eingestellt wird sie oben in der Leiste (−1 / +1 / +2). Unter <b>Lage</b> — ebenfalls oben rechts — steht der Rest: wo die Gruppe ist, was sie gewählt hat, die drei Talente mit ihren Namen, was die Gruppe weiss, und die Chronik. Auf der Seite steht immer nur, was zu diesem Weg gehört — das andere siehst du gar nicht erst. Und eine Entscheidung lässt sich erst anklicken, wenn die davor getroffen ist.</p>
+ <p>Das <b>Ziel</b> der Szene steht oben neben dem Titel, mit der Zeitangabe daneben. Ganz rechts läuft der <b>Gefahrenbalken</b> senkrecht über die ganze Seitenhöhe: die Zahl oben, darunter die zehn Stufen, die von unten her volllaufen — blau bis 3, gold bis 7, rot darüber —, und neben dem Rohr steht, was die erreichte Stufe bedeutet. Eingestellt wird die Gefahr oben in der Leiste (−1 / +1 / +2). Unter <b>Lage</b> — ebenfalls oben rechts — steht der Rest: wo die Gruppe ist, was sie gewählt hat, die drei Talente mit ihren Namen, was die Gruppe weiss, und die Chronik. Auf der Seite steht immer nur, was zu diesem Weg gehört — das andere siehst du gar nicht erst. Und eine Entscheidung lässt sich erst anklicken, wenn die davor getroffen ist.</p>
  <p><b>Charakter-Übersicht / Kampf</b> ist ein eigener Bildschirm; der Knopf steht oben rechts. Dort stehen die <b>Lebenspunkte</b> — nur dort, damit sie beim Vorlesen nicht im Weg sind. Du trägst dort auch Schaden ein, der ausserhalb eines Kampfs entsteht (Sumpf, schlechte Luft). Er öffnet sich von selbst, sobald du in einer Szene einen Kampf lädst. Links die Gruppe mit ihren Talenten, in der Mitte die Gegner mit ihren Werten und der Verstärkung, rechts die Wenn-dann-Regeln dieser Szene, unten das Log. „Kampf vorbei“ heilt alle und bringt dich zur Szene zurück; „← Szene“ lässt den Kampf offen, falls du zwischendurch nachlesen willst.</p>`},
  {t:"sagen", text:["You always have to speak English. If you don’t — who knows what consequences it might have… (evil laugh)","If you don’t know a word, ask me. In English. Nobody laughs."]},
  {t:"regie", titel:"Hintergrund zur Regel", text:`Du kannst den Grafen <b>deutschempfindlich</b> machen: Er hört jeden ganzen deutschen Satz, der am Tisch fällt — für ihn ein Geräusch im Haus. Folge: Die Gefahr steigt um 1 (Knopf rechts), oder er schickt einen Diener los — dafür einen <b>Thrall</b> in den Kampf laden. Hier darfst du improvisieren; die Drohung wirkt meist schon allein.
@@ -1042,6 +1107,15 @@ function schalteStimmen(){
   try{ localStorage.setItem(STIMM_SCHLUESSEL, ZEIGE_STIMMEN?"1":"0"); }catch(e){}
   zeichneStimmschalter(); zeichneSzene();
 }
+/* Der Kopf wird zweizeilig, sobald eine Warnung dazukommt — die Säule muss darunter anfangen */
+function messeKopf(){
+  const k=$("kopfbar");
+  if(!k || typeof k.getBoundingClientRect!=="function") return;
+  try{
+    const h=Math.round(k.getBoundingClientRect().height);
+    if(h>0) document.documentElement.style.setProperty("--barhoehe", h+"px");
+  }catch(e){}
+}
 function zeichneStimmschalter(){
   const b=$("stimmschalter"); if(!b) return;
   b.className = "knopf schalter"+(ZEIGE_STIMMEN?" an":"");
@@ -1113,10 +1187,11 @@ function zeichneBaro(){
   const balken=Array.from({length:10},(_,i)=>{const k=i+1;
     return '<i class="'+(k<=Z.gefahr?"an"+(k<=3?1:k<=7?2:3):"")+'"></i>';}).join("");
   if($("saeule")) $("saeule").innerHTML=balken;
-  $("barmeter").innerHTML=balken;
   if($("b-zahl")) $("b-zahl").textContent=Z.gefahr;
   if($("b-stufe")) $("b-stufe").textContent=st.name;
-  if($("b-folge")) $("b-folge").textContent=st.folge;
+  const bzz=$("b-zahl"); if(bzz) bzz.className="g"+(Z.gefahr<=3?0:Z.gefahr<=7?1:2);
+  messeKopf();
+  const sl=$("gefahrsaeule"); if(sl) sl.title="Gefahr "+Z.gefahr+" von 10 · "+st.name+" — "+st.folge;
   const bz=$("barzahl"); bz.textContent=Z.gefahr; bz.className="zahl g"+(Z.gefahr<=3?0:Z.gefahr<=7?1:2);
   const kb=$("kgefahr"); kb.className="badge g"+(Z.gefahr<=3?0:Z.gefahr<=7?1:2);
   kb.innerHTML="Gefahr <b>"+Z.gefahr+"</b>/10";
@@ -1307,7 +1382,9 @@ function lage(){
   });
   const wiss=WISSEN.filter(e=>Z.wissen[e.k]).map(e=>e.txt);
   t.push(lageZeile("Wissen", wiss.length?wiss.join(", "):"—"));
-  t.push(lageZeile("Gefahr", Z.gefahr+" / 10"));
+  const st=STUFEN.find(x=>Z.gefahr<=x.bis)||STUFEN[2];
+  t.push(lageZeile("Gefahr", Z.gefahr+" / 10 · "+st.name));
+  t.push(lageZeile("Das heisst", st.folge));
   warnungen().forEach(w=>t.push(lageZeile("Achtung", w, "warn")));
   return t.join("");
 }
@@ -1381,8 +1458,6 @@ function blockHTML(b, idx, h){
   /* h: {vor, nach} — bei verschmolzenen Blöcken steht die Stärke oben, die Regel unten */
   const vor = (h&&h.vor)||"", nach = (h&&h.nach)||"", hilfe = vor+nach;
   switch(b.t){
-    case "ziel": return zeile("Ziel","ziel",
-      '<div class="zielkarte">'+(b.zeit?'<span class="zeit">'+b.zeit+'</span>':'')+'<p>'+b.text+'</p></div>', "", hilfe);
     case "vorlesen": return zeile("Vorlesen","vorlesen", redeAbsaetze(b.text, b.spricht), b.titel, hilfe);
     case "sagen": return zeile("Das sagst du","sagen", redeZeilen(b.text.map(t=>({t, wer:b.wer||null}))), "", hilfe);
     case "gruppe": return zeile("Vorlesen","vorlesen", redeAbsaetze(b.text, b.spricht)+redeZeilen(b.rede), b.titel, b.aufgabe?vor:hilfe)+
@@ -1510,11 +1585,6 @@ function talenteHTML(k){
         '<span>'+(da?"Gelegenheit in dieser Szene — der Kasten steht neben der Stelle":"in dieser Szene nichts vorbereitet")+'</span></div>';
     }).join("");
 }
-function gefahrKarteHTML(){
-  return '<div class="hbox gefahrkarte"><div class="gzeile"><span id="b-zahl">0</span><small>/ 10</small>'+
-    '<b id="b-stufe">—</b></div><div class="saeule" id="saeule"></div>'+
-    '<p class="folge" id="b-folge">—</p></div>';
-}
 /* Der Text eines Blocks, in dem der angekündigte Satz einer Stärke stehen kann */
 function blockText(b){
   const t=[];
@@ -1552,9 +1622,12 @@ function zeichneSzene(){
   const fehlt = !!(k.braucht && entscheidungOffen(k.braucht));
   const bl = fehlt ? [] : karten(sichtbareBloecke(k));
   const hilfen = hilfeVerteilen(k, bl);
-  const zielB = k.bloecke.filter(b=>b.t==="ziel").map(b=>blockHTML(b, 0, {vor:gefahrKarteHTML()})).join("");
+  const zB = k.bloecke.find(b=>b.t==="ziel");
+  $("zielband").innerHTML = zB
+    ? '<div class="zk-kopf"><span class="lab">Ziel</span>'+(zB.zeit?'<span class="zeit">'+zB.zeit+'</span>':'')+'</div><p>'+zB.text+'</p>'
+    : "";
   $("talente").innerHTML = talenteHTML(k);
-  $("bloecke").innerHTML = zielB + (fehlt
+  $("bloecke").innerHTML = (fehlt
     ? '<div class="hinweisfehlt">Auf dieser Seite steht nur, was zu eurem Weg gehört — und <b>'+ENTSCHEIDUNGEN[k.braucht].name+'</b> ist noch nicht gewählt. Geh zurück und klick die Karte an, für die sich die Gruppe entschieden hat.</div>'
     : bl.map((b,i)=>blockHTML(b, i+1, hilfen[i])).join(""));
   $("aktionen").innerHTML = aktionenHTML(k, fehlt);
@@ -1569,7 +1642,7 @@ function zeichneSzene(){
     $("zurueck-t").textContent=Z.schritt>0?KAPITEL[Z.schritt-1].titel:"—";
     $("vor-t").textContent=Z.schritt<KAPITEL.length-1?KAPITEL[Z.schritt+1].titel:"Ende";
   }
-  zeichneBaro(); zeichnePfad(); zeichneKampf();
+  zeichneBaro(); zeichnePfad(); zeichneKampf(); messeKopf();
 }
 /* ---- Kampfbildschirm: eigener Vollbild-Modus über der Szene ---- */
 function zeichneKampf(){
@@ -1589,6 +1662,7 @@ function zeichneKampf(){
   const st=sichtbareChancen(k);
   $("k-staerken").innerHTML = st.length ? "Stärken hier: "+st.map(c=>"<b>"+c.wer+"</b> · "+c.talent+" — "+c.text).join(" · ") : "";
   $("kampfmodus").hidden = !Z.kampfOffen;
+  $("gefahrsaeule").hidden = Z.kampfOffen;
 }
 function oeffneKampf(){ Z.kampfOffen=true; zeichneKampf(); sichern(); }
 function schliesseKampf(){ Z.kampfOffen=false; zeichneKampf(); sichern(); }
@@ -1742,6 +1816,7 @@ $("zuruecksetzen").onclick=()=>{
 };
 $("zufuegen").innerHTML=Object.keys(BESTIARIUM).map(k=>'<button data-laden="'+k+'">+ '+BESTIARIUM[k].name+'</button>').join("");
 
+if(typeof window!=="undefined" && window.addEventListener) window.addEventListener("resize", messeKopf);
 function alles(){ zeichneStimmschalter(); zeichneBaro(); zeichneGruppe(); zeichneGegner(); zeichneWissen(); zeichneChronik(); zeichneSzene(); zeichneKampf(); }
 laden(); alles();
 { const befunde=pruefeStory(); if(befunde.length) console.warn("Story-Prüfung:", befunde); }

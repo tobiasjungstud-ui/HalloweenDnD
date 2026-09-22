@@ -67,10 +67,12 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
    **Vorlesen**, **Gesprächsaufforderung** (endet immer mit einer klaren Aufforderung),
    **Hintergrund** (auf einen Satz eingeklappt), **Mögliche Antworten** mit dem Namen der
    Figur darunter. Rechts daneben, **auf der Höhe der Stelle, zu der sie gehören**, stehen die
-   Hilfen: oben die **Gefahr** (Balken, Zahl, Stufe), dann **Wenn … dann** — was hier von der
+   Hilfen: **Wenn … dann** — was hier von der
    Antwort der Gruppe abhängt („alle würfeln 10 oder mehr → an den Wachen vorbei“) — und die
    **Stärken der Figuren** neben dem Absatz, der die Gelegenheit ankündigt. Steht daneben
-   nichts, gibt es an dieser Stelle nichts zu beachten. Ganz unten sammelt eine Aktionsleiste
+   nichts, gibt es an dieser Stelle nichts zu beachten. Das **Ziel** der Szene steht oben
+   neben dem Titel; ganz rechts läuft der **Gefahrenbalken** senkrecht über die ganze
+   Seitenhöhe und füllt sich von unten — blau bis 3, gold bis 7, rot darüber. Ganz unten sammelt eine Aktionsleiste
    alle Knöpfe der Szene und die Bedingung zum Weiterblättern. Blättern geht auch mit den Pfeiltasten.
    Der Schalter **Stimmen** in der Leiste blendet hinter jedem Sprechernamen drei Wörter ein,
    wie die Figur klingt, etwa *Marek — tief, wortkarg, langsam*. Er merkt sich seinen Zustand.
@@ -114,7 +116,7 @@ Der Hintergrund steht weiterhin vollständig da, aber als eingeklappte Zeile. Re
 auf das Verhalten der Gruppe reagieren, stehen nicht mehr gesammelt in einer Leiste, sondern
 **neben der Stelle, an der sie gebraucht werden**: „Sumpf: ein Wurf unter 10 → −1 HP“ steht
 neben dem Sumpf, „Wachen: alle würfeln 10 oder mehr → vorbei“ neben den Wachen. Dieselbe
-Spalte trägt oben die **Gefahr** und, jeweils neben dem Absatz, der sie ankündigt, die
+Spalte trägt, jeweils neben dem Absatz, der sie ankündigt, die
 **Stärken der Figuren**:
 eine Gelegenheit für *diese* Figur —
 der Arcanist mit *Magic Hand*, der Blade mit *Strength*, die Lightbearer mit *Healing Touch*. Sie sind als Möglichkeit
