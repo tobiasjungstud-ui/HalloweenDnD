@@ -71,6 +71,10 @@ h2{font-weight:400;font-size:24px;margin:44px 0 14px}
 .zeilen .m.v{color:var(--gold)}.zeilen .m.s{color:var(--green)}
 .zeilen .i{margin-bottom:14px;font-family:var(--serif);font-size:13px;color:var(--text);line-height:1.5}
 .zeilen .i.grau{font-family:var(--sans);font-size:11.5px;color:var(--muted)}
+.tl{display:flex;align-items:center;gap:9px;margin:0 0 8px;color:var(--gold)}
+.tl.zwei{margin-top:14px}
+.tl::before,.tl::after{content:"";flex:1;height:1px;background:rgba(201,164,87,.35)}
+.tl span{flex:none;font-family:var(--sans);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
 .zeilen .i.gruen{color:var(--green-soft);font-style:italic}
 .zeilen .h{margin-bottom:14px}
 .hk{border:1px solid var(--line);border-radius:4px;background:var(--panel);padding:8px 10px;color:var(--muted);line-height:1.4}
@@ -177,8 +181,9 @@ h2{font-weight:400;font-size:24px;margin:44px 0 14px}
         <div class="i grau">Elf Menschen im Raum, drei sind ansprechbar. Der Name Anneke muss fallen …<u>mehr</u></div>
         <div class="h"></div>
 
-        <div class="m v"><span class="num">5</span>Vorlesen<small>Der Raum</small></div>
-        <div class="i">Above the fireplace hangs a long, heavy board of oak, <b>on two iron hooks</b>, with names carved into it. It says: MIRELA VANCE.</div>
+        <div class="m v"><span class="num">5</span>Vorlesen</div>
+        <div class="i"><span class="tl"><span>Der Raum</span></span>Above the fireplace hangs a long, heavy board of oak, <b>on two iron hooks</b>, with names carved into it. It says: MIRELA VANCE.
+          <span class="tl zwei"><span>Die drei, die euch ansehen</span></span>Behind the bar stands a woman of about fifty with three fingers on her left hand.</div>
         <div class="h"><span class="num">8</span><div class="hk st1"><b>▸ Rook · Strength</b><em>„on two iron hooks“</em></div></div>
 
         <div class="m s"><span class="num">6</span>Gesprächs-<br>aufforderung</div>
@@ -230,7 +235,7 @@ h2{font-weight:400;font-size:24px;margin:44px 0 14px}
     <li><span class="num">2</span><span><b>Gefahr und Steuerung</b>Der Stand, die Knöpfe −1 +1 +2, der Reiter Charakter-Übersicht / Kampf und das Blättern. Diese Leiste bleibt beim Scrollen stehen.</span></li>
     <li><span class="num">3</span><span><b>Titel und Ziel</b>Das Ziel steht rechts neben dem Titel, auf gleicher Höhe, mit der Zeitmarke davor.</span></li>
     <li><span class="num">4</span><span><b>Hintergrund</b>Nur für dich, auf einen Satz eingeklappt. „mehr“ zeigt alles. Am Rand steht, zu welchem Weg er gehört.</span></li>
-    <li><span class="num">5</span><span><b>Vorlesen</b>Die Randbeschriftung sagt, was der Absatz ist. Was in Anführungszeichen steht, ist Rede und steht farbig da, mit dem Namen der Figur davor.</span></li>
+    <li><span class="num">5</span><span><b>Vorlesen</b>Die Randbeschriftung sagt, was der Absatz ist. Was in Anführungszeichen steht, ist Rede und steht farbig da, mit dem Namen der Figur davor. Folgen mehrere Vorlesetexte aufeinander, stehen sie als ein Block da, innen getrennt durch goldene Linien mit dem Titel.</span></li>
     <li><span class="num">6</span><span><b>Gesprächsaufforderung</b>Grün, direkt unter dem Absatz, zu dem sie gehört. Wörtlich sagen, dann schweigen. Sie endet immer mit einer klaren Aufforderung.</span></li>
     <li><span class="num">7</span><span><b>Gefahrenbalken, ganz rechts</b>Senkrecht über die ganze Seitenhöhe, füllt sich von unten: blau bis 3, gold bis 7, rot darüber. Daneben steht, was die Stufe bedeutet. Verstellt wird sie oben in der Leiste.</span></li>
     <li><span class="num">8</span><span><b>Hilfe auf gleicher Höhe</b>Wenn-dann-Regeln und Stärken der Figuren stehen neben der Stelle, zu der sie gehören. Steht daneben nichts, gibt es dort nichts zu beachten.</span></li>

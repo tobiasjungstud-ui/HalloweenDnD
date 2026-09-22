@@ -126,6 +126,18 @@ input{font:inherit;color:inherit}
 .knopf.schalter.an .w::after{left:13px;background:var(--gold)}
 
 /* Hintergrund: Fliesstext, eingeklappt mit Anriss */
+/* Mehrere Vorlesetexte hintereinander: ein Block, innen mit Titellinien getrennt */
+.inhalt.verbund{margin-bottom:0}
+.inhalt.verbund.schluss{margin-bottom:30px}
+.teiltitel{display:flex;align-items:center;gap:14px;margin:0 0 15px;color:var(--gold)}
+.teiltitel::before,.teiltitel::after{content:"";flex:1;height:1px;
+  background:linear-gradient(to right,rgba(201,164,87,0),rgba(201,164,87,.4))}
+.teiltitel::after{background:linear-gradient(to left,rgba(201,164,87,0),rgba(201,164,87,.4))}
+.teiltitel span{flex:none;font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold);white-space:nowrap}
+.teiltitel:empty::after,.teiltitel:empty::before{background:rgba(201,164,87,.22)}
+.inhalt.verbund:not(.erste) .teiltitel{margin-top:30px}
+.marg.verbund:not(.erste){margin-bottom:0}
 .inhalt.regie{font-family:var(--sans);font-size:15px;line-height:1.6;color:var(--muted)}
 .inhalt.regie>summary{list-style:none;cursor:pointer}
 .inhalt.regie>summary::-webkit-details-marker{display:none}
@@ -730,7 +742,7 @@ const KAPITEL = [
  <p>Dazu das <b>Helfer-Blatt</b> als Ausdruck, einmal pro Schüler. Darauf stehen alle englischen Satzanfänge und Vokabeln, nach Szene geordnet. Teil es aus, bevor du anfängst.</p>`},
  {t:"regie", titel:"Wer die Gruppe ist", text:`Das ist vorgegeben, das müssen die Schüler nicht erfinden: <b>Sie sind Vampirjäger.</b> Nicht berühmt, noch nicht. Ein Gerücht hat sie hergeführt — in diesen Bergen liege ein Tal, in dem Menschen nach Plan verschwinden. Sie wollen wissen, ob es stimmt.
  <p>Erfinden dürfen sie: Namen, Herkunft, wie sie sich kennen, was sie können. Der Auftrag steht fest.</p>`},
- {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`Die Seite hat drei Spalten. Am <b>linken Rand</b> steht bei jedem Absatz, was er ist. <b>Vorlesen</b> heisst: wörtlich — Erzähltext und die Sätze der Figuren; die Sätze stehen in Gold. <b>Gesprächsaufforderung</b> heisst: das sagst du den Schülern, ebenfalls wörtlich — sie endet immer mit einer klaren Aufforderung, damit niemand raten muss, was jetzt zu tun ist. <b>Hintergrund</b> heisst: nur für dich. <b>Mögliche Antworten</b> steht über den vorbereiteten Antworten einer Figur; ganz oben am Rand steht dann, welcher Charakter antwortet. <b>Kampf</b> ist ein Knopf und ein Satz, mehr nicht. Ganz unten steht immer, <b>wann es weitergeht</b>.
+ {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`Die Seite hat drei Spalten. Am <b>linken Rand</b> steht bei jedem Absatz, was er ist. <b>Vorlesen</b> heisst: wörtlich — Erzähltext und die Sätze der Figuren; die Sätze stehen in Gold. Folgen mehrere Vorlesetexte aufeinander, stehen sie als <b>ein</b> Block da: die Randnotiz steht nur einmal, und im Text trennen goldene Linien mit dem Titel die Abschnitte — <em>——— Die Treppe ———</em>, <em>——— Das Turmzimmer ———</em>. Du liest von oben nach unten durch und weisst trotzdem, wo du bist. <b>Gesprächsaufforderung</b> heisst: das sagst du den Schülern, ebenfalls wörtlich — sie endet immer mit einer klaren Aufforderung, damit niemand raten muss, was jetzt zu tun ist. <b>Hintergrund</b> heisst: nur für dich. <b>Mögliche Antworten</b> steht über den vorbereiteten Antworten einer Figur; ganz oben am Rand steht dann, welcher Charakter antwortet. <b>Kampf</b> ist ein Knopf und ein Satz, mehr nicht. Ganz unten steht immer, <b>wann es weitergeht</b>.
  <p>Der Schalter <b>Stimmen</b> oben blendet hinter jedem Sprechernamen drei Wörter ein, die sagen, wie die Figur klingt: <em>Marek — tief, wortkarg, langsam</em>. Sie stehen in Gold wie die Rede, aber kursiv und ohne Anführungszeichen; vorgelesen wird nur, was in Anführungszeichen steht. Der Schalter merkt sich, wie du ihn zuletzt hattest.</p>
  <p><b>Rechts neben dem Text</b> stehen die Hilfen — und zwar auf der Höhe der Stelle, zu der sie gehören. <b>Wenn … dann</b>: was hier abzweigt, sobald die Gruppe geantwortet hat („alle würfeln 10 oder mehr → an den Wachen vorbei“). Und <b>Stärken der Figuren</b>: neben dem Absatz, in dem die Gelegenheit angekündigt wird, steht ein Kasten mit dem Satz aus dem Vorlesetext (Tam hält die verbrannte Hand an die Brust; Marek hat die Hand verbunden). Du liest den Satz vor und wartest. Anklicken zeigt die Folge. Das sind keine Aufgaben und keine Lösungen: Der Kasten sagt dir nur, was du zulassen kannst, falls der Spieler von selbst darauf kommt. Jede Szene funktioniert auch ohne. Steht neben einem Absatz nichts, gibt es dort nichts zu beachten.</p>
  <p>Das <b>Ziel</b> der Szene steht oben neben dem Titel, mit der Zeitangabe daneben. Ganz rechts läuft der <b>Gefahrenbalken</b> senkrecht über die ganze Seitenhöhe: die Zahl oben, darunter die zehn Stufen, die von unten her volllaufen — blau bis 3, gold bis 7, rot darüber —, und neben dem Rohr steht, was die erreichte Stufe bedeutet. Eingestellt wird die Gefahr oben in der Leiste (−1 / +1 / +2). Unter <b>Lage</b> — ebenfalls oben rechts — steht der Rest: wo die Gruppe ist, was sie gewählt hat, die drei Talente mit ihren Namen, was die Gruppe weiss, und die Chronik. Auf der Seite steht immer nur, was zu diesem Weg gehört — das andere siehst du gar nicht erst. Und eine Entscheidung lässt sich erst anklicken, wenn die davor getroffen ist.</p>
@@ -1572,14 +1584,39 @@ function regieSub(titel){
   const t=String(titel).replace(/^Hintergrund\s*(·\s*)?/,"");
   return t===titel && /^Hintergrund$/.test(titel) ? "" : t;
 }
-function blockHTML(b, idx, h){
+/* Folgen mehrere Vorlesetexte aufeinander, sind sie ein Block: eine Randnotiz „Vorlesen“,
+   und im Text trennen Linien mit dem Titel die Abschnitte.                               */
+function vorleseLauf(bl){
+  const teil = bl.map(()=>null);
+  const gehoert = b => b.t==="vorlesen" || b.t==="gruppe";
+  let i=0;
+  while(i<bl.length){
+    if(!gehoert(bl[i])){ i++; continue; }
+    let j=i;
+    while(j<bl.length && gehoert(bl[j])){ j++; if(bl[j-1].aufgabe) break; }
+    if(j-i>=2) for(let k=i;k<j;k++) teil[k]={erste:k===i, letzte:k===j-1};
+    i=j;
+  }
+  return teil;
+}
+function teiltitelHTML(titel){
+  return '<div class="teiltitel">'+(titel?'<span>'+titel+'</span>':'')+'</div>';
+}
+function blockHTML(b, idx, h, lauf){
   /* h: {vor, nach} — bei verschmolzenen Blöcken steht die Stärke oben, die Regel unten */
   const vor = (h&&h.vor)||"", nach = (h&&h.nach)||"", hilfe = vor+nach;
   switch(b.t){
-    case "vorlesen": return zeile("Vorlesen","vorlesen", redeAbsaetze(b.text, b.spricht), b.titel, hilfe);
+    case "vorlesen":
+      if(lauf) return zeile(lauf.erste?"Vorlesen":"", "vorlesen verbund"+(lauf.erste?" erste":"")+(lauf.letzte?" schluss":""),
+        teiltitelHTML(b.titel)+redeAbsaetze(b.text, b.spricht), "", hilfe);
+      return zeile("Vorlesen","vorlesen", redeAbsaetze(b.text, b.spricht), b.titel, hilfe);
     case "sagen": return zeile("Das sagst du","sagen", redeZeilen(b.text.map(t=>({t, wer:b.wer||null}))), "", hilfe);
-    case "gruppe": return zeile("Vorlesen","vorlesen", redeAbsaetze(b.text, b.spricht)+redeZeilen(b.rede), b.titel, b.aufgabe?vor:hilfe)+
-      (b.aufgabe?zeile(AUFFORDERUNG,"aufgabe", aufgabeHTML(b.aufgabe), "", nach):"");
+    case "gruppe": {
+      const inhalt = redeAbsaetze(b.text, b.spricht)+redeZeilen(b.rede);
+      const kopf = lauf
+        ? zeile(lauf.erste?"Vorlesen":"", "vorlesen verbund"+(lauf.erste?" erste":"")+(lauf.letzte?" schluss":""), teiltitelHTML(b.titel)+inhalt, "", b.aufgabe?vor:hilfe)
+        : zeile("Vorlesen","vorlesen", inhalt, b.titel, b.aufgabe?vor:hilfe);
+      return kopf + (b.aufgabe?zeile(AUFFORDERUNG,"aufgabe", aufgabeHTML(b.aufgabe), "", nach):""); }
     case "aufgabe": return zeile(AUFFORDERUNG,"aufgabe", aufgabeHTML(b), "", hilfe);
     case "regie": {
       const sub=regieSub(b.titel), roh=ohneTags(b.text);
@@ -1739,7 +1776,7 @@ function zeichneSzene(){
   $("lagekurz").innerHTML=lageKurz(); $("warnbox").innerHTML=warnungenHTML();
   const fehlt = !!(k.braucht && entscheidungOffen(k.braucht));
   const bl = fehlt ? [] : karten(sichtbareBloecke(k));
-  const hilfen = hilfeVerteilen(k, bl);
+  const hilfen = hilfeVerteilen(k, bl), laeufe = vorleseLauf(bl);
   const zB = k.bloecke.find(b=>b.t==="ziel");
   $("zielband").innerHTML = zB
     ? '<div class="zk-kopf"><span class="lab">Ziel</span>'+(zB.zeit?'<span class="zeit">'+zB.zeit+'</span>':'')+'</div><p>'+zB.text+'</p>'
@@ -1747,7 +1784,7 @@ function zeichneSzene(){
   $("talente").innerHTML = talenteHTML(k);
   $("bloecke").innerHTML = (fehlt
     ? '<div class="hinweisfehlt">Auf dieser Seite steht nur, was zu eurem Weg gehört — und <b>'+ENTSCHEIDUNGEN[k.braucht].name+'</b> ist noch nicht gewählt. Geh zurück und klick die Karte an, für die sich die Gruppe entschieden hat.</div>'
-    : bl.map((b,i)=>blockHTML(b, i+1, hilfen[i])).join(""));
+    : bl.map((b,i)=>blockHTML(b, i+1, hilfen[i], laeufe[i])).join(""));
   $("aktionen").innerHTML = aktionenHTML(k, fehlt);
   if(Z.imZwischenakt){
     $("kschritt").textContent="Zwischenakt";

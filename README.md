@@ -66,7 +66,9 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
    Chronik). Darunter die Szene als Regiebuch: am linken Rand steht, was ein Absatz ist —
    **Vorlesen**, **Gesprächsaufforderung** (endet immer mit einer klaren Aufforderung),
    **Hintergrund** (auf einen Satz eingeklappt), **Mögliche Antworten** mit dem Namen der
-   Figur darunter. Rechts daneben, **auf der Höhe der Stelle, zu der sie gehören**, stehen die
+   Figur darunter. Folgen mehrere Vorlesetexte aufeinander, stehen sie als **ein** Block
+   da: die Randnotiz steht nur einmal, und im Text trennen goldene Linien mit dem Titel die
+   Abschnitte (*——— Die Treppe ———*, *——— Das Turmzimmer ———*). Rechts daneben, **auf der Höhe der Stelle, zu der sie gehören**, stehen die
    Hilfen: **Wenn … dann** — was hier von der
    Antwort der Gruppe abhängt („alle würfeln 10 oder mehr → an den Wachen vorbei“) — und die
    **Stärken der Figuren** neben dem Absatz, der die Gelegenheit ankündigt. Steht daneben

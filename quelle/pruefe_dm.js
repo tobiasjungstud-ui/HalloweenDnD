@@ -33,7 +33,8 @@ vm.runInThisContext(`globalThis.T = { Z:()=>Z, setZ:z=>{Z=z;}, KAPITEL, ENTSCHEI
   TALENTE: typeof TALENTE!=="undefined" ? TALENTE : null,
   karten: typeof karten==="function" ? karten : null,
   blockAnker: typeof blockAnker==="function" ? blockAnker : null,
-  hilfeVerteilen: typeof hilfeVerteilen==="function" ? hilfeVerteilen : null }`);
+  hilfeVerteilen: typeof hilfeVerteilen==="function" ? hilfeVerteilen : null,
+  vorleseLauf: typeof vorleseLauf==="function" ? vorleseLauf : null }`);
 console.warn = echtWarn;
 
 /* ---------- Hilfen ---------- */
@@ -140,6 +141,18 @@ function spiele(p, protokoll){
       const j=bl.findIndex(b=>T.blockAnker(b)===r.bei);
       if(j<0) return;
       pruefe(faecher[j].includes(r.wenn), wo+": Regel „"+r.wenn+"“ steht nicht beim Anker "+r.bei);
+    });
+    /* Aufeinanderfolgende Vorlesetexte: eine Randnotiz, innen Titellinien */
+    const lauf=T.vorleseLauf(bl);
+    const eigene = bl.filter((b,j)=>(b.t==="vorlesen"||b.t==="gruppe") && (!lauf[j] || lauf[j].erste)).length;
+    pruefe((text().match(/class="marg vorlesen[^"]*">Vorlesen/g)||[]).length===eigene,
+      wo+": Zahl der Randnotizen „Vorlesen“ passt nicht zu den Läufen");
+    bl.forEach((b,j)=>{
+      if(!lauf[j]) return;
+      if(b.titel) pruefe(text().includes('<div class="teiltitel"><span>'+b.titel+'</span>'),
+        wo+": Titellinie fehlt für „"+b.titel+"“");
+      pruefe(!text().includes('<div class="marg vorlesen verbund'+(lauf[j].erste?" erste":"")+'">Vorlesen<small>'),
+        wo+": verbundener Vorlesetext trägt noch einen Untertitel am Rand");
     });
     /* Stärken stehen im Fach des Blocks, in dem ihr angekündigter Satz vorgelesen wird */
     chancen.forEach(c=>{
