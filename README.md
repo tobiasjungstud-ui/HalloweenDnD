@@ -72,11 +72,17 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
    Hilfen: **Wenn … dann** — was hier von der
    Antwort der Gruppe abhängt („alle würfeln 10 oder mehr → an den Wachen vorbei“) — und die
    **Stärken der Figuren** neben dem Absatz, der die Gelegenheit ankündigt. Steht daneben
-   nichts, gibt es an dieser Stelle nichts zu beachten. Das **Ziel** der Szene steht oben
+   nichts, gibt es an dieser Stelle nichts zu beachten. Wo sich eine Szene gabelt, steht
+   **Was ist passiert?** über zwei benannten Knöpfen („Ja — er führt euch“ / „Nein — ihr
+   sucht selbst“); erst der Klick lässt den passenden Text darunter erscheinen, und nur
+   diesen. Das **Ziel** der Szene steht oben
    neben dem Titel; ganz rechts läuft der **Gefahrenbalken** senkrecht über die ganze
    Seitenhöhe: eine Glasröhre, die sich von unten füllt — blau bis 3, gold bis 7, rot
    darüber —, mit Skala, Zeiger, der Zahl im gotischen Bogen und der Stufe daneben.
-   Der ganze Streifen glüht in der Farbe der erreichten Stufe. Ganz unten sammelt eine Aktionsleiste
+   Der ganze Streifen glüht in der Farbe der erreichten Stufe. Der Schalter **Blut** in der
+   Leiste füllt das Rohr statt mit einem Balken mit Blut — steigende Blasen, Perlen, die
+   innen am Glas herunterlaufen, eine leuchtende Oberfläche. Reine Stimmung; am Wert ändert
+   er nichts, und er merkt sich seinen Zustand. Ganz unten sammelt eine Aktionsleiste
    alle Knöpfe der Szene und die Bedingung zum Weiterblättern. Blättern geht auch mit den Pfeiltasten.
    Der Schalter **Stimmen** in der Leiste blendet hinter jedem Sprechernamen drei Wörter ein,
    wie die Figur klingt, etwa *Marek — tief, wortkarg, langsam*. Er merkt sich seinen Zustand.

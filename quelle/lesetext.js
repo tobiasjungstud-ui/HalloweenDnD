@@ -126,6 +126,10 @@ T.KAPITEL.forEach((k,i)=>{
           ...(b.sonst?[[new TextRun({text:ohneHtml(b.sonst),font:"Georgia",size:17,color:"555555"})]]:[])],grau,"BFBFBF")); break;
       case "tun":
         kinder.push(...kasten([[...etikett("KNOPF (NUR DM):","555555"),new TextRun({text:ohneHtml(b.text)+"  →  "+b.beschriftung,font:"Georgia",size:18,color:"333333"})]],grau,"BFBFBF")); break;
+      case "weiche":
+        kinder.push(...kasten([[...etikett("WAS IST PASSIERT? (NUR DM): "+b.titel,"8A6A2C")],
+          ...b.optionen.map(o=>[new TextRun({text:o.knopf+"  ",font:"Georgia",size:18,bold:true,color:"333333"}),
+            new TextRun({text:ohneHtml(o.sub),font:"Georgia",size:18,italics:true,color:"555555"})])],grau,"BFBFBF")); break;
       case "wenn":
         kinder.push(...kasten([[...etikett(b.titel.toUpperCase()+" (NUR DM):","555555"),new TextRun({text:ohneHtml(b.text),font:"Georgia",size:18,color:"333333"})]],grau,"BFBFBF")); break;
       case "kampf":

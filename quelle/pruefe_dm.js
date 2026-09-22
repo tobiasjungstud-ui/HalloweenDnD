@@ -34,7 +34,8 @@ vm.runInThisContext(`globalThis.T = { Z:()=>Z, setZ:z=>{Z=z;}, KAPITEL, ENTSCHEI
   karten: typeof karten==="function" ? karten : null,
   blockAnker: typeof blockAnker==="function" ? blockAnker : null,
   hilfeVerteilen: typeof hilfeVerteilen==="function" ? hilfeVerteilen : null,
-  vorleseLauf: typeof vorleseLauf==="function" ? vorleseLauf : null }`);
+  vorleseLauf: typeof vorleseLauf==="function" ? vorleseLauf : null,
+  stelleWeiche: typeof stelleWeiche==="function" ? stelleWeiche : (()=>{}) }`);
 console.warn = echtWarn;
 
 /* ---------- Hilfen ---------- */
@@ -101,6 +102,23 @@ function spiele(p, protokoll){
       T.patrouilleFertig(); patrouilleErlebt=true;
       pruefe(!T.Z().imZwischenakt && T.Z().patrouille.status==="erledigt" && T.Z().schritt===i, wo0+": nach der Patrouille nicht am Ziel");
     }
+    /* Weichen: beide Fälle durchspielen, damit kein Zweig unbesucht bleibt */
+    T.sichtbareBloecke(k).filter(b=>b.t==="weiche").forEach(w=>{
+      const woW=`Pfad ${JSON.stringify(p)} Schritt ${i} (${k.titel}) Weiche ${w.id}`;
+      const offen=T.sichtbareBloecke(k).filter(b=>b.weiche).length;
+      pruefe(offen===0, woW+": vor der Wahl ist schon ein Zweig sichtbar");
+      w.optionen.forEach(o=>{
+        T.stelleWeiche(w.id, o.k);
+        const jetzt=T.sichtbareBloecke(k).filter(b=>b.weiche);
+        pruefe(jetzt.length>0, woW+": Fall „"+o.k+"“ zeigt keinen Text");
+        jetzt.forEach(b=>{
+          pruefe(T.liste(b.weiche).some(sp=>sp===w.id+"="+o.k), woW+": fremder Zweig sichtbar bei „"+o.k+"“");
+          gesehen.set(i+"/"+k.bloecke.indexOf(b), gesehen.get(i+"/"+k.bloecke.indexOf(b))+1);
+        });
+        T.stelleWeiche(w.id, o.k);   /* zurücknehmen */
+      });
+      pruefe(T.sichtbareBloecke(k).filter(b=>b.weiche).length===0, woW+": Wahl lässt sich nicht aufheben");
+    });
     const sichtbar=T.sichtbareBloecke(k);
     sichtbar.forEach(b=>{ const j=k.bloecke.indexOf(b); gesehen.set(i+"/"+j, gesehen.get(i+"/"+j)+1); });
     const wo=`Pfad ${JSON.stringify(p)} Schritt ${i} (${k.titel})`;

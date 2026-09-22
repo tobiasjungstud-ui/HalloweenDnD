@@ -59,8 +59,8 @@ input{font:inherit;color:inherit}
 .lage span b{color:var(--text);font-weight:400;text-align:right}
 .lage span.warn b{color:var(--red)}
 .lage .rund{margin-top:4px;border-top:1px solid var(--line);padding-top:8px}
-.lagekurz{max-width:228px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pfeil em{display:inline-block;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom}
+.lagekurz{max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pfeil em{display:inline-block;max-width:86px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom}
 .barrechts{margin-left:auto;display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:5px 0}
 .gefahrbar{display:flex;align-items:center;gap:7px;white-space:nowrap}
 .gefahrbar .meter{display:flex;gap:2px}
@@ -124,6 +124,9 @@ input{font:inherit;color:inherit}
 .knopf.schalter.an{border-color:rgba(201,164,87,.45);color:var(--gold)}
 .knopf.schalter.an .w{background:rgba(201,164,87,.28)}
 .knopf.schalter.an .w::after{left:13px;background:var(--gold)}
+#blutschalter.an{border-color:rgba(190,52,42,.55);color:#e2705f}
+#blutschalter.an .w{background:rgba(190,52,42,.3)}
+#blutschalter.an .w::after{background:#e2705f}
 
 /* Hintergrund: Fliesstext, eingeklappt mit Anriss */
 /* Mehrere Vorlesetexte hintereinander: ein Block, innen mit Titellinien getrennt */
@@ -192,6 +195,20 @@ input{font:inherit;color:inherit}
   padding:8px 14px;border-radius:4px;white-space:nowrap}
 .tunzeile button:hover{background:rgba(201,164,87,.12)}
 .tunzeile button.getan{border-color:var(--green);color:var(--green)}
+/* Zwei benannte Knöpfe; darunter erscheint nur der gewählte Fall */
+.marg.weiche{color:var(--gold)}
+.wbox{border:1px solid var(--line-hi);border-radius:6px;padding:14px 16px 13px}
+.wbox h4{font-size:18px;margin-bottom:11px}
+.wzwei{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wzwei button{display:flex;flex-direction:column;gap:4px;align-items:flex-start;text-align:left;
+  border:1px solid var(--line-hi);border-radius:5px;padding:11px 13px;font-family:var(--sans)}
+.wzwei button b{font-size:14.5px;font-weight:500;color:var(--muted);line-height:1.3}
+.wzwei button span{font-size:12px;color:var(--dim);line-height:1.4}
+.wzwei button:hover{border-color:var(--gold)}
+.wzwei button:hover b{color:var(--gold)}
+.wzwei button.gewaehlt{border-color:var(--gold);background:rgba(201,164,87,.09)}
+.wzwei button.gewaehlt b{color:var(--gold)}
+.whinweis{margin:10px 0 0;font-family:var(--sans);font-size:12.5px;color:var(--dim);line-height:1.45}
 .inhalt.wenn h4{font-size:19px;margin-bottom:5px}
 .inhalt.wenn p{font-family:var(--sans);font-size:14.5px;color:var(--muted);line-height:1.55}
 .inhalt.wenn em{color:var(--gold-soft)}
@@ -330,6 +347,10 @@ input{font:inherit;color:inherit}
 .gs-kuppe{position:absolute;left:1px;right:1px;top:-3px;height:7px;border-radius:50%;
   background:var(--gf-hell);box-shadow:0 0 16px rgba(var(--gf-rgb),1),0 0 34px rgba(var(--gf-rgb),.8)}
 .gefahrsaeule.leer .gs-kuppe{display:none}
+.gs-blut{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;
+  transition:opacity .45s;pointer-events:none}
+.gefahrsaeule.blut .gs-blut{opacity:1}
+.gefahrsaeule.blut .gs-fuell{opacity:0}
 .gs-glanz{position:absolute;left:4px;top:8px;bottom:8px;width:4px;border-radius:4px;pointer-events:none;
   background:linear-gradient(to bottom,rgba(255,255,255,.22),rgba(255,255,255,.05) 40%,transparent)}
 .gs-skala{position:relative;width:22px;flex:none}
@@ -498,6 +519,7 @@ details.fach[open] summary::after{content:"zuklappen"}
 }
 @media (max-width:760px){
   .kopfbar{padding:0 16px}.raum{padding:18px 88px 0 16px}
+  #blutschalter{display:none}
   .gefahrsaeule{width:72px;gap:7px}
   .gs-stufe,.gs-skala{display:none}
   .gs-fluegel{width:64px;height:24px}
@@ -533,6 +555,7 @@ details.fach[open] summary::after{content:"zuklappen"}
       <span class="stell"><button data-gefahr="-1">−1</button><button data-gefahr="1">+1</button><button data-gefahr="2">+2</button></span>
     </span>
     <button id="stimmschalter" class="knopf schalter" aria-pressed="false" title="Stimmangaben einblenden"><span class="w"></span>Stimmen</button>
+    <button id="blutschalter" class="knopf schalter" aria-pressed="false" title="Blut im Messrohr"><span class="w"></span>Blut</button>
     <button id="kampfknopf" class="knopf kampfknopf" title="Charakter-Übersicht und Kampf öffnen">⚔ Charaktere / Kampf</button>
     <button class="knopf pfeil" id="zurueck" title="zurück"><span>←</span><em id="zurueck-t"></em></button>
     <button class="knopf pfeil" id="vor" title="weiter"><span>→</span><em id="vor-t"></em></button>
@@ -585,6 +608,7 @@ details.fach[open] summary::after{content:"zuklappen"}
     </div>
     <div class="gs-glas">
       <div class="gs-fuell" id="saeule"><span class="gs-kuppe"></span></div>
+      <canvas class="gs-blut" id="blutfx" aria-hidden="true"></canvas>
       <span class="gs-glanz"></span>
     </div>
     <div class="gs-skala">
@@ -742,8 +766,8 @@ const KAPITEL = [
  <p>Dazu das <b>Helfer-Blatt</b> als Ausdruck, einmal pro Schüler. Darauf stehen alle englischen Satzanfänge und Vokabeln, nach Szene geordnet. Teil es aus, bevor du anfängst.</p>`},
  {t:"regie", titel:"Wer die Gruppe ist", text:`Das ist vorgegeben, das müssen die Schüler nicht erfinden: <b>Sie sind Vampirjäger.</b> Nicht berühmt, noch nicht. Ein Gerücht hat sie hergeführt — in diesen Bergen liege ein Tal, in dem Menschen nach Plan verschwinden. Sie wollen wissen, ob es stimmt.
  <p>Erfinden dürfen sie: Namen, Herkunft, wie sie sich kennen, was sie können. Der Auftrag steht fest.</p>`},
- {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`Die Seite hat drei Spalten. Am <b>linken Rand</b> steht bei jedem Absatz, was er ist. <b>Vorlesen</b> heisst: wörtlich — Erzähltext und die Sätze der Figuren; die Sätze stehen in Gold. Folgen mehrere Vorlesetexte aufeinander, stehen sie als <b>ein</b> Block da: die Randnotiz steht nur einmal, und im Text trennen goldene Linien mit dem Titel die Abschnitte — <em>——— Die Treppe ———</em>, <em>——— Das Turmzimmer ———</em>. Du liest von oben nach unten durch und weisst trotzdem, wo du bist. <b>Gesprächsaufforderung</b> heisst: das sagst du den Schülern, ebenfalls wörtlich — sie endet immer mit einer klaren Aufforderung, damit niemand raten muss, was jetzt zu tun ist. <b>Hintergrund</b> heisst: nur für dich. <b>Mögliche Antworten</b> steht über den vorbereiteten Antworten einer Figur; ganz oben am Rand steht dann, welcher Charakter antwortet. <b>Kampf</b> ist ein Knopf und ein Satz, mehr nicht. Ganz unten steht immer, <b>wann es weitergeht</b>.
- <p>Der Schalter <b>Stimmen</b> oben blendet hinter jedem Sprechernamen drei Wörter ein, die sagen, wie die Figur klingt: <em>Marek — tief, wortkarg, langsam</em>. Sie stehen in Gold wie die Rede, aber kursiv und ohne Anführungszeichen; vorgelesen wird nur, was in Anführungszeichen steht. Der Schalter merkt sich, wie du ihn zuletzt hattest.</p>
+ {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`Die Seite hat drei Spalten. Am <b>linken Rand</b> steht bei jedem Absatz, was er ist. <b>Vorlesen</b> heisst: wörtlich — Erzähltext und die Sätze der Figuren; die Sätze stehen in Gold. Folgen mehrere Vorlesetexte aufeinander, stehen sie als <b>ein</b> Block da: die Randnotiz steht nur einmal, und im Text trennen goldene Linien mit dem Titel die Abschnitte — <em>——— Die Treppe ———</em>, <em>——— Das Turmzimmer ———</em>. Du liest von oben nach unten durch und weisst trotzdem, wo du bist. <b>Gesprächsaufforderung</b> heisst: das sagst du den Schülern, ebenfalls wörtlich — sie endet immer mit einer klaren Aufforderung, damit niemand raten muss, was jetzt zu tun ist. <b>Hintergrund</b> heisst: nur für dich. <b>Mögliche Antworten</b> steht über den vorbereiteten Antworten einer Figur; ganz oben am Rand steht dann, welcher Charakter antwortet. <b>Kampf</b> ist ein Knopf und ein Satz, mehr nicht. <b>Was ist passiert?</b> steht über zwei Knöpfen: Wo die Szene sich gabelt — führt Tam sie zum Spiegel oder nicht? —, klickst du an, was am Tisch passiert ist, und darunter erscheint <b>nur</b> der passende Text. Noch einmal klicken hebt die Wahl auf. Du musst dir also nie zwei Ausgänge gleichzeitig durch den Kopf gehen lassen. Ganz unten steht immer, <b>wann es weitergeht</b>.
+ <p>Der Schalter <b>Blut</b> oben füllt das Messrohr rechts mit Blut statt mit einem Balken — reine Stimmung, am Wert ändert er nichts, und er merkt sich seinen Zustand wie der Schalter daneben. Der Schalter <b>Stimmen</b> oben blendet hinter jedem Sprechernamen drei Wörter ein, die sagen, wie die Figur klingt: <em>Marek — tief, wortkarg, langsam</em>. Sie stehen in Gold wie die Rede, aber kursiv und ohne Anführungszeichen; vorgelesen wird nur, was in Anführungszeichen steht. Der Schalter merkt sich, wie du ihn zuletzt hattest.</p>
  <p><b>Rechts neben dem Text</b> stehen die Hilfen — und zwar auf der Höhe der Stelle, zu der sie gehören. <b>Wenn … dann</b>: was hier abzweigt, sobald die Gruppe geantwortet hat („alle würfeln 10 oder mehr → an den Wachen vorbei“). Und <b>Stärken der Figuren</b>: neben dem Absatz, in dem die Gelegenheit angekündigt wird, steht ein Kasten mit dem Satz aus dem Vorlesetext (Tam hält die verbrannte Hand an die Brust; Marek hat die Hand verbunden). Du liest den Satz vor und wartest. Anklicken zeigt die Folge. Das sind keine Aufgaben und keine Lösungen: Der Kasten sagt dir nur, was du zulassen kannst, falls der Spieler von selbst darauf kommt. Jede Szene funktioniert auch ohne. Steht neben einem Absatz nichts, gibt es dort nichts zu beachten.</p>
  <p>Das <b>Ziel</b> der Szene steht oben neben dem Titel, mit der Zeitangabe daneben. Ganz rechts läuft der <b>Gefahrenbalken</b> senkrecht über die ganze Seitenhöhe: die Zahl oben, darunter die zehn Stufen, die von unten her volllaufen — blau bis 3, gold bis 7, rot darüber —, und neben dem Rohr steht, was die erreichte Stufe bedeutet. Eingestellt wird die Gefahr oben in der Leiste (−1 / +1 / +2). Unter <b>Lage</b> — ebenfalls oben rechts — steht der Rest: wo die Gruppe ist, was sie gewählt hat, die drei Talente mit ihren Namen, was die Gruppe weiss, und die Chronik. Auf der Seite steht immer nur, was zu diesem Weg gehört — das andere siehst du gar nicht erst. Und eine Entscheidung lässt sich erst anklicken, wenn die davor getroffen ist.</p>
  <p><b>Charakter-Übersicht / Kampf</b> ist ein eigener Bildschirm; der Knopf steht oben rechts. Dort stehen die <b>Lebenspunkte</b> — nur dort, damit sie beim Vorlesen nicht im Weg sind. Du trägst dort auch Schaden ein, der ausserhalb eines Kampfs entsteht (Sumpf, schlechte Luft). Er öffnet sich von selbst, sobald du in einer Szene einen Kampf lädst. Links die Gruppe mit ihren Talenten, in der Mitte die Gegner, rechts die Wenn-dann-Regeln dieser Szene, unten das Log. <b>Jeder Gegner steht dort mit zwei Zeilen:</b> wie er aussieht — das kannst du direkt vorlesen („ein alter mürrischer Kerl in grauer Livree und einer Rüstung aus besseren Zeiten“) — und <em>So führst du ihn</em>: wen er angreift, wann er aufgibt, was ihn stoppt. Damit musst du dir nichts merken und nichts erfinden. „Kampf vorbei“ heilt alle und bringt dich zur Szene zurück; „← Szene“ lässt den Kampf offen, falls du zwischendurch nachlesen willst.</p>`},
@@ -995,8 +1019,8 @@ const KAPITEL = [
   {bei:"tam", nur:"kueche", wenn:"Ehrliche Antwort auf Tams Frage — auch ein ehrliches Nein", dann:"Tam führt euch zum Spiegel", art:"gut"},
   {bei:"tam", nur:"kueche", wenn:"Jemand lügt ihn an oder fährt ihn an", dann:"„Find it yourselves.“ — kein Führer, Block „Ohne Führung“", art:"schlecht"},
   {bei:"tam", nur:"kueche", wenn:"Jemand bedroht ihn oder stösst ihn weg", dann:"er schreit: Gefahr +3 (oben einstellen)", art:"schlecht"},
-  {bei:"ohnefuehrung", nur:["bibliothek","kueche"], wenn:"Ohne Führung: mindestens eine 10 im Wurf", dann:"sie finden den Westgang leise", art:"gut"},
-  {bei:"ohnefuehrung", nur:["bibliothek","kueche"], wenn:"Ohne Führung: keine 10", dann:"sie finden ihn trotzdem — Gefahr +1", art:"schlecht"},
+  {bei:"ohnefuehrung", weiche:"fuehrung=allein", nur:["bibliothek","kueche"], wenn:"Ohne Führung: mindestens eine 10 im Wurf", dann:"sie finden den Westgang leise", art:"gut"},
+  {bei:"ohnefuehrung", weiche:"fuehrung=allein", nur:["bibliothek","kueche"], wenn:"Ohne Führung: keine 10", dann:"sie finden ihn trotzdem — Gefahr +1", art:"schlecht"},
   {bei:"spiegel", wenn:"Jemand sieht in den Spiegel", dann:"„Nobody who looked has ever told anyone.“ — kein Schaden"}],
  chancen:[
   {wer:"Arcanist", talent:"Magic Hand", nur:"bibliothek", cue:"not quite reaching it", text:"Bellamy kommt mit dem Buch nicht ans oberste Regal.", folge:"Stellt Magic Hand es für ihn hinauf, nennt er das die erste Höflichkeit seit 1912 — und sagt einen Satz mehr: „His book lies one floor under her room. Everything he is, is written in it.“ Das ist die Vorlage für Karte B der letzten Entscheidung."},
@@ -1011,7 +1035,10 @@ const KAPITEL = [
   `He says, without turning round: “Nobody has spoken to me since 1912. Say something. Anything — as long as it is true.”`,
   `Then he climbs down, and you see his hands, and his teeth, and you understand what he is. He offers you a chair anyway.`]},
  {t:"aufgabe", anker:"bellamy", nur:"bibliothek", sag:"Three true things about yourself. He can wait — he’s been waiting since 1912. Take thirty seconds, then talk.", hinweis:"Er hört auf die Stimme, nicht auf den Inhalt — Lügen merkt er.", blatt:"Helfer-Blatt · Teil 6"},
- {t:"vorlesen", spricht:"Bellamy", nur:"bibliothek", titel:"Der Weg zum Spiegel — Bellamy führt euch", text:[
+ {t:"weiche", id:"fuehrung", nur:"bibliothek", titel:"Führt Bellamy sie zum Spiegel?", optionen:[
+  {k:"gefuehrt", knopf:"Ja — er führt euch", sub:"Jede Figur hat drei wahre Sätze gesagt."},
+  {k:"allein", knopf:"Nein — ihr sucht selbst", sub:"Jemand hat gelogen oder ihn beleidigt."}]},
+ {t:"vorlesen", weiche:"fuehrung=gefuehrt", spricht:"Bellamy", nur:"bibliothek", titel:"Der Weg zum Spiegel — Bellamy führt euch", text:[
   `Bellamy walks you out of the library and along a corridor with no windows — the west corridor — and stops at the end of it, in front of a tall mirror. “The tower has no stair,” he says. “It has this. Walk backwards through it, and don’t look.”`,
   `Then he takes a letter out of his coat. “Would you carry this down to the village for me? The house is still there. Say yes or no — I will know which one you mean.”`,
   `He does not come with you. “He forbade it in 1804, and I find I still care what he thinks. Isn’t that the saddest thing you have ever heard?”`]},
@@ -1031,11 +1058,14 @@ const KAPITEL = [
   `He sees you. He does not scream. He puts the knife down very slowly — with his right hand; the left one he holds against his chest, red from the pot — and says: “You’re here for the new one. The one in the tower.”`]},
  {t:"sagen", wer:"Tam", nur:"kueche", text:["Will you take me with you? When you go. Say it. Promise."]},
  {t:"aufgabe", anker:"tam", nur:"kueche", sag:"He asked you a question. He’s fourteen, and he’ll know if you lie. Yes or no — and why. Answer him.", blatt:"Helfer-Blatt · Teil 6"},
- {t:"vorlesen", spricht:"Tam", nur:"kueche", titel:"Der Weg zum Spiegel — Tam führt euch", text:[
+ {t:"weiche", id:"fuehrung", nur:"kueche", titel:"Führt Tam sie zum Spiegel?", optionen:[
+  {k:"gefuehrt", knopf:"Ja — er führt euch", sub:"Ehrliche Antwort auf seine Frage — auch ein ehrliches Nein."},
+  {k:"allein", knopf:"Nein — ihr sucht selbst", sub:"Angelogen, angefahren oder weggestossen."}]},
+ {t:"vorlesen", weiche:"fuehrung=gefuehrt", spricht:"Tam", nur:"kueche", titel:"Der Weg zum Spiegel — Tam führt euch", text:[
   `Tam takes corridors that do not look like corridors. Twice he stops, puts up a hand, and you all wait forty seconds in the dark without knowing what for.`,
   `Then he points down a corridor with no windows — the west corridor — at a tall mirror at the end of it. “That’s the door. You have to walk backwards. Don’t look at it.” And then, quietly: “I’ll wait here.”`]},
- {t:"regie", anker:"ohnefuehrung", nur:["bibliothek","kueche"], titel:"Ohne Führung — wenn niemand euch bringt", text:"Nur, wenn Bellamy oder Tam die Gruppe hat stehen lassen. Dann: jeder würfelt einmal (<b>Just roll a d20</b>). Mindestens eine 10 → sie finden den Westgang leise (gelb unten). Keine 10 → sie finden ihn auch, aber nach zwei falschen Türen: <b>Gefahr +1</b> rechts. Die Geschichte bleibt nie stehen."},
- {t:"vorlesen", nur:["bibliothek","kueche"], titel:"Ohne Führung — der Weg zum Spiegel", text:[
+ {t:"regie", anker:"ohnefuehrung", weiche:"fuehrung=allein", nur:["bibliothek","kueche"], titel:"Ohne Führung — wenn niemand euch bringt", text:"Nur, wenn Bellamy oder Tam die Gruppe hat stehen lassen. Dann: jeder würfelt einmal (<b>Just roll a d20</b>). Mindestens eine 10 → sie finden den Westgang leise (gelb unten). Keine 10 → sie finden ihn auch, aber nach zwei falschen Türen: <b>Gefahr +1</b> rechts. Die Geschichte bleibt nie stehen."},
+ {t:"vorlesen", weiche:"fuehrung=allein", nur:["bibliothek","kueche"], titel:"Ohne Führung — der Weg zum Spiegel", text:[
   `Corridors that all look the same, and nobody to ask. Twice you open a door and close it again, very quietly. Then a corridor with no windows — the west corridor — and at the end of it a tall mirror instead of a door. On the frame, in chalk, in a child’s handwriting: walk backwards.`]},
  {t:"regie", anker:"spiegel", titel:"Wenn sie fragen, was beim Hinsehen passiert", text:"„Nobody who looked has ever told anyone.“ Mehr nicht — und wer trotzdem hinsieht, sieht sich selbst, nur älter. Kein Schaden, keine Gefahr."},
  {t:"weiter", text:"Wenn die Gruppe rückwärts durch den Spiegel gegangen ist."}]},
@@ -1248,6 +1278,247 @@ function zeichneStimmschalter(){
   b.setAttribute("aria-pressed", ZEIGE_STIMMEN?"true":"false");
   b.title = ZEIGE_STIMMEN ? "Stimmangaben ausblenden" : "Stimmangaben einblenden";
 }
+/* ====================== BLUT IM MESSROHR ======================
+   Rein zur Stimmung: dieselbe Höhe wie der Balken, nur als Flüssigkeit.
+   Zeichnet nur, wenn der Schalter an ist, die Seite sichtbar und kein Kampf offen. */
+const BLUT_SCHLUESSEL = "nachtfels.dm.blut";
+let ZEIGE_BLUT = false;
+try{ ZEIGE_BLUT = localStorage.getItem(BLUT_SCHLUESSEL)==="1"; }catch(e){}
+
+const Blut = (function(){
+  let cv=null, ctx=null, W=0, H=0, DPR=1;
+  let an=false, pausiert=false, ruhig=false, rahmen=0, letzte=0;
+  let stand=0, ziel=0, hitze=0;                 /* 0..1 — Füllung und Lebhaftigkeit */
+  let blasen=[], perlen=[], spritzer=[], schlieren=[];
+  let bAkku=0, pAkku=0;
+  const zuf=(a,b)=>a+Math.random()*(b-a);
+  const klemm=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+  function bereit(){
+    if(ctx) return true;
+    cv = document.getElementById("blutfx");
+    if(!cv || typeof cv.getContext!=="function") return false;
+    try{ ctx = cv.getContext("2d"); }catch(e){ return false; }
+    try{ ruhig = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches); }catch(e){}
+    return !!ctx;
+  }
+  function mass(){
+    if(typeof cv.getBoundingClientRect!=="function") return false;
+    const r=cv.getBoundingClientRect();
+    const b=Math.max(1,Math.round(r.width)), h=Math.max(1,Math.round(r.height));
+    if(b===W && h===H && cv.width) return true;
+    W=b; H=h;
+    DPR=Math.min(window.devicePixelRatio||1, 2.5);
+    cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    schlieren=[0.26,0.5,0.76].map(p=>({x:W*p, w:zuf(.9,2.2), ph:zuf(0,6.283)}));
+    return true;
+  }
+
+  /* Die Oberfläche: Wellen, und an den Glaswänden zieht sie sich hoch (Meniskus) */
+  function hoehe(t){ return H*(1-stand); }
+  function welle(i, segs, t){
+    const ruhe=0.3+hitze*0.7;
+    const m=Math.abs(i/segs-0.5)*2;            /* 1 an den Wänden, 0 in der Mitte */
+    return Math.sin(i*0.85+t*0.0030)*1.5*ruhe
+         + Math.sin(i*1.90+t*0.0012)*0.8*ruhe
+         - m*m*2.8;                            /* Meniskus */
+  }
+  function pfadOben(t, top, segs){
+    ctx.beginPath();
+    ctx.moveTo(0,H+2);
+    ctx.lineTo(0,top+welle(0,segs,t));
+    for(let i=1;i<=segs;i++) ctx.lineTo((W/segs)*i, top+welle(i,segs,t));
+    ctx.lineTo(W,H+2);
+    ctx.closePath();
+  }
+
+  function koerper(t, top){
+    const segs=12;
+    ctx.save();
+    pfadOben(t,top,segs);
+    const g=ctx.createLinearGradient(0,0,W,0);
+    g.addColorStop(0,   "#130002");
+    g.addColorStop(0.14,"#450206");
+    g.addColorStop(0.38,"#a8060e");
+    g.addColorStop(0.50,"#c40a13");
+    g.addColorStop(0.64,"#8b040b");
+    g.addColorStop(0.86,"#350004");
+    g.addColorStop(1,   "#0c0001");
+    ctx.fillStyle=g; ctx.fill();
+
+    ctx.clip();
+    /* frisch und hell direkt unter der Oberfläche, dunkel und alt in der Tiefe */
+    const h=ctx.createLinearGradient(0,top,0,H);
+    h.addColorStop(0,   "rgba(255,46,28,"+(0.16+hitze*0.16)+")");
+    h.addColorStop(0.16,"rgba(190,6,10,0.10)");
+    h.addColorStop(0.70,"rgba(120,0,6,0.04)");
+    h.addColorStop(1,   "rgba(0,0,0,0.42)");
+    ctx.fillStyle=h; ctx.fillRect(0,top-4,W,H-top+8);
+    /* nasse Reflexe an der Glasinnenseite */
+    schlieren.forEach(sl=>{
+      const x=sl.x+Math.sin(t*0.0009+sl.ph)*1.6;
+      const gg=ctx.createLinearGradient(x-sl.w,0,x+sl.w,0);
+      gg.addColorStop(0,"rgba(255,255,255,0)");
+      gg.addColorStop(.5,"rgba(255,190,170,0.10)");
+      gg.addColorStop(1,"rgba(255,255,255,0)");
+      ctx.fillStyle=gg; ctx.fillRect(x-sl.w,top,sl.w*2,H-top);
+    });
+    ctx.restore();
+  }
+
+  function kuppe(t, top){
+    const segs=12;
+    ctx.save();
+    ctx.globalCompositeOperation="screen";
+    ctx.beginPath();
+    ctx.moveTo(0,top+welle(0,segs,t));
+    for(let i=1;i<=segs;i++) ctx.lineTo((W/segs)*i, top+welle(i,segs,t));
+    ctx.lineWidth=1.7; ctx.lineCap="round";
+    ctx.strokeStyle="rgba(255,96,74,"+(0.6+hitze*0.3)+")";
+    ctx.shadowBlur=9; ctx.shadowColor="rgba(255,30,18,.55)";
+    ctx.stroke();
+    ctx.shadowBlur=0;
+    /* Schein über der Oberfläche */
+    const g=ctx.createLinearGradient(0,top-16,0,top+2);
+    g.addColorStop(0,"rgba(190,20,12,0)");
+    g.addColorStop(1,"rgba(255,54,34,"+(0.12+hitze*0.12)+")");
+    ctx.fillStyle=g; ctx.fillRect(0,top-16,W,18);
+    ctx.restore();
+  }
+
+  /* Fäden, die sich aus der Oberfläche heben */
+  function faeden(t, top){
+    if(hitze<0.25) return;
+    ctx.save();
+    ctx.globalCompositeOperation="screen";
+    for(let i=0;i<2;i++){
+      const x=W*(0.32+i*0.36);
+      const puls=(Math.sin(t*0.0016+i*2.3)+1)*0.5;
+      const hh=(3+11*puls)*hitze;
+      const schwung=Math.sin(t*0.0029+i*2.1)*2.4;
+      const g=ctx.createLinearGradient(x,top,x+schwung,top-hh);
+      g.addColorStop(0,"rgba(255,64,44,0.6)");
+      g.addColorStop(1,"rgba(255,80,58,0)");
+      ctx.strokeStyle=g; ctx.lineWidth=0.9+1.5*puls; ctx.lineCap="round";
+      ctx.beginPath(); ctx.moveTo(x,top+1);
+      ctx.bezierCurveTo(x+schwung*0.3,top-hh*0.35, x-schwung*0.4,top-hh*0.7, x+schwung,top-hh);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function spritz(x,y,n){
+    for(let i=0;i<n;i++) spritzer.push({x,y,vx:zuf(-9,9),vy:zuf(-22,-5),r:zuf(.4,1.3),alt:0,leben:zuf(.25,.6)});
+  }
+
+  function blasen_zeichnen(dt,t,top){
+    ctx.save(); ctx.globalCompositeOperation="screen";
+    blasen.forEach(b=>{
+      b.ph+=dt*b.wob; b.y-=b.vy*dt; b.x+=Math.sin(b.ph*2.1)*1.6*dt;
+      if(b.y-b.r<=top+1.5){ b.leben-=dt*5; if(b.leben>0.8) spritz(b.x,top+1,2); }
+      const a=Math.max(0,b.leben);
+      const g=ctx.createRadialGradient(b.x-b.r*.35,b.y-b.r*.45,0,b.x,b.y,b.r);
+      g.addColorStop(0,"rgba(255,228,215,"+(0.30*a)+")");
+      g.addColorStop(.3,"rgba(255,88,66,"+(0.26*a)+")");
+      g.addColorStop(1,"rgba(60,0,3,0)");
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,6.2832); ctx.fill();
+    });
+    blasen=blasen.filter(b=>b.leben>0 && b.y>-4);
+    ctx.restore();
+  }
+
+  /* Perlen laufen innen am Glas herunter und fallen in die Lache */
+  function perlen_zeichnen(dt,t,top){
+    ctx.save();
+    perlen.forEach(p=>{
+      p.v+=26*dt; p.y+=p.v*dt; p.alt+=dt;
+      const len=p.r*zuf(2.0,2.1);
+      const g=ctx.createLinearGradient(p.x,p.y-len,p.x,p.y+p.r);
+      g.addColorStop(0,"rgba(120,0,5,0)");
+      g.addColorStop(.6,"rgba(168,6,14,.5)");
+      g.addColorStop(1,"rgba(226,32,26,.9)");
+      ctx.fillStyle=g;
+      ctx.beginPath(); ctx.ellipse(p.x,p.y,p.r,len,0,0,6.2832); ctx.fill();
+      ctx.fillStyle="rgba(255,190,175,.5)";
+      ctx.beginPath(); ctx.arc(p.x-p.r*.3,p.y-p.r*.25,p.r*.3,0,6.2832); ctx.fill();
+      if(p.y>=top-1){ spritz(p.x,top,3); p.tot=true; }
+    });
+    perlen=perlen.filter(p=>!p.tot && p.y<H+6);
+    ctx.restore();
+  }
+
+  function spritzer_zeichnen(dt){
+    ctx.save(); ctx.globalCompositeOperation="screen";
+    spritzer.forEach(sp=>{
+      sp.alt+=dt; sp.vy+=64*dt; sp.x+=sp.vx*dt; sp.y+=sp.vy*dt;
+      const k=Math.max(0,1-sp.alt/sp.leben);
+      ctx.fillStyle="rgba(255,70,52,"+(0.7*k)+")";
+      ctx.beginPath(); ctx.arc(sp.x,sp.y,sp.r*(.6+.4*k),0,6.2832); ctx.fill();
+    });
+    spritzer=spritzer.filter(sp=>sp.alt<sp.leben);
+    ctx.restore();
+  }
+
+  function schritt(jetzt){
+    rahmen=0;
+    if(!an || pausiert || !bereit() || !mass()) return;
+    const dt=Math.min((jetzt-letzte)/1000, 0.05); letzte=jetzt;
+    stand += (ziel-stand)*Math.min(1, dt*2.2);
+    const top=hoehe(jetzt);
+    ctx.clearRect(0,0,W,H);
+    if(stand>0.004){
+      koerper(jetzt,top);
+      blasen_zeichnen(dt,jetzt,top);
+      perlen_zeichnen(dt,jetzt,top);
+      spritzer_zeichnen(dt);
+      kuppe(jetzt,top);
+      faeden(jetzt,top);
+      bAkku += dt*(0.8+hitze*7);
+      pAkku += dt*(0.12+hitze*0.85);
+      while(bAkku>=1){ bAkku--; blasen.push({x:zuf(W*0.2,W*0.8), y:zuf(top+6,H), r:zuf(.7,1.6+hitze*1.3),
+        vy:zuf(9,26)*(0.7+hitze*0.8), ph:zuf(0,6.28), wob:zuf(1,3), leben:1}); }
+      while(pAkku>=1 && top>14){ pAkku--; perlen.push({x:Math.random()<0.5?zuf(2.5,W*0.3):zuf(W*0.7,W-2.5),
+        y:zuf(3,top-10), v:zuf(2,9), r:zuf(.9,1.9), alt:0}); }
+    }
+    if(!ruhig && typeof requestAnimationFrame==="function") rahmen=requestAnimationFrame(schritt);
+  }
+
+  function starten(){
+    if(!an || pausiert || !bereit() || rahmen) return;
+    letzte = (typeof performance!=="undefined" && performance.now) ? performance.now() : Date.now();
+    if(ruhig){ if(mass()){ const top=hoehe(letzte); ctx.clearRect(0,0,W,H); if(stand>0.004){ koerper(letzte,top); kuppe(letzte,top); } } return; }
+    if(typeof requestAnimationFrame==="function") rahmen=requestAnimationFrame(schritt);
+  }
+  function stoppen(){
+    if(rahmen && typeof cancelAnimationFrame==="function") cancelAnimationFrame(rahmen);
+    rahmen=0;
+    if(ctx && W && H) ctx.clearRect(0,0,W,H);
+  }
+  return {
+    schalte(ein){ an=!!ein; if(an){ stand=ziel; starten(); } else stoppen(); },
+    pause(p){ pausiert=!!p; if(pausiert) stoppen(); else starten(); },
+    setze(neuerStand, neueHitze){
+      const alt=ziel; ziel=klemm(neuerStand,0,1); hitze=klemm(neueHitze,0,1);
+      if(ziel>alt+0.02 && an && !pausiert && W) spritz(W*0.5, H*(1-alt), 6);
+      if(ruhig) starten();
+    },
+    neuMessen(){ if(ctx){ W=0; H=0; } }
+  };
+})();
+function schalteBlut(){
+  ZEIGE_BLUT=!ZEIGE_BLUT;
+  try{ localStorage.setItem(BLUT_SCHLUESSEL, ZEIGE_BLUT?"1":"0"); }catch(e){}
+  zeichneBlutschalter();
+  const sl=$("gefahrsaeule"); if(sl) sl.classList.toggle("blut", ZEIGE_BLUT);
+  Blut.schalte(ZEIGE_BLUT);
+}
+function zeichneBlutschalter(){
+  const b=$("blutschalter"); if(!b) return;
+  b.className="knopf schalter"+(ZEIGE_BLUT?" an":"");
+  b.setAttribute("aria-pressed", ZEIGE_BLUT?"true":"false");
+  b.title = ZEIGE_BLUT ? "Blut abschalten" : "Blut im Messrohr";
+}
 /* Sprechermarke: Name, und bei eingeschaltetem Schalter die drei Wörter dahinter */
 function sprecherHTML(name){
   if(!name) return "";
@@ -1257,7 +1528,7 @@ function sprecherHTML(name){
 function frischerZustand(namen){
   return { schritt:0, gefahr:0,
     gruppe:GRUPPE_VORLAGE.map((g,i)=>({name:(namen&&namen[i])||"", rolle:g.rolle, hp:g.max, max:g.max})),
-    wissen:{}, flaggen:{}, gewaehlt:{}, getan:{}, abgehakt:{}, gegner:[], chronik:[], besucht:{0:true},
+    wissen:{}, flaggen:{}, gewaehlt:{}, getan:{}, abgehakt:{}, weichen:{}, gegner:[], chronik:[], besucht:{0:true},
     patrouille:{status:"keine", vor:null}, imZwischenakt:false, zwischenaktZiel:null, kampfOffen:false };
 }
 let Z = frischerZustand();
@@ -1276,13 +1547,24 @@ function notiere(text){
 /* ---- Flaggen-Abfragen: eine Stelle für alles ---- */
 function hat(k){ return !!Z.flaggen[k] || !!Z.wissen[k]; }
 const liste = x => x===undefined ? [] : (Array.isArray(x) ? x : [x]);
+/* „weiche“ am Block: nur zeigen, wenn die Spielleitung den passenden Knopf gedrückt hat */
+function weicheGilt(spec){
+  const id=spec.slice(0, spec.indexOf("=")), k=spec.slice(spec.indexOf("=")+1);
+  return (Z.weichen||{})[id]===k;
+}
 function gilt(b){
   const nur=liste(b.nur), alle=liste(b.alle), nicht=liste(b.nicht);
+  if(b.weiche && !liste(b.weiche).some(weicheGilt)) return false;
   if(nur.length && !nur.some(hat)) return false;          /* nur:  mindestens eine */
   if(alle.length && !alle.every(hat)) return false;       /* alle: jede */
   if(nicht.some(hat)) return false;                       /* nicht: keine */
   if(b.gefahrVon!==undefined && !(Z.gefahr>=b.gefahrVon && Z.gefahr<=b.gefahrBis)) return false;
   return true;
+}
+function stelleWeiche(id, k){
+  if(!Z.weichen) Z.weichen={};
+  if(Z.weichen[id]===k) delete Z.weichen[id]; else Z.weichen[id]=k;
+  zeichneSzene(); sichern();
 }
 function entscheidungOffen(id){ return Z.gewaehlt[id]===undefined; }
 function voraussetzungFehlt(id){
@@ -1314,7 +1596,8 @@ function zeichneBaro(){
   const f=$("saeule");   if(f) try{ f.style.height = (Z.gefahr*10)+"%"; }catch(e){}
   const zg=$("gs-zeiger"); if(zg) try{ zg.style.bottom = (Z.gefahr*10)+"%"; }catch(e){}
   const sl0=$("gefahrsaeule");
-  if(sl0) sl0.className = "gefahrsaeule g"+stufe+(Z.gefahr===0?" leer":"");
+  if(sl0) sl0.className = "gefahrsaeule g"+stufe+(Z.gefahr===0?" leer":"")+(ZEIGE_BLUT?" blut":"");
+  Blut.setze(Z.gefahr/10, Z.gefahr/10);
   if($("b-zahl")) $("b-zahl").textContent=Z.gefahr;
   if($("b-stufe")) $("b-stufe").textContent=st.name;
 
@@ -1519,13 +1802,9 @@ function lage(){
   return t.join("");
 }
 function lageKurz(){
-  const k=KAPITEL[Z.schritt], t=[];
-  const ort=ortAufloesen(k.ort);
-  if(k.ort) t.push('<span>Ort <b>'+(ort||"offen")+'</b></span>');
-  const ids=Object.keys(ENTSCHEIDUNGEN).filter(id=>Z.gewaehlt[id]);
-  if(ids.length){ const id=ids[ids.length-1], o=optionenBlock(id).optionen[Z.gewaehlt[id].opt];
-    t.push('<span>'+ENTSCHEIDUNGEN[id].name+' <b>'+o.b+" · "+o.name+'</b></span>'); }
-  return t.join("");
+  const k=KAPITEL[Z.schritt];
+  if(!k.ort) return "";
+  return '<span>Ort <b>'+(ortAufloesen(k.ort)||"offen")+'</b></span>';
 }
 function warnungen(){
   const k=KAPITEL[Z.schritt], t=[];
@@ -1653,6 +1932,15 @@ function blockHTML(b, idx, h, lauf){
       const fertig = b.knopf.art==="wissen" ? !!Z.wissen[b.knopf.k] : (b.wiederholbar ? false : !!Z.getan[b.id]);
       return zeile("Knopf","tun",'<div class="tunzeile"><p>'+b.text+'</p><button class="'+(fertig?"getan":"")+
         '" data-tun="'+b.id+'">'+(fertig?"✓ "+b.beschriftung:b.beschriftung)+'</button></div>', "", hilfe); }
+    case "weiche": {
+      const g=(Z.weichen||{})[b.id];
+      return zeile("Was ist passiert?","weiche",
+        '<div class="wbox"><h4>'+b.titel+'</h4><div class="wzwei">'+
+        b.optionen.map(o=>'<button class="'+(g===o.k?"gewaehlt":"")+'" data-weiche="'+b.id+'" data-wk="'+o.k+'">'+
+          '<b>'+(g===o.k?"✓ ":"")+o.knopf+'</b><span>'+o.sub+'</span></button>').join("")+'</div>'+
+        (g?'<p class="whinweis">Unten steht jetzt nur noch dieser Fall. Noch einmal klicken hebt die Wahl auf.</p>'
+           :'<p class="whinweis">Klick an, was am Tisch passiert ist — darunter erscheint dann nur der passende Text.</p>')+
+        '</div>', "", hilfe); }
     case "wenn": return zeile("Bei euch","wenn", '<h4>'+b.titel+'</h4><p>'+b.text+'</p>', "", hilfe);
     case "kampf":
       return zeile("Kampf","kampf", '<div class="kampfzeile"><h4>'+b.titel+'</h4><p>'+b.text+'</p>'+
@@ -1820,6 +2108,7 @@ function zeichneKampf(){
   $("k-staerken").innerHTML = st.length ? "Stärken hier: "+st.map(c=>"<b>"+c.wer+"</b> · "+c.talent+" — "+c.text).join(" · ") : "";
   $("kampfmodus").hidden = !Z.kampfOffen;
   const gs=$("gefahrsaeule"); if(gs) gs.hidden = Z.kampfOffen;
+  Blut.pause(Z.kampfOffen);
 }
 function oeffneKampf(){ Z.kampfOffen=true; zeichneKampf(); sichern(); }
 function schliesseKampf(){ Z.kampfOffen=false; zeichneKampf(); sichern(); }
@@ -1867,7 +2156,7 @@ function pruefeStory(){
   Object.values(ENTSCHEIDUNGEN).forEach(e=>e.flaggen.forEach(f=>flaggen.add(f)));
   const bekannt=k=>flaggen.has(k)||wissenK.has(k);
   const gelesen=new Set(), tunIds=new Set(), entIds=new Set();
-  const arten=new Set(["ziel","weiter","vorlesen","sagen","aufgabe","personen","fa","tun","regie","wenn","kampf","optionen"]);
+  const arten=new Set(["ziel","weiter","vorlesen","sagen","aufgabe","personen","fa","tun","regie","wenn","kampf","optionen","weiche"]);
   KAPITEL.forEach((k,i)=>{
     const z=k.bloecke.filter(b=>b.t==="ziel").length, we=k.bloecke.filter(b=>b.t==="weiter").length;
     if(z!==1) p.push(`Schritt ${i}: ${z} Ziel-Blöcke`);
@@ -1888,6 +2177,17 @@ function pruefeStory(){
         if(b.knopf.art==="wissen"){ const e=WISSEN.find(x=>x.k===b.knopf.k); if(e.braucht && !liste(b.nur).includes(e.braucht)) p.push(`tun ${b.id}: Wissen ${e.k} braucht ${e.braucht}, Knopf ist nicht darauf beschränkt`); }
       }
       if(b.t==="aufgabe" && !b.sag) p.push(`Schritt ${i} Block ${j}: Aufgabe ohne wörtliche Rede (sag)`);
+      if(b.t==="weiche"){
+        if(!b.id || !b.titel) p.push(`Schritt ${i} Block ${j}: Weiche ohne Kennung oder Frage`);
+        if(!b.optionen || b.optionen.length!==2) p.push(`Schritt ${i} Block ${j}: Weiche braucht genau zwei Knöpfe`);
+        else b.optionen.forEach(o=>{ if(!o.k||!o.knopf||!o.sub) p.push(`Schritt ${i} Block ${j}: Weichenknopf unvollständig`); });
+      }
+      liste(b.weiche).forEach(spec=>{
+        const id=spec.slice(0,spec.indexOf("=")), k=spec.slice(spec.indexOf("=")+1);
+        const w=(KAPITEL[i].bloecke||[]).filter(x=>x.t==="weiche" && x.id===id);
+        if(!w.length) p.push(`Schritt ${i} Block ${j}: zeigt auf die unbekannte Weiche ${id}`);
+        else if(!w.some(x=>x.optionen.some(o=>o.k===k))) p.push(`Schritt ${i} Block ${j}: Weiche ${id} kennt den Fall ${k} nicht`);
+      });
       if(b.t==="personen") b.leute.forEach(l=>{ if(!STIMMEN[l.name]) p.push(`Schritt ${i}: keine Stimme für ${l.name}`); });
       if(b.wer!==undefined && ((b.t!=="sagen"&&b.t!=="fa") || typeof b.wer!=="string")) p.push(`Schritt ${i} Block ${j}: wer nur bei sagen und bei Antwortlisten, und nur als Text`);
       if(b.wer!==undefined && !STIMMEN[b.wer]) p.push(`Schritt ${i} Block ${j}: keine Stimme für ${b.wer}`);
@@ -1948,9 +2248,11 @@ document.addEventListener("click", e=>{
   const ent=t.closest("[data-ent]"); if(ent) return waehle(ent.dataset.ent,+ent.dataset.opt);
   const tu=t.closest("[data-tun]"); if(tu) return tunAusfuehren(tu.dataset.tun);
   const wi=t.closest("[data-wiss]"); if(wi) return setzeWissen(wi.dataset.wiss);
+  const we=t.closest("[data-weiche]"); if(we) return stelleWeiche(we.dataset.weiche, we.dataset.wk);
   const hk=t.closest("[data-hak]"); if(hk){ const k=hk.dataset.hak; if(Z.abgehakt[k]) delete Z.abgehakt[k]; else Z.abgehakt[k]=true; zeichneSzene(); sichern(); return; }
   const l=t.closest("[data-laden]"); if(l){ ladeKampf(l.dataset.laden.split(","), l.dataset.extra||null); if(l.dataset.oeffnen) oeffneKampf(); return; }
   if(t.closest("#stimmschalter")) return schalteStimmen();
+  if(t.closest("#blutschalter")) return schalteBlut();
   if(t.closest("#kampfknopf")) return oeffneKampf();
   if(t.closest("#kampf-zu")) return schliesseKampf();
   if(t.closest("#kampf-vorbei")) return kampfVorbei();
@@ -1978,8 +2280,11 @@ $("zuruecksetzen").onclick=()=>{
 };
 $("zufuegen").innerHTML=Object.keys(BESTIARIUM).map(k=>'<button data-laden="'+k+'" title="'+BESTIARIUM[k].kurz.replace(/"/g,"&quot;")+'">+ '+BESTIARIUM[k].name+' <small>'+BESTIARIUM[k].hp+' HP</small></button>').join("");
 
-if(typeof window!=="undefined" && window.addEventListener) window.addEventListener("resize", messeKopf);
-function alles(){ zeichneStimmschalter(); zeichneBaro(); zeichneGruppe(); zeichneGegner(); zeichneWissen(); zeichneChronik(); zeichneSzene(); zeichneKampf(); }
+if(typeof window!=="undefined" && window.addEventListener){
+  window.addEventListener("resize", ()=>{ messeKopf(); Blut.neuMessen(); });
+  document.addEventListener("visibilitychange", ()=>Blut.pause(document.hidden || Z.kampfOffen));
+}
+function alles(){ zeichneStimmschalter(); zeichneBlutschalter(); zeichneBaro(); zeichneGruppe(); zeichneGegner(); zeichneWissen(); zeichneChronik(); zeichneSzene(); zeichneKampf(); Blut.schalte(ZEIGE_BLUT); }
 laden(); alles();
 { const befunde=pruefeStory(); if(befunde.length) console.warn("Story-Prüfung:", befunde); }
 </script>
