@@ -130,6 +130,22 @@ input{font:inherit;color:inherit}
   border:none;padding:0;background:#000;overflow:hidden}
 .bildschau::backdrop{background:#000}
 .bildschau img{display:block;width:100%;height:100%;object-fit:contain;cursor:zoom-out}
+/* „Wie es funktioniert“ — dasselbe kurze Stück Anleitung, das auf der ersten
+   Seite steht, noch einmal dort, wo man es braucht: im Kampf.               */
+.hilfeschau{border:1px solid var(--line-hi);border-radius:8px;padding:0;background:var(--panel);
+  color:var(--text);max-width:660px;width:calc(100vw - 48px);box-shadow:0 24px 60px rgba(0,0,0,.6)}
+.hilfeschau::backdrop{background:rgba(0,0,0,.66)}
+.hilfeschau .hs-kopf{display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+  padding:16px 22px 12px;border-bottom:1px solid var(--line)}
+.hilfeschau h3{font-family:var(--serif);font-size:21px}
+.hilfeschau .hs-text{padding:16px 22px 20px;font-family:var(--sans);font-size:14.5px;line-height:1.6;
+  color:var(--muted);max-height:68vh;overflow-y:auto}
+.hilfeschau .hs-text b{color:var(--text);font-weight:500}
+.hilfeschau .hs-text em{color:var(--gold-soft);font-style:italic}
+.hilfeschau .hs-text p{margin:11px 0 0}
+.hilfeschau .hs-zu{font-family:var(--sans);font-size:12.5px;color:var(--dim);
+  border:1px solid var(--line-hi);border-radius:4px;padding:5px 11px;flex:none}
+.hilfeschau .hs-zu:hover{color:var(--text);border-color:var(--gold)}
 .bs-zu{position:absolute;top:14px;right:18px;font-size:18px;line-height:1;color:#8a8880;
   border:1px solid rgba(255,255,255,.14);border-radius:4px;padding:6px 12px;background:rgba(0,0,0,.55)}
 .bs-zu:hover{color:#fff;border-color:rgba(255,255,255,.4)}
@@ -552,10 +568,9 @@ details.fach[open] summary::after{content:"zuklappen"}
 .k-kopf h2{font-family:var(--serif);font-size:26px}
 .k-kopf .krume{margin-top:2px}
 .k-rechts{display:flex;gap:10px;align-items:center}
-.handauswahl{margin-top:12px}
-.handauswahl>summary{list-style:none;cursor:pointer;font-family:var(--sans);font-size:12px;color:var(--dim)}
-.handauswahl>summary::-webkit-details-marker{display:none}
-.handauswahl>summary::after{content:" ▾"}
+.handauswahl{margin:0 0 16px;border-bottom:1px solid var(--line);padding-bottom:13px}
+.handauswahl h5{margin:0 0 8px;font-family:var(--sans);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim);font-weight:500}
 .badge{font-family:var(--sans);font-size:13px;border:1px solid var(--line-hi);padding:7px 12px;border-radius:4px;color:var(--muted)}
 .badge b{font-weight:600;color:var(--text)}
 .badge.g1 b{color:var(--gold)}.badge.g2 b{color:var(--red)}
@@ -778,7 +793,7 @@ details.fach[open] summary::after{content:"zuklappen"}
 <section class="kampfmodus" id="kampfmodus" hidden aria-label="Charakter-Übersicht und Kampf">
   <header class="k-kopf">
     <div><h2>Charakter-Übersicht / Kampf</h2><div class="krume" id="k-krume"></div></div>
-    <div class="k-rechts"><span class="badge g0" id="kgefahr">Gefahr <b>0</b>/10</span><button class="leise" id="kampf-zu">← Szene (Kampf bleibt offen)</button></div>
+    <div class="k-rechts"><button class="badge" id="kampfhilfe-auf" title="Wie ein Kampf abläuft">? Wie es funktioniert</button><span class="badge g0" id="kgefahr">Gefahr <b>0</b>/10</span><button class="leise" id="kampf-zu">← Szene (Kampf bleibt offen)</button></div>
   </header>
   <div class="k-feld">
     <div>
@@ -788,17 +803,21 @@ details.fach[open] summary::after{content:"zuklappen"}
     </div>
     <div>
       <h4>Gegner · dein Zug: Attacke drücken</h4>
+      <div class="handauswahl"><h5>Gegner dazunehmen — jederzeit</h5><div class="zufuegen" id="zufuegen"></div></div>
       <div id="gegner"></div>
-      <p class="leerfach" id="gegner-leer">Kein Gegner geladen. Unten einen dazunehmen — oder in der Szene den vorbereiteten Kampf laden.</p>
+      <p class="leerfach" id="gegner-leer">Kein Gegner geladen. Oben einen dazunehmen — oder in der Szene den vorbereiteten Kampf laden.</p>
       <p class="hinweis" id="k-hinweis"></p>
       <div id="k-werte"></div>
-      <details class="handauswahl"><summary>Gegner von Hand dazunehmen</summary><div class="zufuegen" id="zufuegen"></div></details>
     </div>
     <div>
       <h4>Wenn … dann · <span id="k-titel">Kampf</span></h4>
       <div id="k-regeln"></div>
     </div>
   </div>
+  <dialog class="hilfeschau" id="kampfhilfe" aria-label="Wie ein Kampf funktioniert">
+    <div class="hs-kopf"><h3>Wie es funktioniert</h3><button class="hs-zu" id="kampfhilfe-zu">schliessen</button></div>
+    <div class="hs-text" id="kampfhilfe-text"></div>
+  </dialog>
   <footer class="k-fuss">
     <ul class="k-log" id="chronik-kampf"></ul>
     <button class="gruenknopf" id="kampf-vorbei">Kampf vorbei — alle heilen, zurück zur Szene</button>
@@ -834,6 +853,16 @@ const WISSEN = [
 ];
 
 /* kurz = wie er aussieht (zum Vorlesen), spielt = wie du ihn führst */
+/* Die drei Handgriffe eines Kampfs. Sie stehen auf der ersten Seite und noch
+   einmal im Kampfbildschirm hinter „Wie es funktioniert“ — derselbe Text,
+   damit er nicht an zwei Stellen auseinanderläuft.                          */
+const KAMPF_ANLEITUNG = `<b>1.</b> Der Spieler liest seinen gelben Satz vor: „I hit for 9 damage.“
+<p><b>2.</b> Du tippst die 9 im Kampfbildschirm in die Karte des Monsters und drückst <em>Schaden</em>.</p>
+<p><b>3.</b> Das Monster ist dran: Du drückst auf seine Attacke. Die Seite würfelt und sagt dir, ob es trifft. Dann klickst du an, wen es erwischt hat.</p>
+<p><b>Im Kampf heilt niemand</b> — ausser mit dem eigenen Trank. Danach heilt die Lightbearer alle: „Kampf vorbei“ unten im Kampfbildschirm, oder „alle voll“ im selben Reiter.</p>
+<p><b>Einen Gegner mehr</b> nimmst du jederzeit dazu — die Reihe <em>Gegner dazunehmen</em> steht über den Gegnerkarten, mit allen Werten aus dem Bestiarium.</p>
+<p><b>Gewürfelt wird mit zwei Sechsern</b>, zusammengezählt: <b>7 oder mehr</b> heisst, es klappt. Sag die Zahl vorher. Im Kampf brauchst du die Würfel nicht — Treffer und Schaden würfelt die Seite selbst.</p>`;
+
 const BESTIARIUM = {
   wolf:   {name:"Dire Wolf",    hp:14, att:[{n:"Bite",  d:"1d6+2"}],
     kurz:"Ponygross, graues nasses Fell, gelbe Augen. Der kleinere hat ein altes Fangeisen am Hinterbein.",
@@ -920,14 +949,15 @@ const KAPITEL = [
  titel:"So führst du den Abend", art:"info", bloecke:[
  {t:"ziel", text:"Diese Seite führt dich Satz für Satz. Du musst nichts vorbereiten und die Geschichte nicht kennen.", zeit:"5 Min. lesen"},
  {t:"regie", titel:"Was du brauchst", text:`Drei Spieler, jeder mit seinem eigenen Link auf einem Gerät: <b>Arcanist</b>, <b>Blade</b>, <b>Lightbearer</b>. Trag ihre Figurennamen im Reiter <b>Charakter-Übersicht / Kampf</b> ein — der Knopf dafür steht oben rechts.
- <p>Dazu das <b>Helfer-Blatt</b> als Ausdruck, einmal pro Schüler. Darauf stehen alle englischen Satzanfänge und Vokabeln, nach Szene geordnet. Teil es aus, bevor du anfängst.</p>`},
+ <p>Dazu das <b>Helfer-Blatt</b> als Ausdruck, einmal pro Schüler. Darauf stehen alle englischen Satzanfänge und Vokabeln, nach Szene geordnet. Teil es aus, bevor du anfängst.</p>
+ <p>Und <b>zwei gewöhnliche Sechser</b> für den Tisch. Mehr braucht es nicht: Gewürfelt wird immer mit beiden zusammen, und <b>7 oder mehr</b> heisst, es klappt. Im Kampf brauchst du sie gar nicht — dort würfeln die Seiten selbst.</p>`},
  {t:"regie", titel:"Wer die Gruppe ist", text:`Das ist vorgegeben, das müssen die Schüler nicht erfinden: <b>Sie sind Vampirjäger.</b> Nicht berühmt, noch nicht. Ein Gerücht hat sie hergeführt — in diesen Bergen liege ein Tal, in dem Menschen nach Plan verschwinden. Sie wollen wissen, ob es stimmt.
  <p>Erfinden dürfen sie: Namen, Herkunft, wie sie sich kennen, was sie können. Der Auftrag steht fest.</p>`},
  {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`Die Seite hat drei Spalten. Am <b>linken Rand</b> steht bei jedem Absatz, was er ist. <b>Vorlesen</b> heisst: wörtlich — Erzähltext und die Sätze der Figuren; die Sätze stehen in Gold. Folgen mehrere Vorlesetexte aufeinander, stehen sie als <b>ein</b> Block da: die Randnotiz steht nur einmal, und im Text trennen goldene Linien mit dem Titel die Abschnitte — <em>——— Die Treppe ———</em>, <em>——— Das Turmzimmer ———</em>. Du liest von oben nach unten durch und weisst trotzdem, wo du bist. <b>Gesprächsaufforderung</b> heisst: das sagst du den Schülern, ebenfalls wörtlich — sie endet immer mit einer klaren Aufforderung, damit niemand raten muss, was jetzt zu tun ist. <b>Hintergrund</b> heisst: nur für dich. <b>Mögliche Antworten</b> steht über den vorbereiteten Antworten einer Figur; ganz oben am Rand steht dann, welcher Charakter antwortet. <b>Kampf</b> ist ein Knopf und ein Satz, mehr nicht. <b>Was ist passiert?</b> steht über zwei Knöpfen: Wo die Szene sich gabelt — führt Tam sie zum Spiegel oder nicht? —, klickst du an, was am Tisch passiert ist, und darunter erscheint <b>nur</b> der passende Text. Noch einmal klicken hebt die Wahl auf. Du musst dir also nie zwei Ausgänge gleichzeitig durch den Kopf gehen lassen. Ganz unten steht immer, <b>wann es weitergeht</b>.
  <p>Bei manchen Szenen liegt <b>links ein Bild</b> — es wird nach rechts hin schwächer und verschwindet hinter dem Text. Darin steht nichts, was du brauchst; Szenen ohne Bild sehen aus wie immer. In seiner oberen linken Ecke steht klein <b>⤢ zeigen</b>: Das macht das Bild gross und ohne Seite drumherum, damit du den Bildschirm einmal herumdrehen und es der Klasse zeigen kannst. Ein Klick irgendwohin schliesst es wieder, Esc auch.</p><p>Der Schalter <b>Blut</b> oben füllt das Messrohr rechts mit Blut statt mit einem Balken — reine Stimmung, am Wert ändert er nichts, und er merkt sich seinen Zustand wie der Schalter daneben. Der Schalter <b>Stimmen</b> oben blendet hinter jedem Sprechernamen drei Wörter ein, die sagen, wie die Figur klingt: <em>Marek — tief, wortkarg, langsam</em>. Sie stehen in Gold wie die Rede, aber kursiv und ohne Anführungszeichen; vorgelesen wird nur, was in Anführungszeichen steht. Der Schalter merkt sich, wie du ihn zuletzt hattest.</p>
- <p><b>Rechts neben dem Text</b> stehen die Hilfen — und zwar auf der Höhe der Stelle, zu der sie gehören. <b>Wenn … dann</b>: was hier abzweigt, sobald die Gruppe geantwortet hat („alle würfeln 10 oder mehr → an den Wachen vorbei“). Und <b>Stärken der Figuren</b>: neben dem Absatz, in dem die Gelegenheit angekündigt wird, steht ein Kasten mit dem Satz aus dem Vorlesetext (Tam hält die verbrannte Hand an die Brust; Marek hat die Hand verbunden). Du liest den Satz vor und wartest. Anklicken zeigt die Folge. Das sind keine Aufgaben und keine Lösungen: Der Kasten sagt dir nur, was du zulassen kannst, falls der Spieler von selbst darauf kommt. Jede Szene funktioniert auch ohne. Steht neben einem Absatz nichts, gibt es dort nichts zu beachten.</p>
+ <p><b>Rechts neben dem Text</b> stehen die Hilfen — und zwar auf der Höhe der Stelle, zu der sie gehören. <b>Wenn … dann</b>: was hier abzweigt, sobald die Gruppe geantwortet hat („alle würfeln 7 oder mehr → an den Wachen vorbei“). Und <b>Stärken der Figuren</b>: neben dem Absatz, in dem die Gelegenheit angekündigt wird, steht ein Kasten mit dem Satz aus dem Vorlesetext (Tam hält die verbrannte Hand an die Brust; Marek hat die Hand verbunden). Du liest den Satz vor und wartest. Anklicken zeigt die Folge. Das sind keine Aufgaben und keine Lösungen: Der Kasten sagt dir nur, was du zulassen kannst, falls der Spieler von selbst darauf kommt. Jede Szene funktioniert auch ohne. Steht neben einem Absatz nichts, gibt es dort nichts zu beachten.</p>
  <p>Das <b>Ziel</b> der Szene steht oben neben dem Titel, mit der Zeitangabe daneben. Ganz rechts läuft der <b>Gefahrenbalken</b> senkrecht über die ganze Seitenhöhe: die Zahl oben, darunter die Röhre, die von unten her volläuft — blau bis 3, gold bis 7, rot darüber —, und neben ihr steht, was die erreichte Stufe bedeutet. <b>Der Balken lebt mit:</b> Krone, Zahl, Schrift, Glasrand und Skalenstriche leuchten heller, je höher der Wert — und sie <b>atmen</b> dabei: bis 6 langsam (viereinhalb Sekunden, mit steigender Gefahr schneller), ab 7 im <b>Herzschlag</b>, zwei Schläge und eine Pause, von drei Sekunden bei 7 bis eineinhalb bei 10, dazu ein leichtes Flackern. Jede Erhöhung gibt einen kurzen Lichtstoss, jede Senkung fährt ruhig herunter. Bei 10 sitzt ein Gebiss über der Krone. Steigt die Gefahr, gibt es einen kurzen Lichtstoss; sinkt sie, fährt alles ruhig herunter. Das ist reine Stimmung — an Werten und Regeln ändert nichts davon etwas. Eingestellt wird die Gefahr oben in der Leiste (−1 / +1 / +2). Unter <b>Lage</b> — ebenfalls oben rechts — steht der Rest: wo die Gruppe ist, was sie gewählt hat, die drei Talente mit ihren Namen, was die Gruppe weiss, und die Chronik. Auf der Seite steht immer nur, was zu diesem Weg gehört — das andere siehst du gar nicht erst. Und eine Entscheidung lässt sich erst anklicken, wenn die davor getroffen ist.</p>
- <p><b>Charakter-Übersicht / Kampf</b> ist ein eigener Bildschirm; der Knopf steht oben rechts. Dort stehen die <b>Lebenspunkte</b> — nur dort, damit sie beim Vorlesen nicht im Weg sind. Du trägst dort auch Schaden ein, der ausserhalb eines Kampfs entsteht (Sumpf, schlechte Luft). Er öffnet sich von selbst, sobald du in einer Szene einen Kampf lädst. Links die Gruppe mit ihren Talenten, in der Mitte die Gegner, rechts die Wenn-dann-Regeln dieser Szene, unten das Log. <b>Jeder Gegner steht dort mit zwei Zeilen:</b> wie er aussieht — das kannst du direkt vorlesen („ein alter mürrischer Kerl in grauer Livree und einer Rüstung aus besseren Zeiten“) — und <em>So führst du ihn</em>: wen er angreift, wann er aufgibt, was ihn stoppt. Damit musst du dir nichts merken und nichts erfinden. „Kampf vorbei“ heilt alle und bringt dich zur Szene zurück; „← Szene“ lässt den Kampf offen, falls du zwischendurch nachlesen willst.</p>`},
+ <p><b>Charakter-Übersicht / Kampf</b> ist ein eigener Bildschirm; der Knopf steht oben rechts. Dort stehen die <b>Lebenspunkte</b> — nur dort, damit sie beim Vorlesen nicht im Weg sind. Du trägst dort auch Schaden ein, der ausserhalb eines Kampfs entsteht (Sumpf, schlechte Luft). Er öffnet sich von selbst, sobald du in einer Szene einen Kampf lädst. Links die Gruppe mit ihren Talenten, in der Mitte die Gegner, rechts die Wenn-dann-Regeln dieser Szene, unten das Log. Oben rechts steht <b>„? Wie es funktioniert“</b> — dieselben drei Handgriffe wie hier, dort, wo du sie brauchst. Über den Gegnerkarten steht die Reihe <b>Gegner dazunehmen</b>: jederzeit, mit allen Werten aus dem Bestiarium. <b>Jeder Gegner steht dort mit zwei Zeilen:</b> wie er aussieht — das kannst du direkt vorlesen („ein alter mürrischer Kerl in grauer Livree und einer Rüstung aus besseren Zeiten“) — und <em>So führst du ihn</em>: wen er angreift, wann er aufgibt, was ihn stoppt. Damit musst du dir nichts merken und nichts erfinden. „Kampf vorbei“ heilt alle und bringt dich zur Szene zurück; „← Szene“ lässt den Kampf offen, falls du zwischendurch nachlesen willst.</p>`},
  {t:"sagen", text:["You always have to speak English. If you don’t — who knows what consequences it might have… (evil laugh)","If you don’t know a word, ask me. In English. Nobody laughs."]},
  {t:"regie", titel:"Hintergrund zur Regel", text:`Du kannst den Grafen <b>deutschempfindlich</b> machen: Er hört jeden ganzen deutschen Satz, der am Tisch fällt — für ihn ein Geräusch im Haus. Folge: Die Gefahr steigt um 1 (Knopf rechts), oder er schickt einen Diener los — dafür einen <b>Thrall</b> in den Kampf laden. Hier darfst du improvisieren; die Drohung wirkt meist schon allein.
  <p>Das Barometer hat drei Stufen. <b>Blau (0–3):</b> nichts passiert. <b>Orange (4–7):</b> du entscheidest selbst, ob du in einem Kampf einen Gegner hinzufügst — jeder Kampfblock bietet dir dafür einen Knopf an. <b>Rot (8–10):</b> Sobald die dritte Stufe erreicht ist, beginnt als Zwischenakt eine <b>Patrouille</b> (drei Wachen, ein Hund) vor dem nächsten Akt, und jeder Kampf bekommt von selbst einen Gegner mehr.</p>`},
@@ -939,14 +969,12 @@ const KAPITEL = [
    ["Sie streiten über eine Entscheidung","„You have one minute. Then we vote.“"],
    ["Ein Spieler will sein Talent einsetzen (Magic Hand, Strength, Healing Touch)","Steht neben dem Text ein Kasten <b>Stärke</b> dazu: nimm ihn. Steht keine: Ist es harmlos, sag Ja und erfinde eine Kleinigkeit. Ein Talent ersetzt nie ein Gespräch — wer verhandeln soll, verhandelt."],
    ["Eine Figur fällt auf 0 Lebenspunkte","Sie ist bewusstlos, nicht tot. Zwei Wege zurück: der eigene <b>Heiltrank</b> (jede Figur hat genau einen, Knopf auf dem Blatt: +10 HP oder wieder auf die Beine) — oder sie liegt, bis der Kampf vorbei ist; <b>nach dem Kampf heilt die Lightbearer alle umsonst</b> (ihr Knopf, und rechts „alle voll“). Auf dem Blatt erscheint ausserdem <b>„Roll your fate“</b>: eine 20 macht sie stärker, eine 1 macht ihren Schaden unberechenbar, alles dazwischen gibt eine Narbe."],
-   ["Der DM will einfach einen Wurf","Jedes Blatt hat den Knopf <b>„Just roll a d20“</b>. Sag vorher, ab welcher Zahl es klappt — meistens 10."],
+   ["Du willst einfach wissen, ob etwas klappt","<b>Zwei Sechser, zusammengezählt.</b> Sag die Zahl <em>vorher</em>, sonst ist es keine Probe: <b>7 oder mehr</b> ist das übliche Mass, 9 für etwas Schweres, 5 für etwas fast Sicheres."],
+   ["Du willst gar nicht würfeln","Dann lass es dir erzählen. <b>Wie überzeugend beschreibt die Figur, was sie tut?</b> Wer auf Englisch sagt, womit, wie und in welcher Reihenfolge, hat es geschafft; wer nur „I try it“ sagt, noch nicht — frag nach und gib ihm die zweite Chance. Das ist hier oft die bessere Probe, denn geübt wird das Sprechen, nicht das Würfeln. Du darfst beides mischen: erst erzählen lassen, und nur bei einer wackligen Beschreibung würfeln."],
    ["Die Gefahr wird orange (4–7)","Die Kämpfe bleiben, wie sie sind — aber jeder Kampfblock zeigt dir einen Knopf <b>„+1 … dazu — deine Entscheidung“</b>. Nimm ihn, wenn die Gruppe laut oder leichtsinnig war."],
    ["Die Gefahr wird rot (8–10)","Das Haus ist wach: Ab jetzt lädt jeder Kampfknopf <b>einen Gegner mehr</b>, und die Seite schiebt <b>einmal</b> einen Zwischenakt vor den nächsten Akt — eine Patrouille, drei Wachen und ein Hund. Du musst nichts tun; oben in der Leiste erscheint „⚠ Zwischenakt“, und beim Weiterklicken kommt er von selbst. Sinkt die Gefahr vorher wieder unter 8, wird er abgeblasen."],
    ["Du hast dich verklickt","Jede Entscheidung lässt sich umwählen — die Seite nimmt Gefahr, Lebenspunkte und Wissen der alten Wahl selbst zurück."]]},
- {t:"regie", titel:"Ein Kampf in drei Handgriffen", text:`<b>1.</b> Der Spieler liest seinen gelben Satz vor: „I hit for 9 damage.“
- <p><b>2.</b> Du tippst die 9 im Kampfbildschirm in die Karte des Monsters und drückst <em>Schaden</em>.</p>
- <p><b>3.</b> Das Monster ist dran: Du drückst auf seine Attacke. Die Seite würfelt und sagt dir, ob es trifft. Dann klickst du an, wen es erwischt hat.</p>
- <p><b>Im Kampf heilt niemand</b> — ausser mit dem eigenen Trank. Danach heilt die Lightbearer alle: „Kampf vorbei“ unten im Kampfbildschirm, oder „alle voll“ im selben Reiter.</p>`},
+ {t:"regie", titel:"Ein Kampf in drei Handgriffen", text:KAMPF_ANLEITUNG+`<p>Das steht auch im Kampfbildschirm selbst, hinter dem Knopf <b>„? Wie es funktioniert“</b> oben rechts — du musst es dir nicht merken.</p>`},
  {t:"weiter", text:"Wenn du das gelesen hast und jeder sein Helfer-Blatt vor sich liegen hat."}]},
 
 /* ===== 1 ===== */
@@ -1058,9 +1086,9 @@ const KAPITEL = [
 /* ===== 4 ===== */
 {n:"Aufstieg", verlauf:[
   {bei:"wolfe", nur:"weg_a", wenn:"Ein Wolf fällt", dann:"der andere läuft", art:"gut"},
-  {bei:"sumpf", nur:"weg_a", wenn:"Sumpf: ein Wurf unter 10", dann:"−1 HP — im Reiter Charakter-Übersicht eintragen", art:"schlecht"},
-  {bei:"wachen", nur:"weg_a", wenn:"Wachen: alle würfeln 10 oder mehr", dann:"vorbei — weiter bei „Im Hof“", art:"gut"},
-  {bei:"wachen", nur:"weg_a", wenn:"Wachen: einer unter 10, oder jemand greift an", dann:"Knopf: Kampf mit zwei Wachen, Gefahr +1", art:"schlecht"},
+  {bei:"sumpf", nur:"weg_a", wenn:"Sumpf: ein Wurf unter 7", dann:"−1 HP — im Reiter Charakter-Übersicht eintragen", art:"schlecht"},
+  {bei:"wachen", nur:"weg_a", wenn:"Wachen: alle würfeln 7 oder mehr", dann:"vorbei — weiter bei „Im Hof“", art:"gut"},
+  {bei:"wachen", nur:"weg_a", wenn:"Wachen: einer unter 7, oder jemand greift an", dann:"Knopf: Kampf mit zwei Wachen, Gefahr +1", art:"schlecht"},
   {bei:"keller", nur:"weg_b", wenn:"Jeder sagt einen ganzen Satz, niemand droht", dann:"er glaubt euch: „Guests. Of course.“ — hinauf in den Hof", art:"gut"},
   {bei:"keller", nur:"weg_b", wenn:"Stottern, Drohung oder Angriff", dann:"Knopf: Kampf mit der Wache, Gefahr +1", art:"schlecht"},
   {bei:"kutsche", nur:"weg_c", wenn:"Jemand spricht Corvin an", dann:"er fragt freundlich zurück — die Gefahr +4 ist schon eingetragen"},
@@ -1074,17 +1102,17 @@ const KAPITEL = [
   {wer:"Lightbearer", talent:"Healing Touch", nur:"weg_c", cue:"a hand as cold as the door handle", text:"Corvins Hand ist kalt wie Eisen.", folge:"Wer sie festhält, um zu helfen, merkt es sofort: kein Puls. Corvin lächelt: „Kind of you.“ Die Gruppe weiss jetzt, wem die Kutsche gehört — an der Gefahr ändert das nichts, die ist schon eingetragen."}],
  titel:"Up the Mountain", art:"szene", braucht:"e1", bild:{weg_a:"galgen", weg_b:"stollen", weg_c:"kutsche"}, ort:ORT.wirtshaus, nach:ORT.hof, bloecke:[
  {t:"ziel", text:"Die Gruppe steigt auf ihrem Weg zum Schloss hinauf — mit dem, was der Weg kostet (Kampf, schlechte Luft, Wachen) — und steht am Ende im Hof.", zeit:"20–30 Min."},
- {t:"regie", nur:"weg_a", titel:"Hintergrund · Strasse", text:"Drei Stationen: <b>Wölfe</b> am Galgen (erster Kampf des Abends — langsam: jeder sagt auf Englisch, was er tut, drückt seinen Knopf, liest seinen gelben Satz vor; fällt ein Wolf, läuft der andere), der <b>Sumpf</b> (jeder würfelt dreimal, unter 10 = −1 HP) und die <b>Wachen am Tor</b> — Leute des Hauses, nicht freundlich: Die Gruppe schleicht (jeder würfelt einmal; alle ≥ 10 → vorbei) oder greift an. Misslingt das Schleichen oder greift jemand an: Knopf unten, Kampf mit beiden Wachen, Gefahr +1."},
+ {t:"regie", nur:"weg_a", titel:"Hintergrund · Strasse", text:"Drei Stationen: <b>Wölfe</b> am Galgen (erster Kampf des Abends — langsam: jeder sagt auf Englisch, was er tut, drückt seinen Knopf, liest seinen gelben Satz vor; fällt ein Wolf, läuft der andere), der <b>Sumpf</b> (jeder würfelt dreimal, unter 7 = −1 HP) und die <b>Wachen am Tor</b> — Leute des Hauses, nicht freundlich: Die Gruppe schleicht (jeder würfelt einmal; alle ≥ 7 → vorbei) oder greift an. Misslingt das Schleichen oder greift jemand an: Knopf unten, Kampf mit beiden Wachen, Gefahr +1."},
  {t:"vorlesen", nur:"weg_a", titel:"Der Wald und der Galgen", text:[
   `You leave the tavern by the back door. The road climbs through the forest, and the fog is so thick that you walk into the gallows before you see it. The wood is grey and the rope is long gone.`,
   `Two wolves the size of ponies are sitting underneath it, side by side, watching you come. The smaller one holds a back leg off the ground; there is an old iron trap still on it. They are not barking. They are waiting for you to get closer.`]},
  {t:"kampf", anker:"wolfe", nur:"weg_a", titel:"The wolves", text:"Zwei Wölfe, je 14 Lebenspunkte.", gegner:["wolf","wolf"], extra:"wolf"},
  {t:"vorlesen", nur:"weg_a", titel:"Der Sumpf", text:[
   `Above the gallows the road simply stops. In front of you: black water, white mist, and a path that is only there if you find it. Every step, the ground pulls at your boots — and once it has one, it takes real strength to get it back.`]},
- {t:"aufgabe", anker:"sumpf", nur:"weg_a", sag:"Three steps each through the black water — roll a d20 for every step. Under ten, the bog has your boot: minus one hit point. And shout, or nobody will hear you sink.", hinweis:"Schaden im Reiter <b>Charakter-Übersicht / Kampf</b> eintragen.", blatt:"Helfer-Blatt · Teil 4"},
+ {t:"aufgabe", anker:"sumpf", nur:"weg_a", sag:"Three steps each through the black water — roll both dice for every step. Under seven, the bog has your boot: minus one hit point. And shout, or nobody will hear you sink.", hinweis:"Schaden im Reiter <b>Charakter-Übersicht / Kampf</b> eintragen.", blatt:"Helfer-Blatt · Teil 4"},
  {t:"vorlesen", nur:"weg_a", titel:"Die Wachen am Tor", text:[
   `On the far side of the bog the gate of Nachtfels stands open. Two men in old grey livery stand beside it. Their lamps hang on the wall next to them — the only light for a mile. They do not move. They do not talk. They are looking at the fog.`]},
- {t:"aufgabe", anker:"wachen", nur:"weg_a", sag:"Two guards. They belong to the house, and they are not here to welcome anyone. You can try to get past them in the fog — one roll each, ten or more. Or you go straight at them. Decide together. Quietly.", hinweis:"Alle ≥ 10 → weiter unten bei „Im Hof“. Einer darunter, oder sie greifen an → Knopf.", blatt:"Helfer-Blatt · Teil 4"},
+ {t:"aufgabe", anker:"wachen", nur:"weg_a", sag:"Two guards. They belong to the house, and they are not here to welcome anyone. You can try to get past them in the fog — one roll each, seven or more. Or you go straight at them. Decide together. Quietly.", hinweis:"Alle ≥ 7 → weiter unten bei „Im Hof“. Einer darunter, oder sie greifen an → Knopf.", blatt:"Helfer-Blatt · Teil 4"},
  {t:"tun", id:"tor_kampf", nur:"weg_a", text:"Das Anschleichen ist misslungen — die beiden Wachen haben sie gesehen.", knopf:{art:"laden", gegner:["wache","wache"], gefahr:1, extra:"wache"}, beschriftung:"Kampf mit zwei Wachen, Gefahr +1"},
  {t:"vorlesen", nur:"weg_a", titel:"Im Hof", text:[
   `Past the guards, through the gate that nobody ever closed — and you are standing in a square courtyard of black stone.`]},
@@ -1221,7 +1249,7 @@ const KAPITEL = [
  {t:"vorlesen", weiche:"fuehrung=gefuehrt", spricht:"Tam", nur:"kueche", titel:"Der Weg zum Spiegel — Tam führt euch", text:[
   `Tam takes corridors that do not look like corridors. Twice he stops, puts up a hand, and you all wait forty seconds in the dark without knowing what for.`,
   `Then he points down a corridor with no windows — the west corridor — at a tall mirror at the end of it. “That’s the door. You have to walk backwards. Don’t look at it.” And then, quietly: “I’ll wait here.”`]},
- {t:"regie", anker:"ohnefuehrung", weiche:"fuehrung=allein", nur:["bibliothek","kueche"], titel:"Ohne Führung — wenn niemand euch bringt", text:"Nur, wenn Bellamy oder Tam die Gruppe hat stehen lassen. Dann: jeder würfelt einmal (<b>Just roll a d20</b>). Mindestens eine 10 → sie finden den Westgang leise (gelb unten). Keine 10 → sie finden ihn auch, aber nach zwei falschen Türen: <b>Gefahr +1</b> rechts. Die Geschichte bleibt nie stehen."},
+ {t:"regie", anker:"ohnefuehrung", weiche:"fuehrung=allein", nur:["bibliothek","kueche"], titel:"Ohne Führung — wenn niemand euch bringt", text:"Nur, wenn Bellamy oder Tam die Gruppe hat stehen lassen. Dann: jeder würfelt einmal mit den zwei Würfeln. Mindestens eine 7 → sie finden den Westgang leise (gelb unten). Keine 7 → sie finden ihn auch, aber nach zwei falschen Türen: <b>Gefahr +1</b> rechts. Die Geschichte bleibt nie stehen."},
  {t:"vorlesen", weiche:"fuehrung=allein", nur:["bibliothek","kueche"], titel:"Ohne Führung — der Weg zum Spiegel", text:[
   `Corridors that all look the same, and nobody to ask. Twice you open a door and close it again, very quietly. Then a corridor with no windows — the west corridor — and at the end of it a tall mirror instead of a door. On the frame, in chalk, in a child’s handwriting: walk backwards.`]},
  {t:"regie", anker:"spiegel", titel:"Wenn sie fragen, was beim Hinsehen passiert", text:"„Nobody who looked has ever told anyone.“ Mehr nicht — und wer trotzdem hinsieht, sieht sich selbst, nur älter. Kein Schaden, keine Gefahr."},
@@ -2619,13 +2647,17 @@ document.addEventListener("click", e=>{
 });
 document.addEventListener("keydown", e=>{
   const tag=(e.target&&e.target.tagName)||""; if(tag==="INPUT"||tag==="TEXTAREA"||e.altKey||e.ctrlKey||e.metaKey) return;
-  const bs=$("bildschau"); if(bs && bs.open) return;   /* Esc schliesst <dialog> selbst */
+  const bs=$("bildschau"), kh=$("kampfhilfe");
+  if((bs && bs.open) || (kh && kh.open)) return;   /* Esc schliesst <dialog> selbst */
   if(e.key==="Escape"){ ["szenenfach","lagefach"].forEach(id=>{const f=$(id); if(f) f.open=false;}); }
   if(e.key==="Escape" && Z.kampfOffen){ schliesseKampf(); e.preventDefault(); return; }
   if(Z.kampfOffen) return;
   if(e.key==="ArrowRight"){ $("vor").click(); e.preventDefault(); } else if(e.key==="ArrowLeft"){ $("zurueck").click(); e.preventDefault(); }
 });
 document.addEventListener("input", e=>{ if(e.target.dataset&&e.target.dataset.nm!==undefined){ Z.gruppe[+e.target.dataset.nm].name=e.target.value; zeichneSzene(); sichern(); } });
+$("kampfhilfe-text").innerHTML = KAMPF_ANLEITUNG;
+$("kampfhilfe-auf").onclick=()=>{ const d=$("kampfhilfe"); if(d.showModal) d.showModal(); else d.open=true; };
+$("kampfhilfe-zu").onclick=()=>{ const d=$("kampfhilfe"); if(d.close) d.close(); else d.open=false; };
 $("bildzeigen").onclick=zeigeBild;
 $("bildschau").onclick=()=>{ const d=$("bildschau"); if(d.close) d.close(); else d.open=false; };
 $("vor").onclick=()=>{ if(Z.imZwischenakt) patrouilleFertig(); else geheZu(Z.schritt+1); };

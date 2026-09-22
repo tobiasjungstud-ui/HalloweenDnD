@@ -70,7 +70,7 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
    da: die Randnotiz steht nur einmal, und im Text trennen goldene Linien mit dem Titel die
    Abschnitte (*——— Die Treppe ———*, *——— Das Turmzimmer ———*). Rechts daneben, **auf der Höhe der Stelle, zu der sie gehören**, stehen die
    Hilfen: **Wenn … dann** — was hier von der
-   Antwort der Gruppe abhängt („alle würfeln 10 oder mehr → an den Wachen vorbei“) — und die
+   Antwort der Gruppe abhängt („alle würfeln 7 oder mehr → an den Wachen vorbei“) — und die
    **Stärken der Figuren** neben dem Absatz, der die Gelegenheit ankündigt. Steht daneben
    nichts, gibt es an dieser Stelle nichts zu beachten. Wo sich eine Szene gabelt, steht
    **Was ist passiert?** über zwei benannten Knöpfen („Ja — er führt euch“ / „Nein — ihr
@@ -134,8 +134,8 @@ fragt. Das Spiel kann nicht hängenbleiben.
 jeder Seite rund 220 Pixel unter dem oberen Rand, vorher waren es je nach Szene 500 bis 770.
 Der Hintergrund steht weiterhin vollständig da, aber als eingeklappte Zeile. Regeln, die
 auf das Verhalten der Gruppe reagieren, stehen nicht mehr gesammelt in einer Leiste, sondern
-**neben der Stelle, an der sie gebraucht werden**: „Sumpf: ein Wurf unter 10 → −1 HP“ steht
-neben dem Sumpf, „Wachen: alle würfeln 10 oder mehr → vorbei“ neben den Wachen. Dieselbe
+**neben der Stelle, an der sie gebraucht werden**: „Sumpf: ein Wurf unter 7 → −1 HP“ steht
+neben dem Sumpf, „Wachen: alle würfeln 7 oder mehr → vorbei“ neben den Wachen. Dieselbe
 Spalte trägt, jeweils neben dem Absatz, der sie ankündigt, die
 **Stärken der Figuren**:
 eine Gelegenheit für *diese* Figur —
@@ -204,6 +204,22 @@ im Browser öffnen, Datei wählen, Schlüssel eintragen — heraus kommt die fer
 als `data:`-URL in der Datei, damit die Konsole eine einzige Datei bleibt und ohne Netz
 läuft; deshalb rechnet der Helfer sie auf 900 Pixel Breite herunter. Hochformat 2:3 passt
 am besten — so ist die Fläche geschnitten.
+
+**Gewürfelt wird mit zwei Sechsern.** Zusammengezählt, `7 oder mehr` heisst: es
+klappt — das ist die Schwelle, die vorher im Text steht (Sumpf, Wachen, Westgang).
+Sie ersetzt den früheren W20 mit Schwelle 10 und trifft dessen Chancen fast genau:
+55 % wurden 58 %. Und sie ist nicht die einzige Probe: Die Konsole sagt der
+Spielleitung ausdrücklich, dass sie stattdessen prüfen darf, **wie überzeugend eine
+Figur auf Englisch beschreibt, was sie tut** — geübt wird das Sprechen, nicht das
+Würfeln. Im Kampf braucht es die Würfel gar nicht; Treffer und Schaden würfeln die
+Seiten selbst.
+
+**Im Kampfbildschirm** steht oben rechts **„? Wie es funktioniert“** — die drei
+Handgriffe eines Kampfs als Fenster, derselbe Text wie auf der ersten Seite (er
+steht einmal im Quelltext und wird an beiden Stellen benutzt). Über den
+Gegnerkarten liegt die Reihe **Gegner dazunehmen**, offen und jederzeit
+erreichbar — vorher lag sie zugeklappt unter den Karten und war nach zwei
+geladenen Gegnern nicht mehr zu sehen.
 
 **Der Abend passt sich an.** Erreicht das Gefahrenbarometer 8, lädt jeder Kampfknopf einen
 Gegner mehr, und die Konsole schiebt einmal einen Zwischenakt vor den nächsten Akt: eine

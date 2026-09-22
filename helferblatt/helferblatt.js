@@ -189,7 +189,7 @@ const kinder = [
   ...[ "I attack the wolf with my sword.", "I hit for 9 damage.", "I missed.",
        "Critical hit! I hit for 18 damage!", "I heal you for 7 hit points.",
        "How many hit points do you have left?", "I'm down — somebody help me!",
-       "I roll for my fate.", "I rolled a 14.", "I drink my potion!", "The fight is over — I heal everyone." ].map(satz),
+       "I roll for my fate.", "I rolled a nine.", "I drink my potion!", "The fight is over — I heal everyone." ].map(satz),
 
   zwischen("Your talent — outside of fights"),
   ...[ "Can I use my Magic Hand to …?  (Arcanist)", "I'm strong enough to … — let me try.  (Blade)",
