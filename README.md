@@ -79,7 +79,15 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
    neben dem Titel; ganz rechts läuft der **Gefahrenbalken** senkrecht über die ganze
    Seitenhöhe: eine Glasröhre, die sich von unten füllt — blau bis 3, gold bis 7, rot
    darüber —, mit Skala, Zeiger, der Zahl im gotischen Bogen und der Stufe daneben.
-   Der ganze Streifen glüht in der Farbe der erreichten Stufe. Der Schalter **Blut** in der
+   Der ganze Streifen glüht in der Farbe der erreichten Stufe — und er **erwacht mit dem
+   Wert**: ab 1 atmet eine Aura um ihn, ab 4 tritt sie sichtbar aus der Leiste in die Seite
+   hinein, ab 6 steigen Funken, ab 7 schlägt sie im Herzschlag (zwei Schläge, dann Pause;
+   3,0 s bei 7 bis 1,4 s bei 10), ab 8 brennt es an Krone und Rahmen, ab 9 kommt Rauch dazu,
+   bei 10 sitzt ein brennendes Gebiss über der Krone. Metall, Zahl und Schrift werden vom
+   Feuer mitbeleuchtet. Jede Erhöhung gibt einen kurzen Lichtstoss; jede Senkung fährt ruhig
+   herunter. Alles hängt allein am Gefahrenwert, läuft auf einer einzigen Leinwand
+   (`GefahrFX`), schaltet bei „reduzierte Bewegung“ auf ein stehendes Bild und dünnt sich
+   selbst aus, wenn ein Rechner nicht mitkommt. Der Schalter **Blut** in der
    Leiste füllt das Rohr statt mit einem Balken mit Blut — steigende Blasen, Perlen, die
    innen am Glas herunterlaufen, eine leuchtende Oberfläche. Reine Stimmung; am Wert ändert
    er nichts, und er merkt sich seinen Zustand. Ganz unten sammelt eine Aktionsleiste

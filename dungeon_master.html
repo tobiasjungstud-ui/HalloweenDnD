@@ -294,7 +294,12 @@ input{font:inherit;color:inherit}
 .hbox.gefahrkarte .folge{margin:6px 0 0;color:var(--dim);font-size:11.5px;line-height:1.35}
 /* ── Gefahrenbalken: senkrecht, ganz rechts, vom Menü bis zum Fuss ──
    Drei Stufen, drei Farben: blau bis 3, gold bis 7, rot darüber.              */
+/* Die Leinwand für Aura, Glut und Feuer liegt VOR der Säule und ragt weit nach links;
+   sie fängt keine Klicks ab und wird vom Gefahrenwert gesteuert. */
+.gefahrfx{position:fixed;right:0;top:var(--barhoehe);width:420px;height:calc(100vh - var(--barhoehe));
+  z-index:26;pointer-events:none;display:block}
 .gefahrsaeule{position:fixed;right:0;top:var(--barhoehe);bottom:0;width:112px;z-index:25;
+  --fx-l:0;
   display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px 0 12px;
   font-family:var(--sans);border-left:1px solid #17181c;
   background:
@@ -313,8 +318,10 @@ input{font:inherit;color:inherit}
   background:linear-gradient(to bottom,transparent,rgba(var(--gf-rgb),.5) 18%,rgba(var(--gf-rgb),.5) 82%,transparent)}
 
 /* Krone: Flügel, gotischer Bogen, die Zahl */
-.gs-krone{flex:none;display:flex;flex-direction:column;align-items:center;color:rgba(var(--gf-rgb),.75)}
-.gs-fluegel{width:104px;height:39px;filter:drop-shadow(0 0 7px rgba(var(--gf-rgb),.45))}
+.gs-krone{position:relative;flex:none;display:flex;flex-direction:column;align-items:center;
+  color:rgba(var(--gf-rgb),.75)}
+.gs-fluegel{width:104px;height:39px;
+  filter:drop-shadow(0 0 calc(7px + var(--fx-l)*15px) rgba(var(--gf-rgb),calc(.45 + var(--fx-l)*.45)))}
 .gs-fluegel .fl path{fill:rgba(var(--gf-rgb),.16);stroke:currentColor;stroke-width:1.1;
   stroke-linejoin:round;stroke-linecap:round}
 .gs-bogen{position:relative;width:78px;height:72px;margin-top:-7px;display:flex;flex-direction:column;
@@ -322,7 +329,8 @@ input{font:inherit;color:inherit}
 .gs-rahmen{position:absolute;inset:0;width:100%;height:100%;color:rgba(var(--gf-rgb),.55)}
 .gs-bogen b{position:relative;font-family:var(--serif);font-weight:400;font-size:38px;line-height:1;
   color:var(--gf-hell);font-variant-numeric:tabular-nums;
-  text-shadow:0 0 14px rgba(var(--gf-rgb),.75),0 0 3px rgba(var(--gf-rgb),.9);transition:color .4s}
+  text-shadow:0 0 calc(14px + var(--fx-l)*24px) rgba(var(--gf-rgb),calc(.75 + var(--fx-l)*.25)),
+              0 0 3px rgba(var(--gf-rgb),.9);transition:color .4s}
 .gs-bogen small{position:relative;font-size:9px;letter-spacing:.24em;text-transform:uppercase;
   color:rgba(var(--gf-rgb),.75)}
 
@@ -332,12 +340,16 @@ input{font:inherit;color:inherit}
   justify-content:center;gap:16px;overflow:hidden;padding:6px 0}
 .gs-schrift em{font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gs-lab{flex:none;font-family:var(--serif);font-size:18px;letter-spacing:.38em;text-transform:uppercase;
-  color:var(--gf-hell);text-shadow:0 0 14px rgba(var(--gf-rgb),.7),0 0 3px rgba(var(--gf-rgb),.5)}
+  color:var(--gf-hell);
+  text-shadow:0 0 calc(14px + var(--fx-l)*22px) rgba(var(--gf-rgb),calc(.7 + var(--fx-l)*.3)),
+              0 0 3px rgba(var(--gf-rgb),.5)}
 .gs-stufe{font-family:var(--serif);font-style:italic;font-size:13.5px;color:var(--muted);min-height:0;max-height:46%}
 .gs-glas{position:relative;width:26px;flex:none;border-radius:14px;background:#0a0b0d;
   border:1px solid rgba(255,255,255,.07);
-  box-shadow:inset 0 0 14px rgba(0,0,0,.95),0 0 0 5px #121317,0 0 0 6px rgba(var(--gf-rgb),.3),
-             0 0 26px rgba(var(--gf-rgb),.22);overflow:hidden}
+  box-shadow:inset 0 0 14px rgba(0,0,0,.95),0 0 0 5px #121317,
+             0 0 0 6px rgba(var(--gf-rgb),calc(.3 + var(--fx-l)*.5)),
+             0 0 calc(26px + var(--fx-l)*44px) rgba(var(--gf-rgb),calc(.22 + var(--fx-l)*.45));
+  overflow:hidden}
 .gs-fuell{position:absolute;left:0;right:0;bottom:0;height:0;border-radius:0 0 13px 13px;
   background:linear-gradient(to top, rgba(var(--gf-rgb),.45), var(--gf-farbe) 55%, var(--gf-hell));
   box-shadow:0 0 22px rgba(var(--gf-rgb),.8),inset 0 0 10px rgba(0,0,0,.4);
@@ -356,15 +368,37 @@ input{font:inherit;color:inherit}
 .gs-skala{position:relative;width:22px;flex:none}
 .gs-skala span{position:absolute;right:0;transform:translateY(50%);display:flex;align-items:center;gap:4px;
   font-size:10px;color:var(--dim);font-variant-numeric:tabular-nums;white-space:nowrap}
-.gs-skala span i{display:block;width:8px;height:1px;background:rgba(255,255,255,.26)}
+.gs-skala span i{display:block;width:8px;height:1px;
+  background:rgba(255,255,255,calc(.26 + var(--fx-l)*.4))}
 .gs-skala span.fein i{width:4px;background:rgba(255,255,255,.14)}
 .gs-zeiger{position:absolute;right:calc(100% + 2px);transform:translateY(50%);font-size:9px;line-height:1;
   color:var(--gf-hell);text-shadow:0 0 8px rgba(var(--gf-rgb),.9);transition:bottom .55s cubic-bezier(.4,0,.2,1)}
+/* Kurzer roter Blitz beim Sprung auf 10 */
+.gs-blitz{position:absolute;inset:-40px -60px -40px -160px;pointer-events:none;opacity:0;
+  background:radial-gradient(60% 50% at 78% 22%, rgba(255,120,80,.55), rgba(190,30,20,.22) 45%, transparent 72%)}
+.gs-blitz.an{animation:gs-blitz .42s ease-out 1}
+@keyframes gs-blitz{0%{opacity:0}12%{opacity:1}100%{opacity:0}}
+
+/* Das Gebiss — nur bei Gefahr 10, über der Krone */
+.gs-zaehne{position:absolute;top:-5px;left:50%;width:116px;height:73px;margin-left:-58px;
+  z-index:3;pointer-events:none;opacity:0;transform:scale(.8);transform-origin:50% 22%;
+  display:none;filter:drop-shadow(0 6px 16px rgba(0,0,0,.75))}
+.gefahrsaeule.zaehne .gs-zaehne{display:block;animation:gs-zaehne-auf .56s cubic-bezier(.22,1.2,.36,1) forwards}
+.gefahrsaeule.zaehne.ruht .gs-zaehne{animation:none;opacity:1;transform:scale(1)}
+@keyframes gs-zaehne-auf{
+  0%{opacity:0;transform:scale(.78) translateY(7px)}
+  55%{opacity:1;transform:scale(1.05) translateY(0)}
+  100%{opacity:1;transform:scale(1)}}
+.gs-zaehne .zk{fill:url(#gsKiefer);stroke:rgba(160,40,32,.55);stroke-width:1}
+.gs-zaehne .zr{fill:none;stroke:rgba(255,120,90,calc(.25 + var(--fx-l)*.6));stroke-width:1.4}
+.gs-zaehne .zz path{fill:url(#gsZahn);stroke:rgba(30,12,12,.8);stroke-width:.6;stroke-linejoin:round}
+.gs-zaehne .zz .fang{stroke:rgba(120,26,20,.9)}
 .gefahrsaeule.leer .gs-zeiger{opacity:0}
 
 /* Sockel */
 .gs-sockel{flex:none;color:rgba(var(--gf-rgb),.7)}
-.gs-sockel svg{width:104px;height:52px;filter:drop-shadow(0 0 8px rgba(var(--gf-rgb),.4))}
+.gs-sockel svg{width:104px;height:52px;
+  filter:drop-shadow(0 0 calc(8px + var(--fx-l)*16px) rgba(var(--gf-rgb),calc(.4 + var(--fx-l)*.45)))}
 
 @keyframes gs-puls{0%,100%{opacity:1}50%{opacity:.72}}
 .gefahrsaeule.g2 .gs-fuell{animation:gs-puls 2.6s ease-in-out infinite}
@@ -520,6 +554,8 @@ details.fach[open] summary::after{content:"zuklappen"}
 @media (max-width:760px){
   .kopfbar{padding:0 16px}.raum{padding:18px 88px 0 16px}
   #blutschalter{display:none}
+  .gefahrfx{width:240px}
+  .gs-zaehne{width:82px;height:52px;margin-left:-41px;top:-10px}
   .gefahrsaeule{width:72px;gap:7px}
   .gs-stufe,.gs-skala{display:none}
   .gs-fluegel{width:64px;height:24px}
@@ -570,7 +606,34 @@ details.fach[open] summary::after{content:"zuklappen"}
   </span>
 </header>
 
+<canvas class="gefahrfx" id="gefahrfx" aria-hidden="true"></canvas>
+
 <aside class="gefahrsaeule" id="gefahrsaeule" aria-label="Gefahrenbalken">
+  <span class="gs-blitz" id="gs-blitz" aria-hidden="true"></span>
+  <svg class="gs-zaehne" id="gs-zaehne" viewBox="0 0 124 78" aria-hidden="true">
+    <defs>
+      <linearGradient id="gsZahn" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#3a2022"/>
+        <stop offset=".34" stop-color="#d9cdbb"/>
+        <stop offset=".72" stop-color="#a8564a"/>
+        <stop offset="1" stop-color="#5e0f0d"/>
+      </linearGradient>
+      <linearGradient id="gsKiefer" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#241315"/>
+        <stop offset="1" stop-color="#0d0708"/>
+      </linearGradient>
+    </defs>
+    <path class="zk" d="M6 16 C30 3 94 3 118 16 C110 30 100 37 88 40 L36 40 C24 37 14 30 6 16 Z"/>
+    <path class="zr" d="M6 16 C30 3 94 3 118 16" />
+    <g class="zz">
+      <path d="M40 36 L48 36 L44.6 50 L41.2 50 Z"/>
+      <path d="M52 37 L60 37 L57.2 49 L54.4 49 Z"/>
+      <path d="M64 37 L72 37 L69.6 48 L66.8 48 Z"/>
+      <path d="M76 36 L83 36 L80.4 47 L77.8 47 Z"/>
+      <path class="fang" d="M24 32 L35 32 L31.6 70 Z"/>
+      <path class="fang" d="M89 31 L100 31 L93.4 74 Z"/>
+    </g>
+  </svg>
 
   <div class="gs-krone">
     <svg class="gs-fluegel" viewBox="0 0 112 42" aria-hidden="true">
@@ -606,7 +669,7 @@ details.fach[open] summary::after{content:"zuklappen"}
       <em class="gs-lab">✦&nbsp; Gefahr &nbsp;✦</em>
       <em class="gs-stufe" id="b-stufe">—</em>
     </div>
-    <div class="gs-glas">
+    <div class="gs-glas" id="gs-glas">
       <div class="gs-fuell" id="saeule"><span class="gs-kuppe"></span></div>
       <canvas class="gs-blut" id="blutfx" aria-hidden="true"></canvas>
       <span class="gs-glanz"></span>
@@ -769,7 +832,7 @@ const KAPITEL = [
  {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`Die Seite hat drei Spalten. Am <b>linken Rand</b> steht bei jedem Absatz, was er ist. <b>Vorlesen</b> heisst: wörtlich — Erzähltext und die Sätze der Figuren; die Sätze stehen in Gold. Folgen mehrere Vorlesetexte aufeinander, stehen sie als <b>ein</b> Block da: die Randnotiz steht nur einmal, und im Text trennen goldene Linien mit dem Titel die Abschnitte — <em>——— Die Treppe ———</em>, <em>——— Das Turmzimmer ———</em>. Du liest von oben nach unten durch und weisst trotzdem, wo du bist. <b>Gesprächsaufforderung</b> heisst: das sagst du den Schülern, ebenfalls wörtlich — sie endet immer mit einer klaren Aufforderung, damit niemand raten muss, was jetzt zu tun ist. <b>Hintergrund</b> heisst: nur für dich. <b>Mögliche Antworten</b> steht über den vorbereiteten Antworten einer Figur; ganz oben am Rand steht dann, welcher Charakter antwortet. <b>Kampf</b> ist ein Knopf und ein Satz, mehr nicht. <b>Was ist passiert?</b> steht über zwei Knöpfen: Wo die Szene sich gabelt — führt Tam sie zum Spiegel oder nicht? —, klickst du an, was am Tisch passiert ist, und darunter erscheint <b>nur</b> der passende Text. Noch einmal klicken hebt die Wahl auf. Du musst dir also nie zwei Ausgänge gleichzeitig durch den Kopf gehen lassen. Ganz unten steht immer, <b>wann es weitergeht</b>.
  <p>Der Schalter <b>Blut</b> oben füllt das Messrohr rechts mit Blut statt mit einem Balken — reine Stimmung, am Wert ändert er nichts, und er merkt sich seinen Zustand wie der Schalter daneben. Der Schalter <b>Stimmen</b> oben blendet hinter jedem Sprechernamen drei Wörter ein, die sagen, wie die Figur klingt: <em>Marek — tief, wortkarg, langsam</em>. Sie stehen in Gold wie die Rede, aber kursiv und ohne Anführungszeichen; vorgelesen wird nur, was in Anführungszeichen steht. Der Schalter merkt sich, wie du ihn zuletzt hattest.</p>
  <p><b>Rechts neben dem Text</b> stehen die Hilfen — und zwar auf der Höhe der Stelle, zu der sie gehören. <b>Wenn … dann</b>: was hier abzweigt, sobald die Gruppe geantwortet hat („alle würfeln 10 oder mehr → an den Wachen vorbei“). Und <b>Stärken der Figuren</b>: neben dem Absatz, in dem die Gelegenheit angekündigt wird, steht ein Kasten mit dem Satz aus dem Vorlesetext (Tam hält die verbrannte Hand an die Brust; Marek hat die Hand verbunden). Du liest den Satz vor und wartest. Anklicken zeigt die Folge. Das sind keine Aufgaben und keine Lösungen: Der Kasten sagt dir nur, was du zulassen kannst, falls der Spieler von selbst darauf kommt. Jede Szene funktioniert auch ohne. Steht neben einem Absatz nichts, gibt es dort nichts zu beachten.</p>
- <p>Das <b>Ziel</b> der Szene steht oben neben dem Titel, mit der Zeitangabe daneben. Ganz rechts läuft der <b>Gefahrenbalken</b> senkrecht über die ganze Seitenhöhe: die Zahl oben, darunter die zehn Stufen, die von unten her volllaufen — blau bis 3, gold bis 7, rot darüber —, und neben dem Rohr steht, was die erreichte Stufe bedeutet. Eingestellt wird die Gefahr oben in der Leiste (−1 / +1 / +2). Unter <b>Lage</b> — ebenfalls oben rechts — steht der Rest: wo die Gruppe ist, was sie gewählt hat, die drei Talente mit ihren Namen, was die Gruppe weiss, und die Chronik. Auf der Seite steht immer nur, was zu diesem Weg gehört — das andere siehst du gar nicht erst. Und eine Entscheidung lässt sich erst anklicken, wenn die davor getroffen ist.</p>
+ <p>Das <b>Ziel</b> der Szene steht oben neben dem Titel, mit der Zeitangabe daneben. Ganz rechts läuft der <b>Gefahrenbalken</b> senkrecht über die ganze Seitenhöhe: die Zahl oben, darunter die Röhre, die von unten her volläuft — blau bis 3, gold bis 7, rot darüber —, und neben ihr steht, was die erreichte Stufe bedeutet. <b>Der Balken lebt mit:</b> ab 1 atmet ein Schein um ihn, ab 4 tritt er sichtbar aus der Leiste heraus, ab 6 steigen Funken, ab 7 schlägt er im Herzschlag (zwei Schläge, dann Pause — schneller, je höher), ab 8 brennt es an Krone und Rahmen, ab 9 kommt Rauch dazu, und bei 10 sitzt ein brennendes Gebiss über der Krone. Steigt die Gefahr, gibt es einen kurzen Lichtstoss; sinkt sie, fährt alles ruhig herunter. Das ist reine Stimmung — an Werten und Regeln ändert nichts davon etwas. Eingestellt wird die Gefahr oben in der Leiste (−1 / +1 / +2). Unter <b>Lage</b> — ebenfalls oben rechts — steht der Rest: wo die Gruppe ist, was sie gewählt hat, die drei Talente mit ihren Namen, was die Gruppe weiss, und die Chronik. Auf der Seite steht immer nur, was zu diesem Weg gehört — das andere siehst du gar nicht erst. Und eine Entscheidung lässt sich erst anklicken, wenn die davor getroffen ist.</p>
  <p><b>Charakter-Übersicht / Kampf</b> ist ein eigener Bildschirm; der Knopf steht oben rechts. Dort stehen die <b>Lebenspunkte</b> — nur dort, damit sie beim Vorlesen nicht im Weg sind. Du trägst dort auch Schaden ein, der ausserhalb eines Kampfs entsteht (Sumpf, schlechte Luft). Er öffnet sich von selbst, sobald du in einer Szene einen Kampf lädst. Links die Gruppe mit ihren Talenten, in der Mitte die Gegner, rechts die Wenn-dann-Regeln dieser Szene, unten das Log. <b>Jeder Gegner steht dort mit zwei Zeilen:</b> wie er aussieht — das kannst du direkt vorlesen („ein alter mürrischer Kerl in grauer Livree und einer Rüstung aus besseren Zeiten“) — und <em>So führst du ihn</em>: wen er angreift, wann er aufgibt, was ihn stoppt. Damit musst du dir nichts merken und nichts erfinden. „Kampf vorbei“ heilt alle und bringt dich zur Szene zurück; „← Szene“ lässt den Kampf offen, falls du zwischendurch nachlesen willst.</p>`},
  {t:"sagen", text:["You always have to speak English. If you don’t — who knows what consequences it might have… (evil laugh)","If you don’t know a word, ask me. In English. Nobody laughs."]},
  {t:"regie", titel:"Hintergrund zur Regel", text:`Du kannst den Grafen <b>deutschempfindlich</b> machen: Er hört jeden ganzen deutschen Satz, der am Tisch fällt — für ihn ein Geräusch im Haus. Folge: Die Gefahr steigt um 1 (Knopf rechts), oder er schickt einen Diener los — dafür einen <b>Thrall</b> in den Kampf laden. Hier darfst du improvisieren; die Drohung wirkt meist schon allein.
@@ -1278,6 +1341,313 @@ function zeichneStimmschalter(){
   b.setAttribute("aria-pressed", ZEIGE_STIMMEN?"true":"false");
   b.title = ZEIGE_STIMMEN ? "Stimmangaben ausblenden" : "Stimmangaben einblenden";
 }
+/* ====================== GEFAHR-FX ======================
+   Aura, Puls, Glut, Feuer, Rauch und das Gebiss — alles allein vom Gefahrenwert
+   gesteuert. Eine einzige Leinwand vor der Säule, die weit nach links ragt.
+   Die Säule selbst bleibt unverändert; sie bekommt nur --fx-l als Lichtstärke. */
+const GefahrFX = (function(){
+  let cv=null, ctx=null, W=0, H=0, DPR=1;
+  let rahmen=0, pausiert=false, ruhig=false, letzte=0, gemessen=0, gesetzt=0;
+  let wert=0, d=0, dZiel=0;              /* d = geglätteter Wert 0..1 */
+  let stoss=0, blitzBis=0, letzterWert=-1;
+  let glut=[], flammen=[], rauch=[];
+  let gAkku=0, fAkku=0, rAkku=0;
+  let aurC=null, aurX=null, aurStufe=-1, aurW=0, aurH=0;
+  let spar=false, dtMittel=0.016, langsam=0;      /* Sparmodus, falls ein Rechner nicht mitkommt */
+  const AURSKALA=0.5;              /* die Aura wird halb so gross gerechnet und aufgezogen */
+  const S={x:0,y:0,w:112,h:0}, G={x:0,y:0,w:26,h:0};   /* Säule und Glasrohr in Leinwandkoordinaten */
+  const TAU=6.283185307;
+  const zuf=(a,b)=>a+Math.random()*(b-a);
+  const klemm=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const weich=x=>{ x=klemm(x,0,1); return x*x*(3-2*x); };
+
+  function bereit(){
+    if(ctx) return true;
+    cv = document.getElementById("gefahrfx");
+    if(!cv || typeof cv.getContext!=="function") return false;
+    try{ ctx = cv.getContext("2d"); }catch(e){ return false; }
+    try{ ruhig = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches); }catch(e){}
+    return !!ctx;
+  }
+  function mass(){
+    if(typeof cv.getBoundingClientRect!=="function") return false;
+    const r=cv.getBoundingClientRect();
+    const b=Math.max(1,Math.round(r.width)), h=Math.max(1,Math.round(r.height));
+    if(b!==W || h!==H || !cv.width){
+      W=b; H=h; DPR=Math.min(window.devicePixelRatio||1, 1.75);   /* ein Schein braucht keine Schärfe */
+      cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+      aurStufe=-1;
+    }
+    const a=document.getElementById("gefahrsaeule");
+    if(!a || typeof a.getBoundingClientRect!=="function") return false;
+    const ar=a.getBoundingClientRect();
+    S.x=ar.left-r.left; S.y=ar.top-r.top; S.w=ar.width; S.h=ar.height;
+    const gl=document.getElementById("gs-glas");
+    if(gl){ const gr=gl.getBoundingClientRect(); G.x=gr.left-r.left; G.y=gr.top-r.top; G.w=gr.width; G.h=gr.height; }
+    return S.h>2;
+  }
+
+  /* ---- Takt: Atmen bis 6, Herzschlag ab 7 ---- */
+  function herzstoss(p){          /* p: 0..1 innerhalb einer Periode */
+    const b=(x,c,w)=>Math.exp(-((x-c)*(x-c))/(w*w));
+    return b(p,0.07,0.030)*1.0 + b(p,0.22,0.042)*0.60;
+  }
+  function takt(t){
+    const atemDauer = 4.5 - d*1.9;                       /* 4.5 s → 2.6 s */
+    const atem = 0.5+0.5*Math.sin((t/1000)*TAU/atemDauer);
+    if(d < 0.62) return atem*0.55;
+    const g = wert;                                      /* 7..10 */
+    const periode = g>=10 ? 1.42 : g>=9 ? 1.8 : g>=8 ? 2.4 : 3.0;
+    const p = ((t/1000) % periode)/periode;
+    const herz = herzstoss(p);
+    const misch = weich((d-0.62)/0.12);
+    return atem*0.55*(1-misch) + herz*misch;
+  }
+  function flackern(t){
+    if(d < 0.62) return 0;
+    const z=t/1000;
+    const n = Math.sin(z*7.3)*0.5 + Math.sin(z*11.9+1.3)*0.3 + Math.sin(z*19.7+2.6)*0.2;
+    return n * (0.05 + (d-0.62)*0.26);                   /* ±5 % … ±15 % */
+  }
+
+  /* ---- Aura: mehrere weiche Zonen, nicht ein Schatten ----
+     Die drei grossen Zonen ändern ihre Form kaum; sie werden einmal gerechnet und
+     danach nur noch mit wechselnder Deckkraft aufgezogen. Das hält es flüssig. */
+  function zone(c, cx, cy, rx, ry, farbe, a){
+    if(a<=0.002||rx<=0) return;
+    c.save();
+    c.translate(cx,cy); c.scale(1, ry/rx);
+    const g=c.createRadialGradient(0,0,0,0,0,rx);
+    g.addColorStop(0,    "rgba("+farbe+","+a+")");
+    g.addColorStop(0.30, "rgba("+farbe+","+(a*0.78)+")");
+    g.addColorStop(0.62, "rgba("+farbe+","+(a*0.34)+")");
+    g.addColorStop(1,    "rgba("+farbe+",0)");
+    c.fillStyle=g; c.beginPath(); c.arc(0,0,rx,0,TAU); c.fill();
+    c.restore();
+  }
+  function bauAura(){
+    const st=Math.round(d*12);
+    if(aurC && aurStufe===st && aurW===W && aurH===H) return;
+    aurStufe=st; aurW=W; aurH=H;
+    if(!aurC){
+      try{ aurC=document.createElement("canvas"); aurX=aurC.getContext("2d"); }catch(e){ aurC=null; return; }
+      if(!aurX){ aurC=null; return; }
+    }
+    const bw=Math.max(1,Math.round(W*AURSKALA)), bh=Math.max(1,Math.round(H*AURSKALA));
+    if(aurC.width!==bw||aurC.height!==bh){ aurC.width=bw; aurC.height=bh; }
+    aurX.setTransform(1,0,0,1,0,0);
+    aurX.clearRect(0,0,bw,bh);
+    aurX.scale(AURSKALA,AURSKALA);
+    aurX.globalCompositeOperation="lighter";
+    const cx=S.x+S.w*0.55, cy=S.y+S.h*0.5;
+    const eng = d<0.3 ? "150,54,52" : d<0.72 ? "206,78,42" : "255,92,50";
+    zone(aurX, cx, cy,  46+d*32,  S.h*0.50, eng,          0.55);
+    zone(aurX, cx, cy, 122+d*78,  S.h*0.64, "186,32,22",  0.54);
+    zone(aurX, cx, cy, 240+d*140, S.h*0.82, "142,20,15",  0.36);
+    aurX.globalCompositeOperation="destination-out";
+    const loch=aurX.createLinearGradient(S.x-30,0,S.x+S.w,0);
+    loch.addColorStop(0,   "rgba(0,0,0,0)");
+    loch.addColorStop(0.38,"rgba(0,0,0,.44)");
+    loch.addColorStop(1,   "rgba(0,0,0,.66)");
+    aurX.fillStyle=loch; aurX.fillRect(S.x-30, 0, S.w+30, H);
+    aurX.globalCompositeOperation="source-over";
+  }
+  function aura(t, kraft){
+    if(kraft<=0.004) return;
+    bauAura();
+    ctx.globalCompositeOperation="lighter";
+    if(aurC){
+      const z=1+0.05*Math.min(1.4,kraft-0.6>0?kraft-0.6:0);     /* atmet leicht mit */
+      const bw=W*z, bh=H*z;
+      ctx.globalAlpha=Math.min(1, 0.95*kraft);
+      ctx.drawImage(aurC, (W-bw)/2, (H-bh)/2 - 6*(z-1)*H, bw, bh);
+      ctx.globalAlpha=1;
+    }
+    /* ungleichmässige Lichtwolken, langsam nach oben wandernd */
+    const cx=S.x+S.w*0.55;
+    for(let i=0;i<(spar?1:3);i++){
+      const ph=t/1000*0.07 + i*0.37;
+      const y = S.y + S.h*(1 - (ph % 1));
+      const x = cx - 22 + Math.sin(t/1000*0.23+i*2.1)*34;
+      zone(ctx, x, y, 70+i*30+Math.sin(t/900+i)*12, 96+i*34, "200,44,28",
+           0.16*kraft*(0.55+0.45*Math.sin(t/1400+i)));
+    }
+    if(d>0.78){                                                   /* heisser Kern an der Krone */
+      const k=weich((d-0.78)/0.22);
+      zone(ctx, cx, G.y+G.h*0.06, 30+20*k, 66+40*k, "255,198,130", 0.16*k*kraft);
+    }
+    ctx.globalCompositeOperation="source-over";
+  }
+
+  /* ---- Glut, Feuer, Rauch ---- */
+  function quellen(){
+    const cx=S.x+S.w*0.55;
+    const q=[{x:cx, y:S.y+34, s:1.25}, {x:cx, y:S.y+S.h-34, s:0.8}];
+    if(G.h){
+      q.push({x:G.x-3, y:G.y+G.h*0.36, s:0.65});
+      q.push({x:G.x+G.w+3, y:G.y+G.h*0.62, s:0.65});
+      const spiegel = G.y + G.h*(1-d);
+      q.push({x:G.x+G.w*0.5, y:spiegel, s:1.0});
+    }
+    if(wert>=10) q.push({x:cx-29, y:S.y+38, s:1.15}, {x:cx+31, y:S.y+41, s:1.15},
+                        {x:cx-52, y:S.y+10, s:0.9}, {x:cx+52, y:S.y+10, s:0.9}, {x:cx, y:S.y+6, s:1.0});
+    return q;
+  }
+  function neueFlamme(q){
+    if(flammen.length>(spar?42:90)) return;
+    flammen.push({x:q.x+zuf(-3,3), y:q.y+zuf(-2,2), vx:zuf(-7,7), vy:-zuf(24,58)*(0.7+d*0.6),
+      r:zuf(3,7)*q.s*(0.65+d*0.6), alt:0, leben:zuf(0.42,1.0), dreh:zuf(-1,1)});
+  }
+  function neueGlut(q){
+    if(glut.length>(spar?60:120)) return;
+    glut.push({x:q.x+zuf(-6,6), y:q.y+zuf(-4,4), vx:zuf(-5,5), vy:-zuf(14,46),
+      r:zuf(0.6,1.9), alt:0, leben:zuf(0.8,2.1), ph:zuf(0,TAU)});
+  }
+  function neuerRauch(q){
+    if(rauch.length>16) return;
+    rauch.push({x:q.x+zuf(-8,8), y:q.y, vx:zuf(-5,5), vy:-zuf(10,22), r:zuf(8,16), alt:0, leben:zuf(1.6,3.2)});
+  }
+  function flammenZeichnen(dt){
+    ctx.globalCompositeOperation="lighter";
+    for(const f of flammen){
+      f.alt+=dt;
+      const k=f.alt/f.leben;
+      f.vy-=34*dt; f.x+=f.vx*dt + Math.sin(f.alt*6+f.dreh)*7*dt; f.y+=f.vy*dt;
+      const w = k<0.3 ? f.r*(0.5+k/0.3*0.5) : f.r*(1-(k-0.3)/0.7*0.72);
+      const a = (1-k)*(1-k)*0.85;
+      if(w<=0.2||a<=0.01) continue;
+      const g=ctx.createRadialGradient(f.x,f.y,0,f.x,f.y,w*2.6);
+      g.addColorStop(0,   "rgba(255,230,140,"+(a*0.95)+")");
+      g.addColorStop(0.32,"rgba(255,120,35,"+(a*0.7)+")");
+      g.addColorStop(0.7, "rgba(210,20,15,"+(a*0.3)+")");
+      g.addColorStop(1,   "rgba(120,6,6,0)");
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(f.x,f.y,w*2.6,0,TAU); ctx.fill();
+    }
+    flammen=flammen.filter(f=>f.alt<f.leben && f.y>-30);
+    ctx.globalCompositeOperation="source-over";
+  }
+  function glutZeichnen(dt){
+    ctx.globalCompositeOperation="lighter";
+    for(const g0 of glut){
+      g0.alt+=dt; g0.ph+=dt*3;
+      g0.vy-=9*dt; g0.x+=g0.vx*dt+Math.sin(g0.ph)*7*dt; g0.y+=g0.vy*dt;
+      if(g0.x < S.x-96) g0.x += 26*dt;     /* sie treiben nicht in den Text hinein */
+      const k=1-g0.alt/g0.leben, a=k*k*(0.55+0.45*Math.sin(g0.ph*1.7));
+      if(a<=0.02) continue;
+      const g=ctx.createRadialGradient(g0.x,g0.y,0,g0.x,g0.y,g0.r*4);
+      g.addColorStop(0,"rgba(255,214,150,"+(a*0.9)+")");
+      g.addColorStop(0.3,"rgba(255,104,40,"+(a*0.55)+")");
+      g.addColorStop(1,"rgba(180,20,12,0)");
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(g0.x,g0.y,g0.r*4,0,TAU); ctx.fill();
+    }
+    glut=glut.filter(g0=>g0.alt<g0.leben && g0.y>-20);
+    ctx.globalCompositeOperation="source-over";
+  }
+  function rauchZeichnen(dt){
+    for(const r of rauch){
+      r.alt+=dt; r.x+=r.vx*dt; r.y+=r.vy*dt; r.r+=15*dt;
+      const k=1-r.alt/r.leben, a=k*0.16*weich((d-0.8)/0.2);
+      if(a<=0.004) continue;
+      const g=ctx.createRadialGradient(r.x,r.y,0,r.x,r.y,r.r);
+      g.addColorStop(0,"rgba(14,9,9,"+a+")");
+      g.addColorStop(1,"rgba(14,9,9,0)");
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(r.x,r.y,r.r,0,TAU); ctx.fill();
+    }
+    rauch=rauch.filter(r=>r.alt<r.leben && r.y>-40);
+  }
+  /* Angedeutete Hitzeflimmer: warme, wandernde Bänder statt echter Verzerrung */
+  function flimmern(t, kraft){
+    if(d<0.78 || spar) return;
+    const k=weich((d-0.78)/0.22)*kraft;
+    ctx.globalCompositeOperation="lighter";
+    for(let i=0;i<4;i++){
+      const y=S.y + ((t/1000*22 + i*S.h/4) % S.h);
+      const a=0.022*k*(0.5+0.5*Math.sin(t/700+i));
+      const g=ctx.createLinearGradient(S.x-70,0,S.x+S.w,0);
+      g.addColorStop(0,"rgba(255,110,60,0)");
+      g.addColorStop(0.65,"rgba(255,130,70,"+a+")");
+      g.addColorStop(1,"rgba(255,110,60,0)");
+      ctx.fillStyle=g; ctx.fillRect(S.x-70, y, S.w+70, 5+Math.sin(t/500+i)*2);
+    }
+    ctx.globalCompositeOperation="source-over";
+  }
+
+  function schritt(jetzt){
+    rahmen=0;
+    if(pausiert || !bereit()) return;
+    if(jetzt-gemessen > 400){ gemessen=jetzt; if(!mass()){ plan(); return; } }
+    const dt=Math.min((jetzt-letzte)/1000, 0.05); letzte=jetzt;
+    /* Kommt der Rechner nicht mit, fallen zuerst die Zutaten weg, nicht die Bildrate */
+    dtMittel = dtMittel*0.92 + dt*0.08;
+    if(!spar){
+      if(dtMittel > 0.026){ if(++langsam > 90){ spar=true; DPR=Math.min(DPR,1.25); W=0; } }
+      else langsam = Math.max(0, langsam-1);
+    }
+    d += (dZiel-d)*Math.min(1, dt*3.4);
+    stoss *= Math.exp(-dt/0.24);
+
+    const t=jetzt;
+    const p = ruhig ? 0.25 : takt(t);
+    const fl = ruhig ? 0 : flackern(t);
+    const kraft = weich(d*1.12) * (1 + p*(0.20+d*0.45) + stoss*0.85) * (1+fl);
+
+    ctx.clearRect(0,0,W,H);
+    aura(t, kraft);
+    if(!ruhig && d>0.28){
+      rauchZeichnen(dt); glutZeichnen(dt); flammenZeichnen(dt); flimmern(t,kraft);
+      const q=quellen();
+      gAkku += dt*(d<0.35?0 : (d-0.3)*22*(1+stoss));
+      fAkku += dt*(d<0.62?0 : (d-0.6)*54*(1+p*0.8+stoss*1.6));
+      rAkku += dt*(d<0.82?0 : (d-0.8)*9);
+      while(gAkku>=1){ gAkku--; neueGlut(q[(Math.random()*q.length)|0]); }
+      while(fAkku>=1){ fAkku--; neueFlamme(q[(Math.random()*q.length)|0]); }
+      while(rAkku>=1){ rAkku--; neuerRauch(q[0]); }
+    }
+
+    /* Metall, Schrift und Glas reagieren mit — gedrosselt, das genügt fürs Auge */
+    if(jetzt-gesetzt > 55){
+      gesetzt=jetzt;
+      const a=document.getElementById("gefahrsaeule");
+      if(a && a.style && a.style.setProperty)
+        a.style.setProperty("--fx-l", (klemm(weich(d*1.1)*(0.55+p*0.5+stoss*0.6)*(1+fl),0,1.6)).toFixed(3));
+    }
+    plan();
+  }
+  function plan(){ if(!pausiert && !ruhig && typeof requestAnimationFrame==="function") rahmen=requestAnimationFrame(schritt); }
+  function starten(){
+    if(pausiert || rahmen || !bereit()) return;
+    letzte = (typeof performance!=="undefined" && performance.now) ? performance.now() : Date.now();
+    gemessen = 0;
+    if(ruhig){ if(mass()){ ctx.clearRect(0,0,W,H); d=dZiel; aura(letzte, weich(d*1.12)*0.9); } return; }
+    plan();
+  }
+  function stoppen(){
+    if(rahmen && typeof cancelAnimationFrame==="function") cancelAnimationFrame(rahmen);
+    rahmen=0;
+    if(ctx && W && H) ctx.clearRect(0,0,W,H);
+  }
+  return {
+    setze(g){
+      g = klemm(Number(g)||0, 0, 10);
+      const alt = letzterWert; letzterWert = g; wert = g; dZiel = g/10;
+      if(alt>=0 && g>alt){ stoss = Math.min(1, 0.55 + (g-alt)*0.22); }
+      if(alt>=0 && g<alt){ stoss = 0; }
+      if(alt>=0 && alt<10 && g===10){
+        const b=document.getElementById("gs-blitz");
+        if(b && b.classList){ b.classList.remove("an"); void (b.offsetWidth); b.classList.add("an"); }
+        stoss = 1;
+        if(S.h>2) for(let i=0;i<26;i++){ const q=quellen(); neueFlamme(q[(Math.random()*q.length)|0]); }
+      }
+      if(d===0 && dZiel>0 && !rahmen) d = dZiel*0.6;
+      starten();
+    },
+    pause(p){ pausiert=!!p; if(pausiert) stoppen(); else starten(); },
+    neuMessen(){ if(ctx){ W=0; H=0; gemessen=0; } starten(); },
+    ruhigModus(){ return ruhig; }
+  };
+})();
+
 /* ====================== BLUT IM MESSROHR ======================
    Rein zur Stimmung: dieselbe Höhe wie der Balken, nur als Flüssigkeit.
    Zeichnet nur, wenn der Schalter an ist, die Seite sichtbar und kein Kampf offen. */
@@ -1596,8 +1966,10 @@ function zeichneBaro(){
   const f=$("saeule");   if(f) try{ f.style.height = (Z.gefahr*10)+"%"; }catch(e){}
   const zg=$("gs-zeiger"); if(zg) try{ zg.style.bottom = (Z.gefahr*10)+"%"; }catch(e){}
   const sl0=$("gefahrsaeule");
-  if(sl0) sl0.className = "gefahrsaeule g"+stufe+(Z.gefahr===0?" leer":"")+(ZEIGE_BLUT?" blut":"");
+  if(sl0) sl0.className = "gefahrsaeule g"+stufe+(Z.gefahr===0?" leer":"")+(ZEIGE_BLUT?" blut":"")
+    +(Z.gefahr===10?" zaehne":"")+(GefahrFX.ruhigModus()?" ruht":"");
   Blut.setze(Z.gefahr/10, Z.gefahr/10);
+  GefahrFX.setze(Z.gefahr);
   if($("b-zahl")) $("b-zahl").textContent=Z.gefahr;
   if($("b-stufe")) $("b-stufe").textContent=st.name;
 
@@ -2108,7 +2480,8 @@ function zeichneKampf(){
   $("k-staerken").innerHTML = st.length ? "Stärken hier: "+st.map(c=>"<b>"+c.wer+"</b> · "+c.talent+" — "+c.text).join(" · ") : "";
   $("kampfmodus").hidden = !Z.kampfOffen;
   const gs=$("gefahrsaeule"); if(gs) gs.hidden = Z.kampfOffen;
-  Blut.pause(Z.kampfOffen);
+  const fx=$("gefahrfx"); if(fx) fx.hidden = Z.kampfOffen;
+  Blut.pause(Z.kampfOffen); GefahrFX.pause(Z.kampfOffen);
 }
 function oeffneKampf(){ Z.kampfOffen=true; zeichneKampf(); sichern(); }
 function schliesseKampf(){ Z.kampfOffen=false; zeichneKampf(); sichern(); }
@@ -2281,8 +2654,11 @@ $("zuruecksetzen").onclick=()=>{
 $("zufuegen").innerHTML=Object.keys(BESTIARIUM).map(k=>'<button data-laden="'+k+'" title="'+BESTIARIUM[k].kurz.replace(/"/g,"&quot;")+'">+ '+BESTIARIUM[k].name+' <small>'+BESTIARIUM[k].hp+' HP</small></button>').join("");
 
 if(typeof window!=="undefined" && window.addEventListener){
-  window.addEventListener("resize", ()=>{ messeKopf(); Blut.neuMessen(); });
-  document.addEventListener("visibilitychange", ()=>Blut.pause(document.hidden || Z.kampfOffen));
+  window.addEventListener("resize", ()=>{ messeKopf(); Blut.neuMessen(); GefahrFX.neuMessen(); });
+  document.addEventListener("visibilitychange", ()=>{
+    const aus = document.hidden || Z.kampfOffen;
+    Blut.pause(aus); GefahrFX.pause(aus);
+  });
 }
 function alles(){ zeichneStimmschalter(); zeichneBlutschalter(); zeichneBaro(); zeichneGruppe(); zeichneGegner(); zeichneWissen(); zeichneChronik(); zeichneSzene(); zeichneKampf(); Blut.schalte(ZEIGE_BLUT); }
 laden(); alles();
