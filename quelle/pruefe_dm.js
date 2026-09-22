@@ -8,8 +8,20 @@ const fs = require("fs"), path = require("path"), vm = require("vm");
 /* ---------- DOM-Attrappe ---------- */
 const elemente = {};
 function el(id){
-  if(!elemente[id]) elemente[id] = { id, innerHTML:"", textContent:"", className:"", hidden:false, disabled:false, value:"",
-    style:{}, dataset:{}, onclick:null, classList:{ toggle(){}, add(){}, remove(){} }, querySelector(){ return null; }, setAttribute(){}, getAttribute(){ return null; } };
+  if(!elemente[id]){
+    const e = { id, innerHTML:"", textContent:"", className:"", hidden:false, disabled:false, value:"",
+      style:{}, dataset:{}, onclick:null, merkmale:{}, querySelector(){ return null; },
+      setAttribute(n,v){ this.merkmale[n] = String(v); },
+      getAttribute(n){ return n in this.merkmale ? this.merkmale[n] : null; } };
+    const klassen = () => e.className ? e.className.split(/\s+/).filter(Boolean) : [];
+    e.classList = {
+      contains(k){ return klassen().includes(k); },
+      add(k){ const l=klassen(); if(!l.includes(k)){ l.push(k); e.className = l.join(" "); } },
+      remove(k){ e.className = klassen().filter(x=>x!==k).join(" "); },
+      toggle(k,an){ if(an===undefined ? this.contains(k) : !an) this.remove(k); else this.add(k); }
+    };
+    elemente[id] = e;
+  }
   return elemente[id];
 }
 global.document = { getElementById: el, addEventListener(){}, };
@@ -35,7 +47,8 @@ vm.runInThisContext(`globalThis.T = { Z:()=>Z, setZ:z=>{Z=z;}, KAPITEL, ENTSCHEI
   blockAnker: typeof blockAnker==="function" ? blockAnker : null,
   hilfeVerteilen: typeof hilfeVerteilen==="function" ? hilfeVerteilen : null,
   vorleseLauf: typeof vorleseLauf==="function" ? vorleseLauf : null,
-  stelleWeiche: typeof stelleWeiche==="function" ? stelleWeiche : (()=>{}) }`);
+  stelleWeiche: typeof stelleWeiche==="function" ? stelleWeiche : (()=>{}),
+  BILDER: typeof BILDER!=="undefined" ? BILDER : null }`);
 console.warn = echtWarn;
 
 /* ---------- Hilfen ---------- */
@@ -188,6 +201,17 @@ function spiele(p, protokoll){
     pruefe(!zB || el("zielband").innerHTML.includes(zB.text), wo+": Ziel fehlt neben dem Titel");
     pruefe(!zB || !zB.zeit || el("zielband").innerHTML.includes(zB.zeit), wo+": Zeitangabe fehlt neben dem Titel");
     pruefe(!text().includes('class="marg ziel"'), wo+": Ziel steht noch im Raster der Blöcke");
+    /* Szenenbild: sichtbar genau dann, wenn diese Szene auf diesem Weg eines hat.
+       Hängt es an einer noch offenen Flagge, bleibt die Fläche leer.            */
+    if(T.BILDER){
+      const bl=el("szenenbild"), soll = k.bild ? T.ortAufloesen(k.bild) : null;
+      pruefe(bl.classList.contains("da") === !!(soll && T.BILDER[soll]),
+        wo+": Szenenbild "+(soll?"fehlt":"steht da, obwohl die Szene keines hat"));
+      pruefe(!soll || !T.BILDER[soll] || bl.getAttribute("data-bild")===soll,
+        wo+": falsches Szenenbild — erwartet "+soll);
+      pruefe(!k.bild || typeof k.bild!=="string" || !!T.BILDER[k.bild],
+        wo+": Bild "+k.bild+" steht nicht in BILDER");
+    }
     }
     for(const gruppe of GRUPPEN) chancen.forEach(c=>{
       const nur=T.liste(c.nur).filter(f=>gruppe.includes(f));

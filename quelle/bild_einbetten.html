@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8">
+<title>Szenenbild einbetten · Nachtfels</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!--
+  Macht aus einer Bilddatei die Zeile, die in dungeon_master.html unter BILDER
+  steht. Die Seite rechnet im Browser, nichts geht ins Netz.
+
+  1. Datei wählen, Schlüssel eintragen (kurz und klein: kutsche, hof, turm …).
+  2. Die fertige Zeile kopieren und bei  const BILDER = { … }  einfügen.
+  3. In der Szene  bild:"<schlüssel>"  setzen — oder  bild:{weg_c:"<schlüssel>"},
+     wenn das Bild nur auf einem Weg gelten soll.
+
+  Die Breite ist mit 900 px voreingestellt: Das Bild liegt links und läuft nach
+  rechts aus, mehr Auflösung sieht man nicht, und die Datei bleibt klein.
+  Hochformat 2:3 passt am besten — die Fläche ist so geschnitten.
+-->
+<style>
+  :root{--bg:#1c1d21;--panel:#232429;--line:#3a3b41;--text:#d8d5cd;--dim:#6f6d67;--gold:#c9a457}
+  *{box-sizing:border-box}
+  body{margin:0;padding:28px;background:var(--bg);color:var(--text);
+    font:15px/1.6 'IBM Plex Sans',system-ui,sans-serif}
+  h1{font-size:22px;font-weight:400;margin:0 0 6px}
+  p.unter{color:var(--dim);margin:0 0 22px;max-width:70ch}
+  fieldset{border:1px solid var(--line);border-radius:5px;padding:14px 16px;margin:0 0 16px;max-width:70ch}
+  legend{color:var(--gold);font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:0 6px}
+  label{display:block;margin:10px 0 4px;font-size:13px;color:var(--dim)}
+  input[type=text],input[type=number]{background:var(--panel);color:var(--text);
+    border:1px solid var(--line);border-radius:4px;padding:6px 8px;font:inherit;width:12em}
+  textarea{width:100%;max-width:70ch;height:9em;background:var(--panel);color:var(--text);
+    border:1px solid var(--line);border-radius:4px;padding:10px;font:12px/1.5 ui-monospace,monospace;
+    word-break:break-all}
+  button{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:4px;
+    padding:7px 14px;font:inherit;cursor:pointer;margin-top:12px}
+  button:hover{border-color:var(--gold)}
+  #stand{color:var(--gold);margin-left:12px;font-size:13px}
+  #schau{margin-top:14px;max-width:300px;border:1px solid var(--line);border-radius:4px}
+</style>
+<body>
+<h1>Szenenbild einbetten</h1>
+<p class="unter">Aus einer Bilddatei wird die Zeile für <code>BILDER</code> in
+<code>dungeon_master.html</code>. Es wird nichts hochgeladen — das rechnet dein Browser.</p>
+
+<fieldset>
+  <legend>Bild</legend>
+  <input type="file" id="datei" accept="image/*">
+  <label for="schluessel">Schlüssel — kurz, klein, ohne Umlaute</label>
+  <input type="text" id="schluessel" value="kutsche">
+  <label for="breite">Breite in Pixeln</label>
+  <input type="number" id="breite" value="900" min="200" max="2000" step="10">
+  <label for="guete">Güte (0.4 – 0.95)</label>
+  <input type="number" id="guete" value="0.72" min="0.3" max="0.95" step="0.02">
+  <br><button id="los">Umrechnen</button><span id="stand"></span>
+  <br><img id="schau" alt="" hidden>
+</fieldset>
+
+<fieldset>
+  <legend>Diese Zeile bei <code>const BILDER = { … }</code> einfügen</legend>
+  <textarea id="raus" readonly placeholder="…"></textarea>
+  <button id="kopieren">Zeile kopieren</button>
+</fieldset>
+
+<script>
+const $ = id => document.getElementById(id);
+function melde(t){ $("stand").textContent = t; }
+
+$("los").onclick = function(){
+  const f = $("datei").files && $("datei").files[0];
+  if(!f){ melde("keine Datei gewählt"); return; }
+  melde("rechnet …");
+  const leser = new FileReader();
+  leser.onload = function(){
+    const im = new Image();
+    im.onload = function(){
+      const breite = Math.max(200, Math.min(2000, +$("breite").value || 900));
+      const guete  = Math.max(0.3, Math.min(0.95, +$("guete").value || 0.72));
+      const s = Math.min(1, breite / im.naturalWidth);
+      const c = document.createElement("canvas");
+      c.width  = Math.round(im.naturalWidth  * s);
+      c.height = Math.round(im.naturalHeight * s);
+      const x = c.getContext("2d");
+      x.imageSmoothingQuality = "high";
+      x.drawImage(im, 0, 0, c.width, c.height);
+      let url = c.toDataURL("image/webp", guete);
+      if(url.indexOf("image/webp") < 0) url = c.toDataURL("image/jpeg", guete);  /* Notnagel */
+      const schluessel = ($("schluessel").value || "bild").trim().replace(/[^a-z0-9_]/gi, "");
+      $("raus").value = "  " + schluessel + ': "' + url + '",';
+      $("schau").src = url; $("schau").hidden = false;
+      melde(c.width + "×" + c.height + " · " + Math.round(url.length/1024) + " kB als Text");
+    };
+    im.onerror = function(){ melde("Bild nicht lesbar"); };
+    im.src = leser.result;
+  };
+  leser.readAsDataURL(f);
+};
+
+$("kopieren").onclick = function(){
+  const t = $("raus");
+  if(!t.value){ melde("noch nichts umgerechnet"); return; }
+  t.select();
+  if(navigator.clipboard) navigator.clipboard.writeText(t.value).then(()=>melde("kopiert"), ()=>melde("Strg+C"));
+  else melde("Strg+C");
+};
+</script>
+</body>
+</html>

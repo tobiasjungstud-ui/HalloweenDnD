@@ -157,6 +157,23 @@ gilt, wirklich im vorgelesenen Text steht, dass das Talent zur Figur passt, dass
 Gelegenheit auf einer Entscheidungsseite steht, nie mehr als drei zugleich sichtbar sind,
 keine an einer späteren Entscheidung hängt und jede auf mindestens einem Pfad erreichbar ist.
 
+**Manche Szenen haben ein Bild.** Es steht links, in der Breite des Fensters
+angeschlagen, und wird nach rechts hin schwächer, bis es hinter dem Text verschwindet —
+es hat keine Kante, an der es aufhört. Oben und unten läuft es in die Seitenfarbe aus.
+Es ist reine Stimmung: keine Information, kein Klickziel, und Szenen ohne Bild sehen aus
+wie zuvor. Welche Szene welches Bild trägt, steht in `BILDER` und im Feld `bild` der
+Szene. Wie beim Ort darf das Feld an einer Flagge hängen — `bild:{weg_c:"kutsche"}`
+zeigt das Bild nur, wenn die Gruppe diesen Weg genommen hat; solange die Entscheidung
+offen ist, bleibt die Fläche leer. Der Prüfstand kontrolliert auf jedem Pfad, dass genau
+dann ein Bild steht, wenn die Szene dort eines hat, und dass es das richtige ist.
+
+Ein neues Bild kommt **ohne Codeänderung an der Darstellung** dazu. `quelle/bild_einbetten.html`
+im Browser öffnen, Datei wählen, Schlüssel eintragen — heraus kommt die fertige Zeile für
+`const BILDER = { … }`. Danach in der Szene `bild:"<schlüssel>"` setzen. Die Bilder stecken
+als `data:`-URL in der Datei, damit die Konsole eine einzige Datei bleibt und ohne Netz
+läuft; deshalb rechnet der Helfer sie auf 900 Pixel Breite herunter. Hochformat 2:3 passt
+am besten — so ist die Fläche geschnitten.
+
 **Der Abend passt sich an.** Erreicht das Gefahrenbarometer 8, lädt jeder Kampfknopf einen
 Gegner mehr, und die Konsole schiebt einmal einen Zwischenakt vor den nächsten Akt: eine
 Patrouille aus drei Wachen und einem Wachhund — gerade noch zu schaffen, mit Rückzugsregel.
