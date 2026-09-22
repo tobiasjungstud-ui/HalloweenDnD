@@ -39,17 +39,18 @@ h2{font-weight:400;font-size:24px;margin:44px 0 14px}
 .auf{border-left:2px solid var(--line-hi);padding:5px 0 5px 10px;margin-bottom:10px;color:var(--muted);line-height:1.5}
 .auf i{font-style:normal;letter-spacing:.12em;text-transform:uppercase;font-size:9.5px;color:var(--dim);margin-right:7px}
 .auf u{text-decoration:none;color:var(--dim);border-bottom:1px dotted var(--line-hi);margin-left:4px}
-.vk{border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:4px;padding:10px 13px;margin-bottom:9px;
- background:linear-gradient(90deg,rgba(201,164,87,.05),transparent 200px)}
-.vk .l{letter-spacing:.12em;text-transform:uppercase;font-size:9.5px;color:var(--gold);margin-bottom:6px}
-.vk .l span{color:var(--dim);letter-spacing:.04em;text-transform:none;font-size:10.5px;margin-left:8px}
-.vk p{margin:0;font-family:var(--serif);font-size:13px;color:var(--text);line-height:1.5}
-.vk .rede{color:var(--gold-soft);font-style:italic}
-.vk .wer{font-family:var(--sans);font-style:normal;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);
+.zeilen{display:grid;grid-template-columns:86px 1fr;column-gap:16px}
+.zeilen .m{text-align:right;letter-spacing:.11em;text-transform:uppercase;font-size:9.5px;color:var(--dim);padding-top:2px;margin-bottom:14px}
+.zeilen .m small{display:block;letter-spacing:.03em;text-transform:none;font-size:9px;margin-top:2px}
+.zeilen .m.v{color:var(--gold)}.zeilen .m.s{color:var(--green)}
+.zeilen .i{margin-bottom:14px;font-family:var(--serif);font-size:13px;color:var(--text);line-height:1.5}
+.zeilen .i.grau{font-family:var(--sans);font-size:11.5px;color:var(--muted)}
+.zeilen .i.gruen{color:var(--green-soft);font-style:italic}
+.zeilen .i u{text-decoration:none;color:var(--dim);border-bottom:1px dotted var(--line-hi);margin-left:4px}
+.rede{color:var(--gold-soft);font-style:italic}
+.wer{font-family:var(--sans);font-style:normal;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);
  border:1px solid rgba(201,164,87,.35);border-radius:2px;padding:0 5px;margin-right:6px;vertical-align:1px}
-.ak{border-top:1px solid rgba(127,182,148,.25);margin:10px -13px -10px;padding:9px 13px;background:rgba(127,182,148,.06);border-radius:0 0 3px 3px}
-.ak .l{letter-spacing:.12em;text-transform:uppercase;font-size:9.5px;color:var(--green);margin-bottom:5px}
-.ak p{color:var(--green-soft);font-style:italic}
+
 .pk{border:1px solid var(--line);border-radius:4px;background:var(--panel);overflow:hidden;margin-bottom:8px}
 .pk .kopf{display:flex;gap:9px;align-items:baseline;padding:8px 12px;flex-wrap:wrap}
 .pk .kopf b{font-family:var(--serif);font-weight:400;font-size:15px;color:var(--text)}
@@ -134,15 +135,16 @@ h2{font-weight:400;font-size:24px;margin:44px 0 14px}
       <div>
         <div class="tz"><span class="num">3</span><b>The Inn</b><span>Ziel: Drei Menschen ansprechen, am Ende die Karte. 25 Min.</span></div>
 
-        <div class="auf"><span class="num">4</span><i>Hintergrund</i>Elf Menschen im Raum, drei sind ansprechbar. Der Name Anneke muss fallen …<u>mehr</u></div>
-
-        <div class="vk"><div class="l"><span class="num">5</span>Vorlesen <span>Der Raum</span></div>
-          <p>Above the fireplace hangs a long, heavy board of oak, on two iron hooks, with names carved into it. It says: MIRELA VANCE.</p></div>
-
-        <div class="vk"><div class="l">Vorlesen <span>Der Graf</span></div>
-          <p><span class="rede"><span class="wer">Vaskir</span>“Four hundred years, and I never took a single one of them.”</span></p>
-          <div class="ak"><div class="l"><span class="num">6</span>An die Schüler</div>
-            <p>“Who do you want to talk to? Ask — every one of you.”</p></div></div>
+        <div class="zeilen">
+          <div class="m"><span class="num">4</span>Für dich</div>
+          <div class="i grau">Elf Menschen im Raum, drei sind ansprechbar. Der Name Anneke muss fallen …<u>mehr</u></div>
+          <div class="m v"><span class="num">5</span>Vorlesen<small>Der Raum</small></div>
+          <div class="i">Above the fireplace hangs a long, heavy board of oak, on two iron hooks, with names carved into it. It says: MIRELA VANCE.</div>
+          <div class="m v">Vorlesen<small>Der Graf</small></div>
+          <div class="i"><span class="rede"><span class="wer">Vaskir</span>“Four hundred years, and I never took a single one of them.”</span></div>
+          <div class="m s"><span class="num">6</span>An die Schüler</div>
+          <div class="i gruen">“Who do you want to talk to? Ask — every one of you.”</div>
+        </div>
 
         <div class="pk"><div class="kopf"><b>Greta</b><i>Wirtin, drei Finger</i><u>1 von 5 gefragt</u></div>
           <div class="gr">
@@ -190,24 +192,24 @@ h2{font-weight:400;font-size:24px;margin:44px 0 14px}
     <li><span class="num">2</span><span><b>Gefahr und Steuerung</b>Barometer, die Knöpfe −1 +1 +2, der Kampf und das Blättern. Diese Leiste bleibt beim Scrollen stehen.</span></li>
     <li><span class="num">3</span><span><b>Titel und Ziel</b>Was in dieser Szene passieren soll, und wie lange sie dauert.</span></li>
     <li><span class="num">4</span><span><b>Hintergrund</b>Nur für dich, auf einen Satz eingeklappt. „mehr“ zeigt alles.</span></li>
-    <li><span class="num">5</span><span><b>Vorlesen</b>Goldene Kante. Was in Anführungszeichen steht, ist Rede und steht farbig da, mit dem Namen der Figur davor.</span></li>
-    <li><span class="num">6</span><span><b>An die Schüler</b>Grün, direkt an der Karte, zu der es gehört. Wörtlich sagen, dann schweigen.</span></li>
+    <li><span class="num">5</span><span><b>Vorlesen</b>Die Randbeschriftung sagt, was der Absatz ist. Was in Anführungszeichen steht, ist Rede und steht farbig da, mit dem Namen der Figur davor.</span></li>
+    <li><span class="num">6</span><span><b>An die Schüler</b>Grün, direkt unter dem Absatz, zu dem es gehört. Wörtlich sagen, dann schweigen.</span></li>
     <li><span class="num">7</span><span><b>Rechte Spalte</b>Lebenspunkte zuoberst, dann die Verzweigungen, die Stärken, das Barometer, das Wissen, die Chronik. Bleibt stehen.</span></li>
     <li><span class="num">8</span><span><b>Aktionsleiste</b>Alle Knöpfe der Szene, immer am unteren Rand, daneben die Bedingung zum Weiterblättern.</span></li>
   </ul>
 
-  <h2>Was die Karten bedeuten</h2>
+  <h2>Was am Rand steht</h2>
   <div class="rand">
-    <div><b style="color:var(--gold)">Goldene Kante</b>Wörtlich vorlesen. Rede ist farbig.</div>
-    <div><b style="color:var(--green)">Grüne Fläche</b>Das sagst du ihnen. Ihre Aufgabe.</div>
-    <div><b style="color:var(--muted)">Grauer Strich</b>Nur du. Hintergrund, Personen, Antworten.</div>
-    <div><b style="color:var(--red)">Rote Kante</b>Kampf. Der Knopf öffnet den Kampfbildschirm.</div>
+    <div><b style="color:var(--gold)">Vorlesen</b>Wörtlich. Rede steht farbig und kursiv.</div>
+    <div><b style="color:var(--green)">An die Schüler</b>Das sagst du ihnen. Ihre Aufgabe.</div>
+    <div><b style="color:var(--muted)">Für dich</b>Hintergrund, Personen, Antworten. Eingeklappt.</div>
+    <div><b style="color:var(--red)">Kampf</b>Der Knopf öffnet den Kampfbildschirm.</div>
   </div>
 
   <h2>So läuft jede Seite</h2>
   <div class="ablauf">
     <div><b>Hintergrund überfliegen.</b> Ein Satz reicht meistens. Bei Bedarf aufklappen.</div>
-    <div><b>Gold vorlesen, Grün sagen.</b> Dann schweigen und die Gruppe reden lassen.</div>
+    <div><b>Vorlesen, dann Grün sagen.</b> Danach schweigen und die Gruppe reden lassen.</div>
     <div><b>Rechts schauen.</b> Was sie gesagt haben, entscheidet, welche Wenn-dann-Zeile gilt.</div>
     <div><b>Unten drücken und blättern.</b> Knöpfe in der Aktionsleiste, dann „Weiter, wenn“ prüfen.</div>
   </div>

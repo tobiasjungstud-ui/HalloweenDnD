@@ -78,60 +78,56 @@ input{font:inherit;color:inherit}
 .knopf:disabled{opacity:.3;cursor:not-allowed}
 
 /* ═══════════ Raum ═══════════ */
-.raum{display:grid;grid-template-columns:minmax(0,1fr) 340px;column-gap:40px;padding:22px 32px 0;align-items:start}
-.szene{min-width:0;max-width:780px;padding-bottom:70px}
-.titel{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:16px}
-.titel h1{font-size:30px;line-height:1.1}
-.titel .zielzeile{font-family:var(--sans);font-size:13px;color:var(--dim);line-height:1.45;flex:1;min-width:240px}
-.titel .zielzeile b{color:var(--muted);font-weight:500}
-.titel .zielzeile .zeit{color:var(--dim)}
-.bloecke{display:flex;flex-direction:column;gap:14px}
+.raum{display:grid;grid-template-columns:minmax(0,1fr) 340px;column-gap:40px;padding:26px 32px 0;align-items:start}
+.szene{min-width:0;max-width:880px;padding-bottom:70px}
+.titel{margin-bottom:22px}
+.titel h1{font-size:32px;line-height:1.1}
+.bloecke{display:grid;grid-template-columns:150px minmax(0,1fr);column-gap:40px;align-items:start}
 
-/* ── Auftakt, nur für dich ── */
-.auftakt{border-left:2px solid var(--line-hi);padding:8px 0 8px 14px;
-  font-family:var(--sans);font-size:14px;line-height:1.55;color:var(--muted)}
-.auftakt>summary{list-style:none;cursor:pointer}
-.auftakt>summary::-webkit-details-marker{display:none}
-.auftakt .kl{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-right:9px}
-.auftakt .mehr{color:var(--dim);border-bottom:1px dotted var(--line-hi);margin-left:5px;font-size:12.5px}
-.auftakt[open]>summary .anriss,.auftakt[open]>summary .mehr{display:none}
-.auftakt[open]>summary::after{content:"zuklappen";color:var(--dim);border-bottom:1px dotted var(--line-hi);font-size:12.5px}
-.auftakt b{color:var(--text);font-weight:500}
-.auftakt p{margin:0 0 9px}.auftakt p:last-child{margin:0}
-.auftakt em{color:var(--gold-soft)}
-.auftakt .voll{margin-top:8px}
-
-/* ── Vorlesen ── */
-.karte{border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:5px;
-  background:linear-gradient(90deg,rgba(201,164,87,.045),rgba(201,164,87,0) 260px);padding:14px 20px 16px}
-.karte>.kl{font-family:var(--sans);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--gold);display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:9px}
-.karte>.kl span{color:var(--dim);letter-spacing:.04em;text-transform:none;font-size:11.5px}
-.karte p{margin:0 0 12px;line-height:1.62;max-width:64ch}
-.karte p:last-child{margin:0}
+/* Randbeschriftung links, Inhalt rechts. Prosa bekommt keinen Rahmen. */
+.marg{text-align:right;font-family:var(--sans);font-weight:500;font-size:11.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--dim);padding-top:7px;margin-bottom:30px}
+.marg small{display:block;font-weight:400;font-size:10.5px;letter-spacing:.04em;text-transform:none;
+  color:var(--dim);margin-top:4px;line-height:1.35}
+.marg.vorlesen,.marg.sagen{color:var(--gold)}
+.marg.aufgabe{color:var(--green)}
+.marg.kampf{color:var(--red)}
+.marg.ziel{color:var(--muted)}
+.inhalt{margin-bottom:30px;min-width:0;max-width:64ch}
+.inhalt p{margin:0 0 14px;line-height:1.62}
+.inhalt p:last-child{margin-bottom:0}
+.inhalt.ziel p{font-size:16px;color:var(--muted)}
 .rede{color:var(--gold-soft);font-style:italic}
 .redezeile{color:var(--gold-soft);font-style:italic}
 .wer{font-family:var(--sans);font-style:normal;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
   color:var(--gold);border:1px solid rgba(201,164,87,.35);border-radius:3px;padding:1px 6px;margin-right:9px;
   vertical-align:2px;white-space:nowrap}
 
-/* ── Aufgabe an die Schüler ── */
-.karte.mitaufgabe{padding-bottom:0}
-.aufgabe{border-top:1px solid rgba(127,182,148,.25);margin:16px -20px 0;padding:13px 20px 15px;
-  background:rgba(127,182,148,.06);border-radius:0 0 4px 4px}
-.aufgabe .kl{font-family:var(--sans);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:8px;display:block}
-.aufgabe p.rede{margin:0;color:var(--green-soft);font-style:italic;line-height:1.5;max-width:64ch}
-.aufgabe .hinweis{font-family:var(--sans);font-style:normal;font-size:13px;color:var(--muted);margin:8px 0 0;line-height:1.45}
-.aufgabe .blatt{display:inline-block;margin-top:9px;font-family:var(--sans);font-size:11.5px;color:var(--green);
-  border:1px solid #2f5a48;border-radius:3px;padding:3px 9px}
-.karte.gruen{border-left-color:var(--green);background:none}
-.karte.gruen .aufgabe{border-top:none;margin:0;padding:0;background:none}
+/* Hintergrund: Fliesstext, eingeklappt mit Anriss */
+.inhalt.regie{font-family:var(--sans);font-size:15px;line-height:1.6;color:var(--muted)}
+.inhalt.regie>summary{list-style:none;cursor:pointer}
+.inhalt.regie>summary::-webkit-details-marker{display:none}
+.inhalt.regie b{color:var(--text);font-weight:500}
+.inhalt.regie em{color:var(--gold-soft);font-style:italic}
+.inhalt.regie p{margin:0 0 10px;line-height:1.6}
+.inhalt.regie .rt{display:block;font-size:13px;font-weight:500;color:var(--muted);margin-bottom:5px;
+  letter-spacing:.02em;text-transform:none}
+.inhalt.regie .mehr{color:var(--dim);border-bottom:1px dotted var(--line-hi);margin-left:5px;font-size:13px}
+.inhalt.regie[open]>summary .anriss,.inhalt.regie[open]>summary .mehr{display:none}
+.inhalt.regie[open]>summary::after{content:"zuklappen";color:var(--dim);border-bottom:1px dotted var(--line-hi);font-size:13px}
+.inhalt.regie .voll{margin-top:6px}
 
-/* ── Personen und Antworten ── */
-.person{border:1px solid var(--line);border-radius:5px;background:var(--panel);overflow:hidden}
+/* An die Schüler: grüne Schrift, keine Fläche */
+.inhalt.aufgabe p.rede{color:var(--green-soft);font-style:italic;font-size:17.5px;line-height:1.5;margin:0}
+.inhalt.aufgabe .hinweis{font-family:var(--sans);font-style:normal;font-size:13.5px;color:var(--muted);margin:9px 0 0;line-height:1.5}
+.inhalt.aufgabe .blatt{display:inline-block;margin-top:10px;font-family:var(--sans);font-size:11.5px;color:var(--green);
+  border:1px solid #2f5a48;border-radius:3px;padding:3px 9px}
+
+/* Struktur bekommt einen Rahmen: Personen, Antworten, Kampf, Entscheidung */
+.person{border:1px solid var(--line);border-radius:5px;background:rgba(255,255,255,.018);overflow:hidden}
 .person+.person{margin-top:10px}
 .pk{display:flex;align-items:baseline;gap:10px;padding:11px 16px;flex-wrap:wrap}
-.person .fragen+.notfalls,.person .pk+.fragen{border-top:1px solid var(--line)}
+.person .pk+.fragen,.person .fragen+.notfalls{border-top:1px solid var(--line)}
 .pk h4{font-size:19px}
 .pk .rolle{font-family:var(--sans);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
 .pk .spielt{font-family:var(--sans);font-size:12.5px;color:var(--dim);flex:1;min-width:150px}
@@ -144,39 +140,29 @@ input{font:inherit;color:inherit}
 .fragen>div.breit{grid-column:1/-1}
 .fragen .f{font-family:var(--sans);font-size:13px;color:var(--text);display:flex;gap:8px;align-items:flex-start;line-height:1.45}
 .hak{color:var(--gold);flex:none;padding:0;line-height:1.3;font-size:14px}
-.fragen .a{font-size:15.5px;color:var(--muted);font-style:italic;line-height:1.5}
+.fragen .a{font-size:16px;color:var(--muted);font-style:italic;line-height:1.5}
 .fragen .a em{font-style:normal;font-family:var(--sans);font-size:12.5px;color:var(--dim);display:block;margin-top:3px}
 .fragen .erledigt{opacity:.34}
 .fragen .erledigt .f{text-decoration:line-through}
 .notfalls,.sonst{font-family:var(--sans);font-size:12.5px;color:var(--dim);padding:9px 16px;line-height:1.5}
 .notfalls b,.sonst b{color:var(--muted);font-weight:500}
-.sonst{border:1px dashed var(--line);border-radius:5px;padding:10px 16px}
-.fakarte{border:1px solid var(--line);border-radius:5px;background:var(--panel);overflow:hidden}
-.fakarte>.kl{font-family:var(--sans);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--dim);padding:10px 16px}
+.sonst{border:1px dashed var(--line);border-radius:5px;padding:10px 16px;margin-top:10px}
+.fakarte{border:1px solid var(--line);border-radius:5px;background:rgba(255,255,255,.018);overflow:hidden}
+.fakarte>.kl{font-family:var(--sans);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding:10px 16px}
 .fakarte>.kl span{letter-spacing:.04em;text-transform:none;font-size:11.5px}
-
-/* ── Knopfzeile im Text ── */
-.tunzeile{display:flex;gap:16px;align-items:center;flex-wrap:wrap;border:1px dashed var(--line-hi);
-  border-radius:5px;padding:11px 16px}
+.tunzeile{display:flex;gap:16px;align-items:center;flex-wrap:wrap;border-top:1px dashed var(--line-hi);
+  border-bottom:1px dashed var(--line-hi);padding:12px 0}
 .tunzeile p{margin:0;flex:1;min-width:220px;font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.5}
 .tunzeile p b{color:var(--text);font-weight:500}
 .tunzeile button{font-family:var(--sans);font-size:13.5px;border:1px solid var(--gold);color:var(--gold);
   padding:8px 14px;border-radius:4px;white-space:nowrap}
 .tunzeile button:hover{background:rgba(201,164,87,.12)}
 .tunzeile button.getan{border-color:var(--green);color:var(--green)}
-
-/* ── Bedingte Karte, Kampf ── */
-.wennkarte{border:1px solid var(--line);border-left:3px solid var(--line-hi);border-radius:5px;background:var(--panel);padding:11px 16px}
-.wennkarte .kl{font-family:var(--sans);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
-.wennkarte h4{font-size:18px;margin-bottom:4px}
-.wennkarte p{margin:0;font-family:var(--sans);font-size:13.5px;color:var(--muted);line-height:1.5}
-.wennkarte em{color:var(--gold-soft)}
-.kampfkarte{border:1px solid var(--line);border-left:3px solid var(--red-bar);border-radius:5px;
-  background:linear-gradient(90deg,rgba(180,70,58,.05),transparent 260px);padding:14px 20px}
-.kampfkarte .kl{font-family:var(--sans);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:6px}
-.kampfkarte h4{font-size:21px;margin-bottom:6px}
-.kampfkarte p{margin:0 0 10px;font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.5}
+.inhalt.wenn h4{font-size:19px;margin-bottom:5px}
+.inhalt.wenn p{font-family:var(--sans);font-size:14.5px;color:var(--muted);line-height:1.55}
+.inhalt.wenn em{color:var(--gold-soft)}
+.inhalt.kampf h4{font-size:21px;margin-bottom:6px}
+.inhalt.kampf>p{font-family:var(--sans);font-size:14.5px;color:var(--muted);line-height:1.55;margin-bottom:10px}
 .statblock{font-family:var(--sans);font-size:13.5px;color:var(--muted);padding:7px 0;border-top:1px solid var(--line)}
 .statblock b{color:var(--text);font-weight:500}
 .statblock.rot{color:var(--red)}
@@ -186,6 +172,7 @@ input{font:inherit;color:inherit}
 
 /* ── Entscheidung ── */
 .entblock>h3{font-family:var(--sans);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.inhalt.optionen{max-width:none}
 .optionen{display:flex;flex-direction:column;gap:10px}
 .option{border:1px solid var(--line);background:var(--panel);border-radius:6px;display:grid;grid-template-columns:44px minmax(0,1fr)}
 .option.gewaehlt{border-color:var(--gold)}
@@ -206,7 +193,7 @@ input{font:inherit;color:inherit}
 .option .waehlen{font-family:var(--sans);font-size:14px;border:1px solid var(--line-hi);padding:9px 0;border-radius:4px;color:var(--muted)}
 .option .waehlen:hover{border-color:var(--gold);color:var(--gold)}
 .option.gewaehlt .waehlen{border-color:var(--gold);color:var(--gold)}
-.hinweisfehlt{border:1px dashed var(--line-hi);padding:14px 18px;color:var(--muted);font-size:16px;border-radius:5px}
+.hinweisfehlt{grid-column:1/-1;border:1px dashed var(--line-hi);padding:14px 18px;color:var(--muted);font-size:16px;border-radius:5px;margin-bottom:30px}
 
 /* ── Aktionsleiste ── */
 .aktionen{position:sticky;bottom:0;z-index:20;display:flex;gap:10px;align-items:center;flex-wrap:wrap;
@@ -345,6 +332,9 @@ details.fach[open] summary::after{content:"zuklappen"}
   .kopfbar{padding:0 16px}.raum{padding:18px 16px 0}
   .aktionen{margin-left:-16px;margin-right:-16px;padding-left:16px;padding-right:16px}
   .aktionen .weiterwenn{margin-left:0;text-align:left;max-width:none;width:100%}
+  .bloecke{grid-template-columns:1fr;column-gap:0}
+  .marg{text-align:left;margin-bottom:7px;padding-top:0}
+  .inhalt{margin-bottom:26px}
   .fragen{grid-template-columns:1fr}
   .fragen>div:nth-child(2){border-top:1px solid var(--line)}
   .k-kopf,.k-feld,.k-fuss{padding-left:16px;padding-right:16px}
@@ -378,7 +368,7 @@ details.fach[open] summary::after{content:"zuklappen"}
 
 <div class="raum">
   <main class="szene">
-    <div class="titel"><h1 id="s-titel">…</h1><p class="zielzeile" id="zielzeile"></p></div>
+    <div class="titel"><h1 id="s-titel">…</h1></div>
     <div class="bloecke" id="bloecke"></div>
     <div class="aktionen" id="aktionen"></div>
   </main>
@@ -1265,12 +1255,8 @@ function anriss(t, max){
   return (p>max*0.45 ? schnitt.slice(0,p+1) : schnitt)+" …";
 }
 function aufgabeHTML(b){
-  return '<div class="aufgabe"><span class="kl">An die Schüler</span><p class="rede">„'+(b.sag||b.text)+'“</p>'+
-    (b.hinweis?'<p class="hinweis">'+b.hinweis+'</p>':'')+(b.blatt?'<span class="blatt">→ '+b.blatt+'</span>':'')+'</div>';
-}
-function karteHTML(label, titel, innen, aufgabe){
-  return '<div class="karte'+(aufgabe?" mitaufgabe":"")+'"><div class="kl">'+label+
-    (titel?'<span>'+titel+'</span>':'')+'</div>'+innen+(aufgabe?aufgabeHTML(aufgabe):'')+'</div>';
+  return '<p class="rede">„'+(b.sag||b.text)+'“</p>'+
+    (b.hinweis?'<p class="hinweis">'+b.hinweis+'</p>':'')+(b.blatt?'<span class="blatt">→ '+b.blatt+'</span>':'');
 }
 function redeZeilen(eintraege){
   return eintraege.map(e=>{
@@ -1283,23 +1269,26 @@ function hakHTML(k, an){ return '<button class="hak" data-hak="'+k.replace(/"/g,
 function zeile(label, klasse, innen, sub){
   return '<div class="marg '+klasse+'">'+label+(sub?'<small>'+sub+'</small>':'')+'</div><div class="inhalt '+klasse+'">'+innen+'</div>';
 }
+function zeile(label, klasse, innen, sub){
+  return '<div class="marg '+klasse+'">'+label+(sub?'<small>'+sub+'</small>':'')+'</div>'+
+         '<div class="inhalt '+klasse+'">'+innen+'</div>';
+}
 function blockHTML(b, idx){
   switch(b.t){
-    case "vorlesen":
-      return karteHTML("Vorlesen", b.titel, b.text.map(p=>"<p>"+rede(p)+"</p>").join(""), null);
-    case "sagen":
-      return karteHTML("Das sagst du", null, redeZeilen(b.text.map(t=>({t, wer:b.wer||null}))), null);
-    case "gruppe":
-      return karteHTML("Vorlesen", b.titel, b.text.map(p=>"<p>"+rede(p)+"</p>").join("")+redeZeilen(b.rede), b.aufgabe||null);
-    case "aufgabe":
-      return '<div class="karte gruen">'+aufgabeHTML(b)+'</div>';
+    case "ziel": return zeile("Ziel","ziel",'<p>'+b.text+'</p>', b.zeit);
+    case "vorlesen": return zeile("Vorlesen","vorlesen", b.text.map(p=>"<p>"+rede(p)+"</p>").join(""), b.titel);
+    case "sagen": return zeile("Das sagst du","sagen", redeZeilen(b.text.map(t=>({t, wer:b.wer||null}))));
+    case "gruppe": return zeile("Vorlesen","vorlesen", b.text.map(p=>"<p>"+rede(p)+"</p>").join("")+redeZeilen(b.rede), b.titel)+
+      (b.aufgabe?zeile("An die Schüler","aufgabe", aufgabeHTML(b.aufgabe)):"");
+    case "aufgabe": return zeile("An die Schüler","aufgabe", aufgabeHTML(b));
     case "regie": {
-      const titel=b.titel||"Für dich", roh=ohneTags(b.text);
-      if(roh.length<=220) return '<div class="auftakt"><span class="kl">'+titel+'</span>'+b.text+'</div>';
-      return '<details class="auftakt"><summary><span class="kl">'+titel+'</span><span class="anriss">'+
-        anriss(b.text,190)+'</span><span class="mehr">mehr</span></summary><div class="voll">'+b.text+'</div></details>'; }
+      const titel=b.titel?'<b class="rt">'+b.titel+'</b>':'', roh=ohneTags(b.text);
+      if(roh.length<=220) return zeile("Für dich","regie", titel+'<p>'+b.text+'</p>');
+      return '<div class="marg regie">Für dich</div><details class="inhalt regie"><summary>'+titel+
+        '<span class="anriss">'+anriss(b.text,190)+'</span><span class="mehr">mehr</span></summary>'+
+        '<div class="voll">'+b.text+'</div></details>'; }
     case "personen":
-      return b.leute.map(l=>{
+      return zeile("Für dich","personen", b.leute.map(l=>{
         const eintraege=l.fragen||l.sagt, keys=eintraege.map((_,j)=>(Z.schritt+":"+l.name+":"+j));
         const offen=keys.filter(k=>!Z.abgehakt[k]).length, stumm=offen===0;
         const kopf='<div class="pk"><h4>'+l.name+'</h4><span class="rolle">'+l.wer+'</span>'+
@@ -1314,29 +1303,28 @@ function blockHTML(b, idx){
               return '<div class="a breit'+(w?" erledigt":"")+'">'+hakHTML(keys[j],w)+' '+rede("„"+t+"“")+'</div>';}).join("");
         return '<article class="person">'+kopf+'<div class="fragen">'+zeilen+'</div>'+
           '<p class="notfalls"><b>Notfalls:</b> '+l.notfalls+'</p></article>';
-      }).join("")+(b.sonst?'<p class="sonst">'+b.sonst+'</p>':'');
+      }).join("")+(b.sonst?'<p class="sonst">'+b.sonst+'</p>':''), "Wen man ansprechen kann");
     case "fa":
-      return '<div class="fakarte"><div class="kl">'+(b.titel||"Antwortmöglichkeiten")+
-        (b.abhaken?' <span>jede nur einmal</span>':'')+'</div><div class="fragen">'+
+      return zeile(b.titel||"Antworten","fa", '<div class="fakarte"><div class="fragen">'+
         b.paare.map(p=>{ const k=Z.schritt+":"+p[0], w=b.abhaken&&!!Z.abgehakt[k];
           return '<div class="f'+(w?" erledigt":"")+'">'+(b.abhaken?hakHTML(k,w):'')+'<span>'+p[0]+'</span></div>'+
-                 '<div class="a'+(w?" erledigt":"")+'">'+rede(p[1])+'</div>';}).join("")+'</div></div>';
+                 '<div class="a'+(w?" erledigt":"")+'">'+rede(p[1])+'</div>';}).join("")+'</div></div>',
+        b.abhaken?"jede nur einmal":"");
     case "tun": {
       const fertig = b.knopf.art==="wissen" ? !!Z.wissen[b.knopf.k] : (b.wiederholbar ? false : !!Z.getan[b.id]);
-      return '<div class="tunzeile"><p>'+b.text+'</p><button class="'+(fertig?"getan":"")+'" data-tun="'+b.id+
-        '">'+(fertig?"✓ "+b.beschriftung:b.beschriftung)+'</button></div>'; }
-    case "wenn":
-      return '<div class="wennkarte"><div class="kl">Bei euch</div><h4>'+b.titel+'</h4><p>'+b.text+'</p></div>';
+      return zeile("Knopf","tun",'<div class="tunzeile"><p>'+b.text+'</p><button class="'+(fertig?"getan":"")+
+        '" data-tun="'+b.id+'">'+(fertig?"✓ "+b.beschriftung:b.beschriftung)+'</button></div>'); }
+    case "wenn": return zeile("Bei euch","wenn", '<h4>'+b.titel+'</h4><p>'+b.text+'</p>');
     case "kampf":
-      return '<div class="kampfkarte"><div class="kl">Kampf</div><h4>'+b.titel+'</h4><p>'+b.text+'</p>'+
+      return zeile("Kampf","kampf", '<h4>'+b.titel+'</h4><p>'+b.text+'</p>'+
         b.gegner.map(k=>{const v=BESTIARIUM[k]; return '<div class="statblock"><b>'+v.name+'</b> — '+v.hp+' Lebenspunkte · '+v.att.map(a=>a.n+" "+a.d).join(", ")+'</div>';}).join("")+
         (b.extra?'<div class="statblock rot">'+(Z.gefahr>=8?'Gefahr rot: <b>+1 '+BESTIARIUM[b.extra].name+'</b> kommt von selbst dazu.':Z.gefahr>=4?'Gefahr orange: <b>+1 '+BESTIARIUM[b.extra].name+'</b> ist deine Entscheidung — Knopf unten.':'Bei Gefahr 8–10 käme +1 '+BESTIARIUM[b.extra].name+' dazu; bei Orange nach deiner Wahl.')+'</div>':'')+
         (b.extra&&Z.gefahr>=4&&Z.gefahr<=7?'<div class="zufuegen"><button data-laden="'+b.extra+'" data-oeffnen="1">+1 '+BESTIARIUM[b.extra].name+' dazu — deine Entscheidung</button></div>':'')+
-        (b.zusatz?'<div class="zufuegen">'+b.zusatz.map(k=>'<button data-laden="'+k+'" data-oeffnen="1">+ '+BESTIARIUM[k].name+'</button>').join("")+'</div>':'')+'</div>';
+        (b.zusatz?'<div class="zufuegen">'+b.zusatz.map(k=>'<button data-laden="'+k+'" data-oeffnen="1">+ '+BESTIARIUM[k].name+'</button>').join("")+'</div>':''));
     case "optionen": {
       const fehlt=voraussetzungFehlt(b.id);
       if(fehlt) return '<div class="hinweisfehlt">Erst muss <b>'+ENTSCHEIDUNGEN[fehlt].name+'</b> gewählt sein — die Karten hier hängen daran.</div>';
-      return '<div class="entblock" id="ent-'+b.id+'"><h3>'+(b.titel||"Entscheidung")+'</h3><div class="optionen">'+b.optionen.map((o,i)=>{
+      return zeile(b.titel||"Entscheidung","optionen", '<div class="entblock" id="ent-'+b.id+'"><div class="optionen">'+b.optionen.map((o,i)=>{
         const g=Z.gewaehlt[b.id], gew=g&&g.opt===i, wk=o.wirkung, chips=[];
         if(b.id!=="e4" && b.id!=="e5") chips.push('<span class="chip '+(wk.gefahr>0?"gefahr":"ruhe")+'">Gefahr '+(wk.gefahr>0?"+"+wk.gefahr:"±0")+
           (wk.gefahrWenn?' · +'+wk.gefahrWenn.gefahr+' mit '+WISSEN.find(x=>x.k===wk.gefahrWenn.wissen).txt:'')+'</span>');
@@ -1345,7 +1333,7 @@ function blockHTML(b, idx){
           '<h4>'+o.name+'</h4><p class="was">'+o.was+'</p><ul class="bil">'+
           liste(o.pro).map(p=>'<li class="pro">'+p+'</li>').join("")+liste(o.con).map(p=>'<li class="con">'+p+'</li>').join("")+
           '</ul>'+(chips.length?'<div class="chips">'+chips.join("")+'</div>':'')+
-          '<button class="waehlen" data-ent="'+b.id+'" data-opt="'+i+'">'+(gew?"✓ gewählt":"Diese Karte wählen")+'</button></div></article>';}).join("")+'</div></div>'; }
+          '<button class="waehlen" data-ent="'+b.id+'" data-opt="'+i+'">'+(gew?"✓ gewählt":"Diese Karte wählen")+'</button></div></article>';}).join("")+'</div></div>'); }
   }
   return "";
 }
@@ -1417,13 +1405,12 @@ function zeichneStaerken(){
 function zeichneSzene(){
   const k = Z.imZwischenakt ? PATROUILLE : KAPITEL[Z.schritt];
   $("s-n").textContent=k.n; $("s-titel").textContent=k.titel; $("s-titel-kurz").textContent=k.titel;
-  const ziel=k.bloecke.find(b=>b.t==="ziel");
-  $("zielzeile").innerHTML = ziel ? '<b>Ziel:</b> '+ziel.text+' <span class="zeit">'+ziel.zeit+'</span>' : "";
   $("lage").innerHTML=lage(); $("lagekurz").innerHTML=lageKurz(); $("warnbox").innerHTML=warnungenHTML();
   const fehlt = !!(k.braucht && entscheidungOffen(k.braucht));
-  $("bloecke").innerHTML = fehlt
+  const zielB=k.bloecke.filter(b=>b.t==="ziel").map(b=>blockHTML(b,0)).join("");
+  $("bloecke").innerHTML = zielB + (fehlt
     ? '<div class="hinweisfehlt">Auf dieser Seite steht nur, was zu eurem Weg gehört — und <b>'+ENTSCHEIDUNGEN[k.braucht].name+'</b> ist noch nicht gewählt. Geh zurück und klick die Karte an, für die sich die Gruppe entschieden hat.</div>'
-    : karten(sichtbareBloecke(k)).map((b,i)=>blockHTML(b,i+1)).join("");
+    : karten(sichtbareBloecke(k)).map((b,i)=>blockHTML(b,i+1)).join(""));
   $("aktionen").innerHTML = aktionenHTML(k, fehlt);
   zeichneStaerken();
   if(Z.imZwischenakt){

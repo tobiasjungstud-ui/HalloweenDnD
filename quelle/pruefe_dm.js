@@ -128,7 +128,7 @@ function spiele(p, protokoll){
     const wB=k.bloecke.find(b=>b.t==="weiter");
     pruefe(!wB || akt.includes(wB.text), wo+": „Weiter, wenn“ fehlt in der Aktionsleiste");
     const zB=k.bloecke.find(b=>b.t==="ziel");
-    pruefe(!zB || el("zielzeile").innerHTML.includes(zB.text), wo+": Ziel fehlt in der Titelzeile");
+    pruefe(!zB || text().includes(zB.text), wo+": Ziel fehlt auf der Seite");
     }
     for(const gruppe of GRUPPEN) chancen.forEach(c=>{
       const nur=T.liste(c.nur).filter(f=>gruppe.includes(f));
