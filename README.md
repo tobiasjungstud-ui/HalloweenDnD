@@ -171,11 +171,26 @@ Welche Szene welches Bild hat:
 
 | Szene | Bild | gilt |
 |---|---|---|
+| Prolog · *The Carriage* | die Fahrt bergauf, und was im Wald mitläuft | immer |
+| Kapitel I · *The Inn* | das Wirtshaus mit dem Brett und den Namen | immer |
 | Aufstieg · *Up the Mountain* | die Kutsche des Grafen | nur auf Weg C, dem Mitternachtswagen |
 | Kapitel II · *The Courtyard* | der Hof mit dem gefrorenen Brunnen und dem Raben | immer |
 | Hinter der Tür · *What You Find* | Bellamy auf seiner Leiter | nur hinter Tür A, der Bibliothek |
+| Hinter der Tür · *What You Find* | Anneke im Taufbecken | nur hinter Tür B, der Kapelle |
 | Hinter der Tür · *What You Find* | Tam in der Küche | nur hinter Tür C, der Küchentreppe |
+| Kapitel III · *The Tower Room* | Mirela im Sessel, mit dem Buch | immer |
 | Finale · *Count Vaskir* | die Begegnung mit dem Grafen | immer |
+
+Wo ein Bild liegt, steht in seiner oberen linken Ecke klein und grau der Knopf
+**„⤢ zeigen“**. Er macht das Bild gross und ohne Seite drumherum, auf schwarzem
+Grund — damit die Spielleitung den Bildschirm einmal herumdrehen kann. Ein Klick
+irgendwohin schliesst wieder, Esc ebenso; solange es offen ist, blättern die
+Pfeiltasten nicht weiter. Verlässt man die Seite, schliesst es von selbst.
+
+Hochformat 2:3 ist die Voreinstellung, aber nicht die Bedingung: Die Breite der
+Fläche **folgt dem Bild**. Sein Seitenverhältnis wird beim ersten Anzeigen
+gemessen und in `--bild-sv` geschrieben; ein Querformat wird dann nicht
+beschnitten, sondern als Band gezeigt, das genauso nach rechts ausblendet.
 
 Ein neues Bild kommt **ohne Codeänderung an der Darstellung** dazu. `quelle/bild_einbetten.html`
 im Browser öffnen, Datei wählen, Schlüssel eintragen — heraus kommt die fertige Zeile für

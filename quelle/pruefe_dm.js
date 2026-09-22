@@ -211,6 +211,8 @@ function spiele(p, protokoll){
         wo+": falsches Szenenbild — erwartet "+soll);
       pruefe(!k.bild || typeof k.bild!=="string" || !!T.BILDER[k.bild],
         wo+": Bild "+k.bild+" steht nicht in BILDER");
+      pruefe(el("bildzeigen").hidden === !(soll && T.BILDER[soll]),
+        wo+": der Knopf „zeigen“ steht "+(soll?"nicht da":"da, obwohl es nichts zu zeigen gibt"));
     }
     }
     for(const gruppe of GRUPPEN) chancen.forEach(c=>{
