@@ -167,6 +167,16 @@ zeigt das Bild nur, wenn die Gruppe diesen Weg genommen hat; solange die Entsche
 offen ist, bleibt die Fläche leer. Der Prüfstand kontrolliert auf jedem Pfad, dass genau
 dann ein Bild steht, wenn die Szene dort eines hat, und dass es das richtige ist.
 
+Welche Szene welches Bild hat:
+
+| Szene | Bild | gilt |
+|---|---|---|
+| Aufstieg · *Up the Mountain* | die Kutsche des Grafen | nur auf Weg C, dem Mitternachtswagen |
+| Kapitel II · *The Courtyard* | der Hof mit dem gefrorenen Brunnen und dem Raben | immer |
+| Hinter der Tür · *What You Find* | Bellamy auf seiner Leiter | nur hinter Tür A, der Bibliothek |
+| Hinter der Tür · *What You Find* | Tam in der Küche | nur hinter Tür C, der Küchentreppe |
+| Finale · *Count Vaskir* | die Begegnung mit dem Grafen | immer |
+
 Ein neues Bild kommt **ohne Codeänderung an der Darstellung** dazu. `quelle/bild_einbetten.html`
 im Browser öffnen, Datei wählen, Schlüssel eintragen — heraus kommt die fertige Zeile für
 `const BILDER = { … }`. Danach in der Szene `bild:"<schlüssel>"` setzen. Die Bilder stecken
