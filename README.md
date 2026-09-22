@@ -178,6 +178,7 @@ Welche Szene welches Bild hat:
 | Aufstieg · *Up the Mountain* | der Kessler-Stollen unter dem Berg | nur auf Weg B, dem Stollen |
 | Aufstieg · *Up the Mountain* | die Kutsche des Grafen | nur auf Weg C, dem Mitternachtswagen |
 | Kapitel II · *The Courtyard* | der Hof mit dem gefrorenen Brunnen und dem Raben | immer |
+| Entscheidung 2 · *Three Doors* | die drei Türen übereinander: Kapelle, Bibliothek, Küchentreppe | immer |
 | Hinter der Tür · *What You Find* | Bellamy auf seiner Leiter | nur hinter Tür A, der Bibliothek |
 | Hinter der Tür · *What You Find* | Anneke im Taufbecken | nur hinter Tür B, der Kapelle |
 | Hinter der Tür · *What You Find* | Tam in der Küche | nur hinter Tür C, der Küchentreppe |
