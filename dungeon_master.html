@@ -1521,7 +1521,7 @@ try{ ZEIGE_BLUT = localStorage.getItem(BLUT_SCHLUESSEL)==="1"; }catch(e){}
 const Blut = (function(){
   let cv=null, ctx=null, W=0, H=0, DPR=1;
   let an=false, pausiert=false, ruhig=false, rahmen=0, letzte=0;
-  let stand=0, ziel=0, hitze=0;                 /* 0..1 — Füllung und Lebhaftigkeit */
+  let stand=0, ziel=0, hitze=0, schub=0;          /* 0..1 — Füllung, Lebhaftigkeit, Schub */
   let blasen=[], perlen=[], spritzer=[], schlieren=[];
   let bAkku=0, pAkku=0;
   const zuf=(a,b)=>a+Math.random()*(b-a);
@@ -1551,11 +1551,13 @@ const Blut = (function(){
   /* Die Oberfläche: Wellen, und an den Glaswänden zieht sie sich hoch (Meniskus) */
   function hoehe(t){ return H*(1-stand); }
   function welle(i, segs, t){
-    const ruhe=0.3+hitze*0.7;
+    const raserei=Math.max(0,(hitze-0.72)/0.28);
+    const ruhe=0.36 + hitze*1.12 + raserei*1.25 + schub*0.18;
     const m=Math.abs(i/segs-0.5)*2;            /* 1 an den Wänden, 0 in der Mitte */
-    return Math.sin(i*0.85+t*0.0030)*1.5*ruhe
-         + Math.sin(i*1.90+t*0.0012)*0.8*ruhe
-         - m*m*2.8;                            /* Meniskus */
+    return Math.sin(i*0.95+t*(0.0032+hitze*0.0048+schub*0.0015))*1.8*ruhe
+         + Math.sin(i*2.25+t*(0.0019+hitze*0.0042))*1.05*ruhe
+         + Math.sin(i*3.45+t*(0.0008+hitze*0.0031))*0.42*ruhe
+         - m*m*(2.7+hitze*1.35);               /* Meniskus */
   }
   function pfadOben(t, top, segs){
     ctx.beginPath();
@@ -1622,18 +1624,20 @@ const Blut = (function(){
 
   /* Fäden, die sich aus der Oberfläche heben */
   function faeden(t, top){
-    if(hitze<0.25) return;
+    if(hitze<0.18) return;
     ctx.save();
     ctx.globalCompositeOperation="screen";
-    for(let i=0;i<2;i++){
-      const x=W*(0.32+i*0.36);
-      const puls=(Math.sin(t*0.0016+i*2.3)+1)*0.5;
-      const hh=(3+11*puls)*hitze;
-      const schwung=Math.sin(t*0.0029+i*2.1)*2.4;
+    const count=2+Math.round(hitze*4 + schub*2);
+    for(let i=0;i<count;i++){
+      const x=W*(0.18 + (i/Math.max(1,count-1))*0.64);
+      const puls=(Math.sin(t*(0.0016+hitze*0.0018)+i*1.6)+1)*0.5;
+      const hh=(3+14*puls+hitze*7+schub*6)*hitze;
+      const schwung=Math.sin(t*(0.0029+hitze*0.0021)+i*1.9)*(2.6+hitze*2.8);
       const g=ctx.createLinearGradient(x,top,x+schwung,top-hh);
-      g.addColorStop(0,"rgba(255,64,44,0.6)");
+      g.addColorStop(0,"rgba(255,74,50,0.72)");
+      g.addColorStop(.45,"rgba(255,120,96,"+(0.32+hitze*0.22)+")");
       g.addColorStop(1,"rgba(255,80,58,0)");
-      ctx.strokeStyle=g; ctx.lineWidth=0.9+1.5*puls; ctx.lineCap="round";
+      ctx.strokeStyle=g; ctx.lineWidth=0.9+1.8*puls+hitze*0.8; ctx.lineCap="round";
       ctx.beginPath(); ctx.moveTo(x,top+1);
       ctx.bezierCurveTo(x+schwung*0.3,top-hh*0.35, x-schwung*0.4,top-hh*0.7, x+schwung,top-hh);
       ctx.stroke();
@@ -1681,6 +1685,32 @@ const Blut = (function(){
     ctx.restore();
   }
 
+  function stromlinien_zeichnen(dt,t,top){
+    if(hitze<0.12) return;
+    ctx.save();
+    ctx.globalCompositeOperation="screen";
+    const count=3+Math.round(hitze*8 + schub*3);
+    for(let i=0;i<count;i++){
+      const lane = count===1 ? 0.5 : i/(count-1);
+      const x=W*(0.14 + lane*0.72) + Math.sin(t*0.0025 + i*1.3)*(0.6+hitze*1.4);
+      const cycle=(t*(0.0015 + hitze*0.0032 + schub*0.0018) + i*0.17) % 1;
+      const len=(7 + hitze*24 + schub*10) * (0.7 + 0.5*Math.sin(t*0.005+i*2.2));
+      const y=top + (1-cycle)*(H-top+28) - 10;
+      const g=ctx.createLinearGradient(x,y-len,x,y+len);
+      g.addColorStop(0,"rgba(255,170,145,0)");
+      g.addColorStop(.25,"rgba(255,132,108,"+(0.08+hitze*0.14)+")");
+      g.addColorStop(.52,"rgba(255,82,56,"+(0.18+hitze*0.24)+")");
+      g.addColorStop(1,"rgba(255,26,18,0)");
+      ctx.strokeStyle=g;
+      ctx.lineWidth=0.7 + hitze*1.1 + schub*0.5;
+      ctx.beginPath();
+      ctx.moveTo(x,y+len*0.85);
+      ctx.lineTo(x,y-len);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
   function spritzer_zeichnen(dt){
     ctx.save(); ctx.globalCompositeOperation="screen";
     spritzer.forEach(sp=>{
@@ -1697,22 +1727,29 @@ const Blut = (function(){
     rahmen=0;
     if(!an || pausiert || !bereit() || !mass()) return;
     const dt=Math.min((jetzt-letzte)/1000, 0.05); letzte=jetzt;
-    stand += (ziel-stand)*Math.min(1, dt*2.2);
+    const raserei=Math.max(0,(hitze-0.68)/0.32);
+    const endwut=Math.max(0,(hitze-0.9)/0.1);   /* nur auf der allerhöchsten Stufe explodiert die Bubble-Intensität */
+    schub *= Math.exp(-dt/(0.24 + (1-hitze)*0.28));
+    const folge=(2.4 + hitze*6.8 + raserei*17 + schub*12) * 2.0;
+    stand += (ziel-stand)*Math.min(1, dt*folge);
+    if(ziel>stand && schub>0.04) stand = Math.min(ziel, stand + dt*schub*(0.20+hitze*0.48));
     const top=hoehe(jetzt);
     ctx.clearRect(0,0,W,H);
     if(stand>0.004){
       koerper(jetzt,top);
+      stromlinien_zeichnen(dt,jetzt,top);
       blasen_zeichnen(dt,jetzt,top);
       perlen_zeichnen(dt,jetzt,top);
       spritzer_zeichnen(dt);
       kuppe(jetzt,top);
       faeden(jetzt,top);
-      bAkku += dt*(0.8+hitze*7);
-      pAkku += dt*(0.12+hitze*0.85);
-      while(bAkku>=1){ bAkku--; blasen.push({x:zuf(W*0.2,W*0.8), y:zuf(top+6,H), r:zuf(.7,1.6+hitze*1.3),
-        vy:zuf(9,26)*(0.7+hitze*0.8), ph:zuf(0,6.28), wob:zuf(1,3), leben:1}); }
+      bAkku += dt*(0.8 + hitze*8.5 + raserei*18 + schub*7.5 + endwut*68);
+      pAkku += dt*(0.12 + hitze*1.15 + raserei*2.4 + schub*0.9);
+      while(bAkku>=1){ bAkku--; blasen.push({x:zuf(W*0.15,W*0.85), y:zuf(top+5,H), r:zuf(.6,1.8+hitze*1.7+endwut*0.6),
+        vy:zuf(12,38)*(1.15 + hitze*2.5 + schub*2.2 + endwut*5.6), ph:zuf(0,6.28), wob:zuf(1.1,6.6+endwut*2.4), leben:1}); }
       while(pAkku>=1 && top>14){ pAkku--; perlen.push({x:Math.random()<0.5?zuf(2.5,W*0.3):zuf(W*0.7,W-2.5),
-        y:zuf(3,top-10), v:zuf(2,9), r:zuf(.9,1.9), alt:0}); }
+        y:zuf(3,Math.max(4,top-10)), v:zuf(4,16)*(1.1+hitze*1.8+schub*1.0+endwut*1.2), r:zuf(.9,2.0), alt:0}); }
+      if(hitze>.74 && Math.random()<dt*(8 + hitze*18 + schub*12)) spritz(zuf(W*0.18,W*0.82), top+1, 2+Math.round(hitze*4));
     }
     if(!ruhig && typeof requestAnimationFrame==="function") rahmen=requestAnimationFrame(schritt);
   }
@@ -1733,7 +1770,10 @@ const Blut = (function(){
     pause(p){ pausiert=!!p; if(pausiert) stoppen(); else starten(); },
     setze(neuerStand, neueHitze){
       const alt=ziel; ziel=klemm(neuerStand,0,1); hitze=klemm(neueHitze,0,1);
-      if(ziel>alt+0.02 && an && !pausiert && W) spritz(W*0.5, H*(1-alt), 6);
+      if(ziel>alt){
+        schub = Math.min(1.45, schub + (ziel-alt)*(1.9 + hitze*1.35));
+        if(an && !pausiert && W) spritz(W*0.5, H*(1-alt), 6 + Math.round(12*hitze));
+      }else schub *= 0.58;
       if(ruhig) starten();
     },
     neuMessen(){ if(ctx){ W=0; H=0; } }
