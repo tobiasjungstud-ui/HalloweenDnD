@@ -296,7 +296,7 @@ input{font:inherit;color:inherit}
    Drei Stufen, drei Farben: blau bis 3, gold bis 7, rot darüber.              */
 /* Die Leinwand für Aura, Glut und Feuer liegt VOR der Säule und ragt weit nach links;
    sie fängt keine Klicks ab und wird vom Gefahrenwert gesteuert. */
-.gefahrfx{position:fixed;right:0;top:var(--barhoehe);width:420px;height:calc(100vh - var(--barhoehe));
+.gefahrfx{position:fixed;right:0;top:var(--barhoehe);width:540px;height:calc(100vh - var(--barhoehe));
   pointer-events:none;display:block}
 .gefahrfx.hinten{z-index:24}      /* der Schein liegt hinter der Säule und blutet nach links aus */
 .gefahrfx.vorn{z-index:26}        /* Funken, Flammen und Rauch liegen darüber */
@@ -307,17 +307,20 @@ input{font:inherit;color:inherit}
   display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px 0 12px;
   font-family:var(--sans);border-left:1px solid #17181c;
   background:
-    repeating-linear-gradient(112deg, rgba(255,255,255,.02) 0 2px, transparent 2px 7px),
-    repeating-linear-gradient(67deg, rgba(0,0,0,.26) 0 1px, transparent 1px 13px),
-    linear-gradient(to left, rgba(11,12,15,.93) 0%, rgba(17,18,22,.84) 46%,
-                             rgba(22,23,28,.66) 78%, rgba(26,27,32,.42) 100%);
-  box-shadow:inset 1px 0 0 rgba(255,255,255,.03);
+    linear-gradient(to left, rgba(255,255,255,.02) 0 58%, rgba(255,255,255,0) 100%),
+    repeating-linear-gradient(112deg, rgba(255,255,255,.03) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(67deg, rgba(0,0,0,.2) 0 1px, transparent 1px 13px),
+    linear-gradient(to left, rgba(11,12,15,.94) 0%, rgba(14,15,19,.90) 34%,
+                             rgba(19,20,25,.72) 62%, rgba(24,25,30,.34) 86%,
+                             rgba(26,27,32,0) 100%);
   --gf-rgb:110,130,160; --gf-farbe:#6e82a0; --gf-hell:#9fb4d2;
   transition:--gf-rgb .4s}
 .gefahrsaeule.g1{--gf-rgb:201,164,87; --gf-farbe:#c9a457; --gf-hell:#f0dba6}
 .gefahrsaeule.g2{--gf-rgb:190,52,42; --gf-farbe:#be342a; --gf-hell:#ff6b58}
-.gefahrsaeule::before{content:"";position:absolute;left:0;top:0;bottom:0;width:1px;
-  background:linear-gradient(to bottom,transparent,rgba(var(--gf-rgb),.5) 18%,rgba(var(--gf-rgb),.5) 82%,transparent)}
+.gefahrsaeule::before{content:"";position:absolute;left:-30px;top:0;bottom:0;width:38px;pointer-events:none;
+  background:linear-gradient(to right, rgba(var(--gf-rgb),0), rgba(var(--gf-rgb),calc(.05 + var(--fx-l)*.10)));
+  -webkit-mask-image:linear-gradient(to bottom,transparent,#000 14%,#000 86%,transparent);
+  mask-image:linear-gradient(to bottom,transparent,#000 14%,#000 86%,transparent)}
 
 /* Krone: Flügel, gotischer Bogen, die Zahl */
 .gs-krone{position:relative;flex:none;display:flex;flex-direction:column;align-items:center;
@@ -556,7 +559,7 @@ details.fach[open] summary::after{content:"zuklappen"}
 @media (max-width:760px){
   .kopfbar{padding:0 16px}.raum{padding:18px 88px 0 16px}
   #blutschalter{display:none}
-  .gefahrfx{width:240px}
+  .gefahrfx{width:300px}
   .gs-zaehne{width:82px;height:52px;margin-left:-41px;top:-10px}
   .gefahrsaeule{width:72px;gap:7px}
   .gs-stufe,.gs-skala{display:none}
@@ -1358,7 +1361,8 @@ const GefahrFX = (function(){
   let gAkku=0, fAkku=0, rAkku=0;
   let aurC=null, aurX=null, aurStufe=-1, aurW=0, aurH=0;
   let spar=false, dtMittel=0.016, langsam=0;      /* Sparmodus, falls ein Rechner nicht mitkommt */
-  const AURSKALA=0.5;              /* die Aura wird halb so gross gerechnet und aufgezogen */
+  const AURSKALA=0.62;             /* die Aura wird kleiner gerechnet und aufgezogen */
+  let korn=null;                   /* Körnung: bricht die Streifen weicher Verläufe auf */
   const S={x:0,y:0,w:112,h:0}, G={x:0,y:0,w:26,h:0};   /* Säule und Glasrohr in Leinwandkoordinaten */
   const TAU=6.283185307;
   const zuf=(a,b)=>a+Math.random()*(b-a);
@@ -1432,6 +1436,22 @@ const GefahrFX = (function(){
     c.fillStyle=g; c.beginPath(); c.arc(0,0,rx,0,TAU); c.fill();
     c.restore();
   }
+  function bauKorn(){
+    if(korn!==null) return korn;
+    korn=false;
+    try{
+      const k=document.createElement("canvas"); k.width=k.height=64;
+      const kx=k.getContext("2d"); if(!kx) return korn;
+      const b=kx.createImageData(64,64), dd=b.data;
+      for(let i=0;i<dd.length;i+=4){
+        const v=(Math.random()*5)|0;
+        dd[i]=255; dd[i+1]=230; dd[i+2]=210; dd[i+3]=v;
+      }
+      kx.putImageData(b,0,0);
+      korn = aurX.createPattern(k,"repeat") || false;
+    }catch(e){ korn=false; }
+    return korn;
+  }
   function bauAura(){
     const st=Math.round(d*12);
     if(aurC && aurStufe===st && aurW===W && aurH===H) return;
@@ -1451,6 +1471,8 @@ const GefahrFX = (function(){
     zone(aurX, cx, cy,  46+d*32,  S.h*0.50, eng,          0.55);
     zone(aurX, cx, cy, 122+d*78,  S.h*0.64, "186,32,22",  0.54);
     zone(aurX, cx, cy, 240+d*140, S.h*0.82, "142,20,15",  0.36);
+    const kk=bauKorn();
+    if(kk){ aurX.fillStyle=kk; aurX.fillRect(0,0,W,H); }   /* leichte Körnung statt Streifen */
     aurX.globalCompositeOperation="source-over";
   }
   function aura(t, kraft){
