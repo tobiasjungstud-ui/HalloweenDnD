@@ -72,7 +72,9 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
    **Stärken der Figuren** neben dem Absatz, der die Gelegenheit ankündigt. Steht daneben
    nichts, gibt es an dieser Stelle nichts zu beachten. Das **Ziel** der Szene steht oben
    neben dem Titel; ganz rechts läuft der **Gefahrenbalken** senkrecht über die ganze
-   Seitenhöhe und füllt sich von unten — blau bis 3, gold bis 7, rot darüber. Ganz unten sammelt eine Aktionsleiste
+   Seitenhöhe: eine Glasröhre, die sich von unten füllt — blau bis 3, gold bis 7, rot
+   darüber —, mit Skala, Zeiger, der Zahl im gotischen Bogen und der Stufe daneben.
+   Der ganze Streifen glüht in der Farbe der erreichten Stufe. Ganz unten sammelt eine Aktionsleiste
    alle Knöpfe der Szene und die Bedingung zum Weiterblättern. Blättern geht auch mit den Pfeiltasten.
    Der Schalter **Stimmen** in der Leiste blendet hinter jedem Sprechernamen drei Wörter ein,
    wie die Figur klingt, etwa *Marek — tief, wortkarg, langsam*. Er merkt sich seinen Zustand.
@@ -82,7 +84,9 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
    sobald ein Kampf geladen wird, oder jederzeit über den Knopf oben rechts (freier Kampf,
    Gegner von Hand). Links die Gruppe mit ihren Talenten, in der Mitte die Gegner mit
    Attacken, Werten und Verstärkung, rechts die Wenn-dann-Regeln dieser Szene, unten das
-   Log; „Kampf vorbei“ heilt alle und kehrt zur Szene zurück, „← Szene“ lässt den Kampf
+   Log. Jeder Gegner trägt zwei Zeilen: **wie er aussieht** (zum Vorlesen) und **wie du ihn
+   führst** — wen er angreift, wann er aufgibt, was ihn stoppt. Ein Test lässt keinen
+   Gegner ohne beides durch; „Kampf vorbei“ heilt alle und kehrt zur Szene zurück, „← Szene“ lässt den Kampf
    offen. Esc schliesst ihn.
 5. Etwa drei Stunden. Gut teilbar in zwei Doppelstunden — der Schnitt liegt beim Aufstieg.
 

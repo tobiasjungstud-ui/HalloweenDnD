@@ -80,7 +80,7 @@ input{font:inherit;color:inherit}
 .knopf:disabled{opacity:.3;cursor:not-allowed}
 
 /* ═══════════ Raum ═══════════ */
-.raum{padding:26px 104px 0 32px}
+.raum{padding:26px 138px 0 32px}
 .szene{min-width:0;max-width:1180px;margin:0 auto;padding-bottom:70px}
 .titel{display:grid;grid-template-columns:300px minmax(0,1fr);column-gap:36px;align-items:start;
   margin-bottom:30px;padding-bottom:20px;border-bottom:1px solid var(--line)}
@@ -193,12 +193,19 @@ input{font:inherit;color:inherit}
   padding:9px 16px;border-radius:4px;text-align:left;line-height:1.35}
 .kampfstart:hover{background:rgba(160,66,66,.14)}
 .kampfzeile .knopfhinweis{font-family:var(--sans);font-size:12.5px;color:var(--dim)}
-.statblock{font-family:var(--sans);font-size:13.5px;color:var(--muted);padding:7px 0;border-top:1px solid var(--line)}
+.statblock{font-family:var(--sans);font-size:13.5px;color:var(--muted);padding:9px 0;border-top:1px solid var(--line)}
 .statblock b{color:var(--text);font-weight:500}
+.statblock .sb-kurz{display:block;margin-top:5px;font-family:var(--serif);font-size:14px;color:var(--text);line-height:1.5}
+.statblock .sb-spielt{display:block;margin-top:4px;font-size:12.5px;color:var(--dim);line-height:1.5}
+.g-kurz{margin:0;font-family:var(--serif);font-size:15px;line-height:1.5;color:var(--text)}
+.g-spielt{margin:0;font-size:12.5px;line-height:1.5;color:var(--dim)}
+.g-spielt b{color:var(--muted);font-weight:500}
+.gegner.tot .g-kurz,.gegner.tot .g-spielt{display:none}
 .statblock.rot{color:var(--red)}
 .zufuegen{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
 .zufuegen button{font-family:var(--sans);font-size:13px;border:1px dashed var(--line-hi);padding:6px 12px;border-radius:4px;color:var(--dim)}
 .zufuegen button:hover{border-style:solid;color:var(--text)}
+.zufuegen button small{color:var(--dim);font-size:11.5px;margin-left:3px}
 
 /* ── Entscheidung ── */
 .entblock>h3{font-family:var(--sans);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
@@ -256,47 +263,78 @@ input{font:inherit;color:inherit}
 .hbox.gefahrkarte .gzeile b{margin-left:auto;text-align:right;font-family:var(--sans);font-size:11px;
   letter-spacing:.06em;font-weight:500;color:var(--muted);line-height:1.2}
 .hbox.gefahrkarte .folge{margin:6px 0 0;color:var(--dim);font-size:11.5px;line-height:1.35}
-/* ── Gefahrenbalken: senkrecht, ganz rechts, vom Menü bis zum Fuss ── */
-.gefahrsaeule{position:fixed;right:0;top:var(--barhoehe);bottom:0;width:84px;z-index:25;
-  display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px 0 14px;
-  font-family:var(--sans);border-left:1px solid var(--line);
-  background:linear-gradient(to left,rgba(0,0,0,.34),rgba(0,0,0,0))}
-.gefahrsaeule::before{content:"";position:absolute;left:-1px;top:6%;bottom:6%;width:1px;
-  background:linear-gradient(to bottom,transparent,rgba(201,164,87,.3),transparent)}
-.gs-zier{position:relative;display:block;width:44px;text-align:center;font-style:normal;
-  color:var(--gold);opacity:.6;font-size:10px;line-height:1}
-.gs-zier::before,.gs-zier::after{content:"";position:absolute;top:50%;width:15px;height:1px;
-  background:linear-gradient(to right,transparent,rgba(201,164,87,.45))}
-.gs-zier::before{left:0}
-.gs-zier::after{right:0;background:linear-gradient(to left,transparent,rgba(201,164,87,.45))}
-.gs-kopf{flex:none;display:flex;flex-direction:column;align-items:center;gap:7px;line-height:1}
-.gs-kopf b{font-family:var(--serif);font-weight:400;font-size:30px;color:var(--text);
-  font-variant-numeric:tabular-nums;transition:color .35s}
-.gs-kopf b.g1{color:var(--gold)}
-.gs-kopf b.g2{color:var(--red)}
-.gs-kopf small{font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
-.gs-fuss{flex:none;padding-top:4px}
-.gs-koerper{flex:1;min-height:60px;display:flex;align-items:stretch;gap:9px}
-.gs-text{writing-mode:vertical-rl;transform:rotate(180deg);display:flex;align-items:flex-start;
-  justify-content:flex-start;gap:12px;overflow:hidden}
-.gs-text em{font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.gs-lab{font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);flex:none}
-.gs-stufe{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--muted);min-height:0}
-.gs-rohr{position:relative;width:19px;flex:none;border:1px solid var(--line-hi);border-radius:10px;
-  background:#15161a;box-shadow:inset 0 0 10px rgba(0,0,0,.8);
-  outline:1px solid rgba(201,164,87,.14);outline-offset:4px}
-.gs-rohr::after{content:"";position:absolute;inset:0;border-radius:10px;pointer-events:none;
-  background:linear-gradient(to right,rgba(255,255,255,.07),transparent 45%)}
-.gefahrsaeule .saeule{position:absolute;inset:3px;display:flex;flex-direction:column-reverse;gap:2px}
-.gefahrsaeule .saeule i{flex:1;width:100%;height:auto;border-radius:2px;background:#232429;transition:background .35s}
-.gefahrsaeule .saeule i.an1{background:#3f5f80;box-shadow:0 0 6px rgba(63,95,128,.55)}
-.gefahrsaeule .saeule i.an2{background:var(--gold);box-shadow:0 0 6px rgba(201,164,87,.5)}
-.gefahrsaeule .saeule i.an3{background:var(--red-bar);box-shadow:0 0 7px rgba(180,70,58,.62)}
-.gs-schwelle{position:absolute;left:calc(100% + 6px);display:flex;align-items:center;gap:4px;pointer-events:none}
-.gs-schwelle i{display:block;width:6px;height:1px;background:var(--line-hi)}
-.gs-schwelle em{font-style:normal;font-size:9px;color:var(--dim);font-variant-numeric:tabular-nums}
-.gs-schwelle.s4{bottom:30%}
-.gs-schwelle.s8{bottom:70%}
+/* ── Gefahrenbalken: senkrecht, ganz rechts, vom Menü bis zum Fuss ──
+   Drei Stufen, drei Farben: blau bis 3, gold bis 7, rot darüber.              */
+.gefahrsaeule{position:fixed;right:0;top:var(--barhoehe);bottom:0;width:112px;z-index:25;
+  display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px 0 12px;
+  font-family:var(--sans);border-left:1px solid #17181c;
+  background:
+    radial-gradient(130% 40% at 62% 6%, rgba(var(--gf-rgb),.16), transparent 72%),
+    radial-gradient(130% 34% at 62% 96%, rgba(var(--gf-rgb),.14), transparent 72%),
+    radial-gradient(60% 70% at 62% 50%, rgba(var(--gf-rgb),.07), transparent 78%),
+    repeating-linear-gradient(112deg, rgba(255,255,255,.015) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(67deg, rgba(0,0,0,.22) 0 1px, transparent 1px 13px),
+    linear-gradient(to left, #0f1013 0%, #141519 58%, #191a1f 100%);
+  box-shadow:inset 1px 0 0 rgba(255,255,255,.03), -14px 0 26px rgba(0,0,0,.4);
+  --gf-rgb:110,130,160; --gf-farbe:#6e82a0; --gf-hell:#9fb4d2;
+  transition:--gf-rgb .4s}
+.gefahrsaeule.g1{--gf-rgb:201,164,87; --gf-farbe:#c9a457; --gf-hell:#f0dba6}
+.gefahrsaeule.g2{--gf-rgb:190,52,42; --gf-farbe:#be342a; --gf-hell:#ff6b58}
+.gefahrsaeule::before{content:"";position:absolute;left:0;top:0;bottom:0;width:1px;
+  background:linear-gradient(to bottom,transparent,rgba(var(--gf-rgb),.5) 18%,rgba(var(--gf-rgb),.5) 82%,transparent)}
+
+/* Krone: Flügel, gotischer Bogen, die Zahl */
+.gs-krone{flex:none;display:flex;flex-direction:column;align-items:center;color:rgba(var(--gf-rgb),.75)}
+.gs-fluegel{width:104px;height:39px;filter:drop-shadow(0 0 7px rgba(var(--gf-rgb),.45))}
+.gs-fluegel .fl path{fill:rgba(var(--gf-rgb),.16);stroke:currentColor;stroke-width:1.1;
+  stroke-linejoin:round;stroke-linecap:round}
+.gs-bogen{position:relative;width:78px;height:72px;margin-top:-7px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3px}
+.gs-rahmen{position:absolute;inset:0;width:100%;height:100%;color:rgba(var(--gf-rgb),.55)}
+.gs-bogen b{position:relative;font-family:var(--serif);font-weight:400;font-size:38px;line-height:1;
+  color:var(--gf-hell);font-variant-numeric:tabular-nums;
+  text-shadow:0 0 14px rgba(var(--gf-rgb),.75),0 0 3px rgba(var(--gf-rgb),.9);transition:color .4s}
+.gs-bogen small{position:relative;font-size:9px;letter-spacing:.24em;text-transform:uppercase;
+  color:rgba(var(--gf-rgb),.75)}
+
+/* Mitte: Schrift, Glasröhre, Skala */
+.gs-mitte{flex:1;min-height:90px;display:flex;align-items:stretch;justify-content:center;gap:7px;width:100%}
+.gs-schrift{writing-mode:vertical-rl;transform:rotate(180deg);display:flex;align-items:center;
+  justify-content:center;gap:16px;overflow:hidden;padding:6px 0}
+.gs-schrift em{font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gs-lab{flex:none;font-family:var(--serif);font-size:18px;letter-spacing:.38em;text-transform:uppercase;
+  color:var(--gf-hell);text-shadow:0 0 14px rgba(var(--gf-rgb),.7),0 0 3px rgba(var(--gf-rgb),.5)}
+.gs-stufe{font-family:var(--serif);font-style:italic;font-size:13.5px;color:var(--muted);min-height:0;max-height:46%}
+.gs-glas{position:relative;width:26px;flex:none;border-radius:14px;background:#0a0b0d;
+  border:1px solid rgba(255,255,255,.07);
+  box-shadow:inset 0 0 14px rgba(0,0,0,.95),0 0 0 5px #121317,0 0 0 6px rgba(var(--gf-rgb),.3),
+             0 0 26px rgba(var(--gf-rgb),.22);overflow:hidden}
+.gs-fuell{position:absolute;left:0;right:0;bottom:0;height:0;border-radius:0 0 13px 13px;
+  background:linear-gradient(to top, rgba(var(--gf-rgb),.45), var(--gf-farbe) 55%, var(--gf-hell));
+  box-shadow:0 0 22px rgba(var(--gf-rgb),.8),inset 0 0 10px rgba(0,0,0,.4);
+  transition:height .55s cubic-bezier(.4,0,.2,1)}
+.gs-fuell::after{content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(97deg, rgba(0,0,0,.16) 0 3px, transparent 3px 11px)}
+.gs-kuppe{position:absolute;left:1px;right:1px;top:-3px;height:7px;border-radius:50%;
+  background:var(--gf-hell);box-shadow:0 0 16px rgba(var(--gf-rgb),1),0 0 34px rgba(var(--gf-rgb),.8)}
+.gefahrsaeule.leer .gs-kuppe{display:none}
+.gs-glanz{position:absolute;left:4px;top:8px;bottom:8px;width:4px;border-radius:4px;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(255,255,255,.22),rgba(255,255,255,.05) 40%,transparent)}
+.gs-skala{position:relative;width:22px;flex:none}
+.gs-skala span{position:absolute;right:0;transform:translateY(50%);display:flex;align-items:center;gap:4px;
+  font-size:10px;color:var(--dim);font-variant-numeric:tabular-nums;white-space:nowrap}
+.gs-skala span i{display:block;width:8px;height:1px;background:rgba(255,255,255,.26)}
+.gs-skala span.fein i{width:4px;background:rgba(255,255,255,.14)}
+.gs-zeiger{position:absolute;right:calc(100% + 2px);transform:translateY(50%);font-size:9px;line-height:1;
+  color:var(--gf-hell);text-shadow:0 0 8px rgba(var(--gf-rgb),.9);transition:bottom .55s cubic-bezier(.4,0,.2,1)}
+.gefahrsaeule.leer .gs-zeiger{opacity:0}
+
+/* Sockel */
+.gs-sockel{flex:none;color:rgba(var(--gf-rgb),.7)}
+.gs-sockel svg{width:104px;height:52px;filter:drop-shadow(0 0 8px rgba(var(--gf-rgb),.4))}
+
+@keyframes gs-puls{0%,100%{opacity:1}50%{opacity:.72}}
+.gefahrsaeule.g2 .gs-fuell{animation:gs-puls 2.6s ease-in-out infinite}
 .hinweisfehlt{grid-column:1/-1;border:1px dashed var(--line-hi);padding:14px 18px;color:var(--muted);font-size:16px;border-radius:5px;margin-bottom:30px}
 
 /* ── Aktionsleiste ── */
@@ -447,10 +485,14 @@ details.fach[open] summary::after{content:"zuklappen"}
   .aktionen{margin-bottom:0}
 }
 @media (max-width:760px){
-  .kopfbar{padding:0 16px}.raum{padding:18px 74px 0 16px}
-  .gefahrsaeule{width:58px;gap:8px}
-  .gs-stufe{display:none}
-  .gs-schwelle{display:none}
+  .kopfbar{padding:0 16px}.raum{padding:18px 88px 0 16px}
+  .gefahrsaeule{width:72px;gap:7px}
+  .gs-stufe,.gs-skala{display:none}
+  .gs-fluegel{width:64px;height:24px}
+  .gs-bogen{width:52px;height:50px}
+  .gs-bogen b{font-size:25px}
+  .gs-glas{width:20px}
+  .gs-sockel svg{width:62px;height:32px}
   .aktionen{margin-left:-16px;margin-right:-16px;padding-left:16px;padding-right:16px}
   .aktionen .weiterwenn{margin-left:0;text-align:left;max-width:none;width:100%}
   .bloecke{grid-template-columns:1fr;column-gap:0}
@@ -494,16 +536,75 @@ details.fach[open] summary::after{content:"zuklappen"}
 </header>
 
 <aside class="gefahrsaeule" id="gefahrsaeule" aria-label="Gefahrenbalken">
-  <span class="gs-kopf"><i class="gs-zier">✦</i><b id="b-zahl">0</b><small>von 10</small></span>
-  <span class="gs-koerper">
-    <span class="gs-text"><em class="gs-lab">Gefahr</em><em class="gs-stufe" id="b-stufe">—</em></span>
-    <span class="gs-rohr">
-      <span class="saeule" id="saeule"></span>
-      <span class="gs-schwelle s8"><em>8</em><i></i></span>
-      <span class="gs-schwelle s4"><em>4</em><i></i></span>
-    </span>
-  </span>
-  <span class="gs-fuss"><i class="gs-zier">✦</i></span>
+
+  <div class="gs-krone">
+    <svg class="gs-fluegel" viewBox="0 0 112 42" aria-hidden="true">
+      <g class="fl">
+        <path d="M52 22 C42 9 27 2 6 5 C17 10 22 15 24 23 C27 17 34 15 42 18 C37 22 35 26 35 32 C41 27 47 25 52 26 Z"/>
+      </g>
+      <g class="fl" transform="translate(112,0) scale(-1,1)">
+        <path d="M52 22 C42 9 27 2 6 5 C17 10 22 15 24 23 C27 17 34 15 42 18 C37 22 35 26 35 32 C41 27 47 25 52 26 Z"/>
+      </g>
+      <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M56 4 L56 36" stroke-width="1.3"/>
+        <path d="M56 4 L50 12 M56 4 L62 12" stroke-width="1.1"/>
+        <path d="M44 33 C49 36 53 38 56 41 C59 38 63 36 68 33" stroke-width=".9" opacity=".7"/>
+      </g>
+      <path d="M56 15 l5 7 -5 7 -5 -7 z" fill="currentColor"/>
+    </svg>
+    <div class="gs-bogen">
+      <svg class="gs-rahmen" viewBox="0 0 78 72" preserveAspectRatio="none" aria-hidden="true">
+        <g fill="none" stroke="currentColor" stroke-linecap="round">
+          <path d="M8 70 L8 33 C8 16 21 6 39 6 C57 6 70 16 70 33 L70 70" stroke-width="1.4"/>
+          <path d="M13 70 L13 33 C13 20 24 11 39 11 C54 11 65 20 65 33 L65 70" stroke-width=".6" opacity=".45"/>
+          <path d="M3 34 L8 34 M70 34 L75 34 M3 30 L3 38 M75 30 L75 38" stroke-width="1"/>
+        </g>
+        <path d="M39 1 l3 4 -3 4 -3 -4 z" fill="currentColor"/>
+      </svg>
+      <b id="b-zahl">0</b>
+      <small>von 10</small>
+    </div>
+  </div>
+
+  <div class="gs-mitte">
+    <div class="gs-schrift">
+      <em class="gs-lab">✦&nbsp; Gefahr &nbsp;✦</em>
+      <em class="gs-stufe" id="b-stufe">—</em>
+    </div>
+    <div class="gs-glas">
+      <div class="gs-fuell" id="saeule"><span class="gs-kuppe"></span></div>
+      <span class="gs-glanz"></span>
+    </div>
+    <div class="gs-skala">
+      <span style="bottom:100%"><i></i>10</span>
+      <span class="fein" style="bottom:90%"><i></i></span>
+      <span style="bottom:80%"><i></i>8</span>
+      <span class="fein" style="bottom:70%"><i></i></span>
+      <span style="bottom:60%"><i></i>6</span>
+      <span class="fein" style="bottom:50%"><i></i></span>
+      <span style="bottom:40%"><i></i>4</span>
+      <span class="fein" style="bottom:30%"><i></i></span>
+      <span style="bottom:20%"><i></i>2</span>
+      <span class="fein" style="bottom:10%"><i></i></span>
+      <b class="gs-zeiger" id="gs-zeiger" style="bottom:0%">◆</b>
+    </div>
+  </div>
+
+  <div class="gs-sockel">
+    <svg viewBox="0 0 112 56" aria-hidden="true">
+      <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="56" cy="22" r="17" stroke-width="1.2"/>
+        <circle cx="56" cy="22" r="12" stroke-width=".6" opacity=".45"/>
+        <path d="M56 8 L56 38 M46 14 L46 27 M66 14 L66 27" stroke-width="1"/>
+        <path d="M46 27 C49 34 53 38 56 44 C59 38 63 34 66 27" stroke-width="1"/>
+        <path d="M39 22 L14 22 M73 22 L98 22" stroke-width=".7" opacity=".5"/>
+        <path d="M14 18 L14 26 M98 18 L98 26" stroke-width=".7" opacity=".5"/>
+        <path d="M56 44 L56 54 M50 50 L62 50" stroke-width=".9"/>
+      </g>
+      <path d="M56 17 l4 5 -4 5 -4 -5 z" fill="currentColor"/>
+    </svg>
+  </div>
+
 </aside>
 
 <div class="raum">
@@ -576,13 +677,26 @@ const WISSEN = [
   {k:"anneke", txt:"Der Name Anneke", nutzen:"Kapelle: kein Kampf", wo:"Wirtshaus, Old Pieter"}
 ];
 
+/* kurz = wie er aussieht (zum Vorlesen), spielt = wie du ihn führst */
 const BESTIARIUM = {
-  wolf:   {name:"Dire Wolf",    hp:14, att:[{n:"Bite",  d:"1d6+2"}]},
-  anneke: {name:"Anneke",       hp:22, att:[{n:"Claws", d:"1d6+3"}]},
-  thrall: {name:"Thrall",       hp:9,  att:[{n:"Grab",  d:"1d4+1"}]},
-  wache:  {name:"Castle Guard", hp:9,  att:[{n:"Club",  d:"1d6+1"}]},
-  hund:   {name:"Guard Hound",  hp:14, att:[{n:"Bite",  d:"1d6+2"}]},
-  vaskir: {name:"Count Vaskir", hp:55, att:[{n:"Claws", d:"2d6+2"},{n:"Bite", d:"1d8+3"}]}
+  wolf:   {name:"Dire Wolf",    hp:14, att:[{n:"Bite",  d:"1d6+2"}],
+    kurz:"Ponygross, graues nasses Fell, gelbe Augen. Der kleinere hat ein altes Fangeisen am Hinterbein.",
+    spielt:"Sie bellen nicht und knurren nicht — das ist das Unheimliche. Fällt einer, läuft der andere in den Nebel. Dann ist der Kampf vorbei."},
+  anneke: {name:"Anneke",       hp:22, att:[{n:"Claws", d:"1d6+3"}],
+    kurz:"Ein Mädchen von neunzehn, in einem Kleid, das vor zwanzig Jahren weiss war. Ihre Hände sind am Steinbecken aufgerissen.",
+    spielt:"Sie kämpft ohne Wut, was schlimmer ist. Bei 8 Lebenspunkten hört sie von selbst auf und fragt: „Is Greta still alive?“ — dort endet der Kampf."},
+  thrall: {name:"Thrall",       hp:9,  att:[{n:"Grab",  d:"1d4+1"}],
+    kurz:"Ein Diener des Hauses in abgetragener Livree. Er sieht niemanden an und sagt kein Wort.",
+    spielt:"Langsam und stur. Er greift den an, der zuletzt gesprochen hat. Er weicht nie zurück, weil er nicht darf."},
+  wache:  {name:"Castle Guard", hp:9,  att:[{n:"Club",  d:"1d6+1"}],
+    kurz:"Ein alter mürrischer Kerl in grauer Livree und einer Rüstung aus besseren Zeiten — verbeult, zu gross, seit Jahren nicht geputzt.",
+    spielt:"Er ist nicht böse, er hat Dienst. Müde, langsam, schlägt mit dem Knüppel. Sinkt er unter die Hälfte, will er reden statt kämpfen — lass ihn."},
+  hund:   {name:"Guard Hound",  hp:14, att:[{n:"Bite",  d:"1d6+2"}],
+    kurz:"Zu gross für einen Hund, zu leise für einen Wolf. Läuft an einer langen Kette, die jemand loslässt.",
+    spielt:"Er geht zuerst auf den los, der am weitesten hinten steht. Fällt er, verlieren die Wachen die Lust."},
+  vaskir: {name:"Count Vaskir", hp:55, att:[{n:"Claws", d:"2d6+2"},{n:"Bite", d:"1d8+3"}],
+    kurz:"Ein müder Mann von fünfzig in einem guten Mantel. Nicht bleich, nicht gross — er sieht aus wie jemand, der dieselbe Arbeit viel zu lange gemacht hat.",
+    spielt:"Er hebt nie die Stimme und antwortet auf jeden Satz, den eine Figur an ihn richtet. Unter 15 Lebenspunkten hört er auf zu kämpfen und redet: töten, Vertrag oder gehen lassen."}
 };
 
 /* Entscheidungen in ihrer Reihenfolge — jede setzt genau eine dieser Flaggen */
@@ -620,7 +734,7 @@ const KAPITEL = [
  <p>Der Schalter <b>Stimmen</b> oben blendet hinter jedem Sprechernamen drei Wörter ein, die sagen, wie die Figur klingt: <em>Marek — tief, wortkarg, langsam</em>. Sie stehen in Gold wie die Rede, aber kursiv und ohne Anführungszeichen; vorgelesen wird nur, was in Anführungszeichen steht. Der Schalter merkt sich, wie du ihn zuletzt hattest.</p>
  <p><b>Rechts neben dem Text</b> stehen die Hilfen — und zwar auf der Höhe der Stelle, zu der sie gehören. <b>Wenn … dann</b>: was hier abzweigt, sobald die Gruppe geantwortet hat („alle würfeln 10 oder mehr → an den Wachen vorbei“). Und <b>Stärken der Figuren</b>: neben dem Absatz, in dem die Gelegenheit angekündigt wird, steht ein Kasten mit dem Satz aus dem Vorlesetext (Tam hält die verbrannte Hand an die Brust; Marek hat die Hand verbunden). Du liest den Satz vor und wartest. Anklicken zeigt die Folge. Das sind keine Aufgaben und keine Lösungen: Der Kasten sagt dir nur, was du zulassen kannst, falls der Spieler von selbst darauf kommt. Jede Szene funktioniert auch ohne. Steht neben einem Absatz nichts, gibt es dort nichts zu beachten.</p>
  <p>Das <b>Ziel</b> der Szene steht oben neben dem Titel, mit der Zeitangabe daneben. Ganz rechts läuft der <b>Gefahrenbalken</b> senkrecht über die ganze Seitenhöhe: die Zahl oben, darunter die zehn Stufen, die von unten her volllaufen — blau bis 3, gold bis 7, rot darüber —, und neben dem Rohr steht, was die erreichte Stufe bedeutet. Eingestellt wird die Gefahr oben in der Leiste (−1 / +1 / +2). Unter <b>Lage</b> — ebenfalls oben rechts — steht der Rest: wo die Gruppe ist, was sie gewählt hat, die drei Talente mit ihren Namen, was die Gruppe weiss, und die Chronik. Auf der Seite steht immer nur, was zu diesem Weg gehört — das andere siehst du gar nicht erst. Und eine Entscheidung lässt sich erst anklicken, wenn die davor getroffen ist.</p>
- <p><b>Charakter-Übersicht / Kampf</b> ist ein eigener Bildschirm; der Knopf steht oben rechts. Dort stehen die <b>Lebenspunkte</b> — nur dort, damit sie beim Vorlesen nicht im Weg sind. Du trägst dort auch Schaden ein, der ausserhalb eines Kampfs entsteht (Sumpf, schlechte Luft). Er öffnet sich von selbst, sobald du in einer Szene einen Kampf lädst. Links die Gruppe mit ihren Talenten, in der Mitte die Gegner mit ihren Werten und der Verstärkung, rechts die Wenn-dann-Regeln dieser Szene, unten das Log. „Kampf vorbei“ heilt alle und bringt dich zur Szene zurück; „← Szene“ lässt den Kampf offen, falls du zwischendurch nachlesen willst.</p>`},
+ <p><b>Charakter-Übersicht / Kampf</b> ist ein eigener Bildschirm; der Knopf steht oben rechts. Dort stehen die <b>Lebenspunkte</b> — nur dort, damit sie beim Vorlesen nicht im Weg sind. Du trägst dort auch Schaden ein, der ausserhalb eines Kampfs entsteht (Sumpf, schlechte Luft). Er öffnet sich von selbst, sobald du in einer Szene einen Kampf lädst. Links die Gruppe mit ihren Talenten, in der Mitte die Gegner, rechts die Wenn-dann-Regeln dieser Szene, unten das Log. <b>Jeder Gegner steht dort mit zwei Zeilen:</b> wie er aussieht — das kannst du direkt vorlesen („ein alter mürrischer Kerl in grauer Livree und einer Rüstung aus besseren Zeiten“) — und <em>So führst du ihn</em>: wen er angreift, wann er aufgibt, was ihn stoppt. Damit musst du dir nichts merken und nichts erfinden. „Kampf vorbei“ heilt alle und bringt dich zur Szene zurück; „← Szene“ lässt den Kampf offen, falls du zwischendurch nachlesen willst.</p>`},
  {t:"sagen", text:["You always have to speak English. If you don’t — who knows what consequences it might have… (evil laugh)","If you don’t know a word, ask me. In English. Nobody laughs."]},
  {t:"regie", titel:"Hintergrund zur Regel", text:`Du kannst den Grafen <b>deutschempfindlich</b> machen: Er hört jeden ganzen deutschen Satz, der am Tisch fällt — für ihn ein Geräusch im Haus. Folge: Die Gefahr steigt um 1 (Knopf rechts), oder er schickt einen Diener los — dafür einen <b>Thrall</b> in den Kampf laden. Hier darfst du improvisieren; die Drohung wirkt meist schon allein.
  <p>Das Barometer hat drei Stufen. <b>Blau (0–3):</b> nichts passiert. <b>Orange (4–7):</b> du entscheidest selbst, ob du in einem Kampf einen Gegner hinzufügst — jeder Kampfblock bietet dir dafür einen Knopf an. <b>Rot (8–10):</b> Sobald die dritte Stufe erreicht ist, beginnt als Zwischenakt eine <b>Patrouille</b> (drei Wachen, ein Hund) vor dem nächsten Akt, und jeder Kampf bekommt von selbst einen Gegner mehr.</p>`},
@@ -1184,12 +1298,14 @@ function setzeGefahr(d, grund){
 }
 function zeichneBaro(){
   const st=STUFEN.find(x=>Z.gefahr<=x.bis)||STUFEN[2];
-  const balken=Array.from({length:10},(_,i)=>{const k=i+1;
-    return '<i class="'+(k<=Z.gefahr?"an"+(k<=3?1:k<=7?2:3):"")+'"></i>';}).join("");
-  if($("saeule")) $("saeule").innerHTML=balken;
+  const stufe = Z.gefahr<=3 ? 0 : Z.gefahr<=7 ? 1 : 2;
+  const f=$("saeule");   if(f) try{ f.style.height = (Z.gefahr*10)+"%"; }catch(e){}
+  const zg=$("gs-zeiger"); if(zg) try{ zg.style.bottom = (Z.gefahr*10)+"%"; }catch(e){}
+  const sl0=$("gefahrsaeule");
+  if(sl0) sl0.className = "gefahrsaeule g"+stufe+(Z.gefahr===0?" leer":"");
   if($("b-zahl")) $("b-zahl").textContent=Z.gefahr;
   if($("b-stufe")) $("b-stufe").textContent=st.name;
-  const bzz=$("b-zahl"); if(bzz) bzz.className="g"+(Z.gefahr<=3?0:Z.gefahr<=7?1:2);
+
   messeKopf();
   const sl=$("gefahrsaeule"); if(sl) sl.title="Gefahr "+Z.gefahr+" von 10 · "+st.name+" — "+st.folge;
   const bz=$("barzahl"); bz.textContent=Z.gefahr; bz.className="zahl g"+(Z.gefahr<=3?0:Z.gefahr<=7?1:2);
@@ -1275,6 +1391,8 @@ function zeichneGegner(){
     return '<div class="gegner'+(g.hp<=0?" tot":"")+'">'+
      '<div class="g-kopf"><h4>'+g.name+'</h4><span class="hpwert"><b>'+g.hp+'</b>/'+g.max+'</span></div>'+
      '<div class="hpzeile"><span class="bar"><i style="width:'+p+'%"></i></span><button class="weg" data-weg="'+i+'" title="aus dem Kampf entfernen">×</button></div>'+
+     (v.kurz?'<p class="g-kurz">'+v.kurz+'</p>':'')+
+     (v.spielt?'<p class="g-spielt"><b>So führst du ihn:</b> '+v.spielt+'</p>':'')+
      '<div class="steuer"><input type="number" id="gin'+i+'" value="8" min="1" max="99" aria-label="Schaden"><button class="minus" data-gdmg="'+i+'">Schaden</button>'+
      '<span class="att">'+v.att.map((a,j)=>'<button data-att="'+i+'" data-j="'+j+'">'+a.n+' '+a.d+'</button>').join("")+'</span></div>'+
      '<div id="wurf'+i+'"></div></div>';}).join("");
@@ -1652,7 +1770,9 @@ function zeichneKampf(){
   $("k-krume").textContent = k.n+" · "+k.titel+(kb?"":" · Gegner von Hand");
   $("k-hinweis").innerHTML = kb ? kb.text : "";
   $("k-werte").innerHTML = kb
-    ? kb.gegner.map(x=>{const v=BESTIARIUM[x]; return '<div class="statblock"><b>'+v.name+'</b> — '+v.hp+' Lebenspunkte · '+v.att.map(a=>a.n+" "+a.d).join(", ")+'</div>';}).join("")+
+    ? Array.from(new Set(kb.gegner)).map(x=>{const v=BESTIARIUM[x], n=kb.gegner.filter(y=>y===x).length;
+        return '<div class="statblock"><b>'+(n>1?n+"× ":"")+v.name+'</b> — '+v.hp+' Lebenspunkte · '+v.att.map(a=>a.n+" "+a.d).join(", ")+
+          '<span class="sb-kurz">'+v.kurz+'</span><span class="sb-spielt">'+v.spielt+'</span></div>';}).join("")+
       (kb.extra?'<div class="statblock rot">'+(Z.gefahr>=8?'Gefahr rot: <b>+1 '+BESTIARIUM[kb.extra].name+'</b> ist mitgeladen.':Z.gefahr>=4?'Gefahr orange: <b>+1 '+BESTIARIUM[kb.extra].name+'</b> ist deine Entscheidung.':'Bei Gefahr 8–10 käme +1 '+BESTIARIUM[kb.extra].name+' dazu; bei Orange nach deiner Wahl.')+'</div>':'')+
       (kb.extra&&Z.gefahr>=4&&Z.gefahr<=7?'<div class="zufuegen"><button data-laden="'+kb.extra+'">+1 '+BESTIARIUM[kb.extra].name+' dazu — deine Entscheidung</button></div>':'')+
       (kb.zusatz?'<div class="zufuegen">'+kb.zusatz.map(x=>'<button data-laden="'+x+'">+ '+BESTIARIUM[x].name+'</button>').join("")+'</div>':'')
@@ -1662,7 +1782,7 @@ function zeichneKampf(){
   const st=sichtbareChancen(k);
   $("k-staerken").innerHTML = st.length ? "Stärken hier: "+st.map(c=>"<b>"+c.wer+"</b> · "+c.talent+" — "+c.text).join(" · ") : "";
   $("kampfmodus").hidden = !Z.kampfOffen;
-  $("gefahrsaeule").hidden = Z.kampfOffen;
+  const gs=$("gefahrsaeule"); if(gs) gs.hidden = Z.kampfOffen;
 }
 function oeffneKampf(){ Z.kampfOffen=true; zeichneKampf(); sichern(); }
 function schliesseKampf(){ Z.kampfOffen=false; zeichneKampf(); sichern(); }
@@ -1695,6 +1815,11 @@ function geheZu(i){
    Läuft beim Laden; Befunde landen in der Konsole und stehen der Testdatei zur Verfügung. */
 function pruefeStory(){
   const p=[];
+  Object.keys(BESTIARIUM).forEach(k=>{
+    const v=BESTIARIUM[k];
+    if(!v.kurz)   p.push(`Gegner ${k}: keine Beschreibung (kurz)`);
+    if(!v.spielt) p.push(`Gegner ${k}: keine Spielanweisung (spielt)`);
+  });
   /* Anker der Hilfespalte: jede Regel mit „bei“ braucht einen Block mit diesem „anker“ */
   [].concat(KAPITEL, [PATROUILLE]).forEach((k,i)=>{
     const anker=new Set();
@@ -1814,7 +1939,7 @@ $("zuruecksetzen").onclick=()=>{
   if(!confirm("Neue Runde? Gefahr, Lebenspunkte, Entscheidungen und Chronik werden geleert. Die Namen bleiben stehen.")) return;
   Z=frischerZustand(Z.gruppe.map(h=>h.name)); alles(); sichern();
 };
-$("zufuegen").innerHTML=Object.keys(BESTIARIUM).map(k=>'<button data-laden="'+k+'">+ '+BESTIARIUM[k].name+'</button>').join("");
+$("zufuegen").innerHTML=Object.keys(BESTIARIUM).map(k=>'<button data-laden="'+k+'" title="'+BESTIARIUM[k].kurz.replace(/"/g,"&quot;")+'">+ '+BESTIARIUM[k].name+' <small>'+BESTIARIUM[k].hp+' HP</small></button>').join("");
 
 if(typeof window!=="undefined" && window.addEventListener) window.addEventListener("resize", messeKopf);
 function alles(){ zeichneStimmschalter(); zeichneBaro(); zeichneGruppe(); zeichneGegner(); zeichneWissen(); zeichneChronik(); zeichneSzene(); zeichneKampf(); }

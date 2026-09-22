@@ -33,16 +33,23 @@ h2{font-weight:400;font-size:24px;margin:44px 0 14px}
 .flaeche{padding:14px 16px;min-width:0}
 .unten{display:flex;align-items:stretch}
 .hauptteil{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between}
-.gsaeule{flex:none;width:62px;display:flex;flex-direction:column;
+.gsaeule{flex:none;width:68px;display:flex;flex-direction:column;
   align-items:center;gap:7px;padding:12px 0;border-left:1px solid var(--line);
-  background:linear-gradient(to left,rgba(0,0,0,.3),transparent)}
-.gsaeule b{font-family:var(--serif);font-weight:400;font-size:20px;color:var(--text)}
+  background:radial-gradient(70% 50% at 60% 50%,rgba(63,95,128,.10),transparent 75%),
+             linear-gradient(to left,rgba(0,0,0,.34),transparent)}
+.gsaeule .krone{display:flex;flex-direction:column;align-items:center;gap:1px;padding:5px 9px 3px;
+  border:1px solid rgba(63,95,128,.45);border-radius:16px 16px 3px 3px}
+.gsaeule b{font-family:var(--serif);font-weight:400;font-size:20px;color:#9fb4d2;
+  text-shadow:0 0 10px rgba(63,95,128,.8)}
+.gsaeule .sockel{color:rgba(63,95,128,.7);font-size:9px}
 .gsaeule i{font-style:normal;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:-4px}
 .gsaeule .rohr{flex:1;width:13px;border:1px solid var(--line-hi);border-radius:7px;background:#15161a;
   position:relative;outline:1px solid rgba(201,164,87,.14);outline-offset:3px}
-.gsaeule .fuell{position:absolute;left:2px;right:2px;bottom:2px;height:19%;border-radius:4px;background:#3f5f80}
-.gsaeule em{font-style:normal;writing-mode:vertical-rl;transform:rotate(180deg);font-size:8.5px;
-  letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
+.gsaeule .fuell{position:absolute;left:2px;right:2px;bottom:2px;height:19%;border-radius:4px;
+  background:linear-gradient(to top,rgba(63,95,128,.5),#6e82a0 55%,#9fb4d2);
+  box-shadow:0 0 12px rgba(63,95,128,.8)}
+.gsaeule em{font-style:normal;writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--serif);
+  font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#9fb4d2}
 .kopfband{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:8px 20px;align-items:start;
   margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
 .kopfband b{font-family:var(--serif);font-weight:400;font-size:19px;color:var(--text);line-height:1.15}
@@ -196,8 +203,10 @@ h2{font-weight:400;font-size:24px;margin:44px 0 14px}
     <div class="strip"><span class="num">9</span><span class="l">Knöpfe</span><span class="b">Anneke ist gefallen</span>
       <span class="w"><b>Weiter</b>wenn jede Figur einmal gefragt hat und die Karte auf dem Tisch liegt.</span></div>
     </div>
-    <span class="gsaeule"><span class="num">7</span><b>2</b><i>von 10</i>
-      <span class="rohr"><span class="fuell"></span></span><em>Gefahr</em></span>
+    <span class="gsaeule"><span class="num">7</span>
+      <span class="krone"><b>2</b><i>von 10</i></span>
+      <span class="rohr"><span class="fuell"></span></span><em>✦ Gefahr ✦</em>
+      <span class="sockel">✦</span></span>
     </div>
   </div>
 
@@ -227,6 +236,13 @@ h2{font-weight:400;font-size:24px;margin:44px 0 14px}
     <li><span class="num">8</span><span><b>Hilfe auf gleicher Höhe</b>Wenn-dann-Regeln und Stärken der Figuren stehen neben der Stelle, zu der sie gehören. Steht daneben nichts, gibt es dort nichts zu beachten.</span></li>
     <li><span class="num">9</span><span><b>Aktionsleiste</b>Alle Knöpfe der Szene, immer am unteren Rand, daneben die Bedingung zum Weiterblättern.</span></li>
   </ul>
+
+  <h2>Im Kampf-Reiter</h2>
+  <div class="rand">
+    <div><b style="color:var(--text)">Die Gruppe</b>Namen, Talente, Lebenspunkte. Nur hier — auch Schaden ausserhalb des Kampfs.</div>
+    <div><b style="color:var(--red)">Jeder Gegner</b>Wie er aussieht (zum Vorlesen) und wie du ihn führst: wen er angreift, wann er aufgibt.</div>
+    <div><b style="color:var(--muted)">Wenn … dann</b>Die Regeln dieser Szene, damit du sie im Kampf nicht suchen musst.</div>
+  </div>
 
   <h2>Was am Rand steht</h2>
   <div class="rand">

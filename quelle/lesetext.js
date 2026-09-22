@@ -129,7 +129,11 @@ T.KAPITEL.forEach((k,i)=>{
       case "wenn":
         kinder.push(...kasten([[...etikett(b.titel.toUpperCase()+" (NUR DM):","555555"),new TextRun({text:ohneHtml(b.text),font:"Georgia",size:18,color:"333333"})]],grau,"BFBFBF")); break;
       case "kampf":
-        kinder.push(...kasten([[...etikett("KAMPF (NUR DM): "+b.titel,"8A2C2C"),new TextRun({text:" "+ohneHtml(b.text)+"  "+b.gegner.map(g=>T.BESTIARIUM[g].name+" "+T.BESTIARIUM[g].hp+" HP").join(", "),font:"Georgia",size:18,color:"333333"})]],grau,"BFBFBF")); break;
+        kinder.push(...kasten([[...etikett("KAMPF (NUR DM): "+b.titel,"8A2C2C"),new TextRun({text:" "+ohneHtml(b.text)+"  "+b.gegner.map(g=>T.BESTIARIUM[g].name+" "+T.BESTIARIUM[g].hp+" HP").join(", "),font:"Georgia",size:18,color:"333333"})],
+          ...Array.from(new Set(b.gegner)).map(g=>{const v=T.BESTIARIUM[g]; return [
+            new TextRun({text:v.name+": ",font:"Georgia",size:17,bold:true,color:"333333"}),
+            new TextRun({text:v.kurz+"  ",font:"Georgia",size:17,color:"333333"}),
+            new TextRun({text:v.spielt,font:"Georgia",size:17,italics:true,color:"555555"})];})],grau,"BFBFBF")); break;
       case "optionen":
         kinder.push(...kasten([[...etikett((b.titel||"DIE DREI KARTEN")+" (NUR DM)","555555")],
           ...b.optionen.map(o=>[new TextRun({text:o.b+" · "+o.name+"  ",font:"Georgia",size:18,bold:true}),new TextRun({text:ohneHtml(o.was)+(o.pro?"  + "+ohneHtml(o.pro.join(" ")):"")+(o.con?"  − "+ohneHtml(o.con.join(" ")):"")+"  [Gefahr "+(o.wirkung.gefahr>0?"+"+o.wirkung.gefahr:"±0")+"]",font:"Georgia",size:18,color:"333333"})])],grau,"BFBFBF")); break;
