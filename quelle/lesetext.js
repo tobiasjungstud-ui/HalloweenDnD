@@ -107,7 +107,7 @@ T.KAPITEL.forEach((k,i)=>{
         if(b.titel) kinder.push(new Paragraph({spacing:{before:100,after:40},children:[new TextRun({text:b.titel,font:"Georgia",size:19,bold:true,color:"555555"})]}));
         b.text.forEach(t=>kinder.push(new Paragraph({spacing:{after:110,line:320},children:glossiere(t,gesehen,22)}))); break;
       case "sagen":
-        kinder.push(...kasten(b.text.map((t,j)=>[...(j===0?etikett("DM:","8A6A2C"):[]),...glossiere(t,gesehen,21).map(r=>{r.root; return r;})]),gelb,"D9A441")); break;
+        kinder.push(...kasten(b.text.map((t,j)=>[...(j===0?etikett((b.wer?b.wer.toUpperCase():"DM")+":","8A6A2C"):[]),...glossiere(t,gesehen,21).map(r=>{r.root; return r;})]),gelb,"D9A441")); break;
       case "aufgabe":
         kinder.push(...kasten([[...etikett("DM SAGT DEN SCHÜLERN:","3A5A4C"),...glossiere("“"+(b.sag||b.text)+"”",gesehen,19)],
           ...((!schueler&&b.hinweis)?[[new TextRun({text:ohneHtml(b.hinweis)+(b.blatt?"  →  "+b.blatt:""),font:"Georgia",size:17,color:"555555"})]]:(b.blatt?[[new TextRun({text:"→  "+b.blatt,font:"Georgia",size:17,color:"555555"})]]:[]))],gruen,"74B094")); break;

@@ -22,7 +22,7 @@ Spielen, kein Konto, keine Daten verlassen das Gerät.
 
 | Datei | Für wen | Was darauf steht |
 |---|---|---|
-| `dungeon_master.html` | Spielleitung | **V2, Regiebuch:** dreizehn Seiten Ablauf mit Randnotizen, rechts Wenn-dann, Stärken, Gruppe, Barometer; der Kampf als eigener Vollbildschirm |
+| `dungeon_master.html` | Spielleitung | **V2:** dreizehn Seiten Ablauf als Karten, oben eine klebende Leiste, rechts Gruppe, Wenn-dann, Stärken, Barometer; der Kampf als eigener Vollbildschirm |
 | `dungeon_master_v1.html` | Spielleitung | **V1**, die frühere Darstellung (vier Farbbalken, drei Spalten, Kampf in der Seitenleiste) — gleiche Daten, gleiche Logik, weiterhin lauffähig |
 | `spickzettel.html` | Spielleitung | Eine Seite: der DM-Bildschirm auf einen Blick — sieben Bereiche, vier Farben, vier Handgriffe |
 | `spieler_magier.html` | The Arcanist, 18 HP | Fireball · Magic Hand · Arcane Darts — Talent ausserhalb des Kampfs: *Magic Hand* |
@@ -60,12 +60,14 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
 
 1. Helfer-Blatt ausdrucken, drei Geräte bereitlegen, jedem seinen Link geben.
 2. Die Spielleitung liest Seite 1 der Konsole. Fünf Minuten, mehr braucht es nicht.
-3. Die Konsole führt durch dreizehn Seiten. Am linken Rand steht bei jedem Absatz, was er
-   ist: **Vorlesen** (wörtlich), **An die Schüler** (wörtlich, ihre Aufgabe), **Für dich**
-   (nur die Spielleitung), **Kampf**. Unten steht immer, wann es weitergeht. Rechts, beim
-   Scrollen stehend: **Wenn … dann** — was in dieser Szene von der Antwort der Gruppe abhängt
-   („Tam angelogen → kein Führer“) —, die **Stärken der Figuren**, die Gruppe, das Barometer.
-   Blättern geht auch mit den Pfeiltasten.
+3. Die Konsole führt durch dreizehn Seiten. Ganz oben eine schmale Leiste, die beim Scrollen
+   stehen bleibt: Szene, Ort, Gefahr mit den Knöpfen −1 +1 +2, der Kampf und das Blättern.
+   Darunter die Szene als Karten: **Vorlesen** mit goldener Kante, darin die Rede farbig,
+   **An die Schüler** grün und direkt daran hängend, **Hintergrund** grau und auf einen Satz
+   eingeklappt. Rechts, ebenfalls stehend: die Gruppe, **Wenn … dann** — was in dieser Szene
+   von der Antwort der Gruppe abhängt („Tam angelogen → kein Führer“) —, die **Stärken der
+   Figuren**, das Barometer, das Wissen. Ganz unten sammelt eine Aktionsleiste alle Knöpfe der
+   Szene und die Bedingung zum Weiterblättern. Blättern geht auch mit den Pfeiltasten.
 4. **Der Kampf ist ein eigener Bildschirm.** Er öffnet sich, sobald ein Kampf geladen wird,
    oder jederzeit über „⚔ Kampf“ oben rechts (freier Kampf, Gegner von Hand). Links die
    Gegner mit Attacken, rechts die Gruppe, unten das Log; „Kampf vorbei“ heilt alle und
@@ -96,10 +98,13 @@ Jeder Hinweis, den die Gruppe finden kann, ist an einen Satz gebunden, den eine 
 wirklich ausspricht — und jede Person trägt eine Zeile **„Notfalls“**, falls niemand danach
 fragt. Das Spiel kann nicht hängenbleiben.
 
-**Zwei Spalten je Szene, dazu der Kampfbildschirm.** Links steht, was die Spielleitung
-vorliest und sagt, mit Randnotizen statt Farbbalken. Rechts, fest stehend und mitscrollend,
-die Abzweigungen dieser Szene als **Wenn … dann** (grün: es geht gut aus, rot: es kostet
-etwas) und darunter die **Stärken der Figuren**:
+**Was zuerst ins Auge fällt, ist das, was gesagt wird.** Der erste Vorlesesatz steht auf
+jeder Seite rund 220 Pixel unter dem oberen Rand, vorher waren es je nach Szene 500 bis 770.
+Der Hintergrund steht weiterhin vollständig da, aber als eingeklappte Zeile. Regeln, die
+auf das Verhalten der Gruppe reagieren, stehen nur noch an einer Stelle, nämlich rechts.
+Rechts, fest stehend und mitscrollend, stehen die Lebenspunkte, die Abzweigungen dieser
+Szene als **Wenn … dann** (grün: es geht gut aus, rot: es kostet etwas) und die
+**Stärken der Figuren**:
 eine Gelegenheit für *diese* Figur —
 der Arcanist mit *Magic Hand*, der Blade mit *Strength*, die Lightbearer mit *Healing Touch*. Sie sind als Möglichkeit
 formuliert, nie als Lösung, und jede Szene funktioniert ohne sie.

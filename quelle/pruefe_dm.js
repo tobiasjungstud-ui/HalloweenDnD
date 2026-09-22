@@ -30,6 +30,7 @@ vm.runInThisContext(`globalThis.T = { Z:()=>Z, setZ:z=>{Z=z;}, KAPITEL, ENTSCHEI
 console.warn = echtWarn;
 
 /* ---------- Hilfen ---------- */
+const NEU = html.includes('id="aktionen"');   /* V2 nach dem Usability-Umbau */
 const befunde = [];
 let gepruefteZusicherungen = 0;
 function pruefe(bedingung, text){ gepruefteZusicherungen++; if(!bedingung) befunde.push(text); }
@@ -112,8 +113,23 @@ function spiele(p, protokoll){
     chancen.forEach(c=>pruefe(st.includes(c.text) && st.includes(c.folge) && st.includes(c.cue), wo+": Gelegenheit fehlt rechts: "+c.wer+" · "+c.talent));
     const gelb=sichtbar.filter(b=>b.t==="vorlesen"||b.t==="sagen").flatMap(b=>b.text);
     chancen.forEach(c=>pruefe(gelb.some(t=>t.includes(c.cue)), wo+": Ankündigung „"+c.cue+"“ wird auf diesem Pfad nicht vorgelesen"));
-    const leerZeilen=(st.match(/staerke leer/g)||[]).length, belegt=new Set(chancen.map(c=>c.wer)).size;
-    pruefe(leerZeilen===3-belegt, wo+`: ${leerZeilen} leere Stärken-Zeilen bei ${belegt} belegten Figuren`);
+    if(!NEU){
+      const leerZeilen=(st.match(/staerke leer/g)||[]).length, belegt=new Set(chancen.map(c=>c.wer)).size;
+      pruefe(leerZeilen===3-belegt, wo+`: ${leerZeilen} leere Stärken-Zeilen bei ${belegt} belegten Figuren`);
+    } else {
+    /* Figuren ohne Gelegenheit stehen in einer gesammelten Zeile, mit Namen und Talent */
+    const ohneFiguren=T.Z().gruppe.filter(x=>!chancen.some(c=>c.wer===x.rolle)).map(x=>x.rolle);
+    pruefe((st.match(/staerke leer/g)||[]).length===(ohneFiguren.length?1:0), wo+": Sammelzeile für Figuren ohne Gelegenheit fehlt oder ist doppelt");
+    ohneFiguren.forEach(r=>pruefe(st.includes(r), wo+": Figur ohne Gelegenheit wird rechts nicht genannt: "+r));
+    /* Knöpfe der Szene erscheinen auch in der Aktionsleiste */
+    const akt=el("aktionen").innerHTML;
+    sichtbar.filter(b=>b.t==="tun").forEach(b=>pruefe(akt.includes('data-tun="'+b.id+'"'), wo+": Knopf fehlt in der Aktionsleiste: "+b.id));
+    sichtbar.filter(b=>b.t==="kampf"&&!b.ohneKnopf).forEach(b=>pruefe(akt.includes('data-laden="'+b.gegner.join(",")+'"'), wo+": Kampfknopf fehlt in der Aktionsleiste"));
+    const wB=k.bloecke.find(b=>b.t==="weiter");
+    pruefe(!wB || akt.includes(wB.text), wo+": „Weiter, wenn“ fehlt in der Aktionsleiste");
+    const zB=k.bloecke.find(b=>b.t==="ziel");
+    pruefe(!zB || el("zielzeile").innerHTML.includes(zB.text), wo+": Ziel fehlt in der Titelzeile");
+    }
     for(const gruppe of GRUPPEN) chancen.forEach(c=>{
       const nur=T.liste(c.nur).filter(f=>gruppe.includes(f));
       pruefe(nur.length===0 || nur.some(T.hat), wo+": Gelegenheit "+c.wer+" sichtbar, obwohl ihr Zweig ("+nur+") nicht gewählt ist");
