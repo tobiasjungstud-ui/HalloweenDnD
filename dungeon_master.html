@@ -305,7 +305,7 @@ input{font:inherit;color:inherit}
 .gefahrsaeule{position:fixed;right:0;top:var(--barhoehe);bottom:0;width:112px;z-index:25;
   --fx-l:0;
   display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px 0 12px;
-  font-family:var(--sans);border-left:1px solid #17181c;
+  font-family:var(--sans);
   background:
     linear-gradient(to left, rgba(255,255,255,.02) 0 58%, rgba(255,255,255,0) 100%),
     repeating-linear-gradient(112deg, rgba(255,255,255,.03) 0 2px, transparent 2px 7px),
@@ -317,10 +317,7 @@ input{font:inherit;color:inherit}
   transition:--gf-rgb .4s}
 .gefahrsaeule.g1{--gf-rgb:201,164,87; --gf-farbe:#c9a457; --gf-hell:#f0dba6}
 .gefahrsaeule.g2{--gf-rgb:190,52,42; --gf-farbe:#be342a; --gf-hell:#ff6b58}
-.gefahrsaeule::before{content:"";position:absolute;left:-30px;top:0;bottom:0;width:38px;pointer-events:none;
-  background:linear-gradient(to right, rgba(var(--gf-rgb),0), rgba(var(--gf-rgb),calc(.05 + var(--fx-l)*.10)));
-  -webkit-mask-image:linear-gradient(to bottom,transparent,#000 14%,#000 86%,transparent);
-  mask-image:linear-gradient(to bottom,transparent,#000 14%,#000 86%,transparent)}
+.gefahrsaeule::before{content:none}
 
 /* Krone: Flügel, gotischer Bogen, die Zahl */
 .gs-krone{position:relative;flex:none;display:flex;flex-direction:column;align-items:center;
