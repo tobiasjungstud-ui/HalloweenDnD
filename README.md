@@ -79,16 +79,15 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
    neben dem Titel; ganz rechts läuft der **Gefahrenbalken** senkrecht über die ganze
    Seitenhöhe: eine Glasröhre, die sich von unten füllt — blau bis 3, gold bis 7, rot
    darüber —, mit Skala, Zeiger, der Zahl im gotischen Bogen und der Stufe daneben.
-   Der ganze Streifen glüht in der Farbe der erreichten Stufe — und **seine linke Kante
-   brennt**: Flammenzungen schlagen von unten herauf, und wie weit hinauf, wie hoch und wie
-   dicht, hängt allein am Wert. Ab 1 flackert es ganz unten, ab 4 brennt die untere Hälfte,
-   ab 6 steigen Funken, ab 7 pulst das Feuer im Herzschlag (zwei Schläge, dann Pause; 3,0 s
-   bei 7 bis 1,4 s bei 10), ab 8 lodert die ganze Kante samt Krone und Sockel, ab 9 kommt
-   Rauch dazu, bei 10 sitzt ein brennendes Gebiss über der Krone. Metall, Zahl und Schrift
-   werden vom Feuer mitbeleuchtet; jede Erhöhung gibt einen Flammenstoss, jede Senkung
-   fährt ruhig herunter. Alles hängt am Gefahrenwert, läuft auf einer einzigen Leinwand
-   (`GefahrFX`), zeigt bei „reduzierte Bewegung“ einen stehenden Glutsaum und dünnt sich
-   selbst aus, wenn ein Rechner nicht mitkommt. Der Schalter **Blut** in der
+   Der ganze Streifen glüht in der Farbe der erreichten Stufe — und **er atmet**: Krone,
+   Zahl, Schrift, Glasrand, Skalenstriche und die Lichtkante werden heller und dunkler, bis
+   Gefahr 6 in einem langsamen Atem (4,5 s, mit steigender Gefahr auf 2,6 s beschleunigend),
+   ab 7 in einem **Herzschlag** aus zwei Stössen und einer Pause — 3,0 s bei 7, 1,4 s bei 10 —,
+   überlagert von einem Flackern aus drei Sinusschwingungen (±5 % bis ±15 %). Jede Erhöhung
+   gibt einen kurzen Lichtstoss, jede Senkung fährt ruhig herunter; bei 10 sitzt ein Gebiss
+   über der Krone. Das Modul `GefahrFX` zeichnet dafür nichts — es schreibt nur eine
+   Lichtstärke nach `--fx-l`, aus der die CSS-Schatten und -Kanten ihren Schein rechnen, und
+   steht bei „reduzierte Bewegung“ still. Der Schalter **Blut** in der
    Leiste füllt das Rohr statt mit einem Balken mit Blut — steigende Blasen, Perlen, die
    innen am Glas herunterlaufen, eine leuchtende Oberfläche. Reine Stimmung; am Wert ändert
    er nichts, und er merkt sich seinen Zustand. Ganz unten sammelt eine Aktionsleiste
