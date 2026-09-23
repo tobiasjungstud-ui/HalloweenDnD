@@ -222,6 +222,32 @@ Gegnerkarten liegt die Reihe **Gegner dazunehmen**, offen und jederzeit
 erreichbar — vorher lag sie zugeklappt unter den Karten und war nach zwei
 geladenen Gegnern nicht mehr zu sehen.
 
+**Vaskir kann Vampire Spawn rufen** — zwei Tropfen seines eigenen Bluts, und was
+aufsteht, war heute Nacht noch ein Mensch: 30 Lebenspunkte, `Claws 2d6+5`, härter
+als alles andere im Haus. Es kostet ihn **6 Lebenspunkte je Spawn**, sichtbar am
+Tisch, und unter 15 hört er auf zu kämpfen und redet — wer dreimal ruft, redet
+also früher.
+
+Die Zahlen sind **ausgerechnet, nicht geschätzt**: `quelle/kampf_sim.py` spielt den
+Kampf nach den Regeln der Blätter (w20 gegen die Zielzahl, natürliche 20 verdoppelt
+die Würfel) und der Konsole (Gegner treffen mit 65 %) vierzigtausendmal durch.
+
+| Aufstellung | Gruppe gewinnt | Ø Runden |
+|---|---|---|
+| 1 Spawn | 100 % | 2,0 |
+| 2 Spawn | 96 % | 3,9 |
+| **3 Spawn** | **50 %** | 5,3 |
+| 4 Spawn | 7 % | 4,2 |
+| Vaskir + 1 Spawn (er: 49 HP) | 89 % | 5,0 |
+| Vaskir + 2 Spawn (er: 43 HP) | 32 % | 5,4 |
+| Vaskir + 3 Spawn (er: 37 HP) | 4 % | 4,0 |
+
+Ohne Heiltränke, ohne Talente, Schaden gebündelt auf je einen Gegner. Drei Spawn
+allein sind damit der Gleichstand, den der Auftrag verlangt — und die Kurve ist
+steil genug, dass die Zahl etwas bedeutet. Mit den Heiltränken steigt dieselbe
+Aufstellung auf 82 %; verteilt die Gruppe ihren Schaden statt zu bündeln, fällt sie
+auf 31 %. **Neben Vaskir gehört höchstens einer.**
+
 **Der Abend passt sich an.** Erreicht das Gefahrenbarometer 8, lädt jeder Kampfknopf einen
 Gegner mehr, und die Konsole schiebt einmal einen Zwischenakt vor den nächsten Akt: eine
 Patrouille aus drei Wachen und einem Wachhund — gerade noch zu schaffen, mit Rückzugsregel.

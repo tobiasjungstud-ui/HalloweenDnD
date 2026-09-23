@@ -879,6 +879,9 @@ const BESTIARIUM = {
   hund:   {name:"Guard Hound",  hp:14, att:[{n:"Bite",  d:"1d6+2"}],
     kurz:"Zu gross für einen Hund, zu leise für einen Wolf. Läuft an einer langen Kette, die jemand loslässt.",
     spielt:"Er geht zuerst auf den los, der am weitesten hinten steht. Fällt er, verlieren die Wachen die Lust."},
+  spawn:  {name:"Vampire Spawn", hp:30, att:[{n:"Claws", d:"2d6+5"}],
+    kurz:"Es war heute Nacht noch ein Mensch. Der Mantel gehört noch dem Menschen, das Gesicht nicht mehr — und es sieht immer den an, der zuletzt geblutet hat.",
+    spielt:"Es spricht nicht und es zielt nicht: Es schlägt auf den ein, der am nächsten steht, und es kennt keine Angst, weil es nichts mehr zu verlieren hat. Fällt Vaskir, fallen sie mit ihm — dann ist der Kampf sofort vorbei."},
   vaskir: {name:"Count Vaskir", hp:55, att:[{n:"Claws", d:"2d6+2"},{n:"Bite", d:"1d8+3"}],
     kurz:"Ein müder Mann von fünfzig in einem guten Mantel. Nicht bleich, nicht gross — er sieht aus wie jemand, der dieselbe Arbeit viel zu lange gemacht hat.",
     spielt:"Er hebt nie die Stimme und antwortet auf jeden Satz, den eine Figur an ihn richtet. Unter 15 Lebenspunkten hört er auf zu kämpfen und redet: töten, Vertrag oder gehen lassen."}
@@ -1355,8 +1358,12 @@ const KAPITEL = [
  {t:"wenn", gefahrVon:8, gefahrBis:10, titel:"Gefahr 8–10 · Das Haus ist wach", text:`Jede Lampe brennt. Volle 55 Lebenspunkte. Sag der Gruppe vorher, woran das liegt — sie haben es sich verdient und wissen es.`},
  {t:"wenn", gefahrVon:4, gefahrBis:10, nicht:"e3_buch", titel:"Zwei Thralls kommen dazu", text:`Zwei Diener des Hauses stehen mit im Raum, je 9 Lebenspunkte — gelb oben: „Seine Leute“. Der Knopf unten lädt sie mit.`},
  {t:"wenn", gefahrVon:4, gefahrBis:10, nur:"e3_buch", titel:"Keine Thralls", text:`Das Buch hat die Diener befreit — sie liegen irgendwo im Haus und schlafen zum ersten Mal seit Jahren. <b>Vaskir kommt allein.</b>`},
+ {t:"wenn", titel:"Vampire Spawn — wenn er nicht mehr allein kämpfen will", text:`Vaskir kann <b>Spawn rufen</b>: Er beisst sich in die eigene Hand und lässt <b>zwei Tropfen</b> auf die Dielen fallen. Was daraus aufsteht, war heute Nacht noch ein Mensch. Es hat 30 Lebenspunkte und schlägt mit <em>Claws 2d6+5</em> — härter als alles andere im Haus.
+ <p><b>Es kostet ihn etwas, und zwar sichtbar:</b> Zwei Tropfen sind <b>6 Lebenspunkte von Vaskir selbst</b>. Tipp die 6 in seine Karte und drück <em>Schaden</em>, dann den Knopf <b>+ Vampire Spawn</b>. Unter 15 hört er auf zu kämpfen und redet — wer dreimal ruft, redet also früher. Sag den Schülern, was sie sehen: dass er dafür bezahlt.</p>
+ <p><b>Wie viele?</b> <b>Drei Spawn allein</b> sind ein ausgerechneter Gleichstand — die Gruppe gewinnt in genau der Hälfte der Fälle, ohne Tränke und ohne Talente. <b>Neben Vaskir nimmst du einen.</b> Zwei neben ihm gewinnt die Gruppe noch in einem von drei Fällen, drei fast nie. Also: einen, wenn die Gruppe zu leicht durchkommt — und keinen, wenn schon jemand liegt.</p>
+ <p><b>Fällt Vaskir, fallen sie mit ihm.</b> Nimm sie dann vom Tisch, egal wie viele Lebenspunkte sie noch haben: Der Kampf endet mit ihm, nicht mit ihnen.</p>`},
  {t:"tun", id:"finale_laden", wiederholbar:true, text:"Lade den Kampf — die Seite nimmt die richtigen Gegner nach Barometer und eurer Wahl. Bei geglückter Verhandlung brauchst du das nicht.", knopf:{art:"finale"}, beschriftung:"Kampf laden"},
- {t:"kampf", anker:"vaskir", titel:"Count Vaskir", ohneKnopf:true, text:"Geladen wird mit dem Knopf darüber; er öffnet den Kampfbildschirm. Trag den Schaden der Spieler dort in seine Leiste ein. Für seinen Zug drückst du auf eine seiner Attacken — die Seite würfelt und du klickst an, wen es trifft.", gegner:["vaskir"], zusatz:["thrall"]},
+ {t:"kampf", anker:"vaskir", titel:"Count Vaskir", ohneKnopf:true, text:"Geladen wird mit dem Knopf darüber; er öffnet den Kampfbildschirm. Trag den Schaden der Spieler dort in seine Leiste ein. Für seinen Zug drückst du auf eine seiner Attacken — die Seite würfelt und du klickst an, wen es trifft.", gegner:["vaskir"], zusatz:["thrall","spawn"]},
  {t:"optionen", id:"e4", titel:"Wie ist es ausgegangen?", optionen:[
   {b:"A", name:"Vaskir ist tot", flagge:"ausgang_tot", was:"Sie haben ihn erledigt. Zu Staub, im Licht der ersten Sonne.", wirkung:{gefahr:0}},
   {b:"B", name:"Ein neuer Vertrag", flagge:"ausgang_vertrag", was:"Verhandelt — ob vor dem Kampf oder mit dem Schwert an seiner Kehle. Er unterschreibt.", wirkung:{gefahr:0}},
