@@ -1164,7 +1164,7 @@ const KAPITEL = [
   `Above the fireplace hangs a long, heavy board of oak, on two iron hooks, with names carved into it. The last one is fresh — you can still see the pale wood inside the letters. It says: MIRELA VANCE.`]},
  {t:"vorlesen", titel:"Die drei, die euch ansehen", text:[
   `Greta, behind the bar, has three fingers on one hand. Old Pieter sits by the fire with a bottle. Tobias, a boy, waits by the door. These three look at you. The others look down.`]},
- {t:"aufgabe", sag:"Each of you: choose someone and ask a question. Then ask about something you heard of the case — ask for specific information.", hinweis:"Antwortmöglichkeiten stehen bei den drei Personen oben: abhaken, sobald eine Frage gestellt ist — jede nur einmal, egal von wem."},
+ {t:"aufgabe", sag:"Each of you: choose someone and ask a question. Then ask about something you heard of the case — ask for specific information.", hinweis:"Antwortmöglichkeiten stehen bei den drei Personen darunter: abhaken, sobald eine Frage gestellt ist — jede nur einmal, egal von wem."},
   {t:"personen", anker:"inn", leute:[
   {name:"Greta", wer:"Wirtin, drei Finger", spielt:"Kurze Sätze. Sie lügt nie — sie wechselt das Thema. Freundlich, nicht feindlich.", fragen:[
     ["What happened to Mirela?","„She is gone. Three nights ago. That is all there is.“ — mehr nicht."],
@@ -2409,7 +2409,7 @@ function blockHTML(b, idx, h, lauf){
         '<span class="anriss">'+anriss(b.text,190)+'</span><span class="mehr">mehr</span></summary>'+
         '<div class="voll">'+b.text+'</div></details>'+(hilfe?'<div class="hilfe">'+hilfe+'</div>':''); }
     case "personen":
-      return zeile(b.leute.length===1?"Mögliche Antworten":"Für dich","personen", b.leute.map(l=>{
+      return zeile(b.leute.length===1?"Mögliche Antworten":"","personen", b.leute.map(l=>{
         const eintraege=l.fragen||l.sagt, keys=eintraege.map((_,j)=>(Z.schritt+":"+l.name+":"+j));
         const offen=keys.filter(k=>!Z.abgehakt[k]).length, stumm=offen===0;
         const pst = ZEIGE_STIMMEN && STIMMEN[l.name] ? '<span class="pstimme">'+STIMMEN[l.name]+'</span>' : "";
@@ -2425,7 +2425,7 @@ function blockHTML(b, idx, h, lauf){
               return '<div class="a breit'+(w?" erledigt":"")+'">'+hakHTML(keys[j],w)+' '+rede("„"+t+"“")+'</div>';}).join("");
         return '<article class="person">'+kopf+'<div class="fragen">'+zeilen+'</div>'+
           '<p class="notfalls"><b>Notfalls:</b> '+l.notfalls+'</p></article>';
-      }).join("")+(b.sonst?'<p class="sonst">'+b.sonst+'</p>':''), b.leute.length===1?("Charakter: "+b.leute[0].name):"Wen man ansprechen kann", hilfe);
+      }).join("")+(b.sonst?'<p class="sonst">'+b.sonst+'</p>':''), b.leute.length===1?("Charakter: "+b.leute[0].name):"", hilfe);
     case "fa":
       return zeile("Mögliche Antworten","fa", '<div class="fakarte"><div class="fragen">'+
         b.paare.map(p=>{ const k=Z.schritt+":"+p[0], w=b.abhaken&&!!Z.abgehakt[k];
