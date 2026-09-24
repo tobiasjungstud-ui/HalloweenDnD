@@ -62,7 +62,7 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
 2. Die Spielleitung liest Seite 1 der Konsole. Fünf Minuten, mehr braucht es nicht.
 3. Die Konsole führt durch elf Seiten. Ganz oben eine schmale Leiste, die beim Scrollen
    stehen bleibt: Szene, Ort, die **Uhr** (90 Minuten, pausierbar, mit dem Soll je Seite),
-   **Rückgängig**, Gefahr mit den Knöpfen −1 +1 +2, der Reiter *Charakter-Übersicht
+   **Rückgängig**, der Reiter *Charakter-Übersicht
    / Kampf*, das Blättern und die **Lage** (Weg, Tür, Wahl, die drei Talente, das Wissen, die
    Chronik). Darunter die Szene als Regiebuch: am linken Rand steht, was ein Absatz ist —
    **Vorlesen**, **Gesprächsaufforderung** (endet immer mit einer klaren Aufforderung),
@@ -143,7 +143,7 @@ fragt. Das Spiel kann nicht hängenbleiben.
 jeder Seite rund 220 Pixel unter dem oberen Rand, vorher waren es je nach Szene 500 bis 770.
 Der Hintergrund steht weiterhin vollständig da, aber als eingeklappte Zeile. Regeln, die
 auf das Verhalten der Gruppe reagieren, stehen nicht mehr gesammelt in einer Leiste, sondern
-**neben der Stelle, an der sie gebraucht werden**: „Sumpf: ein Wurf unter 7 → −1 HP“ steht
+**neben der Stelle, an der sie gebraucht werden**: „Sumpf: ein Wurf unter 7 → ruft um Hilfe, sonst −1 HP“ steht
 neben dem Sumpf, „Wachen: alle würfeln 7 oder mehr → vorbei“ neben den Wachen. Dieselbe
 Spalte trägt, jeweils neben dem Absatz, der sie ankündigt, die
 **Stärken der Figuren**:
@@ -216,12 +216,44 @@ am besten — so ist die Fläche geschnitten.
 
 **Gewürfelt wird mit zwei Sechsern.** Zusammengezählt, `7 oder mehr` heisst: es
 klappt — das ist die Schwelle, die vorher im Text steht (Sumpf, Wachen, Westgang).
-Sie ersetzt den früheren W20 mit Schwelle 10 und trifft dessen Chancen fast genau:
-55 % wurden 58 %. Und sie ist nicht die einzige Probe: Die Konsole sagt der
+Es gibt am Tisch keine anderen Würfel — auch die Spielerblätter würfeln deshalb mit
+zwei Sechsern (siehe unten). Und sie ist nicht die einzige Probe: Die Konsole sagt der
 Spielleitung ausdrücklich, dass sie stattdessen prüfen darf, **wie überzeugend eine
 Figur auf Englisch beschreibt, was sie tut** — geübt wird das Sprechen, nicht das
 Würfeln. Im Kampf braucht es die Würfel gar nicht; Treffer und Schaden würfeln die
 Seiten selbst.
+
+**Der Sumpf ist ein Wurf pro Figur, nicht drei.** Erst sagt jede Figur, wie sie
+hinüberkommt und wie sie helfen würde; dann würfelt jede einmal. Wer unter 7 bleibt,
+steckt fest und ruft auf Englisch um Hilfe (*Help! I’m stuck!*) — und eine andere
+Figur sagt, wie sie ihn herauszieht. Dann passiert nichts; nur wenn keine Hilfe kommt,
+kostet es einen Lebenspunkt. Der Blade kann mit *Strength* jeden herausziehen. Drei
+Würfe statt neun, und jeder Fehlwurf wird zum Gesprächsanlass statt zur Abzugsliste.
+
+**Die Spielerblätter würfeln dieselben zwei Sechser.** Sie zeigen zwei Würfel mit
+Augen und die Summe; ein **Sechserpasch** ist der kritische Treffer (doppelte
+Schadenswürfel). Die Zielzahlen sind so gewählt, dass die Trefferchancen des früheren
+W20 erhalten bleiben:
+
+| Angriff | trifft ab | Chance | vorher (W20) |
+|---|---|---|---|
+| Sword Strike, Shield Bash, Radiant Strike, Blinding Light | 6 | 72 % | 70 % |
+| Fireball, Magic Hand | 7 | 58 % | 60 % / 65 % |
+| Reckless Charge, Judgement (jetzt `3d6+7` statt `3d6+4`) | 8 | 42 % | 50 % |
+
+Die beiden grossen Angriffe treffen seltener; dafür machen sie drei Schaden mehr, so
+dass ihr Erwartungswert bleibt (7,6 statt 7,8). „Just roll 2d6“ ist der freie Wurf
+für Proben ausserhalb des Kampfs. Das Schicksal bei 0 Lebenspunkten: Sechserpasch →
++3 Schaden für den Rest des Abends, Einerpasch → der Schaden wird ein Rätsel (drei
+Würfel statt der eigenen), alles andere → eine Narbe. Die Balance ist nachgerechnet:
+drei Vampire Spawn bleiben ein Gleichstand (49,9 %, vorher 50,0 %).
+
+**Gefahr verändern — an der Säule, nicht in der Leiste.** An der linken Kante des
+Gefahrenbalkens hängt eine Lasche **‹ GEFAHR**. Sie klappt eine Schublade heraus mit
+−1 +1 +2 und den drei Stufen (0–3 ruhig · 4–7 ein Gegner mehr möglich · 8–10 jeder
+Kampf ein Gegner mehr, Patrouille), die aktuelle hervorgehoben. Esc oder ein zweiter
+Klick klappt sie zu; ↶ nimmt eine Änderung zurück. Die Leiste oben ist dadurch um
+die Knöpfe kürzer.
 
 **Im Kampfbildschirm** steht oben rechts **„? Wie es funktioniert“** — die drei
 Handgriffe eines Kampfs als Fenster, derselbe Text wie auf der ersten Seite (er
@@ -240,7 +272,7 @@ Tisch, und unter 15 hört er auf zu kämpfen und redet — wer dreimal ruft, red
 also früher.
 
 Die Zahlen sind **ausgerechnet, nicht geschätzt**: `quelle/kampf_sim.py` spielt den
-Kampf nach den Regeln der Blätter (w20 gegen die Zielzahl, natürliche 20 verdoppelt
+Kampf nach den Regeln der Blätter (2d6 gegen die Zielzahl, ein Sechserpasch verdoppelt
 die Würfel) und der Konsole (Gegner treffen mit 65 %) vierzigtausendmal durch.
 
 | Aufstellung | Gruppe gewinnt | Ø Runden |

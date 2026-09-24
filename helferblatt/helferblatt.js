@@ -89,7 +89,7 @@ const TEILE = [
         ["to be seen","gesehen werden"],["dangerous — safe","gefährlich — sicher"],
         ["to decide","sich entscheiden"],["to agree","zustimmen"]] },
 
- { nr:"Teil 4", ort:"On the way up", was:"In the cellar: convince the guard that you are guests — one calm sentence each. In the swamp: talk while you roll.",
+ { nr:"Teil 4", ort:"On the way up", was:"In the cellar: convince the guard that you are guests — one calm sentence each. In the swamp: one roll each — if you are stuck, call for help, and somebody explains how they pull you out.",
    saetze:[
      "Good evening. We are guests of the Count.",
      "He is expecting us. We came a long way.",
@@ -97,7 +97,7 @@ const TEILE = [
      "I'm stuck! Give me your hand!",
      "Careful — the ground is soft here."],
    vok:[["a guard","eine Wache"],["a guest","ein Gast"],["to expect somebody","jemanden erwarten"],
-        ["a cellar","ein Keller"],["a swamp, a bog","ein Sumpf"],["to be stuck","feststecken"],["to sneak","schleichen"]] },
+        ["a cellar","ein Keller"],["a swamp, a bog","ein Sumpf"],["to be stuck","feststecken"],["to pull somebody out","jemanden herausziehen"],["to sneak","schleichen"]] },
 
  { nr:"Teil 5", ort:"The courtyard", was:"Three doors. Each of you: which one would you choose, and why? Answer another hunter — then decide together.",
    saetze:[

@@ -730,6 +730,32 @@ details.fach[open] summary::after{content:"zuklappen"}
 @media (max-width:1400px){.knopf.pfeil em{display:none}.knopf.pfeil{padding:6px 8px}}
 @media (max-width:1300px){.knopf.schalter{font-size:0;padding:7px 7px;gap:0}.szenenwahl #kschritt{display:none}.uhr button{padding:2px 5px}}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* ---- Gefahr verändern: Schublade an der linken Kante der Säule (aus dem Rahmentest) ---- */
+.gefahrsaeule{overflow:visible}
+#gefahrlade{position:absolute;right:100%;top:125px;z-index:32;font-family:var(--sans);color:#cdbfb0;filter:drop-shadow(-4px 4px 9px #0006)}
+#gefahrlade>summary{position:absolute;right:0;top:0;display:flex;align-items:center;gap:8px;writing-mode:vertical-rl;list-style:none;cursor:pointer;
+  padding:13px 8px;border:1px solid rgba(var(--rahmen-rgb),.48);border-right:0;border-radius:7px 0 0 7px;font-size:9px;letter-spacing:.15em;min-height:82px;
+  background:repeating-linear-gradient(112deg,#ffffff05 0 2px,transparent 2px 7px),#15161b;color:#c9c3ba;box-shadow:inset 1px 0 #ac8a6640}
+#gefahrlade>summary::-webkit-details-marker{display:none}
+#gefahrlade>summary>span{font-size:20px;line-height:1;writing-mode:horizontal-tb}
+#gefahrlade>summary:hover{color:var(--text)}
+#gefahrlade[open]>summary{right:228px}
+#gefahrlade[open]>summary>span{transform:rotate(180deg)}
+.gl-panel{width:228px;box-sizing:border-box;padding:17px 14px 14px;min-height:142px;border:1px solid rgba(var(--rahmen-rgb),.48);border-right:0;border-radius:0 0 0 8px;
+  background:repeating-linear-gradient(112deg,#ffffff05 0 2px,transparent 2px 7px),#15161b;box-shadow:inset 0 0 25px #77272815}
+.gl-panel b{display:block;font:small-caps 15px Georgia,serif;letter-spacing:.04em;color:#d7c8a8;margin-bottom:13px}
+.gl-panel small{display:block;margin-top:11px;color:#998d8d;font-size:10px}
+.gl-panel .gefahrbar{display:flex;align-items:center;gap:10px}
+.gl-panel .zahl{font:22px Georgia,serif;color:#d7c8a8;min-width:20px}
+.gl-panel .stell{display:flex;gap:5px}
+.gl-panel .stell button{min-width:38px;min-height:34px;font-size:13px;color:#e0c5b4;border:1px solid #76514e;border-radius:3px;background:linear-gradient(#382429,#21191d)}
+.gl-panel .stell button:hover{background:#553037;border-color:#c58c74;color:#fff}
+.gl-stufen{list-style:none;margin:13px 0 0;padding:0;display:grid;gap:5px;font-size:11.5px;line-height:1.35;color:#8d8790}
+.gl-stufen li{padding:4px 7px;border-left:2px solid transparent}
+.gl-stufen em{font-style:normal;font-variant-numeric:tabular-nums;color:#a79f9a;margin-right:4px}
+.gl-stufen li.jetzt{color:var(--text);border-left-color:rgba(var(--rahmen-rgb),.9);background:rgba(var(--rahmen-rgb),.08)}
+@media (max-width:760px){#gefahrlade{top:90px}}
 </style>
 
 <div id="rahmen" aria-hidden="true"></div><div id="rahmenkante" aria-hidden="true"></div>
@@ -743,10 +769,6 @@ details.fach[open] summary::after{content:"zuklappen"}
   <span class="barrechts">
     <span class="uhr" id="uhr" title="Unterrichtsuhr — 90 Minuten, pausierbar"><b id="uhr-zeit">90:00</b><small id="uhr-soll"></small><button id="uhr-schalter">▶</button><button id="uhr-plus" title="fünf Minuten dazu">+5</button></span>
     <button id="rueckgaengig" class="knopf" title="Rückgängig — den letzten Spielschritt zurücknehmen (Strg+Z)" disabled>↶</button>
-    <span class="gefahrbar" title="Gefahrenbarometer">
-      <span class="zahl" id="barzahl">0</span>
-      <span class="stell"><button data-gefahr="-1">−1</button><button data-gefahr="1">+1</button><button data-gefahr="2">+2</button></span>
-    </span>
     <button id="stimmschalter" class="knopf schalter" aria-pressed="false" title="Stimmangaben einblenden"><span class="w"></span>Stimmen</button>
     <button id="blutschalter" class="knopf schalter" aria-pressed="false" title="Blut im Messrohr"><span class="w"></span>Blut</button>
     <button id="kampfknopf" class="knopf kampfknopf" title="Charakter-Übersicht und Kampf öffnen">⚔ Charaktere / Kampf</button>
@@ -764,6 +786,17 @@ details.fach[open] summary::after{content:"zuklappen"}
 </header>
 
 <aside class="gefahrsaeule" id="gefahrsaeule" aria-label="Gefahrenbalken">
+  <details id="gefahrlade"><summary title="Gefahr verändern" aria-label="Gefahrensteuerung auf- oder zuklappen"><span aria-hidden="true">‹</span> GEFAHR</summary>
+    <div class="gl-panel"><b>Gefahr verändern</b>
+      <span class="gefahrbar"><span class="zahl" id="barzahl">0</span>
+        <span class="stell"><button data-gefahr="-1">−1</button><button data-gefahr="1">+1</button><button data-gefahr="2">+2</button></span></span>
+      <ol class="gl-stufen" id="gl-stufen">
+        <li data-st="0"><em>0–3</em> ruhig — nichts passiert</li>
+        <li data-st="1"><em>4–7</em> du darfst einem Kampf einen Gegner dazugeben</li>
+        <li data-st="2"><em>8–10</em> jeder Kampf ein Gegner mehr; Patrouille vor dem nächsten Akt</li>
+      </ol>
+      <small>Änderungen gelten sofort. ↶ nimmt sie zurück.</small></div>
+  </details>
   <span class="gs-blitz" id="gs-blitz" aria-hidden="true"></span>
   <svg class="gs-zaehne" id="gs-zaehne" viewBox="0 0 124 78" aria-hidden="true">
     <defs>
@@ -1058,7 +1091,7 @@ const KAPITEL = [
  {t:"regie", titel:"Wer die Gruppe ist", text:`Das ist vorgegeben, das müssen die Schüler nicht erfinden: <b>Sie sind Vampirjäger.</b> Nicht berühmt, noch nicht. Ein Gerücht hat sie hergeführt — in diesen Bergen liege ein Tal, in dem Menschen nach Plan verschwinden. Sie wollen wissen, ob es stimmt.
  <p>Erfinden dürfen sie: Namen, Herkunft, wie sie sich kennen, was sie können. Der Auftrag steht fest.</p>`},
  {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`<b>1 · Gold lesen.</b> Englische Erzählung und Figurenrede — wörtlich. <b>2 · Grün fragen.</b> Jede Figur äussert eine eigene Absicht oder Frage und danach einen Grund oder eine Reaktion. <b>3 · Ergebnis klicken.</b> Nur markieren, was am Tisch passiert ist — Antworten abhaken, Entscheidungen anklicken.
- <p>Rechts neben dem Text stehen die Hilfen auf der Höhe der Stelle, zu der sie gehören. Unten steht immer, wann es weitergeht. Die <b>Gefahr</b> stellst du oben ein: 0–3 ruhig, 4–7 du darfst in einem Kampf einen Gegner dazunehmen, 8–10 eine Patrouille vor dem nächsten Akt. <b>Rückgängig</b> oben nimmt den letzten Spielschritt zurück.</p>`},
+ <p>Rechts neben dem Text stehen die Hilfen auf der Höhe der Stelle, zu der sie gehören. Unten steht immer, wann es weitergeht. Die <b>Gefahr</b> stellst du an der Säule rechts ein — die Lasche <b>‹ GEFAHR</b> klappt die Knöpfe heraus: 0–3 ruhig, 4–7 du darfst in einem Kampf einen Gegner dazunehmen, 8–10 eine Patrouille vor dem nächsten Akt. <b>Rückgängig</b> oben nimmt den letzten Spielschritt zurück.</p>`},
  {t:"sagen", text:["Speak English. Mistakes are fine. If you need a word, ask for help. Just don’t speak in full German sentences — who knows what consequences it might have… (evil laugh). Take a moment, then try.","Everyone gets a turn. Listen, and add your own idea. You do not need a special voice."]},
  {t:"fa", titel:"wenn etwas klemmt", paare:[
    ["Niemand sagt etwas","20 Sekunden Denkzeit. Dann: „What do you notice? What could you do?“ Nur Wörter oder offene Anfänge anbieten, keine ganzen Sätze."],
@@ -1186,7 +1219,7 @@ const KAPITEL = [
 /* ===== 4 ===== */
 {n:"Aufstieg", verlauf:[
   {bei:"wolfe", nur:"weg_a", wenn:"Ein Wolf fällt", dann:"der andere läuft", art:"gut"},
-  {bei:"sumpf", nur:"weg_a", wenn:"Sumpf: ein Wurf unter 7", dann:"−1 HP — im Reiter Charakter-Übersicht eintragen", art:"schlecht"},
+  {bei:"sumpf", nur:"weg_a", wenn:"Sumpf: ein Wurf unter 7", dann:"steckt fest und ruft auf Englisch um Hilfe. Sagt jemand, wie er hilft → nichts passiert; sonst −1 HP (im Reiter eintragen)", art:"schlecht"},
   {bei:"wachen", nur:"weg_a", wenn:"Wachen: alle würfeln 7 oder mehr", dann:"vorbei — weiter bei „Im Hof“", art:"gut"},
   {bei:"wachen", nur:"weg_a", wenn:"Wachen: einer unter 7, oder jemand greift an", dann:"Knopf: Kampf mit zwei Wachen, Gefahr +1", art:"schlecht"},
   {bei:"keller", nur:"weg_b", wenn:"Jeder sagt einen ganzen Satz, niemand droht", dann:"er glaubt euch: „Guests. Of course.“ — hinauf in den Hof", art:"gut"},
@@ -1195,15 +1228,15 @@ const KAPITEL = [
   {bei:"kutsche", nur:"weg_c", wenn:"Jemand merkt: kein Spiegelbild, kalte Hände, nie Mirelas Name", dann:"sag „Yes. You noticed.“ — mehr nicht"}],
  chancen:[
   {wer:"Lightbearer", talent:"Healing Touch", nur:"weg_a", cue:"an old iron trap still on it", text:"Der kleinere Wolf hat ein Fangeisen am Hinterbein.", folge:"Wer sich ihm langsam nähert und das Eisen löst, hat einen Wolf weniger: Er humpelt in den Nebel. Es dauert — der andere Wolf greift währenddessen einmal an (drück seine Attacke). Dann Kampf gegen einen."},
-  {wer:"Blade", talent:"Strength", nur:"weg_a", cue:"takes real strength", text:"Der Sumpf gibt Stiefel nur mit Kraft wieder her.", folge:"Wer feststeckt und den Blade neben sich hat, verliert den Punkt nicht — Blade zieht ihn heraus. Gilt für einen Fehlwurf je Figur, und nur, wenn der Blade-Spieler es sagt."},
+  {wer:"Blade", talent:"Strength", nur:"weg_a", cue:"takes real strength", text:"Der Sumpf gibt Stiefel nur mit Kraft wieder her.", folge:"Wer feststeckt, kann den Blade rufen: Blade zieht ihn heraus, ohne dass jemand eine andere Idee braucht — wenn der Blade-Spieler auf Englisch sagt, wie."},
   {wer:"Arcanist", talent:"Magic Hand", nur:"weg_a", cue:"Their lamps hang on the wall next to them", text:"Die Lampen der Wachen hängen an der Wand, nicht in ihren Händen.", folge:"Kippt Magic Hand eine der Lampen, sehen beide Wachen zur Lampe statt in den Nebel: Jeder, dem der Schleichwurf misslingt, darf einmal nachwürfeln. Der Spieler drückt Magic Hand auf seinem Blatt; misslingt der Zauber, passiert nichts."},
   {wer:"Lightbearer", talent:"Healing Touch", nur:"weg_b", cue:"a cough that has clearly been going on for weeks", text:"Der Mann mit der Lampe hustet seit Wochen.", folge:"Wer ihm den Husten nimmt, bevor die Gruppe ihre Sätze sagt, bekommt ungefragt einen Rat: „The kitchen stair is the quiet way up. The boy down there is all right.“ Glauben tut er trotzdem nur, wer redet."},
   {wer:"Arcanist", talent:"Magic Hand", nur:"weg_b", cue:"behind an iron grille", text:"Hinter dem Gitter: eine Flasche mit blassem Licht.", folge:"Magic Hand holt sie durch die Stäbe — ein zweiter Heiltrank für die Gruppe, einer, nicht drei. Wer ihn trinkt, sagt es; du gibst im Reiter Charakter-Übersicht +10. Misslingt der Zauber auf dem Blatt, klirrt Glas: Gefahr +1."},
   {wer:"Lightbearer", talent:"Healing Touch", nur:"weg_c", cue:"a hand as cold as the door handle", text:"Corvins Hand ist kalt wie Eisen.", folge:"Wer sie festhält, um zu helfen, merkt es sofort: kein Puls. Corvin lächelt: „Kind of you.“ Die Gruppe weiss jetzt, wem die Kutsche gehört — an der Gefahr ändert das nichts, die ist schon eingetragen."}],
- woerter:[["a guard","eine Wache"],["a guest","ein Gast"],["to expect somebody","jemanden erwarten"],["a cellar","ein Keller"],["a swamp, a bog","ein Sumpf"],["to be stuck","feststecken"],["to sneak","schleichen"]],
+ woerter:[["a guard","eine Wache"],["a guest","ein Gast"],["to expect somebody","jemanden erwarten"],["a cellar","ein Keller"],["a swamp, a bog","ein Sumpf"],["to be stuck","feststecken"],["to pull somebody out","jemanden herausziehen"],["to sneak","schleichen"]],
  titel:"Up the Mountain", art:"szene", braucht:"e1", bild:{weg_a:"galgen", weg_b:"stollen", weg_c:"kutsche"}, ort:ORT.wirtshaus, nach:ORT.hof, bloecke:[
  {t:"ziel", text:"Die Gruppe steigt auf ihrem Weg zum Schloss hinauf — mit dem, was der Weg kostet (Kampf, schlechte Luft, Wachen) — und steht am Ende im Hof.", zeit:"10 Min."},
- {t:"regie", nur:"weg_a", titel:"Hintergrund · Strasse", text:"Drei Stationen: <b>Wölfe</b> am Galgen (erster Kampf des Abends — langsam: jeder sagt auf Englisch, was er tut, drückt seinen Knopf, liest seinen gelben Satz vor; fällt ein Wolf, läuft der andere), der <b>Sumpf</b> (jeder würfelt dreimal, unter 7 = −1 HP) und die <b>Wachen am Tor</b> — Leute des Hauses, nicht freundlich: Die Gruppe schleicht (jeder würfelt einmal; alle ≥ 7 → vorbei) oder greift an. Misslingt das Schleichen oder greift jemand an: Knopf unten, Kampf mit beiden Wachen, Gefahr +1."},
+ {t:"regie", nur:"weg_a", titel:"Hintergrund · Strasse", text:"Drei Stationen: <b>Wölfe</b> am Galgen (erster Kampf des Abends — langsam: jeder sagt auf Englisch, was er tut, drückt seinen Knopf, liest seinen gelben Satz vor; fällt ein Wolf, läuft der andere), der <b>Sumpf</b> (jeder würfelt einmal; wer unter 7 feststeckt, ruft auf Englisch um Hilfe — sagt jemand, wie er hilft, passiert nichts, sonst −1 HP) und die <b>Wachen am Tor</b> — Leute des Hauses, nicht freundlich: Die Gruppe schleicht (jeder würfelt einmal; alle ≥ 7 → vorbei) oder greift an. Misslingt das Schleichen oder greift jemand an: Knopf unten, Kampf mit beiden Wachen, Gefahr +1."},
  {t:"vorlesen", nur:"weg_a", titel:"Der Wald und der Galgen", text:[
   `You leave the tavern by the back door. The road climbs through the forest, and the fog is so thick that you walk into the gallows before you see it. The wood is grey and the rope is long gone.`,
   `Two wolves the size of ponies are sitting underneath it, side by side, watching you come. The smaller one holds a back leg off the ground; there is an old iron trap still on it. They are not barking. They are waiting for you to get closer.`]},
@@ -1211,8 +1244,8 @@ const KAPITEL = [
  {t:"kampf", anker:"wolfe", nur:"weg_a", titel:"The wolves", text:"Zwei Wölfe, je 14 Lebenspunkte.", gegner:["wolf","wolf"], extra:"wolf"},
  {t:"vorlesen", nur:"weg_a", titel:"Der Sumpf", text:[
   `Above the gallows the road simply stops. In front of you: black water, white mist, and a path that is only there if you find it. Every step, the ground pulls at your boots — and once it has one, it takes real strength to get it back.`]},
- {t:"aufgabe", nur:"weg_a", sag:"Before your three steps, explain how you will cross and how you could help someone.", hinweis:"Erst reden lassen — dann die zweite Aufforderung."},
- {t:"aufgabe", anker:"sumpf", nur:"weg_a", sag:"Roll both dice for each step. Under seven: lose one hit point.", hinweis:"Schaden im Reiter <b>Charakter-Übersicht / Kampf</b> eintragen."},
+ {t:"aufgabe", nur:"weg_a", sag:"Each of you: how will you cross — slowly, fast, or holding on to someone? And if somebody gets stuck, how could you help them?", hinweis:"Erst reden lassen — dann würfeln."},
+ {t:"aufgabe", anker:"sumpf", nur:"weg_a", sag:"Now each of you rolls both dice — once. Seven or more: you are across. Under seven: you are stuck. Call for help — in English. Who helps you, and how?", hinweis:"Drei Würfe, einer pro Figur. Wer feststeckt, ruft (<i>Help! I’m stuck!</i>); eine andere Figur sagt auf Englisch, wie sie hilft → kein Schaden. Kommt keine Hilfe: −1 HP im Reiter <b>Charakter-Übersicht / Kampf</b>."},
  {t:"vorlesen", nur:"weg_a", titel:"Die Wachen am Tor", text:[
   `On the far side of the bog the gate of Nachtfels stands open. Two men in old grey livery stand beside it. Their lamps hang on the wall next to them — the only light for a mile. They do not move. They do not talk. They are looking at the fog.`]},
  {t:"aufgabe", anker:"wachen", nur:"weg_a", sag:"Two guards. They belong to the house, and they are not here to welcome anyone. You can try to get past them in the fog — one roll each, seven or more. Or you will be detected — and attacked. Decide together. Quietly.", hinweis:"Alle ≥ 7 → weiter unten bei „Im Hof“. Einer darunter, oder sie greifen an → Knopf."},
@@ -1292,7 +1325,7 @@ const KAPITEL = [
   {bei:"anneke_name", nur:"kapelle", alle:["anneke"], wenn:"Jemand ruft „Anneke!“", dann:"kein Kampf — sie zeigt die Treppe hinter dem Altar", art:"gut"},
   {bei:"tam", nur:"kueche", wenn:"Ehrliche Antwort auf Tams Frage — auch ein ehrliches Nein", dann:"Tam führt euch zum Spiegel", art:"gut"},
   {bei:"tam", nur:"kueche", wenn:"Jemand lügt ihn an oder fährt ihn an", dann:"„Find it yourselves.“ — kein Führer, Block „Ohne Führung“", art:"schlecht"},
-  {bei:"tam", nur:"kueche", wenn:"Jemand bedroht ihn oder stösst ihn weg", dann:"er schreit: Gefahr +3 (oben einstellen)", art:"schlecht"},
+  {bei:"tam", nur:"kueche", wenn:"Jemand bedroht ihn oder stösst ihn weg", dann:"er schreit: Gefahr +3 (rechts an der Säule einstellen)", art:"schlecht"},
   {bei:"ohnefuehrung", weiche:"fuehrung=allein", nur:["bibliothek","kueche"], wenn:"Ohne Führung: mindestens eine 10 im Wurf", dann:"sie finden den Westgang leise", art:"gut"},
   {bei:"ohnefuehrung", weiche:"fuehrung=allein", nur:["bibliothek","kueche"], wenn:"Ohne Führung: keine 10", dann:"sie finden ihn trotzdem — Gefahr +1", art:"schlecht"},
   {bei:"spiegel", wenn:"Jemand sieht in den Spiegel", dann:"„Nobody who looked has ever told anyone.“ — kein Schaden"}],
@@ -2104,6 +2137,7 @@ function zeichneBaro(){
   messeKopf();
   const sl=$("gefahrsaeule"); if(sl) sl.title="Gefahr "+Z.gefahr+" von 10 · "+st.name+" — "+st.folge;
   const bz=$("barzahl"); bz.textContent=Z.gefahr; bz.className="zahl g"+(Z.gefahr<=3?0:Z.gefahr<=7?1:2);
+  const gls=$("gl-stufen"); if(gls && gls.children && gls.children.length) Array.from(gls.children).forEach(li=>li.classList.toggle("jetzt", +li.dataset.st===(Z.gefahr<=3?0:Z.gefahr<=7?1:2)));
   const kb=$("kgefahr"); kb.className="badge g"+(Z.gefahr<=3?0:Z.gefahr<=7?1:2);
   kb.innerHTML="Gefahr <b>"+Z.gefahr+"</b>/10";
   $("lage").innerHTML=lage(); $("lagekurz").innerHTML=lageKurz(); $("warnbox").innerHTML=warnungenHTML();
@@ -2745,10 +2779,10 @@ function uebergangOeffnen(){
 }
 
 /* ---- Gewinnchance: dieselbe Rechnung wie quelle/kampf_sim.py, im Browser ----
-   Spieler: w20 gegen die Zielzahl ihrer verlässlichsten Attacke (Blatt), 1 verfehlt,
-   20 verdoppelt. Gegner: 65 % Treffer, ihre Würfel. Ohne Tränke, ohne Talente,
+   Spieler: zwei Sechser gegen die Zielzahl ihrer verlässlichsten Attacke (Blatt),
+   ein Sechserpasch verdoppelt die Würfel. Gegner: 65 % Treffer, ihre Würfel. Ohne Tränke, ohne Talente,
    Schaden gebündelt. Tausend Durchläufe reichen für eine Prozentzahl ohne Nachkomma. */
-const ANGRIFF = {Arcanist:{ab:9,d:"2d8+2"}, Blade:{ab:7,d:"1d10+4"}, Lightbearer:{ab:7,d:"1d10+4"}};
+const ANGRIFF = {Arcanist:{ab:7,d:"2d8+2"}, Blade:{ab:6,d:"1d10+4"}, Lightbearer:{ab:6,d:"1d10+4"}};
 function wuerfleText(f, krit){ const m=/^(\d+)d(\d+)(?:\+(\d+))?$/.exec(f); if(!m) return 0; let n=+m[1]*(krit?2:1), s=+m[3]||0; for(let i=0;i<n;i++) s+=w(+m[2]); return s; }
 function gewinnchance(laeufe){
   const helden=Z.gruppe.filter(g=>g.hp>0).map(g=>({hp:g.hp, a:ANGRIFF[g.rolle]||ANGRIFF.Blade}));
@@ -2761,7 +2795,7 @@ function gewinnchance(laeufe){
     while(r<200){
       r++;
       for(const hd of H){ if(hd.hp<=0) continue; const z=F.find(f=>f.hp>0); if(!z){ sieg=true; break; }
-        const augen=w(20); if(augen>1 && augen>=hd.a.ab) z.hp-=wuerfleText(hd.a.d, augen===20); }
+        const a1=w(6), a2=w(6), pasch=a1===6&&a2===6; if(pasch || a1+a2>=hd.a.ab) z.hp-=wuerfleText(hd.a.d, pasch); }
       if(sieg || F.every(f=>f.hp<=0)){ sieg=true; break; }
       for(const f of F){ if(f.hp<=0) continue; const ziele=H.filter(x=>x.hp>0); if(!ziele.length) break;
         if(Math.random()<0.65) ziele[Math.floor(Math.random()*ziele.length)].hp-=wuerfleText(f.d,false); }
@@ -2987,6 +3021,7 @@ document.addEventListener("keydown", e=>{
   if((e.ctrlKey||e.metaKey) && !e.altKey && (e.key==="z"||e.key==="Z") && tag!=="INPUT" && tag!=="TEXTAREA"){ e.preventDefault(); rueckgaengig(); return; }
   if(tag==="INPUT"||tag==="TEXTAREA"||e.altKey||e.ctrlKey||e.metaKey) return;
   if(["bildschau","kampfhilfe","notstopp","uebergang"].some(id=>{ const d=$(id); return d && d.open; })) return;   /* Esc schliesst <dialog> selbst */
+  if(e.key==="Escape" && $("gefahrlade").open){ $("gefahrlade").open=false; $("gefahrlade").querySelector("summary").focus(); e.preventDefault(); return; }
   if(e.key==="Escape"){ ["szenenfach","lagefach"].forEach(id=>{const f=$(id); if(f) f.open=false;}); }
   if(e.key==="Escape" && Z.kampfOffen){ schliesseKampf(); e.preventDefault(); return; }
   if(Z.kampfOffen) return;

@@ -96,15 +96,22 @@ input{font:inherit;color:inherit}
 /* ---------- Würfelbühne ---------- */
 .stage{border:1px solid var(--line);background:radial-gradient(120% 130% at 50% 0%,#12121b,#08080c 70%);padding:22px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:center}
 @media (max-width:620px){.stage{grid-template-columns:1fr;justify-items:center;text-align:center}}
-.die{position:relative;width:114px;height:114px;flex:none}
-.die svg{width:100%;height:100%;display:block}
-.die .face{font-family:var(--mono);font-weight:700;font-size:33px;position:absolute;inset:0;display:grid;place-items:center;font-variant-numeric:tabular-nums}
-.die.rolling{animation:tumble .62s cubic-bezier(.3,.8,.4,1) infinite}
+.die{position:relative;width:128px;flex:none;display:grid;grid-template-columns:1fr 1fr;gap:10px;justify-items:center}
+.w6{width:56px;height:56px;border:1.6px solid var(--klasse);border-radius:11px;background:linear-gradient(145deg,#1a1a26,#0c0c12);
+  display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:7px;box-sizing:border-box;box-shadow:inset 0 -3px 0 rgba(0,0,0,.35)}
+.w6 i{display:block;width:10px;height:10px;border-radius:50%;place-self:center;background:transparent}
+.w6 i.an{background:#e9e4da}
+.die .face{grid-column:1 / -1;font-family:var(--mono);font-weight:700;font-size:26px;line-height:1;font-variant-numeric:tabular-nums}
+.die.rolling .w6{animation:tumble .62s cubic-bezier(.3,.8,.4,1) infinite}
+.die.rolling .w6+.w6{animation-duration:.54s;animation-direction:reverse}
 @keyframes tumble{0%{transform:rotate(0) scale(1)}35%{transform:rotate(140deg) scale(1.07)}70%{transform:rotate(255deg) scale(.95)}100%{transform:rotate(360deg) scale(1)}}
-.die.landed{animation:land .4s ease-out}
+.die.landed .w6{animation:land .4s ease-out}
 @keyframes land{0%{transform:scale(1.18)}60%{transform:scale(.96)}100%{transform:scale(1)}}
 .die.crit .face{color:var(--gold)}
+.die.crit .w6{border-color:var(--gold)}
+.die.crit .w6 i.an{background:var(--gold)}
 .die.miss .face{color:var(--dim)}
+.die.miss .w6 i.an{background:var(--dim)}
 .readout{min-width:0;width:100%}
 .readout .what{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--klasse);margin:0 0 5px}
 .verdict{font-family:var(--display);font-size:clamp(26px,3.6vw,36px);line-height:1.08;margin:0}
@@ -220,7 +227,7 @@ footer.fine{font-size:12.5px;color:var(--dim);border-top:1px solid var(--line);p
         <button id="vollheil" class="heilbtn">After the fight: I heal everyone → full</button>
       </div>
       <p class="hint">The potion works once: 10 hit points back — or back on your feet when you are down. After a fight, the Lightbearer heals everyone for free. Every change is logged below.</p>
-      <div class="down" id="downbox" hidden><span>You are down. Drink your potion — or wait: after the fight, the Lightbearer heals everyone.</span><button id="schicksal" hidden>Roll your fate (d20)</button></div>
+      <div class="down" id="downbox" hidden><span>You are down. Drink your potion — or wait: after the fight, the Lightbearer heals everyone.</span><button id="schicksal" hidden>Roll your fate (2d6)</button></div>
     </div>
     <div class="howto talent">
       <span class="label">Your talent — outside of fights</span>
@@ -247,18 +254,12 @@ footer.fine{font-size:12.5px;color:var(--dim);border-top:1px solid var(--line);p
     </header>
 
     <section class="stage" aria-live="polite">
-      <div class="die" id="die">
-        <svg viewBox="0 0 100 100" aria-hidden="true">
-          <polygon points="50,3 93,27 93,73 50,97 7,73 7,27" fill="#11111a" stroke="var(--klasse)" stroke-width="1.6"></polygon>
-          <polygon points="50,3 93,27 50,44 7,27" fill="rgba(255,255,255,.035)"></polygon>
-          <polygon points="50,44 93,27 93,73" fill="rgba(0,0,0,.28)"></polygon>
-          <polygon points="50,44 7,27 7,73" fill="rgba(0,0,0,.14)"></polygon>
-          <polygon points="50,44 93,73 50,97 7,73" fill="none" stroke="rgba(255,255,255,.09)" stroke-width="1"></polygon>
-        </svg>
-        <span class="face" id="wurfzahl">20</span>
+      <div class="die" id="die" aria-hidden="true">
+        <span class="w6" id="w6a"></span><span class="w6" id="w6b"></span>
+        <span class="face" id="wurfzahl">12</span>
       </div>
       <div class="readout">
-        <div style="display:flex;align-items:center;gap:10px"><p class="what" id="was" style="margin:0">Your turn</p><button class="frei" id="d20frei">Just roll a d20</button></div>
+        <div style="display:flex;align-items:center;gap:10px"><p class="what" id="was" style="margin:0">Your turn</p><button class="frei" id="wurffrei">Just roll 2d6</button></div>
         <p class="verdict warten" id="verdict">Pick one of the three below.</p>
         <p class="detail" id="detail">The sheet rolls for you and tells you what happened.</p>
         <div class="dmgline" id="dmgline"></div>
@@ -287,9 +288,9 @@ const KLASSEN = {
   magier: {
     id:"magier", hpmax:18,
     aktionen:[
-      {name:"Fireball", kind:"Spell", art:"angriff", ab:9, dmg:"2d8+2", risiko:"Often misses",
+      {name:"Fireball", kind:"Spell", art:"angriff", ab:7, dmg:"2d8+2", risiko:"Often misses",
        text:"A huge ball of fire. It hits harder than anything else you have — when it hits."},
-      {name:"Magic Hand", kind:"Spell", art:"trick", ab:8,
+      {name:"Magic Hand", kind:"Spell", art:"trick", ab:7,
        text:"An invisible hand. Open a door, pull a lever, take a key. Tell your DM what it should do, then roll."},
       {name:"Arcane Darts", kind:"Spell", art:"immer", dmg:"1d6+3", risiko:"Never misses",
        text:"Three darts of light. Small damage — but they always hit. Use them when you cannot afford to miss."}
@@ -297,21 +298,21 @@ const KLASSEN = {
   krieger: {
     id:"krieger", hpmax:30,
     aktionen:[
-      {name:"Sword Strike", kind:"Weapon", art:"angriff", ab:7, dmg:"1d10+4", risiko:"Usually hits",
+      {name:"Sword Strike", kind:"Weapon", art:"angriff", ab:6, dmg:"1d10+4", risiko:"Usually hits",
        text:"A heavy cut with your greatsword. Nothing clever about it. It works."},
-      {name:"Shield Bash", kind:"Weapon", art:"angriff", ab:7, dmg:"1d6+2", risiko:"Usually hits", stun:true,
+      {name:"Shield Bash", kind:"Weapon", art:"angriff", ab:6, dmg:"1d6+2", risiko:"Usually hits", stun:true,
        text:"You throw your shield into it. Less damage — but the monster loses its next turn."},
-      {name:"Reckless Charge", kind:"Weapon", art:"angriff", ab:11, dmg:"3d6+4", risiko:"Often misses", selbstschaden:2,
+      {name:"Reckless Charge", kind:"Weapon", art:"angriff", ab:8, dmg:"3d6+7", risiko:"Often misses", selbstschaden:2,
        text:"You run straight in with no guard up. Huge damage — and you always take 2 damage yourself, hit or miss."}
     ]},
   heiler: {
     id:"heiler", hpmax:24,
     aktionen:[
-      {name:"Radiant Strike", kind:"Weapon", art:"angriff", ab:7, dmg:"1d10+4", risiko:"Usually hits",
+      {name:"Radiant Strike", kind:"Weapon", art:"angriff", ab:6, dmg:"1d10+4", risiko:"Usually hits",
        text:"Your mace, wrapped in white light. Monsters of the night hate it."},
-      {name:"Blinding Light", kind:"Blessing", art:"angriff", ab:7, dmg:"1d6+2", risiko:"Usually hits", stun:true,
+      {name:"Blinding Light", kind:"Blessing", art:"angriff", ab:6, dmg:"1d6+2", risiko:"Usually hits", stun:true,
        text:"A flash from your palm. Less damage — but the monster is blinded and loses its next turn."},
-      {name:"Judgement", kind:"Blessing", art:"angriff", ab:11, dmg:"3d6+4", risiko:"Often misses",
+      {name:"Judgement", kind:"Blessing", art:"angriff", ab:8, dmg:"3d6+7", risiko:"Often misses",
        text:"You call the light down from above. Huge damage — when it lands. It often doesn’t."}
     ]}
 };
@@ -332,6 +333,14 @@ function wuerfle(f, doppelt){
   return {augen, seiten:+m[2], mod, summe:augen.reduce((a,b)=>a+b,0)+mod};
 }
 const ruhig = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+/* Gewürfelt wird mit zwei Sechsern — wie am Tisch. Ein Sechserpasch ist der kritische Treffer. */
+const PUNKTE={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
+function zeigePaar(p){
+  [["w6a",p[0]],["w6b",p[1]]].forEach(([id,z])=>{ $(id).innerHTML=[0,1,2,3,4,5,6,7,8].map(i=>'<i'+(PUNKTE[z].includes(i)?' class="an"':'')+'></i>').join(""); });
+  $("wurfzahl").textContent=p[0]+p[1];
+}
+const paar=()=>[w(6),w(6)];
+const pasch6=p=>p[0]===6&&p[1]===6, pasch1=p=>p[0]===1&&p[1]===1;
 let laeuft=false;
 
 function notiere(text, ergebnis, sorte){
@@ -396,19 +405,20 @@ function rolle(i){
   $("detail").textContent=""; $("sagbox").classList.add("leer"); $("sagtext").textContent="…";
   $("die").classList.remove("landed","crit","miss");
 
-  const braucht20 = (a.art==="angriff"||a.art==="trick");
-  const augen = braucht20 ? w(20) : null;
-  if(!braucht20){ $("wurfzahl").textContent="✦"; return ende(a,null); }
-  if(ruhig){ $("wurfzahl").textContent=augen; return ende(a,augen); }
+  const brauchtWurf = (a.art==="angriff"||a.art==="trick");
+  const p = brauchtWurf ? paar() : null;
+  if(!brauchtWurf){ $("wurfzahl").textContent="✦"; return ende(a,null); }
+  if(ruhig){ zeigePaar(p); return ende(a,p); }
   $("die").classList.add("rolling");
   const bis=performance.now()+850;
   (function dreh(){
-    if(performance.now()<bis){ $("wurfzahl").textContent=w(20); setTimeout(dreh,58); }
-    else { $("die").classList.remove("rolling"); $("die").classList.add("landed"); $("wurfzahl").textContent=augen; ende(a,augen); }
+    if(performance.now()<bis){ zeigePaar(paar()); setTimeout(dreh,58); }
+    else { $("die").classList.remove("rolling"); $("die").classList.add("landed"); zeigePaar(p); ende(a,p); }
   })();
 }
 
-function ende(a, augen){
+function ende(a, p){
+  const augen = p ? p[0]+p[1] : null;
   if(a.art==="trick"){
     const klappt = augen>=a.ab;
     $("die").classList.toggle("miss",!klappt);
@@ -437,8 +447,8 @@ function ende(a, augen){
     notiere("<b>Circle of Light</b>", "+"+h.summe+" all", "heal");
   }
   else { /* Angriff */
-    const krit = augen===20;
-    const trifft = krit || (augen!==1 && augen>=a.ab);
+    const krit = pasch6(p);
+    const trifft = krit || augen>=a.ab;
     if(!trifft){
       $("die").classList.add("miss");
       $("verdict").className="verdict miss"; $("verdict").textContent="Miss";
@@ -447,13 +457,13 @@ function ende(a, augen){
       sag(a.selbstschaden ? "I missed — and I hurt myself doing it." : "I missed!");
       notiere("<b>"+a.name+"</b>", "miss", "miss");
     } else {
-      const d=wuerfle(S.wahnsinn?"1d20":a.dmg,krit);
+      const d=wuerfle(S.wahnsinn?"3d6":a.dmg,krit);
       if(S.bonus){ d.mod+=S.bonus; d.summe+=S.bonus; }
       zeigeDice(d);
       $("die").classList.toggle("crit",krit);
       $("verdict").className="verdict "+(krit?"crit":"hit");
       $("verdict").textContent = krit ? ("Critical hit! "+d.summe+" damage") : (d.summe+" damage");
-      $("detail").textContent = krit ? "A natural 20 — double dice. Say it loudly." : "Tell your DM the number so it can be taken off the monster.";
+      $("detail").textContent = krit ? "Double six — double dice. Say it loudly." : "Tell your DM the number so it can be taken off the monster.";
       let satz = krit ? "Critical hit! I hit for "+d.summe+" damage!" : "I hit for "+d.summe+" damage.";
       if(a.stun) satz += " And it loses its next turn!";
       if(a.selbstschaden) satz += " But I take "+a.selbstschaden+" damage myself.";
@@ -476,17 +486,17 @@ function zeichneNarben(){
   S.narben.forEach(n=>t.push("Scar: "+n));
   $("narben").innerHTML=t.join("<br>");
 }
-function dreheD20(danach){
+function dreheWuerfel(danach){
   if(laeuft) return; laeuft=true;
-  const augen=w(20);
+  const p=paar();
   $("after").innerHTML=""; $("dmgline").innerHTML=""; $("die").classList.remove("landed","crit","miss");
   $("verdict").className="verdict warten"; $("verdict").textContent="Rolling…"; $("detail").textContent="";
   $("sagbox").classList.add("leer"); $("sagtext").textContent="…";
-  const fertig=()=>{ $("wurfzahl").textContent=augen; danach(augen); laeuft=false; };
+  const fertig=()=>{ zeigePaar(p); danach(p); laeuft=false; };
   if(ruhig) return fertig();
   $("die").classList.add("rolling");
   const bis=performance.now()+850;
-  (function dreh(){ if(performance.now()<bis){ $("wurfzahl").textContent=w(20); setTimeout(dreh,58); }
+  (function dreh(){ if(performance.now()<bis){ zeigePaar(paar()); setTimeout(dreh,58); }
     else { $("die").classList.remove("rolling"); $("die").classList.add("landed"); fertig(); } })();
 }
 function zeichneTrank(){ const b=$("trank"); b.disabled=!S.trank; b.textContent=S.trank?"Healing potion — drink it (once per game)":"Healing potion — used"; }
@@ -508,33 +518,35 @@ function nachKampfHeilen(){
   notiere("<b>Healed by the Lightbearer</b> after the fight", "+"+(K.hpmax-vorher)+" HP → "+S.hp, "heal");
 }
 function freierWurf(){
-  $("was").textContent="d20";
-  dreheD20(augen=>{
-    $("die").classList.toggle("crit",augen===20); $("die").classList.toggle("miss",augen===1);
-    $("verdict").className="verdict "+(augen===20?"crit":augen===1?"miss":"hit");
+  $("was").textContent="2d6";
+  dreheWuerfel(p=>{
+    const augen=p[0]+p[1], gut=augen>=7;
+    $("die").classList.toggle("crit",pasch6(p)); $("die").classList.toggle("miss",!gut);
+    $("verdict").className="verdict "+(pasch6(p)?"crit":gut?"hit":"miss");
     $("verdict").textContent="You rolled "+augen;
-    $("detail").textContent="Your DM tells you what that means. Usually 10 or higher is good.";
+    $("detail").textContent=gut?"Seven or more — that usually works. Your DM tells you what happens.":"Under seven — that usually does not work. Your DM tells you what happens.";
     sag("I rolled "+augen+".");
-    notiere("<b>d20</b>", ""+augen, augen===20?"hit":augen===1?"miss":"");
+    notiere("<b>2d6</b>", p[0]+" + "+p[1]+" = "+augen, gut?"hit":"miss");
   });
 }
 function schicksal(){
   if(!S.schicksalOffen) return;
   $("was").textContent="Your fate";
-  dreheD20(augen=>{
+  dreheWuerfel(p=>{
+    const augen=p[0]+p[1];
     S.schicksalOffen=false;
-    if(augen===20){
+    if(pasch6(p)){
       S.bonus+=3;
       $("die").classList.add("crit"); $("verdict").className="verdict crit"; $("verdict").textContent="You come back stronger";
-      $("detail").textContent="A natural 20. From now on, every hit you land does +3 damage.";
+      $("detail").textContent="Double six. From now on, every hit you land does +3 damage.";
       sag("I'm back — and I'm stronger. Plus three damage from now on!");
-      notiere("<b>Fate</b> — natural 20", "+3 dmg", "hit");
-    } else if(augen===1){
+      notiere("<b>Fate</b> — double six", "+3 dmg", "hit");
+    } else if(pasch1(p)){
       S.wahnsinn=true;
       $("die").classList.add("miss"); $("verdict").className="verdict miss"; $("verdict").textContent="Something in you broke";
-      $("detail").textContent="A natural 1. Your damage is a mystery now: the sheet rolls a d20 instead of your dice — sometimes 1, sometimes 20.";
+      $("detail").textContent="Double one. Your damage is a mystery now: the sheet rolls three dice instead of yours — sometimes 3, sometimes 18.";
       sag("I'm back… I think. Don't stand too close to me.");
-      notiere("<b>Fate</b> — natural 1", "madness", "miss");
+      notiere("<b>Fate</b> — double one", "madness", "miss");
     } else {
       const n=NARBEN[w(NARBEN.length)-1]; S.narben.push(n);
       $("verdict").className="verdict hit"; $("verdict").textContent="You come back with a scar";
@@ -555,7 +567,7 @@ document.addEventListener("click", e=>{
 $("schicksal").onclick=schicksal;
 $("trank").onclick=trinken;
 $("vollheil").onclick=nachKampfHeilen;
-$("d20frei").onclick=freierWurf;
+$("wurffrei").onclick=freierWurf;
 $("heldname").addEventListener("input", e=>{ S.name=e.target.value; $("gravur").textContent=S.name; sichern(); });
 $("neu").onclick=()=>{
   if(!confirm("Start a new game? Your hit points and the whole roll log are cleared.")) return;
@@ -568,7 +580,7 @@ $("neu").onclick=()=>{
   $("sagbox").classList.add("leer"); $("sagtext").textContent="Your sentence appears here after you roll.";
 };
 
-laden();
+laden(); zeigePaar([6,6]);
 $("heldname").value=S.name; $("gravur").textContent=S.name;
 zeichneHP(); zeichneAktionen(); zeichneLog(); zeichneNarben(); zeichneTrank();
 </script>

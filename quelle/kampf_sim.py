@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 """Rechnet nach, wie ein Kampf ausgeht — nach genau den Regeln, die im Paket stehen.
 
-Spieler (Spielerblatt): ein w20, Treffer ab der Zielzahl des Angriffs, natürliche 1
-verfehlt immer, natürliche 20 verdoppelt die Würfel. Schaden aus den Würfeln des
+Spieler (Spielerblatt): zwei Sechser, zusammengezählt, Treffer ab der Zielzahl des
+Angriffs; ein Sechserpasch verdoppelt die Würfel. Schaden aus den Würfeln des
 Blattes. Gegner (Konsole): trifft mit 65 % — `Math.random()>=0.65` verfehlt — und
 würfelt seinen Schaden. Im Kampf heilt niemand ausser mit dem eigenen Trank.
 
@@ -22,14 +22,15 @@ def wuerfle(f, krit=False):
     return sum(random.randint(1, s) for _ in range(n)) + b
 
 # Name, Lebenspunkte, Zielzahl und Würfel der verlässlichsten Attacke
-GRUPPE = [("Arcanist",    18,  9, "2d8+2"),    # Fireball
-          ("Blade",       30,  7, "1d10+4"),   # Sword Strike
-          ("Lightbearer", 24,  7, "1d10+4")]   # Radiant Strike
+GRUPPE = [("Arcanist",    18,  7, "2d8+2"),    # Fireball
+          ("Blade",       30,  6, "1d10+4"),   # Sword Strike
+          ("Lightbearer", 24,  6, "1d10+4")]   # Radiant Strike
 
 def spieler_schaden(ab, dmg):
-    augen = random.randint(1, 20)
-    if augen == 1 or augen < ab: return 0
-    return wuerfle(dmg, augen == 20)
+    a, b = random.randint(1, 6), random.randint(1, 6)
+    pasch = a == b == 6
+    if not pasch and a + b < ab: return 0
+    return wuerfle(dmg, pasch)
 
 def kampf(feinde_vorlage, fokus=True, traenke=0):
     """feinde_vorlage: [(Lebenspunkte, Schadenswürfel), …]"""
