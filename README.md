@@ -22,7 +22,7 @@ Spielen, kein Konto, keine Daten verlassen das Gerät.
 
 | Datei | Für wen | Was darauf steht |
 |---|---|---|
-| `dungeon_master.html` | Spielleitung | **V2:** dreizehn Seiten Regiebuch — links die Randbeschriftung, in der Mitte der Text, rechts auf gleicher Höhe die Hilfe (Gefahr, Wenn-dann, Stärken); Lebenspunkte und Kampf im Reiter *Charakter-Übersicht / Kampf* |
+| `dungeon_master.html` | Spielleitung | **V2:** elf Seiten Regiebuch — links die Randbeschriftung, in der Mitte der Text, rechts auf gleicher Höhe die Hilfe (Gefahr, Wenn-dann, Stärken); Lebenspunkte und Kampf im Reiter *Charakter-Übersicht / Kampf* |
 | `dungeon_master_v1.html` | Spielleitung | **V1**, die frühere Darstellung (vier Farbbalken, drei Spalten, Kampf in der Seitenleiste) — gleiche Daten, gleiche Logik, weiterhin lauffähig |
 | `spickzettel.html` | Spielleitung | Eine Seite: der DM-Bildschirm auf einen Blick — neun Bereiche, vier Randbeschriftungen, vier Handgriffe |
 | `spieler_magier.html` | The Arcanist, 18 HP | Fireball · Magic Hand · Arcane Darts — Talent ausserhalb des Kampfs: *Magic Hand* |
@@ -60,8 +60,9 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
 
 1. Helfer-Blatt ausdrucken, drei Geräte bereitlegen, jedem seinen Link geben.
 2. Die Spielleitung liest Seite 1 der Konsole. Fünf Minuten, mehr braucht es nicht.
-3. Die Konsole führt durch dreizehn Seiten. Ganz oben eine schmale Leiste, die beim Scrollen
-   stehen bleibt: Szene, Ort, Gefahr mit den Knöpfen −1 +1 +2, der Reiter *Charakter-Übersicht
+3. Die Konsole führt durch elf Seiten. Ganz oben eine schmale Leiste, die beim Scrollen
+   stehen bleibt: Szene, Ort, die **Uhr** (90 Minuten, pausierbar, mit dem Soll je Seite),
+   **Rückgängig**, Gefahr mit den Knöpfen −1 +1 +2, der Reiter *Charakter-Übersicht
    / Kampf*, das Blättern und die **Lage** (Weg, Tür, Wahl, die drei Talente, das Wissen, die
    Chronik). Darunter die Szene als Regiebuch: am linken Rand steht, was ein Absatz ist —
    **Vorlesen**, **Gesprächsaufforderung** (endet immer mit einer klaren Aufforderung),
@@ -104,7 +105,15 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
    führst** — wen er angreift, wann er aufgibt, was ihn stoppt. Ein Test lässt keinen
    Gegner ohne beides durch; „Kampf vorbei“ heilt alle und kehrt zur Szene zurück, „← Szene“ lässt den Kampf
    offen. Esc schliesst ihn.
-5. Etwa drei Stunden. Gut teilbar in zwei Doppelstunden — der Schnitt liegt beim Aufstieg.
+5. **Eine Lektion, 90 Minuten.** Die Uhr in der Leiste läuft rückwärts; jede Seite trägt
+   ihr Zeitbudget (Einstieg 5, Wirtshaus und Wegwahl 12, Aufstieg 10, Hof und Türwahl 8,
+   hinter der Tür 8, Mirela und die letzte Entscheidung 16, Finale 15, Abschluss 8, dazu
+   8 Minuten Reserve). Liegt die Gruppe hinter dem Soll, wird die Uhr gelb und jede Seite
+   bekommt einen Knopf **„Zeit knapp — kurzer Übergang“** mit dem Satz, der die Szene in
+   einer Zeile abschliesst. Bleiben zehn Minuten und das Finale ist noch nicht erreicht,
+   öffnet sich einmal der **Notstopper**: Der Graf kommt selbst — eine Seite, drei
+   Ausgänge (jemand tauscht sich, Kampf, der Vertrag wird geändert), und die Konsole
+   springt direkt zu *Six O’Clock*, wo der Epilog zum gewählten Ausgang steht.
 
 ## Wie es aufgebaut ist
 
@@ -177,8 +186,7 @@ Welche Szene welches Bild hat:
 | Aufstieg · *Up the Mountain* | der Galgen über dem Sumpf, mit den zwei Wölfen | nur auf Weg A, der alten Strasse |
 | Aufstieg · *Up the Mountain* | der Kessler-Stollen unter dem Berg | nur auf Weg B, dem Stollen |
 | Aufstieg · *Up the Mountain* | die Kutsche des Grafen | nur auf Weg C, dem Mitternachtswagen |
-| Kapitel II · *The Courtyard* | der Hof mit dem gefrorenen Brunnen und dem Raben | immer |
-| Entscheidung 2 · *Three Doors* | die drei Türen übereinander: Kapelle, Bibliothek, Küchentreppe | immer |
+| Kapitel II · *The Courtyard* | die drei Türen übereinander: Kapelle, Bibliothek, Küchentreppe — die Entscheidung steht auf derselben Seite | immer |
 | Hinter der Tür · *What You Find* | Bellamy auf seiner Leiter | nur hinter Tür A, der Bibliothek |
 | Hinter der Tür · *What You Find* | Anneke im Taufbecken | nur hinter Tür B, der Kapelle |
 | Hinter der Tür · *What You Find* | Tam in der Küche | nur hinter Tür C, der Küchentreppe |
@@ -219,8 +227,11 @@ Seiten selbst.
 Handgriffe eines Kampfs als Fenster, derselbe Text wie auf der ersten Seite (er
 steht einmal im Quelltext und wird an beiden Stellen benutzt). Über den
 Gegnerkarten liegt die Reihe **Gegner dazunehmen**, offen und jederzeit
-erreichbar — vorher lag sie zugeklappt unter den Karten und war nach zwei
-geladenen Gegnern nicht mehr zu sehen.
+erreichbar. Rechts steht statt einer Erklärung zum freien Kampf die
+**Gewinnchance der Gruppe** für genau die Gegner, die gerade am Tisch stehen:
+Die Seite spielt den Kampf mit den Lebenspunkten von jetzt achthundertmal durch
+(ohne Tränke und Talente) und sagt in einem Satz, ob das sicher, fair, offen oder
+gefährlich ist. Jeder Gegner, der dazukommt oder fällt, rechnet neu.
 
 **Vaskir kann Vampire Spawn rufen** — zwei Tropfen seines eigenen Bluts, und was
 aufsteht, war heute Nacht noch ein Mensch: 30 Lebenspunkte, `Claws 2d6+5`, härter
@@ -254,6 +265,34 @@ Patrouille aus drei Wachen und einem Wachhund — gerade noch zu schaffen, mit R
 Sinkt die Gefahr vorher wieder unter 8, wird die Patrouille abgeblasen. Die Spielleitung muss
 dafür nichts tun; der Prüfstand testet beides auf allen Pfaden.
 
+**Die Leiste und der Gefahrenbalken sind ein Rahmen.** Ein dunkles Band läuft oben
+über die ganze Breite und rechts als Säule hinunter, aus einem Stück; die Leiste und
+der Balken liegen durchsichtig darauf. Er färbt sich mit der Gefahrenstufe. Wie hoch
+die Leiste gerade ist, wird gemessen (`--barhoehe`), nicht angenommen — bricht sie in
+einem schmalen Fenster um, wächst das Band mit.
+
+**Antworten der Figuren sind Karten.** Jede Person, die die Gruppe befragen kann
+(Marek, Bellamy, Anneke, Tam, Mirela, der Graf), steht als Karte mit ihren Fragen und
+Antworten; jede Antwort hat ein Häkchen und wird grün, sobald sie gefallen ist. So sieht
+die Spielleitung, was die Gruppe noch nicht gehört hat. Die Zeile **„Notfalls“** ist
+als goldener Streifen hervorgehoben: der Satz, den die Figur von sich aus sagt, falls
+niemand fragt.
+
+**Festhalten.** Was am Tisch versprochen wurde, wird an Ort und Stelle notiert — in
+der Küche *Tams Bitte* („Mitnahme zugesagt“ / „Ehrlich abgelehnt“). Bleibt es offen,
+sagt die Konsole das ausdrücklich, statt stillschweigend ein Ja anzunehmen; im Epilog
+erscheint dann der Text, der zur Notiz passt.
+
+**Rückgängig.** Der Knopf ↶ in der Leiste (oder Strg+Z) nimmt den letzten vollständigen
+Spielschritt zurück — eine Entscheidung, einen Gefahrenwechsel, einen geladenen Kampf,
+eine Notiz. Blättern und die Uhr zählen nicht als Schritt; nach einer Entscheidung nimmt
+Rückgängig also die Entscheidung zurück, nicht das Umblättern. Zwanzig Schritte tief.
+
+**Wortstützen.** Unter dem Text jeder Seite liegt zugeklappt die Handvoll Wörter, die
+die Schüler für diese Szene brauchen (*to warn · a debt · to trade*) — für die
+Spielleitung, um sie zu geben, wenn jemand stecken bleibt. Das Helfer-Blatt trägt keine
+Hinweise mehr.
+
 ## V1 und V2
 
 `dungeon_master_v1.html` ist die frühere Darstellung, unverändert und lauffähig. V2
@@ -282,9 +321,10 @@ gezeichneten Porträts) und schreibt die drei fertigen Dateien in die Wurzel. Di
 Klassen — Lebenspunkte, Aktionen, Trefferchancen, Signaturfarbe — stehen im Objekt `KLASSEN`
 ganz oben im `<script>` der Vorlage.
 
-Die Storylogik hat einen Prüfstand, der das echte Skript der Konsole lädt und alle 216
+Die Storylogik hat einen Prüfstand, der das echte Skript der Konsole lädt und alle 1800
 Entscheidungspfade von Anfang bis Ende durchspielt — Ortskontinuität, Sichtbarkeit, Gefahr,
-Lebenspunkte, Gegner, Epilogkarten, Umwählen, vorzeitiges und doppeltes Auslösen:
+Lebenspunkte, Gegner, Epilogkarten, Umwählen, vorzeitiges und doppeltes Auslösen, dazu
+Uhr, Rückgängig und Notstopper:
 
 ```bash
 node quelle/pruefe_dm.js          # „Keine Befunde.“ oder eine Liste
@@ -302,8 +342,10 @@ node helferblatt/helferblatt.js
 ```
 
 Die Geschichte selbst steht als Datenstruktur `KAPITEL` im `<script>` von
-`dungeon_master.html` — dreizehn Objekte mit Blöcken vom Typ `vorlesen`, `sagen`, `aufgabe`,
-`personen`, `fa` (Frage/Antwort), `tun`, `optionen`, `kampf`, `wenn`. Wer eine Szene ändern
+`dungeon_master.html` — elf Objekte mit Blöcken vom Typ `vorlesen`, `sagen`, `aufgabe`,
+`personen`, `fa` (Frage/Antwort), `tun`, `optionen`, `kampf`, `wenn`, `weiche`
+(Festhalten, etwa *Tams Bitte*). Jede Seite trägt ausserdem `zeit` (das Budget in Minuten)
+und `woerter` (die Wortstützen für die Schüler, als zugeklappte Zeile unter dem Text). Wer eine Szene ändern
 oder eine eigene schreiben will, arbeitet dort und braucht kein Werkzeug.
 
 ## Lizenz

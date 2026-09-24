@@ -99,13 +99,13 @@ const TEILE = [
    vok:[["a guard","eine Wache"],["a guest","ein Gast"],["to expect somebody","jemanden erwarten"],
         ["a cellar","ein Keller"],["a swamp, a bog","ein Sumpf"],["to be stuck","feststecken"],["to sneak","schleichen"]] },
 
- { nr:"Teil 5", ort:"The courtyard", was:"The raven repeats every sentence it hears. Say one whole sentence to it — slowly and clearly.",
+ { nr:"Teil 5", ort:"The courtyard", was:"Three doors. Each of you: which one would you choose, and why? Answer another hunter — then decide together.",
    saetze:[
      "Hello. Can you understand me?",
      "Where is the woman?",
      "Who taught you to speak?",
      "Say: the Count is a liar."],
-   vok:[["a raven","ein Rabe"],["a courtyard","ein Innenhof"],["a fountain","ein Brunnen"],
+   vok:[["to choose","wählen"],["to explore","erkunden"],["a courtyard","ein Innenhof"],["a fountain","ein Brunnen"],
         ["a chapel","eine Kapelle"],["a library","eine Bibliothek"],["to repeat","wiederholen"],
         ["a liar","ein Lügner"]] },
 

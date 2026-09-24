@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 /* Prüfstand für dungeon_master.html
    Lädt das Skript der Seite unverändert, ersetzt das DOM durch Attrappen und spielt
-   jede erreichbare Zustandsklasse von Schritt 0 bis 11 durch. Jede Abweichung ist ein Befund. */
+   jede erreichbare Zustandsklasse von der ersten bis zur letzten Seite durch. Jede Abweichung ist ein Befund.
+   Seiten werden über ihren Titel gefunden, Entscheidungen über den Ort ihres Optionen-Blocks —
+   so läuft derselbe Prüfstand über V1 (dreizehn Seiten) und V2 (elf).                          */
 "use strict";
 const fs = require("fs"), path = require("path"), vm = require("vm");
 
@@ -48,7 +50,17 @@ vm.runInThisContext(`globalThis.T = { Z:()=>Z, setZ:z=>{Z=z;}, KAPITEL, ENTSCHEI
   hilfeVerteilen: typeof hilfeVerteilen==="function" ? hilfeVerteilen : null,
   vorleseLauf: typeof vorleseLauf==="function" ? vorleseLauf : null,
   stelleWeiche: typeof stelleWeiche==="function" ? stelleWeiche : (()=>{}),
-  BILDER: typeof BILDER!=="undefined" ? BILDER : null }`);
+  BILDER: typeof BILDER!=="undefined" ? BILDER : null,
+  notstoppWaehle: typeof notstoppWaehle==="function" ? notstoppWaehle : null,
+  notstoppZumMorgen: typeof notstoppZumMorgen==="function" ? notstoppZumMorgen : null,
+  notstoppOeffnen: typeof notstoppOeffnen==="function" ? notstoppOeffnen : null,
+  zeichneUhr: typeof zeichneUhr==="function" ? zeichneUhr : null,
+  uhrLage: typeof uhrLage==="function" ? uhrLage : null,
+  uhrSchalte: typeof uhrSchalte==="function" ? uhrSchalte : null,
+  rueckgaengig: typeof rueckgaengig==="function" ? rueckgaengig : null,
+  verlaufLaenge: ()=>typeof VERLAUF!=="undefined" ? VERLAUF.length : 0,
+  verlaufLeeren: ()=>{ if(typeof VERLAUF!=="undefined") VERLAUF.length=0; },
+  ladeGegner: typeof ladeGegner==="function" ? ladeGegner : null }`);
 console.warn = echtWarn;
 
 /* ---------- Hilfen ---------- */
@@ -60,6 +72,13 @@ const K = T.KAPITEL;
 function text(){ return el("bloecke").innerHTML; }
 function optIdx(entId, flagge){ const b=K.flatMap(k=>k.bloecke).find(b=>b.t==="optionen"&&b.id===entId); return b.optionen.findIndex(o=>o.flagge===flagge); }
 function frisch(){ T.setZ(T.frischerZustand()); T.alles(); }
+/* Wo steht was — nach Titel und nach Entscheidung, nicht nach Nummer */
+function seite(...titel){ for(const t of titel){ const i=K.findIndex(k=>k.titel===t); if(i>=0) return i; } throw new Error("Seite nicht gefunden: "+titel.join(" / ")); }
+function entSeite(id){ return K.findIndex(k=>k.bloecke.some(b=>b.t==="optionen"&&b.id===id)); }
+const S={ inn:seite("The Inn"), berg:seite("Up the Mountain"), hof:seite("The Courtyard"), tuer:seite("What You Find"),
+          finale:seite("Count Vaskir"), epilog:seite("Six O’Clock"), ende:seite("What Happens Now","Six O’Clock"),
+          e1:entSeite("e1"), e2:entSeite("e2"), e3:entSeite("e3"), e4:entSeite("e4"), e5:entSeite("e5") };
+const HAT_TAM_BITTE = K.some(k=>k.bloecke.some(b=>b.t==="weiche"&&b.id==="tam_bitte"));
 
 /* ---------- 1 · Statische Selbstprüfung ---------- */
 const statisch = T.pruefeStory();
@@ -75,7 +94,8 @@ for(const weg of WEGE) for(const anneke of [false,true]) for(const tuer of TUERE
   for(const scheitert of (wahl==="e3_pakt"?[false,true]:[false])) for(const ausgang of AUSGAENGE)
    for(const wache of (weg==="weg_c"?[false]:[false,true]))
     for(const danach of DANACH)
-     pfade.push({weg,anneke,tuer,wahl,scheitert,ausgang,wache,danach});
+     for(const tam of ((HAT_TAM_BITTE && tuer==="kueche")?["offen","zugesagt","abgelehnt"]:["offen"]))
+      pfade.push({weg,anneke,tuer,wahl,scheitert,ausgang,wache,danach,tam});
 
 const gesehen = new Map();  /* Block → in wie vielen Pfaden sichtbar */
 K.forEach((k,i)=>k.bloecke.forEach((b,j)=>{ if(b.t!=="ziel"&&b.t!=="weiter") gesehen.set(i+"/"+j,0); }));
@@ -95,16 +115,17 @@ function spiele(p, protokoll){
     T.geheZu(i);
     const k=K[i];
     /* Handlungen an der richtigen Stelle */
-    if(i===2 && p.anneke) T.tunAusfuehren("w_anneke");
-    if(i===3) T.waehle("e1", optIdx("e1",p.weg));
-    if(i===4 && p.weg==="weg_b") T.tunAusfuehren("stollen_luft");
-    if(i===4 && p.wache) T.tunAusfuehren(p.weg==="weg_a"?"tor_kampf":"keller_kampf");
-    if(i===4){ T.geheZu(4); const wachen=T.Z().gegner.filter(g=>g.k==="wache").length;
+    if(i===S.inn && p.anneke) T.tunAusfuehren("w_anneke");
+    if(i===S.e1) T.waehle("e1", optIdx("e1",p.weg));
+    if(i===S.berg && p.weg==="weg_b") T.tunAusfuehren("stollen_luft");
+    if(i===S.berg && p.wache) T.tunAusfuehren(p.weg==="weg_a"?"tor_kampf":"keller_kampf");
+    if(i===S.berg){ T.geheZu(S.berg); const wachen=T.Z().gegner.filter(g=>g.k==="wache").length;
       pruefe(wachen===(p.wache?(p.weg==="weg_a"?2:1):0), `Pfad ${JSON.stringify(p)}: ${wachen} Wachen geladen`); }
-    if(i===6) T.waehle("e2", optIdx("e2",p.tuer));
-    if(i===9) T.waehle("e3", optIdx("e3",p.wahl));
-    if(i===10){ if(p.scheitert) T.tunAusfuehren("pakt_scheitert"); T.tunAusfuehren("finale_laden"); T.waehle("e4", optIdx("e4",p.ausgang)); }
-    if(i===12) T.waehle("e5", optIdx("e5",p.danach));
+    if(i===S.e2) T.waehle("e2", optIdx("e2",p.tuer));
+    if(i===S.tuer && p.tuer==="kueche" && p.tam!=="offen") T.stelleWeiche("tam_bitte", p.tam);
+    if(i===S.e3) T.waehle("e3", optIdx("e3",p.wahl));
+    if(i===S.e4){ if(p.scheitert) T.tunAusfuehren("pakt_scheitert"); T.tunAusfuehren("finale_laden"); T.waehle("e4", optIdx("e4",p.ausgang)); }
+    if(i===S.e5) T.waehle("e5", optIdx("e5",p.danach));
     T.geheZu(i); /* neu zeichnen nach Handlungen */
     if(T.Z().imZwischenakt){
       const Zp=T.Z(), wo0=`Pfad ${JSON.stringify(p)} Schritt ${i}`;
@@ -123,7 +144,8 @@ function spiele(p, protokoll){
       w.optionen.forEach(o=>{
         T.stelleWeiche(w.id, o.k);
         const jetzt=T.sichtbareBloecke(k).filter(b=>b.weiche);
-        pruefe(jetzt.length>0, woW+": Fall „"+o.k+"“ zeigt keinen Text");
+        /* Ein Festhalten hat seinen Text auf einer späteren Seite — das prüft der Epilog-Abschnitt */
+        pruefe(jetzt.length>0 || w.art==="festhalten", woW+": Fall „"+o.k+"“ zeigt keinen Text");
         jetzt.forEach(b=>{
           pruefe(T.liste(b.weiche).some(sp=>sp===w.id+"="+o.k), woW+": fremder Zweig sichtbar bei „"+o.k+"“");
           gesehen.set(i+"/"+k.bloecke.indexOf(b), gesehen.get(i+"/"+k.bloecke.indexOf(b))+1);
@@ -132,6 +154,8 @@ function spiele(p, protokoll){
       });
       pruefe(T.sichtbareBloecke(k).filter(b=>b.weiche).length===0, woW+": Wahl lässt sich nicht aufheben");
     });
+    /* Die Schleife hat die Weiche wieder aufgehoben — den Stand dieses Pfads neu setzen */
+    if(i===S.tuer && p.tuer==="kueche" && p.tam!=="offen" && (T.Z().weichen||{}).tam_bitte!==p.tam) T.stelleWeiche("tam_bitte", p.tam);
     const sichtbar=T.sichtbareBloecke(k);
     sichtbar.forEach(b=>{ const j=k.bloecke.indexOf(b); gesehen.set(i+"/"+j, gesehen.get(i+"/"+j)+1); });
     const wo=`Pfad ${JSON.stringify(p)} Schritt ${i} (${k.titel})`;
@@ -219,7 +243,7 @@ function spiele(p, protokoll){
       const nur=T.liste(c.nur).filter(f=>gruppe.includes(f));
       pruefe(nur.length===0 || nur.some(T.hat), wo+": Gelegenheit "+c.wer+" sichtbar, obwohl ihr Zweig ("+nur+") nicht gewählt ist");
     });
-    if(i===10){ const heilerin=chancen.some(c=>c.wer==="Lightbearer");
+    if(i===S.finale){ const heilerin=chancen.some(c=>c.wer==="Lightbearer");
       pruefe(heilerin===(T.Z().gefahr>=4 && p.wahl!=="e3_buch"), wo+": Thrall-Gelegenheit widerspricht dem Thrall-Lader"); }
 
     /* Orientierung: nie eine leere Seite, nie ein „geh zurück“ auf einem gültigen Pfad */
@@ -264,16 +288,18 @@ function spiele(p, protokoll){
   pruefe(vaskir && vaskir.hp===(Zend.gefahr<=3?40:55), wo+": Vaskir-HP passen nicht zum Barometer");
   pruefe(thralls===((Zend.gefahr>=4&&p.wahl!=="e3_buch")?2:0), wo+`: ${thralls} Thralls geladen`);
   /* Epilog-Karten */
-  T.geheZu(11); const s11=T.sichtbareBloecke(K[11]).map(b=>b.titel||b.t);
+  T.geheZu(S.epilog); const s11=T.sichtbareBloecke(K[S.epilog]).map(b=>b.titel||b.t);
   pruefe(s11.filter(t=>["Ein neuer Vertrag","Der Graf ist tot","Er ist entkommen"].includes(t)).length===1, wo+": Epilog zeigt nicht genau einen Ausgang");
   const annekeKarten=s11.filter(t=>/Anneke|Mädchen aus der Kapelle/.test(t)).length;
   pruefe(annekeKarten===((p.tuer==="kapelle"||p.wahl==="e3_buch")?1:0), wo+`: ${annekeKarten} Anneke-Karten im Epilog`);
-  pruefe(s11.includes("Tam")===(p.tuer==="kueche"), wo+": Tam-Karte passt nicht zur Tür");
+  const tamKarten=s11.filter(t=>t.startsWith("Tam"));
+  pruefe(tamKarten.length===(p.tuer==="kueche"?1:0), wo+`: ${tamKarten.length} Tam-Karten im Epilog`);
+  if(HAT_TAM_BITTE && p.tuer==="kueche") pruefe(tamKarten[0].includes({offen:"nichts gesagt",zugesagt:"versprochen",abgelehnt:"Nein"}[p.tam||"offen"]), wo+": Tam-Karte passt nicht zum Festgehaltenen: "+tamKarten[0]);
   pruefe(s11.includes("Bellamys Brief")===(p.tuer==="bibliothek"), wo+": Bellamy-Karte passt nicht zur Tür");
   pruefe(s11.includes("Mirela auf dem Weg hinunter")===(p.wahl==="e3_raus"&&p.ausgang==="ausgang_flucht"), wo+": Mirela-Karte passt nicht");
   pruefe(s11.includes("Das Blutbuch brannte")===(p.wahl==="e3_buch"), wo+": Blutbuch-Karte passt nicht");
   /* Schlussseite: genau ein Schlusstext, und er gehört zur getroffenen Wahl */
-  T.geheZu(12); const s12=T.sichtbareBloecke(K[12]).map(b=>b.titel||b.t);
+  T.geheZu(S.ende); const s12=T.sichtbareBloecke(K[S.ende]).map(b=>b.titel||b.t);
   const SCHLUSS={weiter_jagd:"Schluss · Die nächste Jagd", weiter_dorf:"Schluss · Der Winter", weiter_schloss:"Schluss · Nachtfels"};
   pruefe(s12.filter(t=>Object.values(SCHLUSS).includes(t)).length===1, wo+": Schlussseite zeigt nicht genau einen Schlusstext");
   pruefe(s12.includes(SCHLUSS[p.danach]), wo+": Schlusstext passt nicht zur letzten Wahl");
@@ -281,11 +307,11 @@ function spiele(p, protokoll){
   pruefe(s12.includes("Sie ziehen ein, und er lebt noch")===(p.danach==="weiter_schloss"&&p.ausgang==="ausgang_flucht"), wo+": Schloss-Notiz falsch");
   pruefe(Zend.gefahr===erwarteteGefahr(p), wo+": die letzte Entscheidung hat die Gefahr verändert");
   /* NPC-Kontinuität an drei Stellen */
-  T.geheZu(5); const s5=T.sichtbareBloecke(K[5]);
+  T.geheZu(S.hof); const s5=T.sichtbareBloecke(K[S.hof]);
   pruefe(s5.some(b=>b.nur==="weg_c")===(p.weg==="weg_c"), wo+": Corvin im Hof, obwohl nicht mit der Kutsche gekommen (oder umgekehrt)");
-  T.geheZu(7); const s7=T.sichtbareBloecke(K[7]);
+  T.geheZu(S.tuer); const s7=T.sichtbareBloecke(K[S.tuer]);
   pruefe(s7.some(b=>b.t==="kampf")===(p.tuer==="kapelle"&&!p.anneke), wo+": Anneke-Kampf sichtbar/unsichtbar falsch");
-  T.geheZu(10); const s10=T.sichtbareBloecke(K[10]);
+  T.geheZu(S.finale); const s10=T.sichtbareBloecke(K[S.finale]);
   pruefe(s10.some(b=>b.id==="pakt_scheitert")===(p.wahl==="e3_pakt"), wo+": Verhandlungsknopf falsch sichtbar");
   pruefe(s10.some(b=>b.titel==="Zwei Thralls kommen dazu")===(Zend.gefahr>=4&&p.wahl!=="e3_buch"), wo+": Thrall-Karte widerspricht dem Lader");
   pruefe(s10.some(b=>b.titel==="Keine Thralls")===(Zend.gefahr>=4&&p.wahl==="e3_buch"), wo+": Keine-Thralls-Karte falsch");
@@ -297,6 +323,7 @@ pfade.forEach(p=>{ spiele(p); gefahrWerte.add(T.Z().gefahr); });
 
 /* ---------- 3 · Erreichbarkeit jedes Blocks ---------- */
 gesehen.forEach((n,key)=>{ const [i,j]=key.split("/").map(Number); const b=K[i].bloecke[j];
+  if(b.notstopp) return;   /* nur über den Notstopp erreichbar — den spielt Abschnitt 6a für jeden Fall durch */
   pruefe(n>0, `Unerreichbar: Schritt ${i} Block ${j} (${b.t}${b.titel?" · "+b.titel:""}${b.id?" · "+b.id:""})`); });
 
 gesehenChancen.forEach((n,key)=>{ const [i,j]=key.split("/").map(Number); const c=K[i].chancen[j];
@@ -313,9 +340,9 @@ T.waehle("e2",0); pruefe(T.Z().gewaehlt.e2===undefined, "e2 liess sich vor e1 w�
 T.waehle("e3",0); pruefe(T.Z().gewaehlt.e3===undefined, "e3 liess sich vor e2 wählen");
 T.waehle("e5",0); pruefe(T.Z().gewaehlt.e5===undefined, "e5 liess sich vor e4 wählen");
 T.waehle("e4",0); pruefe(T.Z().gewaehlt.e4===undefined, "e4 liess sich vor e3 wählen");
-T.geheZu(4); pruefe(text().includes("hinweisfehlt"), "Schritt 4 ohne e1 zeigt keinen Hinweis");
-T.geheZu(10); pruefe(text().includes("hinweisfehlt"), "Finale ohne e3 zeigt keinen Hinweis");
-T.geheZu(11); pruefe(text().includes("hinweisfehlt"), "Epilog ohne e4 zeigt keinen Hinweis");
+T.geheZu(S.berg); pruefe(text().includes("hinweisfehlt"), "Aufstieg ohne e1 zeigt keinen Hinweis");
+T.geheZu(S.finale); pruefe(text().includes("hinweisfehlt"), "Finale ohne e3 zeigt keinen Hinweis");
+T.geheZu(S.epilog); pruefe(text().includes("hinweisfehlt"), "Epilog ohne e4 zeigt keinen Hinweis");
 T.tunAusfuehren("stollen_luft"); pruefe(T.Z().gruppe[0].hp===18, "Stollen-Knopf wirkte ohne Weg B");
 T.tunAusfuehren("pakt_scheitert"); pruefe(T.Z().gefahr===0, "Verhandlungsknopf wirkte ohne e3_pakt");
 
@@ -347,19 +374,20 @@ T.waehle("e1",optIdx("e1","weg_c"));
 pruefe(T.Z().gefahr===4 && T.Z().gegner.length===0 && !T.Z().getan.keller_kampf, "Umwahl B→C nahm die Wache nicht zurück: "+JSON.stringify({g:T.Z().gefahr,n:T.Z().gegner.length}));
 
 /* ---------- 6b · Patrouille und Verstärkung ---------- */
-frisch(); T.geheZu(5); T.setzeGefahr(8,"Test");
-pruefe(T.Z().patrouille.status==="steht_bevor" && T.Z().patrouille.vor===7, "Patrouille nicht vor dem nächsten Akt (7) angesetzt: "+JSON.stringify(T.Z().patrouille));
-T.geheZu(6); pruefe(!T.Z().imZwischenakt && T.Z().schritt===6, "Zwischenakt kam vor der Entscheidung statt vor dem Akt");
-T.geheZu(7); pruefe(T.Z().imZwischenakt && T.Z().schritt===6, "Zwischenakt kam nicht vor Schritt 7");
+const AKT = K.findIndex((k,i)=>i>S.hof && k.art!=="ent");   /* der Akt, vor dem die Patrouille kommt */
+frisch(); T.geheZu(S.hof); T.setzeGefahr(8,"Test");
+pruefe(T.Z().patrouille.status==="steht_bevor" && T.Z().patrouille.vor===AKT, "Patrouille nicht vor dem nächsten Akt ("+AKT+") angesetzt: "+JSON.stringify(T.Z().patrouille));
+if(AKT-1>S.hof){ T.geheZu(AKT-1); pruefe(!T.Z().imZwischenakt && T.Z().schritt===AKT-1, "Zwischenakt kam vor der Entscheidung statt vor dem Akt"); }
+T.geheZu(AKT); pruefe(T.Z().imZwischenakt && T.Z().schritt===AKT-1, "Zwischenakt kam nicht vor dem nächsten Akt");
 pruefe(text().includes("hinweisfehlt")===false, "Zwischenakt zeigt einen Vorentscheidungs-Hinweis");
-el("zurueck").onclick(); pruefe(!T.Z().imZwischenakt && T.Z().schritt===6 && T.Z().patrouille.status==="steht_bevor", "Zurück aus dem Zwischenakt verliert die Patrouille");
-T.geheZu(7); el("vor").onclick(); pruefe(T.Z().schritt===7 && T.Z().patrouille.status==="erledigt" && !T.Z().imZwischenakt, "Weiter aus dem Zwischenakt landet nicht in Schritt 7");
-T.geheZu(8); pruefe(!T.Z().imZwischenakt, "Patrouille kam ein zweites Mal");
+el("zurueck").onclick(); pruefe(!T.Z().imZwischenakt && T.Z().schritt===AKT-1 && T.Z().patrouille.status==="steht_bevor", "Zurück aus dem Zwischenakt verliert die Patrouille");
+T.geheZu(AKT); el("vor").onclick(); pruefe(T.Z().schritt===AKT && T.Z().patrouille.status==="erledigt" && !T.Z().imZwischenakt, "Weiter aus dem Zwischenakt landet nicht im nächsten Akt");
+T.geheZu(AKT+1); pruefe(!T.Z().imZwischenakt, "Patrouille kam ein zweites Mal");
 T.setzeGefahr(2,"Test"); pruefe(T.Z().patrouille.status==="erledigt", "Erledigte Patrouille wurde neu angesetzt");
-frisch(); T.geheZu(5); T.setzeGefahr(8,"Test"); T.setzeGefahr(-1,"Test");
+frisch(); T.geheZu(S.hof); T.setzeGefahr(8,"Test"); T.setzeGefahr(-1,"Test");
 pruefe(T.Z().patrouille.status==="keine", "Patrouille nicht abgeblasen, als Gefahr unter 8 fiel");
-T.geheZu(7); pruefe(!T.Z().imZwischenakt, "abgeblasene Patrouille kam trotzdem");
-frisch(); T.geheZu(10); T.setzeGefahr(9,"Test"); pruefe(T.Z().patrouille.status==="keine", "Patrouille im Finale angesetzt (vor dem Epilog)");
+T.geheZu(AKT); pruefe(!T.Z().imZwischenakt, "abgeblasene Patrouille kam trotzdem");
+frisch(); T.geheZu(S.finale); T.setzeGefahr(9,"Test"); pruefe(T.Z().patrouille.status==="keine", "Patrouille im Finale angesetzt (vor dem Epilog)");
 frisch(); T.setzeGefahr(8,"Test"); const gel=T.ladeKampf(["wolf","wolf"],"wolf");
 pruefe(T.Z().gegner.filter(g=>g.k==="wolf").length===3 && gel.length===3, "Verstärkung bei Gefahr 8 fehlt (Wölfe)");
 frisch(); T.setzeGefahr(7,"Test"); T.ladeKampf(["wolf","wolf"],"wolf");
@@ -368,12 +396,52 @@ frisch(); T.setzeGefahr(8,"Test"); T.waehle("e1",optIdx("e1","weg_b")); T.tunAus
 pruefe(T.Z().gegner.filter(g=>g.k==="wache").length===2, "Kellerwache ohne Verstärkung bei Gefahr 8: "+T.Z().gegner.length);
 T.waehle("e1",optIdx("e1","weg_c")); pruefe(T.Z().gegner.length===0, "Umwahl nahm die verstärkte Wache nicht mit zurück: "+T.Z().gegner.length);
 
+/* ---------- 6a · Uhr, Rückgängig, Notstopper (nur V2) ---------- */
+if(T.uhrLage && T.rueckgaengig && T.notstoppZumMorgen){
+  /* Uhr: das Soll wächst je Seite, „knapp“ heisst hinter dem Soll */
+  frisch(); const Z0=T.Z(); Z0.uhr={rest:90*60000-30*60000, laeuft:false, stempel:0};   /* 30 Minuten gespielt */
+  T.geheZu(S.inn); pruefe(T.uhrLage().knapp===true, "Uhr: 30 Minuten im Wirtshaus gelten nicht als knapp");
+  T.geheZu(S.tuer); pruefe(T.uhrLage().knapp===false, "Uhr: 30 Minuten hinter der Tür gelten als knapp");
+  pruefe(T.uhrLage().spaet===false, "Uhr: 60 Minuten Rest gelten als spät");
+  Z0.uhr.rest=9*60000; pruefe(T.uhrLage().spaet===true, "Uhr: 9 Minuten Rest vor dem Finale gelten nicht als spät");
+  T.geheZu(S.finale); pruefe(T.uhrLage().spaet===false, "Uhr: im Finale darf der Notstopp nicht mehr drängen");
+  /* Rückgängig: eine Entscheidung zurücknehmen, Blättern zählt nicht */
+  frisch(); T.verlaufLeeren(); const v0=T.verlaufLaenge();   /* der Stapel ist auf 20 gedeckelt — vorher leeren */
+  T.geheZu(S.e1); T.geheZu(S.inn); pruefe(T.verlaufLaenge()===v0, "Blättern legt einen Rückgängig-Schritt an");
+  T.waehle("e1", optIdx("e1","weg_a")); pruefe(T.verlaufLaenge()===v0+1, "Entscheidung legt keinen Rückgängig-Schritt an");
+  pruefe(T.Z().gefahr===2 && T.Z().flaggen.weg_a===true, "Vorbedingung Rückgängig");
+  T.rueckgaengig(); pruefe(T.Z().gefahr===0 && !T.Z().flaggen.weg_a && T.Z().gewaehlt.e1===undefined, "Rückgängig nimmt die Entscheidung nicht zurück: "+JSON.stringify({g:T.Z().gefahr,f:T.Z().flaggen}));
+  pruefe(T.verlaufLaenge()===v0, "Rückgängig räumt den Schritt nicht ab");
+  /* Notstopper: jeder der drei Wege führt in den Morgen und zeigt dort genau seinen Block */
+  const ende=seite("Six O’Clock");
+  for(const fall of ["tausch","vertrag","kampf"]){
+    frisch(); T.waehle("e1",optIdx("e1","weg_b")); T.geheZu(S.hof); T.waehle("e2",optIdx("e2","kueche")); T.geheZu(S.tuer);
+    T.Z().uhr={rest:9*60000, laeuft:true, stempel:Date.now()}; T.zeichneUhr();
+    pruefe(T.Z().notstopp.gesehen===true, "Notstopp "+fall+": Uhr auf 9 Minuten hat den Grafen nicht gerufen");
+    T.notstoppWaehle(fall);
+    if(fall==="kampf"){ T.Z().gegner=[]; T.ladeGegner("vaskir",55); T.waehle("e3",optIdx("e3","e3_pakt")); T.waehle("e4",optIdx("e4","ausgang_tot")); }
+    T.notstoppZumMorgen();
+    const Zn=T.Z();
+    pruefe(Zn.schritt===ende, "Notstopp "+fall+": landet nicht im Morgen, sondern in Schritt "+Zn.schritt);
+    pruefe(Zn.gewaehlt.e3!==undefined && Zn.gewaehlt.e4!==undefined, "Notstopp "+fall+": e3/e4 nicht gesetzt");
+    pruefe(!text().includes("hinweisfehlt"), "Notstopp "+fall+": der Morgen verlangt noch eine Entscheidung");
+    const s=T.sichtbareBloecke(K[ende]);
+    const ns=s.filter(b=>b.notstopp);
+    pruefe(ns.length===1 && ns[0].notstopp===fall, "Notstopp "+fall+": Epilog zeigt "+ns.map(b=>b.notstopp).join(",")+" statt "+fall);
+    ns.forEach(b=>gesehen.set(ende+"/"+K[ende].bloecke.indexOf(b), (gesehen.get(ende+"/"+K[ende].bloecke.indexOf(b))||0)+1));
+    if(fall!=="kampf") pruefe(Zn.flaggen.ausgang_vertrag===true && Zn.flaggen.e3_pakt===true, "Notstopp "+fall+": Vertrag/Angebot nicht gesetzt");
+  }
+  /* Ohne Notstopp bleibt der Epilog frei davon */
+  frisch(); T.waehle("e1",0); T.geheZu(S.hof); T.waehle("e2",0); T.geheZu(S.e3); T.waehle("e3",0); T.geheZu(S.e4); T.waehle("e4",0); T.geheZu(ende);
+  pruefe(T.sichtbareBloecke(K[ende]).filter(b=>b.notstopp).length===0, "Notstopp-Block sichtbar ohne Notstopp");
+}
+
 /* ---------- 6b · Kampfbildschirm (nur V2) ---------- */
 if(T.oeffneKampf){
   frisch(); pruefe(T.Z().kampfOffen===false && el("kampfmodus").hidden===true, "Kampfbildschirm ist beim Start offen");
   T.waehle("e1",optIdx("e1","weg_b")); T.tunAusfuehren("keller_kampf");
   pruefe(T.Z().kampfOffen===true && el("kampfmodus").hidden===false, "Laden aus der Szene öffnet den Kampfbildschirm nicht");
-  pruefe(el("k-titel").textContent==="Freier Kampf" || el("k-titel").textContent.length>0, "Kampftitel leer");
+  pruefe(el("k-titel").textContent.length>0 || el("k-chance").innerHTML.includes("Gewinnchance"), "Kampf ohne Szenenkampf zeigt weder Titel noch Gewinnchance");
   T.schliesseKampf(); pruefe(!T.Z().kampfOffen && el("kampfmodus").hidden===true && T.Z().gegner.length===1, "Schliessen verliert den Kampf");
   T.oeffneKampf(); T.Z().gruppe[1].hp=4; T.kampfVorbei();
   pruefe(!T.Z().kampfOffen && T.Z().gegner.length===0 && T.Z().gruppe.every(h=>h.hp===h.max), "Kampf vorbei heilt nicht oder räumt nicht auf");
