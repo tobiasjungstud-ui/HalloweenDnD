@@ -761,6 +761,18 @@ details.fach[open] summary::after{content:"zuklappen"}
 .einst-pop small{font-size:11px;color:var(--muted)}
 .einst-pop .knopf{width:100%;justify-content:flex-start;text-align:left;padding:8px 10px;font-size:13px}
 .einst-pop .knopf.schalter{font-size:13px;gap:10px;padding:8px 10px}
+
+/* ---- Blutruf: Bonusaktion in Vaskirs Karte ---- */
+.gegner .bonus{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px dashed var(--red-line)}
+.gegner .bonus button{border:1px solid rgba(190,52,42,.7);border-radius:4px;padding:7px 12px;color:var(--red);font-weight:500;background:rgba(90,42,36,.25);min-height:36px}
+.gegner .bonus button:hover{background:rgba(90,42,36,.5);color:#fff}
+.gegner .bonus span{font-size:12.5px;color:var(--muted)}
+.gegner .bonus.weg{font-size:12.5px;color:var(--dim);border-top:1px dashed var(--line)}
+#blutruf .br-vorlesen{font-family:var(--serif);font-size:17px;line-height:1.55;color:var(--gold-soft);font-style:italic;border-left:2px solid rgba(201,164,87,.5);padding-left:14px}
+#blutruf .br-chance{font-size:13.5px;color:var(--muted)} #blutruf .br-chance b{color:var(--text)} #blutruf .br-chance .warn{color:var(--red)}
+#blutruf .br-knoepfe{display:flex;justify-content:flex-end;margin-top:6px}
+#blutruf-ja{border:1px solid rgba(190,52,42,.8);border-radius:4px;padding:9px 16px;color:#fff;background:#6a2620;font-weight:500;min-height:40px}
+#blutruf-ja:hover{background:#8a3027}
 </style>
 
 <div id="rahmen" aria-hidden="true"></div><div id="rahmenkante" aria-hidden="true"></div>
@@ -947,6 +959,15 @@ details.fach[open] summary::after{content:"zuklappen"}
   <dialog class="hilfeschau" id="uebergang" aria-label="Zeit knapp — kurzer Übergang">
     <div class="hs-kopf"><h3>Zeit knapp — der kurze Übergang</h3><button class="hs-zu" id="uebergang-zu">schliessen</button></div>
     <div class="hs-text" id="uebergang-text"></div>
+  </dialog>
+  <dialog class="hilfeschau" id="blutruf" aria-label="Bonusaktion Blutruf">
+    <div class="hs-kopf"><h3>Bonusaktion · Blutruf</h3><button class="hs-zu" id="blutruf-nein">abbrechen</button></div>
+    <div class="hs-text">
+      <p class="br-vorlesen">Vaskir bites into his own hand. Two drops fall on the floorboards — then two more. Where they land, something stands up that was a person tonight.</p>
+      <p><b>Was es kostet:</b> 12 Lebenspunkte von Vaskir (6 je Spawn) — sag den Schülern, dass sie es sehen. <b>Was er bekommt:</b> zwei Vampire Spawn, je 30 Lebenspunkte, <em>Claws 2d6+5</em>. Einmal pro Kampf. Fällt Vaskir, fallen sie mit ihm; unter 15 Lebenspunkten redet er.</p>
+      <p class="br-chance" id="blutruf-chance"></p>
+      <div class="br-knoepfe"><button id="blutruf-ja">Blutruf ausführen</button></div>
+    </div>
   </dialog>
   <dialog class="hilfeschau" id="kampfhilfe" aria-label="Wie ein Kampf funktioniert">
     <div class="hs-kopf"><h3>Wie es funktioniert</h3><button class="hs-zu" id="kampfhilfe-zu">schliessen</button></div>
@@ -1221,10 +1242,10 @@ const KAPITEL = [
 {n:"Aufstieg", verlauf:[
   {bei:"wolfe", nur:"weg_a", wenn:"Ein Wolf fällt", dann:"der andere läuft", art:"gut"},
   {bei:"sumpf", nur:"weg_a", wenn:"Sumpf: ein Wurf unter 7", dann:"steckt fest und ruft auf Englisch um Hilfe. Sagt jemand, wie er hilft → nichts passiert; sonst −1 HP (im Reiter eintragen)", art:"schlecht"},
-  {bei:"wachen", nur:"weg_a", wenn:"Wachen: alle würfeln 7 oder mehr", dann:"vorbei — weiter bei „Im Hof“", art:"gut"},
-  {bei:"wachen", nur:"weg_a", wenn:"Wachen: einer unter 7, oder jemand greift an", dann:"Knopf: Kampf mit zwei Wachen, Gefahr +1", art:"schlecht"},
-  {bei:"keller", nur:"weg_b", wenn:"Jeder sagt einen ganzen Satz, niemand droht", dann:"er glaubt euch: „Guests. Of course.“ — hinauf in den Hof", art:"gut"},
-  {bei:"keller", nur:"weg_b", wenn:"Stottern, Drohung oder Angriff", dann:"Knopf: Kampf mit der Wache, Gefahr +1", art:"schlecht"},
+  {bei:"wachen", nur:"weg_a", wenn:"Wachen: alle würfeln 7 oder mehr", dann:"unten „Ja — vorbeigeschlichen“ anklicken → weiter ohne Kampf", art:"gut"},
+  {bei:"wachen", nur:"weg_a", wenn:"Wachen: einer unter 7, oder jemand greift an", dann:"unten „Nein — entdeckt“ anklicken → erst dann erscheint der Kampf (zwei Wachen, Gefahr +1)", art:"schlecht"},
+  {bei:"keller", nur:"weg_b", wenn:"Jeder sagt einen ganzen Satz, niemand droht", dann:"unten „Ja — er glaubt ihnen“ anklicken → weiter ohne Kampf", art:"gut"},
+  {bei:"keller", nur:"weg_b", wenn:"Stottern, Drohung oder Angriff", dann:"unten „Nein — Kampf“ anklicken → erst dann erscheint der Kampf (eine Wache, Gefahr +1)", art:"schlecht"},
   {bei:"kutsche", nur:"weg_c", wenn:"Jemand spricht Corvin an", dann:"er fragt freundlich zurück — die Gefahr +4 ist schon eingetragen"},
   {bei:"kutsche", nur:"weg_c", wenn:"Jemand merkt: kein Spiegelbild, kalte Hände, nie Mirelas Name", dann:"sag „Yes. You noticed.“ — mehr nicht"}],
  chancen:[
@@ -1249,9 +1270,12 @@ const KAPITEL = [
  {t:"aufgabe", anker:"sumpf", nur:"weg_a", sag:"Now each of you rolls both dice — once. Seven or more: you are across. Under seven: you are stuck. Call for help — in English. Who helps you, and how?", hinweis:"Drei Würfe, einer pro Figur. Wer feststeckt, ruft (<i>Help! I’m stuck!</i>); eine andere Figur sagt auf Englisch, wie sie hilft → kein Schaden. Kommt keine Hilfe: −1 HP im Reiter <b>Charakter-Übersicht / Kampf</b>."},
  {t:"vorlesen", nur:"weg_a", titel:"Die Wachen am Tor", text:[
   `On the far side of the bog the gate of Nachtfels stands open. Two men in old grey livery stand beside it. Their lamps hang on the wall next to them — the only light for a mile. They do not move. They do not talk. They are looking at the fog.`]},
- {t:"aufgabe", anker:"wachen", nur:"weg_a", sag:"Two guards. They belong to the house, and they are not here to welcome anyone. You can try to get past them in the fog — one roll each, seven or more. Or you will be detected — and attacked. Decide together. Quietly.", hinweis:"Alle ≥ 7 → weiter unten bei „Im Hof“. Einer darunter, oder sie greifen an → Knopf."},
- {t:"tun", id:"tor_kampf", nur:"weg_a", text:"Das Anschleichen ist misslungen — die beiden Wachen haben sie gesehen.", knopf:{art:"laden", gegner:["wache","wache"], gefahr:1, extra:"wache"}, beschriftung:"Kampf mit zwei Wachen, Gefahr +1"},
- {t:"vorlesen", nur:"weg_a", titel:"Im Hof", text:[
+ {t:"aufgabe", anker:"wachen", nur:"weg_a", sag:"Two guards. They belong to the house, and they are not here to welcome anyone. You can try to get past them in the fog — one roll each, seven or more. Or you will be detected — and attacked. Decide together. Quietly.", hinweis:"Würfeln lassen, dann unten anklicken, was passiert ist."},
+ {t:"weiche", id:"wache", nur:"weg_a", titel:"Kommen sie an den Wachen vorbei?", optionen:[
+  {k:"vorbei", knopf:"Ja — vorbeigeschlichen", sub:"Alle haben 7 oder mehr gewürfelt."},
+  {k:"entdeckt", knopf:"Nein — entdeckt", sub:"Einer unter 7, oder jemand greift an."}]},
+ {t:"tun", id:"tor_kampf", weiche:"wache=entdeckt", nur:"weg_a", text:"Das Anschleichen ist misslungen — die beiden Wachen haben sie gesehen.", knopf:{art:"laden", gegner:["wache","wache"], gefahr:1, extra:"wache"}, beschriftung:"Kampf mit zwei Wachen, Gefahr +1"},
+ {t:"vorlesen", weiche:["wache=vorbei","wache=entdeckt"], nur:"weg_a", titel:"Im Hof", text:[
   `Past the guards, through the gate that nobody ever closed — and you are standing in a square courtyard of black stone.`]},
 
  {t:"regie", nur:"weg_b", titel:"Hintergrund · Stollen", text:"Vier Stunden Dunkelheit, schlechte Luft (−2 HP für alle, Knopf unten), dann ein Keller unter dem Schloss — und eine <b>Wache mit Lampe</b>. Hier wird nicht gewürfelt, hier wird geredet: Trägt jede Figur einen ganzen englischen Satz bei und droht niemand, glaubt er ihnen. Stottert die Gruppe, droht oder greift jemand an: Knopf unten, Kampf, Gefahr +1."},
@@ -1264,9 +1288,13 @@ const KAPITEL = [
   `The tunnel ends at a rotten wooden door. Behind it: a cellar full of barrels, a smell of wine and wet stone, and a stair going up. In the corner, behind an iron grille, a shelf of small bottles — and one of them gives off a faint, pale light.`,
   `At the top of the stair stands a man with a lamp. He has heard the door. He comes down, slowly, coughing — a cough that has clearly been going on for weeks — and holds the lamp up to your faces.`]},
  {t:"sagen", wer:"Die Wache", nur:"weg_b", text:["Nobody comes in through the cellar. Who are you, and who let you in?"]},
- {t:"aufgabe", anker:"keller", nur:"weg_b", sag:"He wants an answer, and he wants it now. Guests — say it like you mean it, one sentence each, and give him a reason. No weapons, no dice. Just talk.", hinweis:"Jeder ein ganzer Satz, keine Drohung → er glaubt ihnen: „Guests. Of course. Nobody tells me anything. Up the stair, wait in the courtyard — somebody will come for you.“ (Niemand kommt.) Sonst der Knopf unten."},
- {t:"tun", id:"keller_kampf", nur:"weg_b", text:"Die Wache glaubt ihnen nicht.", knopf:{art:"laden", gegner:["wache"], gefahr:1, extra:"wache"}, beschriftung:"Kampf mit der Wache, Gefahr +1"},
- {t:"vorlesen", nur:"weg_b", titel:"Hinauf in den Hof", text:[
+ {t:"aufgabe", anker:"keller", nur:"weg_b", sag:"He wants an answer, and he wants it now. Guests — say it like you mean it, one sentence each, and give him a reason. No weapons, no dice. Just talk.", hinweis:"Reden lassen, dann unten anklicken, was passiert ist. Jeder ein ganzer Satz und niemand droht → er glaubt ihnen. Stottert die Gruppe, droht oder greift jemand an → Kampf."},
+ {t:"weiche", id:"wache", nur:"weg_b", titel:"Glaubt die Wache ihnen?", optionen:[
+  {k:"vorbei", knopf:"Ja — er glaubt ihnen", sub:"Jede Figur ein ganzer Satz, niemand droht."},
+  {k:"entdeckt", knopf:"Nein — Kampf", sub:"Gestottert, gedroht oder angegriffen."}]},
+ {t:"sagen", wer:"Die Wache", weiche:"wache=vorbei", nur:"weg_b", text:["Guests. Of course. Nobody tells me anything. Up the stair, wait in the courtyard — somebody will come for you."]},
+ {t:"tun", id:"keller_kampf", weiche:"wache=entdeckt", nur:"weg_b", text:"Die Wache glaubt ihnen nicht.", knopf:{art:"laden", gegner:["wache"], gefahr:1, extra:"wache"}, beschriftung:"Kampf mit der Wache, Gefahr +1"},
+ {t:"vorlesen", weiche:["wache=vorbei","wache=entdeckt"], nur:"weg_b", titel:"Hinauf in den Hof", text:[
   `Up the cellar stair, through a low door — and you are standing in a square courtyard of black stone, with the night sky above you for the first time in five hours.`]},
 
  {t:"regie", nur:"weg_c", titel:"Hintergrund · Kutsche", text:`Zwei Stunden mit <b>Corvin Ash</b>, dem Kutscher des Grafen: sehr freundlich, fährt ohne Lampe, sieht nie auf die Strasse. Spiel ihn freundlich und stell den Spielern <b>seine</b> Fragen: „And what are your names?“ — „And what do you want up there?“ — „You’re not from the village, are you?“ Drei Dinge dürfen sie merken: Er sagt nie Mirelas Namen, seine Hände sind kalt, im Fenster spiegelt sich alles ausser ihm. Merkt es niemand — kein Problem, die Gefahr (+4) ist schon eingetragen. Er bringt sie bis in den Hof.`},
@@ -1351,15 +1379,18 @@ const KAPITEL = [
   `Bellamy walks you out of the library and along a corridor with no windows — the west corridor — and stops at the end of it, in front of a tall mirror. “The tower has no stair,” he says. “It has this. Walk backwards through it, and don’t look.”`,
   `Then he takes a letter out of his coat. “Would you carry this down to the village for me? The house is still there. Say yes or no — I will know which one you mean.”`,
   `He does not come with you. “He forbade it in 1804, and I find I still care what he thinks. Isn’t that the saddest thing you have ever heard?”`]},
- {t:"regie", nur:"kapelle", nicht:"anneke", text:"Die Gruppe kennt ihren Namen <b>nicht</b> — im Wirtshaus ist er nicht gefallen. Also sagt Anneke einen Satz (gelb unten) und greift an. Bei 8 Lebenspunkten hört Anneke von selbst auf und fragt „Is Greta still alive?“ — lass den Kampf dort enden, nicht bei null. Sie bleibt in der Kapelle zurück."},
+ {t:"regie", nur:"kapelle", text:"Anneke steht auf und sagt einen Satz (gelb unten). Dann entscheidet sich, ob es einen Kampf gibt: <b>Nennt jemand sie beim Namen?</b> Den Namen können sie nur aus dem Wirtshaus kennen (Old Pieter). Unten anklicken, was am Tisch passiert."},
  {t:"vorlesen", nur:"kapelle", titel:"Die Kapelle", text:[
   `You cross the courtyard and step through the broken door. Candles, hundreds of them, all burnt down to stubs — a thread of wick left in every one. The saint above the altar has no face left.`,
   `Something sits up in the stone font. It is a girl of about nineteen, in a dress that was white twenty years ago. Her hands, on the rim of the font, are torn open and have been for a long time. She looks at you without any anger at all, and that is worse.`]},
- {t:"sagen", wer:"Anneke", nur:"kapelle", nicht:"anneke", text:["Twenty years. And nobody came. Why now?"]},
- {t:"kampf", anker:"anneke_kampf", nur:"kapelle", nicht:"anneke", titel:"Anneke", text:"22 Lebenspunkte. Sie kämpft ohne Wut, was schlimmer ist.", gegner:["anneke"], extra:"thrall"},
- {t:"wenn", anker:"anneke_name", nur:"kapelle", alle:["anneke"], titel:"Sie kennen ihren Namen — kein Kampf", text:`Ruft jemand <b>„Anneke!“</b>, hält sie mitten in der Bewegung an und setzt sich zurück ins Becken. Dann fragt sie: „Is Greta still alive?“
- <p>Sie erzählt, was vor zwanzig Jahren geschah, und zeigt der Gruppe die Treppe hinter dem Altar. Die Gefahr ist dafür schon richtig eingetragen — +1 statt +2. Sag laut, woran das lag: <em>„Because you listened to the old man in the tavern, this fight never happens.“</em></p>`},
- {t:"vorlesen", nur:"kapelle", titel:"Der Weg zum Spiegel — die Treppe hinter dem Altar", text:[
+ {t:"sagen", wer:"Anneke", nur:"kapelle", text:["Twenty years. And nobody came. Why now?"]},
+ {t:"weiche", id:"anneke_name", nur:"kapelle", titel:"Nennt jemand sie beim Namen?", optionen:[
+  {k:"erkannt", knopf:"Ja — jemand ruft „Anneke!“", sub:"Sie hält an. Kein Kampf."},
+  {k:"kampf", knopf:"Nein — niemand kennt sie", sub:"Sie greift an."}]},
+ {t:"wenn", anker:"anneke_name", weiche:"anneke_name=erkannt", nur:"kapelle", titel:"Sie kennen ihren Namen — kein Kampf", text:`Anneke hält mitten in der Bewegung an und setzt sich zurück ins Becken. Dann fragt sie: „Is Greta still alive?“
+ <p>Sie erzählt, was vor zwanzig Jahren geschah, und zeigt der Gruppe die Treppe hinter dem Altar. Sag laut, woran das lag: <em>„Because you listened to the old man in the tavern, this fight never happens.“</em></p>`},
+ {t:"kampf", anker:"anneke_kampf", weiche:"anneke_name=kampf", nur:"kapelle", titel:"Anneke", text:"22 Lebenspunkte. Sie kämpft ohne Wut, was schlimmer ist. Bei 8 Lebenspunkten hört sie von selbst auf und fragt „Is Greta still alive?“ — lass den Kampf dort enden, nicht bei null. Sie bleibt in der Kapelle zurück.", gegner:["anneke"], extra:"thrall"},
+ {t:"vorlesen", weiche:["anneke_name=erkannt","anneke_name=kampf"], nur:"kapelle", titel:"Der Weg zum Spiegel — die Treppe hinter dem Altar", text:[
   `Behind the altar a narrow stair goes up inside the wall and comes out in a corridor with no windows — the west corridor. At the end of it stands a tall mirror instead of a door. Written on the frame, in chalk, in a child’s handwriting: walk backwards.`]},
  {t:"regie", nur:"kueche", text:"Tam ist seit sechs Jahren hier und kennt jeden Gang. Er hält die verbrannte Hand an die Brust und wartet — ob jemand etwas dazu sagt, ist ihre Sache (Hilfekasten neben dem Text). Dann bittet er <b>einmal</b> (gelb unten). Lass die drei laut besprechen, was sie mit ihm machen wollen; ein ehrliches Nein ist eine gute Antwort. In jedem Fall bleibt er noch kurz, um die Töpfe vom Feuer zu nehmen. <b>Unten festhalten</b>, was sie ihm gesagt haben — das zählt im Epilog. Danach führt er sie, wenn sie ehrlich waren; wer ihn anlügt oder wegstösst, sucht den Spiegel selbst."},
  {t:"vorlesen", spricht:"Tam", nur:"kueche", titel:"Die Küche", text:[
@@ -1495,10 +1526,6 @@ const KAPITEL = [
  {t:"wenn", gefahrVon:8, gefahrBis:10, titel:"Gefahr 8–10 · Das Haus ist wach", text:`Jede Lampe brennt. Volle 55 Lebenspunkte. Sag der Gruppe vorher, woran das liegt — sie haben es sich verdient und wissen es.`},
  {t:"wenn", gefahrVon:4, gefahrBis:10, nicht:"e3_buch", titel:"Zwei Thralls kommen dazu", text:`Zwei Diener des Hauses stehen mit im Raum, je 9 Lebenspunkte — gelb oben: „Seine Leute“. Der Knopf unten lädt sie mit.`},
  {t:"wenn", gefahrVon:4, gefahrBis:10, nur:"e3_buch", titel:"Keine Thralls", text:`Das Buch hat die Diener befreit — sie liegen irgendwo im Haus und schlafen zum ersten Mal seit Jahren. <b>Vaskir kommt allein.</b>`},
- {t:"wenn", titel:"Vampire Spawn — wenn er nicht mehr allein kämpfen will", text:`Vaskir kann <b>Spawn rufen</b>: Er beisst sich in die eigene Hand und lässt <b>zwei Tropfen</b> auf die Dielen fallen. Was daraus aufsteht, war heute Nacht noch ein Mensch. Es hat 30 Lebenspunkte und schlägt mit <em>Claws 2d6+5</em> — härter als alles andere im Haus.
- <p><b>Es kostet ihn etwas, und zwar sichtbar:</b> Zwei Tropfen sind <b>6 Lebenspunkte von Vaskir selbst</b>. Tipp die 6 in seine Karte und drück <em>Schaden</em>, dann den Knopf <b>+ Vampire Spawn</b>. Unter 15 hört er auf zu kämpfen und redet — wer dreimal ruft, redet also früher. Sag den Schülern, was sie sehen: dass er dafür bezahlt.</p>
- <p><b>Wie viele?</b> <b>Drei Spawn allein</b> sind ein ausgerechneter Gleichstand — die Gruppe gewinnt in genau der Hälfte der Fälle, ohne Tränke und ohne Talente. <b>Neben Vaskir nimmst du einen.</b> Zwei neben ihm gewinnt die Gruppe noch in einem von drei Fällen, drei fast nie. Also: einen, wenn die Gruppe zu leicht durchkommt — und keinen, wenn schon jemand liegt.</p>
- <p><b>Fällt Vaskir, fallen sie mit ihm.</b> Nimm sie dann vom Tisch, egal wie viele Lebenspunkte sie noch haben: Der Kampf endet mit ihm, nicht mit ihnen.</p>`},
  {t:"tun", id:"finale_laden", wiederholbar:true, text:"Lade den Kampf — die Seite nimmt die richtigen Gegner nach Barometer und eurer Wahl. Bei geglückter Verhandlung brauchst du das nicht.", knopf:{art:"finale"}, beschriftung:"Kampf laden"},
  {t:"kampf", anker:"vaskir", titel:"Count Vaskir", ohneKnopf:true, text:"Geladen wird mit dem Knopf darüber; er öffnet den Kampfbildschirm. Trag den Schaden der Spieler dort in seine Leiste ein. Für seinen Zug drückst du auf eine seiner Attacken — die Seite würfelt und du klickst an, wen es trifft.", gegner:["vaskir"], zusatz:["thrall","spawn"]},
  {t:"optionen", id:"e4", titel:"Wie ist es ausgegangen?", optionen:[
@@ -1528,9 +1555,9 @@ const KAPITEL = [
  {t:"wenn", nur:"ausgang_flucht", titel:"Er ist entkommen", text:`Nebel durchs Fenster, mehr nicht. Mirela geht mit euch hinunter, und niemand hat unterschrieben. In zwanzig Jahren, oder früher, wird jemand oben ein Licht sehen.`},
  {t:"wenn", alle:["e3_raus","ausgang_flucht"], titel:"Mirela auf dem Weg hinunter", text:`Sie spricht auf dem ganzen Weg kein Wort. Im Dorf öffnet sich keine einzige Tür. Erst Tobias kommt gelaufen — und Mirela sagt den Satz, der hängenbleibt: „So who is going instead of me?“`},
  {t:"wenn", nur:"e3_buch", titel:"Das Blutbuch brannte", text:`Im ganzen Haus wachen Menschen auf, die nicht wissen, welches Jahr ist. Einer davon ist Corvin Ash. Er fragt, welches Jahr wir haben, und setzt sich auf die Treppe.`},
- {t:"wenn", anker:"ep_tam", nur:"kueche", weiche:"tam_bitte=zugesagt", titel:"Tam — ihr habt es versprochen", text:`Er steht am Tor mit einem Sack, in dem drei Töpfe und ein Messer sind. Er fragt nicht, ob es noch gilt — er geht einfach neben euch her. <b>Haltet ihr Wort</b>, kocht er ab heute im Wirtshaus, und Greta hat zum ersten Mal seit zwanzig Jahren jemanden, der ihr widerspricht. <b>Lasst ihr ihn stehen</b>, sag es beiläufig, ohne Vorwurf: „Tam waits at the gate. He waits for a long time.“`},
- {t:"wenn", anker:"ep_tam_nein", nur:"kueche", weiche:"tam_bitte=abgelehnt", titel:"Tam — ihr habt ehrlich Nein gesagt", text:`Er steht nicht am Tor. Er steht am Küchenfenster und hebt die verbrannte Hand, als ihr über den Hof geht. Ein ehrliches Nein hat er angenommen; er hat die Töpfe vom Feuer genommen und wartet auf den nächsten, der die Treppe herunterkommt. Wer will, ruft ihm etwas zu — er antwortet nicht, aber er nickt.`},
- {t:"wenn", anker:"ep_tam_offen", nur:"kueche", weicheOffen:"tam_bitte", titel:"Tam — ihr habt ihm nichts gesagt", text:`Er hat auf eine Antwort gewartet und keine bekommen. Er steht am Tor, ohne Sack, und sieht euch nach. Sag der Gruppe, dass er gefragt hat — und dass niemand geantwortet hat. Lass das so stehen. (Steht hier, weil unten in der Küche nichts festgehalten wurde.)`},
+ {t:"wenn", anker:"ep_tam", nur:"kueche", warDort:"What You Find", weiche:"tam_bitte=zugesagt", titel:"Tam — ihr habt es versprochen", text:`Er steht am Tor mit einem Sack, in dem drei Töpfe und ein Messer sind. Er fragt nicht, ob es noch gilt — er geht einfach neben euch her. <b>Haltet ihr Wort</b>, kocht er ab heute im Wirtshaus, und Greta hat zum ersten Mal seit zwanzig Jahren jemanden, der ihr widerspricht. <b>Lasst ihr ihn stehen</b>, sag es beiläufig, ohne Vorwurf: „Tam waits at the gate. He waits for a long time.“`},
+ {t:"wenn", anker:"ep_tam_nein", nur:"kueche", warDort:"What You Find", weiche:"tam_bitte=abgelehnt", titel:"Tam — ihr habt ehrlich Nein gesagt", text:`Er steht nicht am Tor. Er steht am Küchenfenster und hebt die verbrannte Hand, als ihr über den Hof geht. Ein ehrliches Nein hat er angenommen; er hat die Töpfe vom Feuer genommen und wartet auf den nächsten, der die Treppe herunterkommt. Wer will, ruft ihm etwas zu — er antwortet nicht, aber er nickt.`},
+ {t:"wenn", anker:"ep_tam_offen", nur:"kueche", warDort:"What You Find", weicheOffen:"tam_bitte", titel:"Tam — ihr habt ihm nichts gesagt", text:`Er hat auf eine Antwort gewartet und keine bekommen. Er steht am Tor, ohne Sack, und sieht euch nach. Sag der Gruppe, dass er gefragt hat — und dass niemand geantwortet hat. Lass das so stehen. (Steht hier, weil unten in der Küche nichts festgehalten wurde.)`},
  {t:"wenn", anker:"ep_brief", nur:"bibliothek", titel:"Bellamys Brief", text:`Nur, wenn sie den Brief bekommen haben. Die Adressatin ist seit 180 Jahren tot, ihr Haus steht noch. Wer den Brief dort durch den Schlitz wirft, hat Wort gehalten — und findet zwei Wochen später eine Antwort im eigenen Gepäck, in einer Handschrift von 1844.`},
  {t:"wenn", alle:["kapelle","anneke"], nicht:"e3_buch", titel:"Anneke — sie kennt euch", text:`Sie steht in der Kapellentür, als ihr vorbeigeht, und sagt zum ersten Mal seit zwanzig Jahren ihren eigenen Namen laut. Dann fragt sie, ob jemand Greta etwas ausrichten kann.`},
  {t:"wenn", nur:"kapelle", nicht:["anneke","e3_buch"], titel:"Anneke — ihr habt gekämpft", text:`Sie sitzt im Taufbecken, wo ihr sie gelassen habt, und sieht euch nach. Sie hat nach Greta gefragt, und niemand hat geantwortet. Lass das so stehen.`},
@@ -2087,6 +2114,7 @@ function gilt(b){
   if(b.weiche && !liste(b.weiche).some(weicheGilt)) return false;
   if(b.weicheOffen && (Z.weichen||{})[b.weicheOffen]!==undefined) return false;
   if(b.notstopp && (Z.notstopp||{}).fall!==b.notstopp) return false;
+  if(b.warDort && !(Z.besucht||{})[KAPITEL.findIndex(k=>k.titel===b.warDort)]) return false;   /* nur, wenn die Gruppe die Seite wirklich erlebt hat */
   if(nur.length && !nur.some(hat)) return false;          /* nur:  mindestens eine */
   if(alle.length && !alle.every(hat)) return false;       /* alle: jede */
   if(nicht.some(hat)) return false;                       /* nicht: keine */
@@ -2226,6 +2254,9 @@ function zeichneGegner(){
      (v.spielt?'<p class="g-spielt"><b>So führst du ihn:</b> '+v.spielt+'</p>':'')+
      '<div class="steuer"><input type="number" id="gin'+i+'" value="8" min="1" max="99" aria-label="Schaden"><button class="minus" data-gdmg="'+i+'">Schaden</button>'+
      '<span class="att">'+v.att.map((a,j)=>'<button data-att="'+i+'" data-j="'+j+'">'+a.n+' '+a.d+'</button>').join("")+'</span></div>'+
+     (g.k==="vaskir" && g.hp>0 ? (g.blutruf
+        ? '<p class="bonus weg">✦ Blutruf eingesetzt — die Spawn stehen im Kampf.</p>'
+        : '<div class="bonus"><button data-blutruf="'+i+'">✦ Bonusaktion · Blutruf</button><span>opfert 12 Lebenspunkte, ruft 2 Vampire Spawn</span></div>') : '')+
      '<div id="wurf'+i+'"></div></div>';}).join("");
   const kk=$("kampfknopf"); if(kk){ kk.textContent="⚔ Charaktere / Kampf"+(Z.gegner.length?" · "+Z.gegner.length+" Gegner":""); kk.className="kampfknopf"+(Z.gegner.length?" aktiv":""); }
   zeichneChance();
@@ -2240,6 +2271,30 @@ function gegnerAngriff(i,j){
   $("wurf"+i).innerHTML='<div class="wurfbox"><span class="erg">'+a.n+' trifft für <b>'+sch+'</b> Schaden — an wen?</span>'+
     '<div class="an">'+Z.gruppe.map((h,k)=>'<button data-treffer="'+k+'" data-s="'+sch+'" data-q="'+g.name+'">'+(h.name||h.rolle)+'</button>').join("")+'</div></div>';
   notiere("<b>"+g.name+"</b> "+a.n+" trifft für "+sch);
+}
+
+/* ---- Blutruf: Vaskirs Bonusaktion im Kampf ----
+   Er opfert eigenes Blut (6 Lebenspunkte je Spawn) und bekommt zwei Verbündete. Einmal pro Kampf. */
+const BLUTRUF_KOSTEN = 12;
+function blutrufOeffnen(i){
+  const g=Z.gegner[i]; if(!g || g.k!=="vaskir" || g.blutruf) return;
+  const jetzt=gewinnchance(600), vorher=Z.gegner;
+  Z.gegner=vorher.map(x=>Object.assign({},x));
+  Z.gegner[i].hp=Math.max(1,g.hp-BLUTRUF_KOSTEN);
+  Z.gegner.push({k:"spawn",name:"Vampire Spawn",hp:30,max:30},{k:"spawn",name:"Vampire Spawn",hp:30,max:30});
+  const danach=gewinnchance(600); Z.gegner=vorher;
+  const pr=c=>c?Math.round(c.quote*100)+" %":"—";
+  $("blutruf-chance").innerHTML='Gewinnchance der Gruppe: <b>'+pr(jetzt)+'</b> jetzt → <b>'+pr(danach)+'</b> danach'+
+    (danach && danach.quote<0.4?' · <span class="warn">zu hart — lieber nicht</span>':'');
+  $("blutruf-ja").dataset.i=i;
+  const d=$("blutruf"); if(d.showModal) d.showModal(); else d.open=true;
+}
+function blutruf(i){
+  const g=Z.gegner[i]; if(!g || g.k!=="vaskir" || g.blutruf) return;
+  g.hp=Math.max(1,g.hp-BLUTRUF_KOSTEN); g.blutruf=true;
+  notiere("<b>Blutruf</b> — Vaskir opfert "+BLUTRUF_KOSTEN+" Lebenspunkte → "+g.hp+"/"+g.max);
+  ladeGegner("spawn"); ladeGegner("spawn");
+  zeichneGegner(); sichern();
 }
 
 /* ---- Wissen ---- */
@@ -2970,6 +3025,9 @@ document.addEventListener("click", e=>{
   const gd=t.closest("[data-gdmg]"); if(gd){ const i=+gd.dataset.gdmg, v=Math.max(0,parseInt($("gin"+i).value,10)||0);
     aktion(()=>{ const m=Z.gegner[i]; m.hp=Math.max(0,m.hp-v); notiere("<b>"+m.name+"</b> −"+v+" → "+m.hp+"/"+m.max+(m.hp===0?" · <b>fällt</b>":"")); }); zeichneGegner(); sichern(); return; }
   const at=t.closest("[data-att]"); if(at) return gegnerAngriff(+at.dataset.att,+at.dataset.j);
+  const br=t.closest("[data-blutruf]"); if(br) return blutrufOeffnen(+br.dataset.blutruf);
+  if(t.closest("#blutruf-ja")){ const d=$("blutruf"); if(d.close) d.close(); else d.open=false; return blutruf(+$("blutruf-ja").dataset.i); }
+  if(t.closest("#blutruf-nein")){ const d=$("blutruf"); if(d.close) d.close(); else d.open=false; return; }
   const tr=t.closest("[data-treffer]"); if(tr) return aendereHP(+tr.dataset.treffer,-(+tr.dataset.s),tr.dataset.q);
   const hi=t.closest("[data-hpin]"); if(hi){ const i=+hi.dataset.hpin, feld=hi.closest(".steuer").querySelector("input"), v=Math.max(0,parseInt(feld.value,10)||0); aendereHP(i,v*(+hi.dataset.r), +hi.dataset.r>0?"Heilung":"Schaden"); return; }
 });
@@ -2977,7 +3035,7 @@ document.addEventListener("keydown", e=>{
   const tag=(e.target&&e.target.tagName)||"";
   if((e.ctrlKey||e.metaKey) && !e.altKey && (e.key==="z"||e.key==="Z") && tag!=="INPUT" && tag!=="TEXTAREA"){ e.preventDefault(); rueckgaengig(); return; }
   if(tag==="INPUT"||tag==="TEXTAREA"||e.altKey||e.ctrlKey||e.metaKey) return;
-  if(["bildschau","kampfhilfe","notstopp","uebergang"].some(id=>{ const d=$(id); return d && d.open; })) return;   /* Esc schliesst <dialog> selbst */
+  if(["bildschau","kampfhilfe","notstopp","uebergang","blutruf"].some(id=>{ const d=$(id); return d && d.open; })) return;   /* Esc schliesst <dialog> selbst */
   if(e.key==="Escape" && $("gefahrlade").open){ $("gefahrlade").open=false; $("gefahrlade").querySelector("summary").focus(); e.preventDefault(); return; }
   if(e.key==="Escape"){ ["szenenfach","einstellungen"].forEach(id=>{const f=$(id); if(f) f.open=false;}); }
   if(e.key==="Escape" && Z.kampfOffen){ schliesseKampf(); e.preventDefault(); return; }
@@ -3015,7 +3073,7 @@ function alles(){ zeichneUhr(); zeichneRueckgaengig(); zeichneStimmschalter(); z
 /* Jede dieser Funktionen ist ein Spielschritt für „Rückgängig“ — auch, wenn der Prüfstand sie direkt aufruft */
 waehle=aktioniert(waehle); tunAusfuehren=aktioniert(tunAusfuehren); setzeGefahr=aktioniert(setzeGefahr); aendereHP=aktioniert(aendereHP);
 ladeKampf=aktioniert(ladeKampf); kampfVorbei=aktioniert(kampfVorbei); stelleWeiche=aktioniert(stelleWeiche); setzeWissen=aktioniert(setzeWissen);
-patrouilleFertig=aktioniert(patrouilleFertig); notstoppWaehle=aktioniert(notstoppWaehle); notstoppZumMorgen=aktioniert(notstoppZumMorgen);
+patrouilleFertig=aktioniert(patrouilleFertig); blutruf=aktioniert(blutruf); notstoppWaehle=aktioniert(notstoppWaehle); notstoppZumMorgen=aktioniert(notstoppZumMorgen);
 laden(); alles();
 { const befunde=pruefeStory(); if(befunde.length) console.warn("Story-Prüfung:", befunde); }
 </script>

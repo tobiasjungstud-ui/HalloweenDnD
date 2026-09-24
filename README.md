@@ -264,11 +264,14 @@ Die Seite spielt den Kampf mit den Lebenspunkten von jetzt achthundertmal durch
 (ohne Tränke und Talente) und sagt in einem Satz, ob das sicher, fair, offen oder
 gefährlich ist. Jeder Gegner, der dazukommt oder fällt, rechnet neu.
 
-**Vaskir kann Vampire Spawn rufen** — zwei Tropfen seines eigenen Bluts, und was
-aufsteht, war heute Nacht noch ein Mensch: 30 Lebenspunkte, `Claws 2d6+5`, härter
-als alles andere im Haus. Es kostet ihn **6 Lebenspunkte je Spawn**, sichtbar am
-Tisch, und unter 15 hört er auf zu kämpfen und redet — wer dreimal ruft, redet
-also früher.
+**Vaskir hat eine Bonusaktion: den Blutruf.** Sie steht nicht im Regiebuch, sondern
+im Kampfbildschirm, in seiner eigenen Karte: **✦ Bonusaktion · Blutruf**. Ein Klick
+öffnet ein Fenster mit dem Satz zum Vorlesen, dem Preis — **12 seiner Lebenspunkte**,
+6 je Spawn — und der Gewinnchance der Gruppe vorher und nachher. Erst „Blutruf
+ausführen“ zieht ihm die 12 ab und stellt **zwei Vampire Spawn** dazu (je 30
+Lebenspunkte, `Claws 2d6+5`, härter als alles andere im Haus). Einmal pro Kampf;
+↶ nimmt ihn zurück. Unter 15 hört Vaskir auf zu kämpfen und redet, und fällt er,
+fallen die Spawn mit ihm.
 
 Die Zahlen sind **ausgerechnet, nicht geschätzt**: `quelle/kampf_sim.py` spielt den
 Kampf nach den Regeln der Blätter (2d6 gegen die Zielzahl, ein Sechserpasch verdoppelt

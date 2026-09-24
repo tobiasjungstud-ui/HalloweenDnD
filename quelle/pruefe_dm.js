@@ -118,7 +118,9 @@ function spiele(p, protokoll){
     if(i===S.inn && p.anneke) T.tunAusfuehren("w_anneke");
     if(i===S.e1) T.waehle("e1", optIdx("e1",p.weg));
     if(i===S.berg && p.weg==="weg_b") T.tunAusfuehren("stollen_luft");
-    if(i===S.berg && p.wache) T.tunAusfuehren(p.weg==="weg_a"?"tor_kampf":"keller_kampf");
+    /* Wachen: erst „entdeckt“ anklicken, dann erscheint der Kampfknopf; die Weiche danach zurücknehmen,
+       damit die Weichen-Prüfung unten beide Fälle selbst durchspielt, und am Ende wieder setzen */
+    if(i===S.berg && p.wache){ T.stelleWeiche("wache","entdeckt"); T.tunAusfuehren(p.weg==="weg_a"?"tor_kampf":"keller_kampf"); T.stelleWeiche("wache","entdeckt"); }
     if(i===S.berg){ T.geheZu(S.berg); const wachen=T.Z().gegner.filter(g=>g.k==="wache").length;
       pruefe(wachen===(p.wache?(p.weg==="weg_a"?2:1):0), `Pfad ${JSON.stringify(p)}: ${wachen} Wachen geladen`); }
     if(i===S.e2) T.waehle("e2", optIdx("e2",p.tuer));
@@ -156,6 +158,9 @@ function spiele(p, protokoll){
     });
     /* Die Schleife hat die Weiche wieder aufgehoben — den Stand dieses Pfads neu setzen */
     if(i===S.tuer && p.tuer==="kueche" && p.tam!=="offen" && (T.Z().weichen||{}).tam_bitte!==p.tam) T.stelleWeiche("tam_bitte", p.tam);
+    if(i===S.berg && p.weg!=="weg_c") T.stelleWeiche("wache", p.wache?"entdeckt":"vorbei");
+    /* Kapelle: wer den Namen aus dem Wirtshaus kennt, ruft ihn — sonst Kampf */
+    if(i===S.tuer && p.tuer==="kapelle" && (T.Z().weichen||{}).anneke_name===undefined) T.stelleWeiche("anneke_name", p.anneke?"erkannt":"kampf");
     const sichtbar=T.sichtbareBloecke(k);
     sichtbar.forEach(b=>{ const j=k.bloecke.indexOf(b); gesehen.set(i+"/"+j, gesehen.get(i+"/"+j)+1); });
     const wo=`Pfad ${JSON.stringify(p)} Schritt ${i} (${k.titel})`;
@@ -364,7 +369,7 @@ T.Z().gefahr=9; T.waehle("e3",optIdx("e3","e3_pakt")); /* 9−3=6 */ T.tunAusfue
 pruefe(T.Z().gefahr===10, "Deckel bei 10 nicht eingehalten");
 T.waehle("e3",optIdx("e3","e3_buch")); pruefe(T.Z().gefahr===8, "Rücknahme über dem Deckel falsch: "+T.Z().gefahr);
 
-frisch(); T.waehle("e1",optIdx("e1","weg_b")); T.tunAusfuehren("keller_kampf");
+frisch(); T.waehle("e1",optIdx("e1","weg_b")); T.stelleWeiche("wache","entdeckt"); T.tunAusfuehren("keller_kampf");
 pruefe(T.Z().gefahr===1 && T.Z().gegner.length===1, "keller_kampf lädt nicht richtig");
 T.waehle("e1",optIdx("e1","weg_c"));
 pruefe(T.Z().gefahr===4 && T.Z().gegner.length===0 && !T.Z().getan.keller_kampf, "Umwahl B→C nahm die Wache nicht zurück: "+JSON.stringify({g:T.Z().gefahr,n:T.Z().gegner.length}));
@@ -388,7 +393,7 @@ frisch(); T.setzeGefahr(8,"Test"); const gel=T.ladeKampf(["wolf","wolf"],"wolf")
 pruefe(T.Z().gegner.filter(g=>g.k==="wolf").length===3 && gel.length===3, "Verstärkung bei Gefahr 8 fehlt (Wölfe)");
 frisch(); T.setzeGefahr(7,"Test"); T.ladeKampf(["wolf","wolf"],"wolf");
 pruefe(T.Z().gegner.length===2, "Verstärkung kam schon bei Gefahr 7");
-frisch(); T.setzeGefahr(8,"Test"); T.waehle("e1",optIdx("e1","weg_b")); T.tunAusfuehren("keller_kampf");
+frisch(); T.setzeGefahr(8,"Test"); T.waehle("e1",optIdx("e1","weg_b")); T.stelleWeiche("wache","entdeckt"); T.tunAusfuehren("keller_kampf");
 pruefe(T.Z().gegner.filter(g=>g.k==="wache").length===2, "Kellerwache ohne Verstärkung bei Gefahr 8: "+T.Z().gegner.length);
 T.waehle("e1",optIdx("e1","weg_c")); pruefe(T.Z().gegner.length===0, "Umwahl nahm die verstärkte Wache nicht mit zurück: "+T.Z().gegner.length);
 
@@ -435,7 +440,7 @@ if(T.uhrLage && T.rueckgaengig && T.notstoppZumMorgen){
 /* ---------- 6b · Kampfbildschirm (nur V2) ---------- */
 if(T.oeffneKampf){
   frisch(); pruefe(T.Z().kampfOffen===false && el("kampfmodus").hidden===true, "Kampfbildschirm ist beim Start offen");
-  T.waehle("e1",optIdx("e1","weg_b")); T.tunAusfuehren("keller_kampf");
+  T.waehle("e1",optIdx("e1","weg_b")); T.stelleWeiche("wache","entdeckt"); T.tunAusfuehren("keller_kampf");
   pruefe(T.Z().kampfOffen===true && el("kampfmodus").hidden===false, "Laden aus der Szene öffnet den Kampfbildschirm nicht");
   pruefe(el("k-titel").textContent.length>0 || el("k-chance").innerHTML.includes("Gewinnchance"), "Kampf ohne Szenenkampf zeigt weder Titel noch Gewinnchance");
   T.schliesseKampf(); pruefe(!T.Z().kampfOffen && el("kampfmodus").hidden===true && T.Z().gegner.length===1, "Schliessen verliert den Kampf");
