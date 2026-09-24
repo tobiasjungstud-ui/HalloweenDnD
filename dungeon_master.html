@@ -85,21 +85,13 @@ input{font:inherit;color:inherit}
 .pfad button.getan .n{color:var(--green)}
 .pfad button.ent .n{color:var(--gold)}
 .pfad button.kampf .n{color:var(--red)}
-.lagekurz{display:flex;gap:16px;min-width:0;overflow:hidden;white-space:nowrap}
-.lagekurz span{color:var(--dim)}
-.lagekurz b{color:var(--muted);font-weight:400}
 .warnbox{display:flex;gap:10px;flex-wrap:wrap}
 .warnbox .warn{color:var(--red);border:1px solid var(--red-line);border-radius:3px;padding:2px 8px;font-size:12px;white-space:nowrap}
-.lagefach{position:relative}
-.lagefach>summary{list-style:none;cursor:pointer;color:var(--dim);border-bottom:1px dotted var(--line-hi);white-space:nowrap}
-.lagefach>summary::-webkit-details-marker{display:none}
-.lagefach .klappe{left:auto;right:-8px;min-width:300px}
 .lage{display:flex;flex-direction:column;gap:7px;padding:8px 10px}
 .lage span{display:flex;justify-content:space-between;gap:16px;font-size:13px;color:var(--dim)}
 .lage span b{color:var(--text);font-weight:400;text-align:right}
 .lage span.warn b{color:var(--red)}
 .lage .rund{margin-top:4px;border-top:1px solid var(--line);padding-top:8px}
-.lagekurz{max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pfeil em{display:inline-block;max-width:86px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom}
 .barrechts{margin-left:auto;display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:5px 0}
 .gefahrbar{display:flex;align-items:center;gap:7px;white-space:nowrap}
@@ -688,7 +680,6 @@ details.fach[open] summary::after{content:"zuklappen"}
 .gruenknopf:hover{background:rgba(127,182,148,.12)}
 
 
-@media (max-width:1180px){.lagekurz{display:none}}
 @media (max-width:1240px){
   .titel{grid-template-columns:260px minmax(0,1fr);row-gap:16px}
   .bloecke{grid-template-columns:150px minmax(0,1fr)}
@@ -725,7 +716,7 @@ details.fach[open] summary::after{content:"zuklappen"}
   .k-feld{grid-template-columns:1fr}.k-fuss{grid-template-columns:1fr;justify-items:stretch}
 }
 /* Die Leiste bleibt eine Zeile: je schmaler der Schirm, desto weniger Beschriftung */
-@media (max-width:1700px){.uhr small{display:none}.kopfbar{gap:9px}.knopf.pfeil em{max-width:60px}.lagekurz{display:none}
+@media (max-width:1700px){.uhr small{display:none}.kopfbar{gap:9px}.knopf.pfeil em{max-width:60px}
   .kopfbar .knopf{padding:5px 8px}.knopf.schalter{padding:4px 8px 4px 6px}}
 @media (max-width:1400px){.knopf.pfeil em{display:none}.knopf.pfeil{padding:6px 8px}}
 @media (max-width:1300px){.knopf.schalter{font-size:0;padding:7px 7px;gap:0}.szenenwahl #kschritt{display:none}.uhr button{padding:2px 5px}}
@@ -756,6 +747,20 @@ details.fach[open] summary::after{content:"zuklappen"}
 .gl-stufen em{font-style:normal;font-variant-numeric:tabular-nums;color:#a79f9a;margin-right:4px}
 .gl-stufen li.jetzt{color:var(--text);border-left-color:rgba(var(--rahmen-rgb),.9);background:rgba(var(--rahmen-rgb),.08)}
 @media (max-width:760px){#gefahrlade{top:90px}}
+
+/* ---- Einstellungen hinter dem Zahnrad, ganz rechts in der Leiste (aus dem Rahmentest) ---- */
+.einstellfach{position:relative}
+.einstellfach>summary{list-style:none;cursor:pointer;display:flex;align-items:center;padding:7px;color:var(--muted);border-radius:4px}
+.einstellfach>summary::-webkit-details-marker{display:none}
+.einstellfach>summary:hover,.einstellfach[open]>summary{color:var(--text)}
+.einstellfach[open]>summary svg{transform:rotate(30deg)}
+.einstellfach svg{transition:transform .2s}
+.einst-pop{position:absolute;z-index:80;top:calc(100% + 8px);right:0;width:250px;max-width:calc(100vw - 32px);display:flex;flex-direction:column;gap:10px;
+  padding:16px;background:var(--panel,#1c1d21);border:1px solid var(--line);border-radius:4px;box-shadow:0 8px 24px #0006;font:13px/1.5 var(--sans);color:var(--text)}
+.einst-pop b{font-weight:500}
+.einst-pop small{font-size:11px;color:var(--muted)}
+.einst-pop .knopf{width:100%;justify-content:flex-start;text-align:left;padding:8px 10px;font-size:13px}
+.einst-pop .knopf.schalter{font-size:13px;gap:10px;padding:8px 10px}
 </style>
 
 <div id="rahmen" aria-hidden="true"></div><div id="rahmenkante" aria-hidden="true"></div>
@@ -764,23 +769,20 @@ details.fach[open] summary::after{content:"zuklappen"}
     <summary><span id="s-n">Anleitung</span> · <span id="s-titel-kurz"></span><span id="kschritt">Seite 1 von 13</span></summary>
     <div class="klappe"><nav class="pfad" id="pfad" aria-label="Szenen"></nav></div>
   </details>
-  <span class="lagekurz" id="lagekurz"></span>
   <span class="warnbox" id="warnbox"></span>
   <span class="barrechts">
     <span class="uhr" id="uhr" title="Unterrichtsuhr — 90 Minuten, pausierbar"><b id="uhr-zeit">90:00</b><small id="uhr-soll"></small><button id="uhr-schalter">▶</button><button id="uhr-plus" title="fünf Minuten dazu">+5</button></span>
     <button id="rueckgaengig" class="knopf" title="Rückgängig — den letzten Spielschritt zurücknehmen (Strg+Z)" disabled>↶</button>
-    <button id="stimmschalter" class="knopf schalter" aria-pressed="false" title="Stimmangaben einblenden"><span class="w"></span>Stimmen</button>
-    <button id="blutschalter" class="knopf schalter" aria-pressed="false" title="Blut im Messrohr"><span class="w"></span>Blut</button>
     <button id="kampfknopf" class="knopf kampfknopf" title="Charakter-Übersicht und Kampf öffnen">⚔ Charaktere / Kampf</button>
     <button class="knopf pfeil" id="zurueck" title="zurück"><span>←</span><em id="zurueck-t"></em></button>
     <button class="knopf pfeil" id="vor" title="weiter"><span>→</span><em id="vor-t"></em></button>
-    <details class="lagefach" id="lagefach">
-      <summary>Lage</summary>
-      <div class="klappe"><div class="lage" id="lage"></div>
-        <div class="lagegruppe"><h5>Stärken der Figuren</h5><div id="talente"></div></div>
-        <div class="lagegruppe"><h5>Was die Gruppe weiss</h5><div id="wissen"></div></div>
-        <details class="lagegruppe"><summary>Chronik</summary><ul class="chronik" id="chronik"></ul></details>
-        <div class="lage rund"><button class="knopf" id="zuruecksetzen">Neue Runde</button></div></div>
+    <details class="einstellfach" id="einstellungen">
+      <summary aria-label="Einstellungen" title="Einstellungen"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m9 3 1-2h4l1 2 2 1 2-.2 2 3-1 2v3l1 2-2 3-2-.2-2 1-1 2h-4l-1-2-2-1-2 .2-2-3 1-2V9L3 7l2-3 2 .2Z" transform="translate(0 1)"/><circle cx="12" cy="11.5" r="3"/></svg></summary>
+      <div class="einst-pop"><b>Einstellungen</b>
+        <button id="stimmschalter" class="knopf schalter" aria-pressed="false" title="Stimmangaben einblenden"><span class="w"></span>Stimmen der Figuren</button>
+        <button id="blutschalter" class="knopf schalter" aria-pressed="false" title="Blut im Messrohr"><span class="w"></span>Blut im Gefahrenbalken</button>
+        <button class="knopf" id="zuruecksetzen">Neue Runde</button>
+        <small>„Neue Runde“ setzt alles auf den Anfang zurück.</small></div>
     </details>
   </span>
 </header>
@@ -964,7 +966,7 @@ details.fach[open] summary::after{content:"zuklappen"}
 const GRUPPE_VORLAGE = [{rolle:"Arcanist", max:18},{rolle:"Blade", max:30},{rolle:"Lightbearer", max:24}];
 /* Das Talent jeder Figur ausserhalb des Kampfs — steht so auch auf ihrem Blatt */
 const TALENTE = {Arcanist:"Magic Hand", Blade:"Strength", Lightbearer:"Healing Touch"};
-/* Wie eine Figur klingt: drei Wörter, mehr nicht. Schaltbar über „Stimmen“ in der Leiste. */
+/* Wie eine Figur klingt: drei Wörter, mehr nicht. Schaltbar über „Stimmen“ hinter dem Zahnrad. */
 const STIMMEN = {
   "Marek":"tief, wortkarg, langsam",
   "Greta":"flach, ruhig, ohne Betonung",
@@ -2140,7 +2142,7 @@ function zeichneBaro(){
   const gls=$("gl-stufen"); if(gls && gls.children && gls.children.length) Array.from(gls.children).forEach(li=>li.classList.toggle("jetzt", +li.dataset.st===(Z.gefahr<=3?0:Z.gefahr<=7?1:2)));
   const kb=$("kgefahr"); kb.className="badge g"+(Z.gefahr<=3?0:Z.gefahr<=7?1:2);
   kb.innerHTML="Gefahr <b>"+Z.gefahr+"</b>/10";
-  $("lage").innerHTML=lage(); $("lagekurz").innerHTML=lageKurz(); $("warnbox").innerHTML=warnungenHTML();
+  $("warnbox").innerHTML=warnungenHTML();
 }
 
 /* ---- Gruppe ---- */
@@ -2243,12 +2245,6 @@ function gegnerAngriff(i,j){
 
 /* ---- Wissen ---- */
 function wissenErreichbar(e){ return !e.braucht || hat(e.braucht); }
-function zeichneWissen(){
-  $("wissen").innerHTML=WISSEN.map(e=>{
-    const an=!!Z.wissen[e.k], frei=wissenErreichbar(e);
-    return '<button class="wisszeile'+(an?" hat":"")+'" data-wiss="'+e.k+'"'+(frei?"":' disabled style="opacity:.45"')+'>'+
-     '<span class="haken">'+(an?"✓":"○")+'</span><span><b>'+e.txt+'</b><span>'+(frei?e.nutzen:"erst nach: "+e.wo)+'</span></span></button>';}).join("");
-}
 function setzeWissen(k, an){
   const e=WISSEN.find(x=>x.k===k); if(!e) return;
   if(an===undefined) an=!Z.wissen[k];
@@ -2256,12 +2252,9 @@ function setzeWissen(k, an){
   if(!!Z.wissen[k]===an) return;
   if(an) Z.wissen[k]=true; else delete Z.wissen[k];
   notiere(an?("Erfahren: <b>"+e.txt+"</b>"):("Zurückgenommen: "+e.txt));
-  zeichneWissen(); zeichneSzene(); sichern();
+  zeichneSzene(); sichern();
 }
 function zeichneChronik(){
-  $("chronik").innerHTML = Z.chronik.length
-    ? Z.chronik.map(e=>'<li><span class="z">'+e.z+'</span><span>'+e.text+'</span></li>').join("")
-    : '<li style="border:none;color:var(--dim);font-style:italic">Noch nichts passiert.</li>';
   $("chronik-kampf").innerHTML = Z.chronik.slice(0,4).map(e=>'<li><span class="z">'+e.z+'</span>'+e.text+'</li>').join("");
 }
 
@@ -2314,34 +2307,10 @@ function waehle(entId, i){
   notiere("Entscheidung: <b>"+o.b+" — "+o.name+"</b>");
   const echt = delta ? setzeGefahr(delta, o.name) : 0;
   Z.gewaehlt[entId]={opt:i, gefahr:echt};
-  zeichneSzene(); zeichneWissen(); sichern();
+  zeichneSzene(); sichern();
 }
 
-/* ====================== LAGE ====================== */
-/* Die volle Lage steht im Aufklapper „Lage“, das Wichtigste dauerhaft in der Leiste. */
-function lageZeile(l,v,kl){ return '<span class="'+(kl||"")+'">'+l+' <b>'+v+'</b></span>'; }
-function lage(){
-  const k=KAPITEL[Z.schritt], t=[];
-  const ort=ortAufloesen(k.ort);
-  if(k.ort) t.push(lageZeile("Ort", ort||"hängt an der offenen Entscheidung"));
-  Object.keys(ENTSCHEIDUNGEN).forEach(id=>{
-    const g=Z.gewaehlt[id]; if(!g) return;
-    const o=optionenBlock(id).optionen[g.opt];
-    t.push(lageZeile(ENTSCHEIDUNGEN[id].name, o.b+" · "+o.name));
-  });
-  const wiss=WISSEN.filter(e=>Z.wissen[e.k]).map(e=>e.txt);
-  t.push(lageZeile("Wissen", wiss.length?wiss.join(", "):"—"));
-  const st=STUFEN.find(x=>Z.gefahr<=x.bis)||STUFEN[2];
-  t.push(lageZeile("Gefahr", Z.gefahr+" / 10 · "+st.name));
-  t.push(lageZeile("Das heisst", st.folge));
-  warnungen().forEach(w=>t.push(lageZeile("Achtung", w, "warn")));
-  return t.join("");
-}
-function lageKurz(){
-  const k=KAPITEL[Z.schritt];
-  if(!k.ort) return "";
-  return '<span>Ort <b>'+(ortAufloesen(k.ort)||"offen")+'</b></span>';
-}
+/* Warnungen stehen dauerhaft in der Leiste */
 function warnungen(){
   const k=KAPITEL[Z.schritt], t=[];
   if(Z.patrouille.status==="steht_bevor") t.push("⚠ Patrouille vor „"+KAPITEL[Z.patrouille.vor].titel+"“");
@@ -2561,15 +2530,6 @@ function chanceHTML(c, name){
   return '<details class="hbox staerke"><summary><b>'+name+' · '+c.talent+'</b>'+
     '<span class="cue">Vorgelesen: “'+c.cue+'”</span></summary><p><b>'+c.text+'</b> '+c.folge+'</p></details>';
 }
-/* Wer was kann — auf jeder Seite, damit kein Talent in Vergessenheit gerät */
-function talenteHTML(k){
-  const cs=sichtbareChancen(k);
-  return Z.gruppe.map(h=>{
-      const da=cs.some(c=>c.wer===h.rolle);
-      return '<div class="tz'+(da?" da":" leer")+'"><b>'+(h.name||h.rolle)+'</b> · '+TALENTE[h.rolle]+
-        '<span>'+(da?"Gelegenheit in dieser Szene — der Kasten steht neben der Stelle":"in dieser Szene nichts vorbereitet")+'</span></div>';
-    }).join("");
-}
 /* Der Text eines Blocks, in dem der angekündigte Satz einer Stärke stehen kann */
 function blockText(b){
   const t=[];
@@ -2661,7 +2621,7 @@ function zeichneSzene(){
   const k = aktuelleSzene();
   zeichneBild(k);
   $("s-n").textContent=k.n; $("s-titel").textContent=k.titel; $("s-titel-kurz").textContent=k.titel;
-  $("lagekurz").innerHTML=lageKurz(); $("warnbox").innerHTML=warnungenHTML();
+  $("warnbox").innerHTML=warnungenHTML();
   const fehlt = !!(k.braucht && entscheidungOffen(k.braucht));
   const bl = fehlt ? [] : karten(sichtbareBloecke(k));
   const hilfen = hilfeVerteilen(k, bl), laeufe = vorleseLauf(bl);
@@ -2670,7 +2630,6 @@ function zeichneSzene(){
   $("zielband").innerHTML = zB
     ? '<div class="zk-kopf"><span class="lab">Ziel</span>'+(minuten?'<span class="zeit">'+minuten+' Min.</span>':(zB.zeit?'<span class="zeit">'+zB.zeit+'</span>':''))+'</div><p>'+zB.text+'</p>'
     : "";
-  $("talente").innerHTML = talenteHTML(k);
   let ersteAufgabe = bl.findIndex(b=>b.t==="aufgabe");
   const woerterHTML = (k.woerter && k.woerter.length && !fehlt)
     ? '<details class="woerter"><summary>Wortstützen für die Schüler · '+k.woerter.length+' Wörter</summary><dl>'+
@@ -2990,7 +2949,6 @@ document.addEventListener("click", e=>{
   const g=t.closest("[data-gefahr]"); if(g) return setzeGefahr(+g.dataset.gefahr,"von Hand");
   const ent=t.closest("[data-ent]"); if(ent) return waehle(ent.dataset.ent,+ent.dataset.opt);
   const tu=t.closest("[data-tun]"); if(tu) return tunAusfuehren(tu.dataset.tun);
-  const wi=t.closest("[data-wiss]"); if(wi) return setzeWissen(wi.dataset.wiss);
   const we=t.closest("[data-weiche]"); if(we) return stelleWeiche(we.dataset.weiche, we.dataset.wk);
   if(t.closest("[data-uebergang]")) return uebergangOeffnen();
   if(t.closest("[data-uebergang-weiter]")){ const d=$("uebergang"); if(d&&d.close) d.close(); return geheZu(Z.schritt+1); }
@@ -3022,7 +2980,7 @@ document.addEventListener("keydown", e=>{
   if(tag==="INPUT"||tag==="TEXTAREA"||e.altKey||e.ctrlKey||e.metaKey) return;
   if(["bildschau","kampfhilfe","notstopp","uebergang"].some(id=>{ const d=$(id); return d && d.open; })) return;   /* Esc schliesst <dialog> selbst */
   if(e.key==="Escape" && $("gefahrlade").open){ $("gefahrlade").open=false; $("gefahrlade").querySelector("summary").focus(); e.preventDefault(); return; }
-  if(e.key==="Escape"){ ["szenenfach","lagefach"].forEach(id=>{const f=$(id); if(f) f.open=false;}); }
+  if(e.key==="Escape"){ ["szenenfach","einstellungen"].forEach(id=>{const f=$(id); if(f) f.open=false;}); }
   if(e.key==="Escape" && Z.kampfOffen){ schliesseKampf(); e.preventDefault(); return; }
   if(Z.kampfOffen) return;
   if(e.key==="ArrowRight"){ $("vor").click(); e.preventDefault(); } else if(e.key==="ArrowLeft"){ $("zurueck").click(); e.preventDefault(); }
@@ -3054,7 +3012,7 @@ if(typeof window!=="undefined" && window.addEventListener){
     Blut.pause(aus); GefahrFX.pause(aus);
   });
 }
-function alles(){ zeichneUhr(); zeichneRueckgaengig(); zeichneStimmschalter(); zeichneBlutschalter(); zeichneBaro(); zeichneGruppe(); zeichneGegner(); zeichneWissen(); zeichneChronik(); zeichneSzene(); zeichneKampf(); Blut.schalte(ZEIGE_BLUT); }
+function alles(){ zeichneUhr(); zeichneRueckgaengig(); zeichneStimmschalter(); zeichneBlutschalter(); zeichneBaro(); zeichneGruppe(); zeichneGegner(); zeichneChronik(); zeichneSzene(); zeichneKampf(); Blut.schalte(ZEIGE_BLUT); }
 /* Jede dieser Funktionen ist ein Spielschritt für „Rückgängig“ — auch, wenn der Prüfstand sie direkt aufruft */
 waehle=aktioniert(waehle); tunAusfuehren=aktioniert(tunAusfuehren); setzeGefahr=aktioniert(setzeGefahr); aendereHP=aktioniert(aendereHP);
 ladeKampf=aktioniert(ladeKampf); kampfVorbei=aktioniert(kampfVorbei); stelleWeiche=aktioniert(stelleWeiche); setzeWissen=aktioniert(setzeWissen);

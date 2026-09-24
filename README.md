@@ -61,10 +61,9 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
 1. Helfer-Blatt ausdrucken, drei Geräte bereitlegen, jedem seinen Link geben.
 2. Die Spielleitung liest Seite 1 der Konsole. Fünf Minuten, mehr braucht es nicht.
 3. Die Konsole führt durch elf Seiten. Ganz oben eine schmale Leiste, die beim Scrollen
-   stehen bleibt: Szene, Ort, die **Uhr** (90 Minuten, pausierbar, mit dem Soll je Seite),
-   **Rückgängig**, der Reiter *Charakter-Übersicht
-   / Kampf*, das Blättern und die **Lage** (Weg, Tür, Wahl, die drei Talente, das Wissen, die
-   Chronik). Darunter die Szene als Regiebuch: am linken Rand steht, was ein Absatz ist —
+   stehen bleibt: Szene, die **Uhr** (90 Minuten, pausierbar, mit dem Soll je Seite),
+   **Rückgängig**, der Reiter *Charakter-Übersicht / Kampf*, das Blättern und ganz rechts
+   das **Zahnrad** mit den Einstellungen (Stimmen, Blut, Neue Runde). Darunter die Szene als Regiebuch: am linken Rand steht, was ein Absatz ist —
    **Vorlesen**, **Gesprächsaufforderung** (endet immer mit einer klaren Aufforderung),
    **Hintergrund** (auf einen Satz eingeklappt), **Mögliche Antworten** mit dem Namen der
    Figur darunter. Folgen mehrere Vorlesetexte aufeinander, stehen sie als **ein** Block
@@ -88,12 +87,12 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
    gibt einen kurzen Lichtstoss, jede Senkung fährt ruhig herunter; bei 10 sitzt ein Gebiss
    über der Krone. Das Modul `GefahrFX` zeichnet dafür nichts — es schreibt nur eine
    Lichtstärke nach `--fx-l`, aus der die CSS-Schatten und -Kanten ihren Schein rechnen, und
-   steht bei „reduzierte Bewegung“ still. Der Schalter **Blut** in der
-   Leiste füllt das Rohr statt mit einem Balken mit Blut — steigende Blasen, Perlen, die
+   steht bei „reduzierte Bewegung“ still. Der Schalter **Blut** hinter
+   dem Zahnrad füllt das Rohr statt mit einem Balken mit Blut — steigende Blasen, Perlen, die
    innen am Glas herunterlaufen, eine leuchtende Oberfläche. Reine Stimmung; am Wert ändert
    er nichts, und er merkt sich seinen Zustand. Ganz unten sammelt eine Aktionsleiste
    alle Knöpfe der Szene und die Bedingung zum Weiterblättern. Blättern geht auch mit den Pfeiltasten.
-   Der Schalter **Stimmen** in der Leiste blendet hinter jedem Sprechernamen drei Wörter ein,
+   Der Schalter **Stimmen** hinter dem Zahnrad blendet hinter jedem Sprechernamen drei Wörter ein,
    wie die Figur klingt, etwa *Marek — tief, wortkarg, langsam*. Er merkt sich seinen Zustand.
 4. **Charakter-Übersicht und Kampf sind ein eigener Bildschirm.** Dort — und nur dort —
    stehen die **Lebenspunkte**, damit sie beim Vorlesen nicht im Weg sind; auch Schaden

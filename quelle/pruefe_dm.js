@@ -166,14 +166,15 @@ function spiele(p, protokoll){
     pruefe(chancen.length<=3, wo+`: ${chancen.length} Gelegenheiten sichtbar — mehr als drei lenken ab`);
     pruefe(chancen.length<=sichtbar.length, wo+": mehr Gelegenheiten als Szenenblöcke");
     /* V1 hatte dafür eine eigene Leiste; in V2 stehen Regeln und Stärken als Kästen im Regiebuch */
-    const st=NEU?el("talente").innerHTML:el("staerken").innerHTML, vl=NEU?text():el("verlauf").innerHTML;
+    /* V2 hat keine eigene Talentübersicht mehr (die „Lage“ ist weg) — die Talente stehen im Kampfbildschirm */
+    const st=NEU?"":el("staerken").innerHTML, vl=NEU?text():el("verlauf").innerHTML;
     pruefe((k.verlauf||[]).filter(T.gilt).every(r=>vl.includes(r.wenn)&&vl.includes(r.dann)), wo+": Wenn-dann-Spalte unvollständig");
     for(const gruppe of GRUPPEN) (k.verlauf||[]).filter(T.gilt).forEach(r=>{
       const nur=T.liste(r.nur).filter(f=>gruppe.includes(f));
       pruefe(nur.length===0 || nur.some(T.hat), wo+": Regel „"+r.wenn+"“ sichtbar, obwohl ihr Zweig nicht gewählt ist"); });
     pruefe((k.verlauf||[]).filter(T.gilt).length<=8, wo+": mehr als acht Regeln in der mittleren Spalte");
     if(!NEU) pruefe(!text().includes('class="staerke'), wo+": Gelegenheiten stehen noch in der Hauptspalte");
-    pruefe(["Magic Hand","Strength","Healing Touch"].every(t=>st.includes(t)), wo+": Stärken-Abschnitt nennt nicht alle drei Talente");
+    if(!NEU) pruefe(["Magic Hand","Strength","Healing Touch"].every(t=>st.includes(t)), wo+": Stärken-Abschnitt nennt nicht alle drei Talente");
     const gz=NEU?text():st;
     chancen.forEach(c=>pruefe(gz.includes(c.text) && gz.includes(c.folge) && gz.includes(c.cue), wo+": Gelegenheit fehlt rechts: "+c.wer+" · "+c.talent));
     const gelb=sichtbar.filter(b=>b.t==="vorlesen"||b.t==="sagen").flatMap(b=>b.text);
@@ -182,11 +183,6 @@ function spiele(p, protokoll){
       const leerZeilen=(st.match(/staerke leer/g)||[]).length, belegt=new Set(chancen.map(c=>c.wer)).size;
       pruefe(leerZeilen===3-belegt, wo+`: ${leerZeilen} leere Stärken-Zeilen bei ${belegt} belegten Figuren`);
     } else {
-    /* Die Übersicht nennt jede Figur mit ihrem Talent und sagt, ob die Szene eine Gelegenheit hat */
-    const ohneFiguren=T.Z().gruppe.filter(x=>!chancen.some(c=>c.wer===x.rolle)).map(x=>x.rolle);
-    pruefe((st.match(/tz leer/g)||[]).length===ohneFiguren.length, wo+": Zeile „hier nichts vorbereitet“ stimmt nicht mit den Figuren ohne Gelegenheit überein");
-    pruefe((st.match(/tz da/g)||[]).length===3-ohneFiguren.length, wo+": Zeile „Gelegenheit in dieser Szene“ stimmt nicht");
-    ohneFiguren.forEach(r=>pruefe(st.includes(r), wo+": Figur ohne Gelegenheit wird rechts nicht genannt: "+r));
     /* Gefahrenkarte steht auf jeder Seite rechts neben dem Ziel */
     pruefe(el("gefahrsaeule")!==null, wo+": Gefahrenbalken fehlt");
     /* Anker: jede Regel mit „bei“ landet im Fach ihres Blocks, nicht im Sammelfach oben */
