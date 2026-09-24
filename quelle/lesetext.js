@@ -69,12 +69,23 @@ function kasten(zeilenRuns, farbe, randfarbe){
 }
 const etikett=(t,farbe)=>[new TextRun({text:t+"  ",font:"Georgia",size:16,bold:true,color:farbe})];
 const FLAG_NAMEN={weg_a:"Weg A · Strasse",weg_b:"Weg B · Stollen",weg_c:"Weg C · Kutsche",bibliothek:"Tür A · Bibliothek",kapelle:"Tür B · Kapelle",kueche:"Tür C · Küche",
-  e3_raus:"Wahl A · hinaustragen",e3_buch:"Wahl B · Buch verbrennen",e3_pakt:"Wahl C · Angebot",ausgang_tot:"Vaskir tot",ausgang_vertrag:"neuer Vertrag",ausgang_flucht:"entkommen",anneke:"Name Anneke bekannt"};
+  e3_raus:"Wahl A · hinaustragen",e3_buch:"Wahl B · Buch verbrennen",e3_pakt:"Wahl C · Angebot",ausgang_tot:"Vaskir tot",ausgang_vertrag:"neuer Vertrag",ausgang_tausch:"jemand bleibt bei ihm",ausgang_flucht:"entkommen",weiter_jagd:"weiterziehen",weiter_dorf:"der Winter im Dorf",weiter_schloss:"ins Schloss ziehen",anneke:"Name Anneke bekannt"};
 function bedingung(b){
   const t=[];
-  T.liste(b.nur).forEach(f=>t.push(FLAG_NAMEN[f]||f)); T.liste(b.alle).forEach(f=>t.push(FLAG_NAMEN[f]||f));
+  /* Nennt „nur“ alle Möglichkeiten einer Entscheidung, gilt der Block immer — dann nichts dazuschreiben */
+  let nur=T.liste(b.nur);
+  Object.values(T.ENTSCHEIDUNGEN).forEach(e=>{ if(e.flaggen.every(f=>nur.includes(f))) nur=nur.filter(f=>!e.flaggen.includes(f)); });
+  nur.forEach(f=>t.push(FLAG_NAMEN[f]||f)); T.liste(b.alle).forEach(f=>t.push(FLAG_NAMEN[f]||f));
   T.liste(b.nicht).forEach(f=>t.push("nicht: "+(FLAG_NAMEN[f]||f)));
   if(b.gefahrVon!==undefined) t.push("Gefahr "+b.gefahrVon+"–"+b.gefahrBis);
+  /* Weichen: welcher Knopf auf der Seite angeklickt sein muss */
+  const weichenKnopf=spec=>{ const id=spec.slice(0,spec.indexOf("=")), k=spec.slice(spec.indexOf("=")+1);
+    const w=T.KAPITEL.flatMap(kk=>kk.bloecke).find(x=>x.t==="weiche"&&x.id===id);
+    const o=w&&w.optionen.find(x=>x.k===k); return o ? "„"+o.knopf+"“" : spec; };
+  const ws=T.liste(b.weiche);
+  if(ws.length) t.push((ws.length>1?"eins von ":"")+ws.map(weichenKnopf).join(" / "));
+  if(b.weicheOffen){ const w=T.KAPITEL.flatMap(kk=>kk.bloecke).find(x=>x.t==="weiche"&&x.id===b.weicheOffen); t.push("bei „"+(w?w.titel:b.weicheOffen)+"“ nichts festgehalten"); }
+  if(b.warDort) t.push("die Gruppe war dort");
   return t.length?"▸ Nur bei: "+t.join(", "):"";
 }
 
@@ -96,7 +107,7 @@ T.KAPITEL.forEach((k,i)=>{
   if(ziel && !schueler) kinder.push(new Paragraph({spacing:{after:160},children:[new TextRun({text:"Ziel: ",font:"Georgia",size:19,bold:true,color:"7A5A1A"}),new TextRun({text:ohneHtml(ziel.text)+"  ("+ziel.zeit+")",font:"Georgia",size:19,italics:true,color:"444444"})]}));
   let letzteBedingung="";
   k.bloecke.forEach(b=>{
-    if(b.t==="ziel"||b.t==="weiter") return;
+    if(b.t==="ziel"||b.t==="weiter"||b.versteckt) return;
     const bed=bedingung(b);
     const sichtbarFuerSchueler=["vorlesen","sagen","aufgabe"].includes(b.t);
     if(schueler && !sichtbarFuerSchueler) return;
@@ -115,10 +126,10 @@ T.KAPITEL.forEach((k,i)=>{
       case "regie":
         kinder.push(...kasten([[...etikett((b.titel?b.titel.toUpperCase():"HINTERGRUND")+" (NUR DM):","555555"),new TextRun({text:ohneHtml(b.text),font:"Georgia",size:18,color:"333333"})]],grau,"BFBFBF")); break;
       case "fa":
-        kinder.push(...kasten([[...etikett(("MÖGLICHE ANTWORTEN"+(b.wer?" · CHARAKTER: "+b.wer.toUpperCase():b.titel?" · "+b.titel.toUpperCase():""))+" (NUR DM)","555555")],
+        kinder.push(...kasten([[...etikett((b.wer?"MÖGLICHE ANTWORTEN VON "+b.wer.toUpperCase():b.titel?b.titel.toUpperCase():"MÖGLICHE ANTWORTEN")+" (NUR DM)","555555")],
           ...b.paare.map(p=>[new TextRun({text:p[0]+"  ",font:"Georgia",size:18,bold:true,color:"333333"}),new TextRun({text:ohneHtml(p[1]),font:"Georgia",size:18,italics:true,color:"333333"})])],grau,"BFBFBF")); break;
       case "personen":
-        kinder.push(...kasten([[...etikett("WEN MAN ANSPRECHEN KANN (NUR DM)","555555")],
+        kinder.push(...kasten([[...etikett("MÖGLICHE ANTWORTEN VON "+b.leute.map(l=>l.name.toUpperCase()).join(", ")+" (NUR DM)","555555")],
           ...b.leute.flatMap(l=>[[new TextRun({text:l.name+" — "+l.wer+". ",font:"Georgia",size:18,bold:true}),new TextRun({text:l.spielt,font:"Georgia",size:18,color:"333333"})],
             ...(l.fragen ? l.fragen.map(f=>[new TextRun({text:f[0]+"  ",font:"Georgia",size:18,bold:true,color:"333333"}),new TextRun({text:ohneHtml(f[1]),font:"Georgia",size:18,italics:true,color:"333333"})])
                          : [[new TextRun({text:l.sagt.map(s=>"„"+s+"“").join("  ·  "),font:"Georgia",size:18,italics:true})]]),

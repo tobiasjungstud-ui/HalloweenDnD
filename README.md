@@ -65,8 +65,8 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
    **Rückgängig**, der Reiter *Charakter-Übersicht / Kampf*, das Blättern und ganz rechts
    das **Zahnrad** mit den Einstellungen (Stimmen, Blut, Neue Runde). Darunter die Szene als Regiebuch: am linken Rand steht, was ein Absatz ist —
    **Vorlesen**, **Gesprächsaufforderung** (endet immer mit einer klaren Aufforderung),
-   **Hintergrund** (auf einen Satz eingeklappt), **Mögliche Antworten** mit dem Namen der
-   Figur darunter. Folgen mehrere Vorlesetexte aufeinander, stehen sie als **ein** Block
+   **Hintergrund** (auf einen Satz eingeklappt). Die Antwortkästen der Figuren tragen keinen
+   Randtitel; direkt über jedem Kasten steht **„Mögliche Antworten von …“** mit dem Namen. Folgen mehrere Vorlesetexte aufeinander, stehen sie als **ein** Block
    da: die Randnotiz steht nur einmal, und im Text trennen goldene Linien mit dem Titel die
    Abschnitte (*——— Die Treppe ———*, *——— Das Turmzimmer ———*). Rechts daneben, **auf der Höhe der Stelle, zu der sie gehören**, stehen die
    Hilfen: **Wenn … dann** — was hier von der
@@ -107,12 +107,13 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
 5. **Eine Lektion, 90 Minuten.** Die Uhr in der Leiste läuft rückwärts; jede Seite trägt
    ihr Zeitbudget (Einstieg 5, Wirtshaus und Wegwahl 12, Aufstieg 10, Hof und Türwahl 8,
    hinter der Tür 8, Mirela und die letzte Entscheidung 16, Finale 15, Abschluss 8, dazu
-   8 Minuten Reserve). Liegt die Gruppe hinter dem Soll, wird die Uhr gelb und jede Seite
-   bekommt einen Knopf **„Zeit knapp — kurzer Übergang“** mit dem Satz, der die Szene in
-   einer Zeile abschliesst. Bleiben zehn Minuten und das Finale ist noch nicht erreicht,
-   öffnet sich einmal der **Notstopper**: Der Graf kommt selbst — eine Seite, drei
-   Ausgänge (jemand tauscht sich, Kampf, der Vertrag wird geändert), und die Konsole
-   springt direkt zu *Six O’Clock*, wo der Epilog zum gewählten Ausgang steht.
+   8 Minuten Reserve). Liegt die Gruppe hinter dem Soll, wird die Uhr gelb. Bleiben zehn
+   Minuten und das Finale ist noch nicht erreicht, öffnet sich der **Notstopper** von selbst —
+   ausgelöst von der Uhr, nicht von der Spielleitung; es gibt dafür keinen Knopf. Der Graf
+   kommt selbst: eine Seite, drei Wege (jemand bleibt bei ihm, Kampf, ein neuer Vertrag), und
+   die Konsole springt direkt zu *Six O’Clock*, wo genau der Ausgang steht, der gewählt wurde.
+   „später“ schiebt das Fenster auf; es kommt beim nächsten Umblättern wieder, spätestens
+   nach zwei Minuten. Bei angehaltener Uhr kommt er nicht.
 
 ## Wie es aufgebaut ist
 
@@ -307,7 +308,8 @@ einem schmalen Fenster um, wächst das Band mit.
 
 **Antworten der Figuren sind Karten.** Jede Person, die die Gruppe befragen kann
 (Marek, Bellamy, Anneke, Tam, Mirela, der Graf), steht als Karte mit ihren Fragen und
-Antworten; jede Antwort hat ein Häkchen und wird grün, sobald sie gefallen ist. So sieht
+Antworten, und direkt darüber steht **„Mögliche Antworten von …“** — nicht am Rand. Jede
+Antwort hat ein Häkchen und wird grün, sobald sie gefallen ist. So sieht
 die Spielleitung, was die Gruppe noch nicht gehört hat. Die Zeile **„Notfalls“** ist
 als goldener Streifen hervorgehoben: der Satz, den die Figur von sich aus sagt, falls
 niemand fragt.
@@ -316,6 +318,49 @@ niemand fragt.
 der Küche *Tams Bitte* („Mitnahme zugesagt“ / „Ehrlich abgelehnt“). Bleibt es offen,
 sagt die Konsole das ausdrücklich, statt stillschweigend ein Ja anzunehmen; im Epilog
 erscheint dann der Text, der zur Notiz passt.
+
+**Entscheidungen auf der Seite.** Wo es davon abhängt, was am Tisch passiert, steht eine
+Wahl mit benannten Knöpfen („Was ist passiert?“); darunter erscheint nur der passende Teil.
+Einen Kampf gibt es erst, wenn der Knopf dafür gedrückt ist:
+
+| Stelle | Wahl | Folge |
+|---|---|---|
+| Wölfe am Galgen (Weg A) | Geholfen / Kampf / Verpatzt | ziehen ab · zwei Wölfe · ein dritter Wolf kommt dazu |
+| Wachen am Tor (Weg A) | vorbeigeschlichen / entdeckt | weiter · Kampf mit zwei Wachen, Gefahr +1 |
+| Keller (Weg B) | er glaubt ihnen / Kampf | weiter · Kampf mit der Wache, Gefahr +1 |
+| Kapelle | jemand ruft „Anneke!“ / niemand kennt sie | kein Kampf · Kampf |
+| Bibliothek, Küche | er führt euch / ihr sucht selbst | wer führt, wie ihr zum Spiegel kommt |
+| Küche | Tams Bitte festhalten | der passende Tam im Epilog |
+| Finale | Wie läuft das Gespräch? (fünf Verläufe) | siehe unten |
+
+Die Wölfe hauen im Kampf ab, sobald einer unter 5 Lebenspunkte fällt: Über seiner Karte im
+Kampfbildschirm steht dann „Abgehauen“, und die Gewinnchance zählt ihn nicht mehr.
+
+**Das Finale ist zuerst ein Gespräch.** Vaskir antwortet auf jeden Satz (seine Antworten
+stehen unter „Mögliche Antworten von Vaskir“). Dann klickt die Spielleitung an, wie das
+Gespräch lief — und darunter geht es mit eigenem Vorlesetext weiter:
+
+| Verlauf | Was passiert |
+|---|---|
+| Ein echtes Angebot | Er schreibt es auf und unterschreibt. Kein Kampf. |
+| Sie fragen und hören zu | Er erzählt, wie 1604 alles anfing, und macht selbst ein Angebot — annehmen oder kämpfen. |
+| Nur Forderungen | Er lehnt ab („That is not a deal. That is a robbery“) und lässt einen letzten Versuch. |
+| Drohung oder Beleidigung | Kampf, und er schlägt zuerst zu. Hatte die Gruppe ihn zum Reden gerufen: Gefahr +4. |
+| Sie greifen an | Kampf. |
+
+**„Wie ist es ausgegangen?“ bietet nur an, was nach diesem Verlauf möglich ist.** „Vaskir
+ist tot“ erscheint erst, wenn er im Kampf unter 15 Lebenspunkte gefallen ist (dann gibt er
+auf); „Er ist entkommen“ nur, wenn gekämpft wurde; „Ein neuer Vertrag“ nach einem Gespräch,
+in dem verhandelt wurde, oder wenn er aufgibt; „Jemand bleibt bei ihm“ nur aus dem Gespräch.
+Die Seite merkt sich, wie tief er gefallen ist — auch nach „Kampf vorbei“. Wird die letzte
+Wahl im Turm umgewählt, fangen Gespräch, Kampf und Ausgang von vorn an.
+
+**Der Epilog zeigt nur, was zusammenpasst.** Genau eine Karte sagt, wie es ausging. Anneke
+steht nur da, wenn die Gruppe in der Kapelle war, und passend dazu, ob jemand ihren Namen
+gerufen hat. Bellamys Brief nur, wenn er sie geführt hat. Tam nur, wenn „Hinter der Tür“ mit
+der Küchentür aufgeschlagen war — nicht, wenn die Küche erst später gewählt oder nie erreicht
+wurde. Corvin nur, wer mit ihm gefahren ist. Ist das Blutbuch verbrannt, sagen auch der
+Vertrag und der Tod des Grafen, dass der alte Vertrag schon Asche war.
 
 **Rückgängig.** Der Knopf ↶ in der Leiste (oder Strg+Z) nimmt den letzten vollständigen
 Spielschritt zurück — eine Entscheidung, einen Gefahrenwechsel, einen geladenen Kampf,
@@ -355,7 +400,7 @@ gezeichneten Porträts) und schreibt die drei fertigen Dateien in die Wurzel. Di
 Klassen — Lebenspunkte, Aktionen, Trefferchancen, Signaturfarbe — stehen im Objekt `KLASSEN`
 ganz oben im `<script>` der Vorlage.
 
-Die Storylogik hat einen Prüfstand, der das echte Skript der Konsole lädt und alle 1800
+Die Storylogik hat einen Prüfstand, der das echte Skript der Konsole lädt und alle 1680
 Entscheidungspfade von Anfang bis Ende durchspielt — Ortskontinuität, Sichtbarkeit, Gefahr,
 Lebenspunkte, Gegner, Epilogkarten, Umwählen, vorzeitiges und doppeltes Auslösen, dazu
 Uhr, Rückgängig und Notstopper:

@@ -53,11 +53,10 @@
 .uhr.spaet b,.uhr.spaet small{color:var(--red)}
 .uhr.steht b{color:var(--dim)}
 #rueckgaengig:disabled{opacity:.3}
-.aktionen button.knapp{border-color:rgba(201,164,87,.6);color:var(--gold)}
-.aktionen button.notstopp{border-color:var(--red-line);color:var(--red);font-weight:500}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-html,body{height:100%}
+html{height:100%}
+body{min-height:100%}
 body{margin:0;background:var(--bg);color:var(--text);font-family:var(--serif);font-size:18px;line-height:1.6}
 h1,h2,h3,h4{font-weight:400;margin:0}
 button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
@@ -773,6 +772,23 @@ details.fach[open] summary::after{content:"zuklappen"}
 #blutruf .br-knoepfe{display:flex;justify-content:flex-end;margin-top:6px}
 #blutruf-ja{border:1px solid rgba(190,52,42,.8);border-radius:4px;padding:9px 16px;color:#fff;background:#6a2620;font-weight:500;min-height:40px}
 #blutruf-ja:hover{background:#8a3027}
+
+/* ---- Titel direkt über jedem Antwortkasten („Mögliche Antworten von …“) statt am linken Rand ---- */
+.boxtitel{font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin:0 0 7px}
+.boxtitel b{color:var(--gold-soft);font-weight:600}
+.boxtitel span{letter-spacing:.04em;text-transform:none;font-weight:400;color:var(--dim)}
+.person+.boxtitel{margin-top:20px}
+
+/* ---- Geflohene Gegner (die Wölfe unter 5 Lebenspunkten) ---- */
+.gegner.geflohen{opacity:.72;border-style:dashed}
+.gegner.geflohen .g-kopf,.gegner.geflohen .hpzeile{opacity:.55}
+.g-flucht{margin:0 0 10px;padding:8px 12px;border-radius:4px;background:rgba(127,182,148,.1);border:1px solid rgba(127,182,148,.35);
+  color:var(--green-soft);font-family:var(--sans);font-size:13.5px;font-weight:500}
+
+/* ---- Weichen mit drei und mehr Knöpfen; Hinweis unter den Ausgängen ---- */
+.wzwei.drei{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:1100px){.wzwei.drei{grid-template-columns:1fr 1fr}}
+.ophinweis{margin:10px 0 0;font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.5}
 </style>
 
 <div id="rahmen" aria-hidden="true"></div><div id="rahmenkante" aria-hidden="true"></div>
@@ -919,15 +935,11 @@ details.fach[open] summary::after{content:"zuklappen"}
   <div class="hs-kopf"><h3>Der Graf kommt zu euch</h3><button class="hs-zu" id="notstopp-zu">später</button></div>
   <div class="hs-text" id="notstopp-text"></div>
 </dialog>
-<dialog class="hilfeschau" id="uebergang" aria-label="Zeit knapp — kurzer Übergang">
-  <div class="hs-kopf"><h3>Zeit knapp — der kurze Übergang</h3><button class="hs-zu" id="uebergang-zu">schliessen</button></div>
-  <div class="hs-text" id="uebergang-text"></div>
-</dialog>
 <dialog class="hilfeschau" id="blutruf" aria-label="Bonusaktion Blutruf">
   <div class="hs-kopf"><h3>Bonusaktion · Blutruf</h3><button class="hs-zu" id="blutruf-nein">abbrechen</button></div>
   <div class="hs-text">
     <p class="br-vorlesen">Vaskir bites into his own hand. Two drops fall on the floorboards — then two more. Where they land, something stands up that was a person tonight.</p>
-    <p><b>Was es kostet:</b> 12 Lebenspunkte von Vaskir (6 je Spawn) — sag den Schülern, dass sie es sehen. <b>Was er bekommt:</b> zwei Vampire Spawn, je 30 Lebenspunkte, <em>Claws 2d6+5</em>. Einmal pro Kampf. Fällt Vaskir, fallen sie mit ihm; unter 15 Lebenspunkten redet er.</p>
+    <p><b>Was es kostet:</b> 12 Lebenspunkte von Vaskir (6 je Spawn) — sag den Schülern, dass sie es sehen. <b>Was er bekommt:</b> zwei Vampire Spawn, je 30 Lebenspunkte, <em>Claws 2d6+5</em>. Einmal pro Kampf, und nur, solange er danach noch über 15 steht. Fällt Vaskir, fallen sie mit ihm; unter 15 Lebenspunkten gibt er auf und redet.</p>
     <p class="br-chance" id="blutruf-chance"></p>
     <div class="br-knoepfe"><button id="blutruf-ja">Blutruf ausführen</button></div>
   </div>
@@ -1020,9 +1032,9 @@ const KAMPF_ANLEITUNG = `<b>1.</b> Der Spieler liest seinen gelben Satz vor: „
 <p><b>Gewürfelt wird mit zwei Sechsern</b>, zusammengezählt: <b>7 oder mehr</b> heisst, es klappt. Sag die Zahl vorher. Im Kampf brauchst du die Würfel nicht — Treffer und Schaden würfelt die Seite selbst.</p>`;
 
 const BESTIARIUM = {
-  wolf:   {name:"Dire Wolf",    hp:14, att:[{n:"Bite",  d:"1d6+2"}],
+  wolf:   {name:"Dire Wolf",    hp:14, att:[{n:"Bite",  d:"1d6+2"}], flieht:5,
     kurz:"Ponygross, graues nasses Fell, gelbe Augen. Der kleinere hat ein altes Fangeisen am Hinterbein.",
-    spielt:"Sie bellen nicht und knurren nicht — das ist das Unheimliche. Fällt einer, läuft der andere in den Nebel. Dann ist der Kampf vorbei."},
+    spielt:"Sie bellen nicht und knurren nicht — das ist das Unheimliche. Fällt einer unter 5 Lebenspunkte, haut er ab; die Seite zeigt es an. Ist keiner mehr da, ist der Kampf vorbei."},
   anneke: {name:"Anneke",       hp:22, att:[{n:"Claws", d:"1d6+3"}],
     kurz:"Ein Mädchen von neunzehn, in einem Kleid, das vor zwanzig Jahren weiss war. Ihre Hände sind am Steinbecken aufgerissen.",
     spielt:"Sie kämpft ohne Wut, was schlimmer ist. Bei 8 Lebenspunkten hört sie von selbst auf und fragt: „Is Greta still alive?“ — dort endet der Kampf."},
@@ -1048,7 +1060,7 @@ const ENTSCHEIDUNGEN = {
   e1:{name:"Weg",     flaggen:["weg_a","weg_b","weg_c"]},
   e2:{name:"Tür",     flaggen:["bibliothek","kapelle","kueche"]},
   e3:{name:"Wahl",    flaggen:["e3_raus","e3_buch","e3_pakt"], braucht:"e2"},
-  e4:{name:"Ausgang", flaggen:["ausgang_tot","ausgang_vertrag","ausgang_flucht"], braucht:"e3"}
+  e4:{name:"Ausgang", flaggen:["ausgang_tot","ausgang_vertrag","ausgang_tausch","ausgang_flucht"], braucht:"e3"}
 };
 ENTSCHEIDUNGEN.e2.braucht="e1";
 ENTSCHEIDUNGEN.e5={name:"Danach", flaggen:["weiter_jagd","weiter_dorf","weiter_schloss"], braucht:"e4"};
@@ -1111,7 +1123,7 @@ const KAPITEL = [
  {t:"ziel", text:"Diese Seite führt dich Satz für Satz. Du musst nichts vorbereiten und die Geschichte nicht kennen.", zeit:"2 Min."},
  {t:"regie", titel:"Was du brauchst", text:`Drei Spielerblätter auf drei Geräten (<b>Arcanist</b>, <b>Blade</b>, <b>Lightbearer</b>), das Helfer-Blatt als Ausdruck und <b>zwei Sechser</b>. Namen unter <b>Charaktere / Kampf</b> eintragen.
  <p>Die Figurenwerte auf der Konsole und auf den Spielergeräten sind <b>nicht automatisch synchronisiert</b>: Was du hier einträgst, tragen die Spieler dort ebenfalls ein — und umgekehrt.</p>
- <p>Oben in der Leiste läuft eine <b>pausierbare 90-Minuten-Uhr</b>. Sie weiss, wie viel Zeit jede Seite haben darf, und wird gelb, wenn ihr hinten liegt. <b>„Zeit knapp“</b> liefert dir einen kurzen Übergang; offene Entscheidungen bleiben bei der Gruppe. Zehn Minuten vor Schluss holt die Uhr den Grafen selbst — wenn die Gruppe noch nicht bei ihm ist.</p>`},
+ <p>Oben in der Leiste läuft eine <b>pausierbare 90-Minuten-Uhr</b>. Sie weiss, wie viel Zeit jede Seite haben darf, und wird gelb, wenn ihr hinten liegt. <b>Zehn Minuten vor Schluss holt die Uhr den Grafen selbst</b>, wenn die Gruppe noch nicht bei ihm ist: Es geht ein Fenster auf, du musst nichts auslösen. „später“ schiebt es bis zum nächsten Umblättern auf.</p>`},
  {t:"regie", titel:"Wer die Gruppe ist", text:`Das ist vorgegeben, das müssen die Schüler nicht erfinden: <b>Sie sind Vampirjäger.</b> Nicht berühmt, noch nicht. Ein Gerücht hat sie hergeführt — in diesen Bergen liege ein Tal, in dem Menschen nach Plan verschwinden. Sie wollen wissen, ob es stimmt.
  <p>Erfinden dürfen sie: Namen, Herkunft, wie sie sich kennen, was sie können. Der Auftrag steht fest.</p>`},
  {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`<b>1 · Gold lesen.</b> Englische Erzählung und Figurenrede — wörtlich. <b>2 · Grün fragen.</b> Jede Figur äussert eine eigene Absicht oder Frage und danach einen Grund oder eine Reaktion. <b>3 · Ergebnis klicken.</b> Nur markieren, was am Tisch passiert ist — Antworten abhaken, Entscheidungen anklicken.
@@ -1129,7 +1141,7 @@ const KAPITEL = [
    ["0 Lebenspunkte","Eigener Trank laut Spielerblatt, oder bewusstlos bis nach dem Kampf. Die Person beschreibt eine Erinnerung oder Wahrnehmung — keine zusätzliche Aktion, kein neuer Hinweis. Danach volle Heilung."],
    ["Probe","Zwei Sechser, Summe mindestens 7. Handlung zuerst beschreiben, dann würfeln. Kein Würfeln für Aussprache oder Grammatik. Talentwürfe richten sich nach dem Spielerblatt."],
    ["Ein Fehlklick","<b>Rückgängig</b> oben in der Leiste nimmt den letzten vollständigen Spielschritt zurück. Bei Umwahl werden davon abhängige Entscheidungen und Zusagen verworfen."],
-   ["Zeit knapp","Kurze Übergänge nutzen, alle Hinweise sichern. Kämpfe bleiben mechanisch unverändert; die Patrouille ist weiterhin ein zusätzlicher Zeitbedarf. Uhr pausieren bei Unterbrechungen."]]},
+   ["Zeit knapp","Kürzer vorlesen, eine Antwortrunde statt zwei. Zehn Minuten vor Schluss kommt der Graf von selbst, solange die Uhr läuft. Bei Unterbrechungen die Uhr anhalten."]]},
  {t:"weiter", text:"Wenn du das gelesen hast, die Namen eingetragen sind und die Uhr läuft."}]},
 
 /* ===== 1 ===== */
@@ -1241,7 +1253,9 @@ const KAPITEL = [
 
 /* ===== 4 ===== */
 {n:"Aufstieg", verlauf:[
-  {bei:"wolfe", nur:"weg_a", wenn:"Ein Wolf fällt", dann:"der andere läuft", art:"gut"},
+  {bei:"wolfe", nur:"weg_a", wenn:"Jemand hilft dem verletzten Wolf — ruhig, ohne Waffe", dann:"unten „Geholfen“ anklicken: beide ziehen ab, kein Kampf", art:"gut"},
+  {bei:"wolfe", nur:"weg_a", wenn:"Sie greifen an, oder niemand hilft", dann:"„Kampf“ anklicken: zwei Wölfe. Fällt einer unter 5 Lebenspunkte, haut er ab", art:"schlecht"},
+  {bei:"wolfe", nur:"weg_a", wenn:"Laut, grob oder ungeschickt", dann:"„Verpatzt“ anklicken: ein dritter Wolf kommt aus dem Nebel", art:"schlecht"},
   {bei:"sumpf", nur:"weg_a", wenn:"Sumpf: ein Wurf unter 7", dann:"steckt fest und ruft auf Englisch um Hilfe. Sagt jemand, wie er hilft → nichts passiert; sonst −1 HP (im Reiter eintragen)", art:"schlecht"},
   {bei:"wachen", nur:"weg_a", wenn:"Wachen: alle würfeln 7 oder mehr", dann:"unten „Ja — vorbeigeschlichen“ anklicken → weiter ohne Kampf", art:"gut"},
   {bei:"wachen", nur:"weg_a", wenn:"Wachen: einer unter 7, oder jemand greift an", dann:"unten „Nein — entdeckt“ anklicken → erst dann erscheint der Kampf (zwei Wachen, Gefahr +1)", art:"schlecht"},
@@ -1250,7 +1264,7 @@ const KAPITEL = [
   {bei:"kutsche", nur:"weg_c", wenn:"Jemand spricht Corvin an", dann:"er fragt freundlich zurück — die Gefahr +4 ist schon eingetragen"},
   {bei:"kutsche", nur:"weg_c", wenn:"Jemand merkt: kein Spiegelbild, kalte Hände, nie Mirelas Name", dann:"sag „Yes. You noticed.“ — mehr nicht"}],
  chancen:[
-  {wer:"Lightbearer", talent:"Healing Touch", nur:"weg_a", cue:"an old iron trap still on it", text:"Der kleinere Wolf hat ein Fangeisen am Hinterbein.", folge:"Wer sich ihm langsam nähert und das Eisen löst, hat einen Wolf weniger: Er humpelt in den Nebel. Es dauert — der andere Wolf greift währenddessen einmal an (drück seine Attacke). Dann Kampf gegen einen."},
+  {wer:"Lightbearer", talent:"Healing Touch", nur:"weg_a", cue:"an old iron trap still on it", text:"Der kleinere Wolf hat ein Fangeisen am Hinterbein.", folge:"Wer sich ihm langsam nähert und die Wunde schliesst oder das Eisen löst, hilft ihm. Gelingt das ruhig und ohne Waffe in der Hand, ziehen beide Wölfe ab — unten „Geholfen“ anklicken."},
   {wer:"Blade", talent:"Strength", nur:"weg_a", cue:"takes real strength", text:"Der Sumpf gibt Stiefel nur mit Kraft wieder her.", folge:"Wer feststeckt, kann den Blade rufen: Blade zieht ihn heraus, ohne dass jemand eine andere Idee braucht — wenn der Blade-Spieler auf Englisch sagt, wie."},
   {wer:"Arcanist", talent:"Magic Hand", nur:"weg_a", cue:"Their lamps hang on the wall next to them", text:"Die Lampen der Wachen hängen an der Wand, nicht in ihren Händen.", folge:"Kippt Magic Hand eine der Lampen, sehen beide Wachen zur Lampe statt in den Nebel: Jeder, dem der Schleichwurf misslingt, darf einmal nachwürfeln. Der Spieler drückt Magic Hand auf seinem Blatt; misslingt der Zauber, passiert nichts."},
   {wer:"Lightbearer", talent:"Healing Touch", nur:"weg_b", cue:"a cough that has clearly been going on for weeks", text:"Der Mann mit der Lampe hustet seit Wochen.", folge:"Wer ihm den Husten nimmt, bevor die Gruppe ihre Sätze sagt, bekommt ungefragt einen Rat: „The kitchen stair is the quiet way up. The boy down there is all right.“ Glauben tut er trotzdem nur, wer redet."},
@@ -1259,12 +1273,23 @@ const KAPITEL = [
  woerter:[["a guard","eine Wache"],["a guest","ein Gast"],["to expect somebody","jemanden erwarten"],["a cellar","ein Keller"],["a swamp, a bog","ein Sumpf"],["to be stuck","feststecken"],["to pull somebody out","jemanden herausziehen"],["to sneak","schleichen"]],
  titel:"Up the Mountain", art:"szene", braucht:"e1", bild:{weg_a:"galgen", weg_b:"stollen", weg_c:"kutsche"}, ort:ORT.wirtshaus, nach:ORT.hof, bloecke:[
  {t:"ziel", text:"Die Gruppe steigt auf ihrem Weg zum Schloss hinauf — mit dem, was der Weg kostet (Kampf, schlechte Luft, Wachen) — und steht am Ende im Hof.", zeit:"10 Min."},
- {t:"regie", nur:"weg_a", titel:"Hintergrund · Strasse", text:"Drei Stationen: <b>Wölfe</b> am Galgen (erster Kampf des Abends — langsam: jeder sagt auf Englisch, was er tut, drückt seinen Knopf, liest seinen gelben Satz vor; fällt ein Wolf, läuft der andere), der <b>Sumpf</b> (jeder würfelt einmal; wer unter 7 feststeckt, ruft auf Englisch um Hilfe — sagt jemand, wie er hilft, passiert nichts, sonst −1 HP) und die <b>Wachen am Tor</b> — Leute des Hauses, nicht freundlich: Die Gruppe schleicht (jeder würfelt einmal; alle ≥ 7 → vorbei) oder greift an. Misslingt das Schleichen oder greift jemand an: Knopf unten, Kampf mit beiden Wachen, Gefahr +1."},
+ {t:"regie", nur:"weg_a", titel:"Hintergrund · Strasse", text:"Drei Stationen: <b>Wölfe</b> am Galgen — hilft jemand dem verletzten Wolf, ziehen beide ab; sonst Kampf (der erste des Abends — langsam: jeder sagt auf Englisch, was er tut, drückt seinen Knopf, liest seinen gelben Satz vor; unter 5 Lebenspunkten haut ein Wolf ab), der <b>Sumpf</b> (jeder würfelt einmal; wer unter 7 feststeckt, ruft auf Englisch um Hilfe — sagt jemand, wie er hilft, passiert nichts, sonst −1 HP) und die <b>Wachen am Tor</b> — Leute des Hauses, nicht freundlich: Die Gruppe schleicht (jeder würfelt einmal; alle ≥ 7 → vorbei) oder greift an. Misslingt das Schleichen oder greift jemand an: Knopf unten, Kampf mit beiden Wachen, Gefahr +1."},
  {t:"vorlesen", nur:"weg_a", titel:"Der Wald und der Galgen", text:[
   `You leave the tavern by the back door. The road climbs through the forest, and the fog is so thick that you walk into the gallows before you see it. The wood is grey and the rope is long gone.`,
   `Two wolves the size of ponies are sitting underneath it, side by side, watching you come. The smaller one holds a back leg off the ground; there is an old iron trap still on it. They are not barking. They are waiting for you to get closer.`]},
  {t:"aufgabe", nur:"weg_a", sag:"Each of you: what will you do, and why? You may protect someone or try to help the hurt wolf. Discuss before you act."},
- {t:"kampf", anker:"wolfe", nur:"weg_a", titel:"The wolves", text:"Zwei Wölfe, je 14 Lebenspunkte.", gegner:["wolf","wolf"], extra:"wolf"},
+ {t:"weiche", id:"woelfe", anker:"wolfe", nur:"weg_a", titel:"Was machen die Wölfe?", optionen:[
+  {k:"geholfen", knopf:"Geholfen — sie ziehen ab", sub:"Jemand hat dem verletzten Wolf geholfen, ruhig und ohne Waffe. Kein Kampf."},
+  {k:"kampf", knopf:"Kampf — zwei Wölfe", sub:"Sie greifen an, oder niemand hilft. Die Wölfe verteidigen sich."},
+  {k:"verpatzt", knopf:"Verpatzt — ein dritter kommt", sub:"Laut, grob oder ungeschickt: Die Wölfe werden wütend, und aus dem Nebel kommt ein dritter."}]},
+ {t:"vorlesen", weiche:"woelfe=geholfen", nur:"weg_a", titel:"Die Wölfe ziehen ab", text:[
+  `Whatever you did, the smaller wolf understands it. It puts its hurt leg down, carefully, and looks at you for a long time — the way a person would.`,
+  `Then both wolves stand up. They do not run. They walk past you, close enough to touch, and disappear into the fog above the gallows. A minute later, somewhere up the hill, one of them howls — just once.`]},
+ {t:"kampf", weiche:"woelfe=kampf", nur:"weg_a", titel:"The wolves", text:"Zwei Wölfe, je 14 Lebenspunkte. Fällt einer unter 5 Lebenspunkte, haut er ab — der Kampfbildschirm zeigt es an.", gegner:["wolf","wolf"], extra:"wolf"},
+ {t:"vorlesen", weiche:"woelfe=verpatzt", nur:"weg_a", titel:"Ein dritter Wolf", text:[
+  `The smaller wolf yelps and snaps at the air. The bigger one gets up, slowly, and shows you its teeth.`,
+  `Then a third shape comes out of the fog behind the gallows — bigger than both of them — and the three wolves spread out around you.`]},
+ {t:"kampf", weiche:"woelfe=verpatzt", nur:"weg_a", titel:"Three wolves", text:"Drei Wölfe, je 14 Lebenspunkte. Fällt einer unter 5 Lebenspunkte, haut er ab — der Kampfbildschirm zeigt es an.", gegner:["wolf","wolf","wolf"], extra:"wolf"},
  {t:"vorlesen", nur:"weg_a", titel:"Der Sumpf", text:[
   `Above the gallows the road simply stops. In front of you: black water, white mist, and a path that is only there if you find it. Every step, the ground pulls at your boots — and once it has one, it takes real strength to get it back.`]},
  {t:"aufgabe", nur:"weg_a", sag:"Each of you: how will you cross — slowly, fast, or holding on to someone? And if somebody gets stuck, how could you help them?", hinweis:"Erst reden lassen — dann würfeln."},
@@ -1478,24 +1503,27 @@ const KAPITEL = [
  {t:"weiter", text:"Sobald du eine der drei Karten angeklickt hast."}]},
 
 /* ===== 9 ===== */
+/* Das Finale ist zuerst ein Gespräch. Wie es läuft, klickt die Spielleitung an (Weiche „gespraech“);
+   darunter steht nur, was daraus folgt. Gekämpft wird nur in den Fällen, die es verlangen, und
+   „Wie ist es ausgegangen?“ bietet nur an, was nach diesem Verlauf möglich ist (ausgangMoeglich). */
 {n:"Finale", verlauf:[
-  {bei:"pakt", nur:"e3_pakt", wenn:"Das Angebot kostet die Gruppe etwas Echtes", dann:"er nimmt an — unten „Ein neuer Vertrag“, kein Kampf", art:"gut"},
-  {bei:"pakt", nur:"e3_pakt", wenn:"Drohung, Beleidigung, „we’ll kill you anyway“", dann:"Knopf: Gefahr +4, Kampf", art:"schlecht"},
-  {bei:"vaskir", wenn:"Vaskir unter 15 HP", dann:"er hört auf und redet: töten, Vertrag oder gehen lassen", art:"gut"},
-  {bei:"vaskir", wenn:"Eine Figur fällt auf 0", dann:"Trank — oder liegen bis nach dem Kampf"},
-  {wenn:"Der Kampf ist entschieden", dann:"unten eintragen, wie es ausging"}],
+  {bei:"gespraech", wenn:"Das Angebot kostet die Gruppe etwas Echtes", dann:"er nimmt an — „Ein echtes Angebot“ anklicken, kein Kampf", art:"gut"},
+  {bei:"gespraech", wenn:"Sie wollen wissen, wie alles anfing", dann:"„Sie fragen und hören zu“ — er erzählt und macht selbst ein Angebot", art:"gut"},
+  {bei:"gespraech", wenn:"Drohung, Beleidigung, „we’ll kill you anyway“", dann:"„Drohung“ anklicken — Kampf, und er schlägt zuerst zu", art:"schlecht"},
+  {bei:"vaskir", weiche:["gespraech=zuhoeren","gespraech=forderung","gespraech=drohung","gespraech=angriff"], wenn:"Vaskir fällt unter 15 Lebenspunkte", dann:"er hört auf und redet: töten, Vertrag oder gehen lassen — erst jetzt steht „Vaskir ist tot“ unten", art:"gut"},
+  {bei:"vaskir", weiche:["gespraech=zuhoeren","gespraech=forderung","gespraech=drohung","gespraech=angriff"], wenn:"Eine Figur fällt auf 0", dann:"Trank — oder liegen bis nach dem Kampf"}],
  chancen:[
   {wer:"Blade", talent:"Strength", cue:"standing furthest back", text:"Der Graf sucht sich den aus, der hinten steht.", folge:"Stellt der Blade sich dazwischen und sagt es laut, gehen die Klauen auf ihn — du wählst Blade als Ziel, statt frei zu entscheiden, wen es trifft. Bis Blade zurücktritt oder fällt."},
   {wer:"Arcanist", talent:"Magic Hand", nur:"e3_pakt", cue:"still steaming", text:"Die Teekanne dampft noch.", folge:"Kippt Magic Hand ihm den Tee ins Gesicht: kein Schaden, aber sein nächster Angriff ist vertan — er wischt sich das Gesicht und lacht: „Manners.“"},
   {wer:"Arcanist", talent:"Magic Hand", nur:"e3_buch", cue:"hangs in the air", text:"Die Asche des Buches schwebt noch.", folge:"Wirft Magic Hand sie ihm in die Augen: kein Schaden, aber sein nächster Angriff ist vertan."},
   {wer:"Arcanist", talent:"Magic Hand", nur:"e3_raus", cue:"the only light there is", text:"Die Lampe über ihm ist das einzige Licht im Gang.", folge:"Reisst Magic Hand sie herunter: einen Moment Dunkelheit — sein nächster Angriff ist vertan."},
   {wer:"Lightbearer", talent:"Healing Touch", gefahrVon:4, gefahrBis:10, nicht:"e3_buch", cue:"Their eyes are open and see nothing", text:"Die beiden Thralls sind Menschen aus dem Tal — unter Vertrag.", folge:"Wer einen von ihnen berührt, statt ihn zu schlagen, weckt ihn: Er setzt sich an die Wand und schläft. Ein Thrall weniger (im Kampfbildschirm ×). Der zweite bleibt, und Vaskir bleibt."}],
- woerter:[["to offer something","etwas anbieten"],["to let somebody go","jemanden gehen lassen"],["innocent","unschuldig"],["to give up","aufgeben"],["a promise","ein Versprechen"],["forever","für immer"]],
+ woerter:[["to offer something","etwas anbieten"],["a deal","ein Handel, eine Abmachung"],["to let somebody go","jemanden gehen lassen"],["innocent","unschuldig"],["to give up","aufgeben"],["a promise","ein Versprechen"],["to threaten somebody","jemandem drohen"],["forever","für immer"]],
  titel:"Count Vaskir", art:"kampf", braucht:"e3", bild:"graf", ort:{e3_raus:ORT.treppe, e3_buch:ORT.studie, e3_pakt:ORT.turm}, nach:ORT.graf, bloecke:[
- {t:"ziel", text:"Die Begegnung mit dem Grafen — Verhandlung, Kampf oder beides. Am Ende trägst du unten ein, wie es ausging.", zeit:"15 Min."},
- {t:"regie", titel:"Hintergrund", text:`Der Graf sieht aus wie ein müder Mann von fünfzig. Wie er auftritt, hängt an eurer Wahl (Übergang) und am Barometer (Lebenspunkte, Thralls) — es steht nur der Fall da, der bei euch gilt. <b>Unter 15 Lebenspunkten hört er auf zu kämpfen und redet:</b> Dann kann die Gruppe noch einmal wählen — töten, Vertrag, oder ihn gehen lassen. Fällt eine Figur auf 0, ist sie bewusstlos, nicht tot — Trank, oder sie liegt bis nach dem Kampf. <b>Am Ende trägst du unten ein, wie es ausging.</b>`},
- {t:"regie", anker:"pakt", nur:"e3_pakt", titel:"Die Verhandlung — was er annimmt", text:`Das ist zuerst ein Gespräch, kein Kampf. <b>Eine einzige Regel:</b> Er nimmt jedes Angebot an, das die Gruppe etwas Echtes kostet — Zeit, ein Versprechen, einen Besuch jedes Jahr. Er lehnt alles ab, was nur ihm etwas kostet.
- <p>Lass die Gruppe laut überlegen, was sie geben könnte. Nimmt er an: unten „Ein neuer Vertrag“ anklicken, kein Kampf. Droht die Gruppe oder beleidigt ihn: Knopf „Verhandlung gescheitert“ — dann Kampf.</p>`},
+ {t:"ziel", text:"Die Begegnung mit dem Grafen. Zuerst wird geredet — wie das Gespräch läuft, klickst du an; darunter steht nur, was daraus folgt: ein Vertrag, ein Kampf oder beides. Am Ende trägst du ein, wie es ausging.", zeit:"15 Min."},
+ {t:"regie", titel:"Hintergrund", text:`Der Graf sieht aus wie ein müder Mann von fünfzig. Wie er auftritt, hängt an eurer Wahl und am Barometer — es steht nur der Fall da, der bei euch gilt. <b>Zuerst wird geredet:</b> Er antwortet auf jeden Satz (Antworten unten). Dann klickst du an, <b>wie das Gespräch gelaufen ist</b>, und darunter erscheint nur der passende Teil.
+ <p>Kommt es zum Kampf: <b>Unter 15 Lebenspunkten hört er auf und redet</b> — töten, Vertrag oder gehen lassen. Fällt eine Figur auf 0, ist sie bewusstlos, nicht tot. <b>„Wie ist es ausgegangen?“</b> bietet nur an, was nach eurem Verlauf möglich ist: „Vaskir ist tot“ erst, wenn er im Kampf unter 15 gefallen ist; „Er ist entkommen“ nur nach einem Kampf.</p>`},
+ {t:"regie", nur:"e3_pakt", titel:"Die Verhandlung — was er annimmt", text:`Ihr habt ihn zum Reden gerufen, also ist das zuerst ein Gespräch. <b>Eine einzige Regel:</b> Er nimmt jedes Angebot an, das die Gruppe etwas Echtes kostet — Zeit, ein Versprechen, einen Besuch jedes Jahr, einen Platz. Er lehnt alles ab, was nur ihn etwas kostet. Droht die Gruppe, ist die Verhandlung gescheitert: Gefahr +4 (Knopf im Fall „Drohung“).`},
  {t:"vorlesen", nur:"e3_raus", von:ORT.treppe, titel:"Der Weg hinunter", text:[
   `Mirela does not fight you. She screams — once, very loud — and then she goes quiet and lets herself be carried. Down the long stair, backwards through the mirror, into the west corridor.`,
   `At the far end of the corridor a single lamp is burning — the only light there is — and a man is standing under it. He has clearly been waiting for a while.`]},
@@ -1511,7 +1539,7 @@ const KAPITEL = [
   `Then he looks at the three of you, one after the other — and his eyes stop on the one who is standing furthest back.`]},
  {t:"vorlesen", gefahrVon:4, gefahrBis:10, nicht:"e3_buch", titel:"Seine Leute", text:[
   `Two of his people stand by the door. Villagers, by their coats. Their eyes are open and see nothing.`]},
- {t:"aufgabe", sag:"Before each action, tell us what you do and why. If you speak to Vaskir, listen to his answer. Give every hunter a turn.", hinweis:"Was er auf typische Sätze antwortet, steht unten — er antwortet immer, höflich, und nie laut."},
+ {t:"aufgabe", sag:"He is waiting, and he will answer anything you say. Each of you: say one thing to him — a question, a demand, or an offer. What do you want from him? And what are you willing to give?", hinweis:"Seine Antworten stehen darunter. Er ist leise und höflich und droht nie. Danach anklicken, wie das Gespräch gelaufen ist."},
  {t:"personen", leute:[
   {name:"Vaskir", wer:"Der Graf", spielt:"Leise, freundlich, sehr langsam. Er antwortet auf jeden Satz, der an ihn gerichtet ist — auch mitten im Kampf. Er droht nie; das macht ihn unheimlich.", fragen:[
     ["Let her go! / Set her free!","„She is free. She walked up that road with a bag she packed herself. Ask her.“"],
@@ -1521,25 +1549,66 @@ const KAPITEL = [
     ["What do you want?","„What everyone wants. That someone comes up the road who was not sent. You did. So — talk.“"],
     ["Is there another way? / Can we change the deal?","„Offer me something that costs you. Not words — something real. Then we will see.“"]],
    notfalls:"Sagt niemand etwas zu ihm, sagt er es selbst, an den, der am weitesten hinten steht: „You. You haven’t said a word. Say one.“"}]},
- {t:"tun", id:"pakt_scheitert", nur:"e3_pakt", text:"Die Verhandlung ist gescheitert — eine Drohung, eine Beleidigung, ein „we’ll kill you anyway“.", knopf:{art:"gefahr", v:4}, beschriftung:"Gefahr +4, es wird gekämpft"},
- {t:"wenn", gefahrVon:0, gefahrBis:3, titel:"Gefahr 0–3 · Er ist beeindruckt", text:`„You came up my mountain without waking a single one of my people. Do you know how long it has been since anyone did that?“ — Er ist allein und lässt bis zuletzt mit sich reden. Der Knopf unten lädt ihn <b>mit 40 statt 55 Lebenspunkten</b>, und die Gruppe darf einmal angreifen, bevor er reagiert.`},
- {t:"wenn", gefahrVon:4, gefahrBis:7, titel:"Gefahr 4–7 · Er hat gewartet", text:`Er weiss seit Stunden, dass sie da sind, und wollte sehen, wie weit sie kommen. Volle 55 Lebenspunkte.`},
- {t:"wenn", gefahrVon:8, gefahrBis:10, titel:"Gefahr 8–10 · Das Haus ist wach", text:`Jede Lampe brennt. Volle 55 Lebenspunkte. Sag der Gruppe vorher, woran das liegt — sie haben es sich verdient und wissen es.`},
- {t:"wenn", gefahrVon:4, gefahrBis:10, nicht:"e3_buch", titel:"Zwei Thralls kommen dazu", text:`Zwei Diener des Hauses stehen mit im Raum, je 9 Lebenspunkte — gelb oben: „Seine Leute“. Der Knopf unten lädt sie mit.`},
- {t:"wenn", gefahrVon:4, gefahrBis:10, nur:"e3_buch", titel:"Keine Thralls", text:`Das Buch hat die Diener befreit — sie liegen irgendwo im Haus und schlafen zum ersten Mal seit Jahren. <b>Vaskir kommt allein.</b>`},
- {t:"tun", id:"finale_laden", wiederholbar:true, text:"Lade den Kampf — die Seite nimmt die richtigen Gegner nach Barometer und eurer Wahl. Bei geglückter Verhandlung brauchst du das nicht.", knopf:{art:"finale"}, beschriftung:"Kampf laden"},
- {t:"kampf", anker:"vaskir", titel:"Count Vaskir", ohneKnopf:true, text:"Geladen wird mit dem Knopf darüber; er öffnet den Kampfbildschirm. Trag den Schaden der Spieler dort in seine Leiste ein. Für seinen Zug drückst du auf eine seiner Attacken — die Seite würfelt und du klickst an, wen es trifft.", gegner:["vaskir"], zusatz:["thrall","spawn"]},
- {t:"optionen", id:"e4", titel:"Wie ist es ausgegangen?", optionen:[
-  {b:"A", name:"Vaskir ist tot", flagge:"ausgang_tot", was:"Sie haben ihn erledigt. Zu Staub, im Licht der ersten Sonne.", wirkung:{gefahr:0}},
-  {b:"B", name:"Ein neuer Vertrag", flagge:"ausgang_vertrag", was:"Verhandelt — ob vor dem Kampf oder mit dem Schwert an seiner Kehle. Er unterschreibt.", wirkung:{gefahr:0}},
-  {b:"C", name:"Er ist entkommen", flagge:"ausgang_flucht", was:"Nebel durchs Fenster. Er lebt, er ist weg, und er hat nichts versprochen.", wirkung:{gefahr:0}}]},
+ {t:"weiche", id:"gespraech", anker:"gespraech", nur:["e3_raus","e3_buch","e3_pakt"], titel:"Wie läuft das Gespräch?", optionen:[
+  {k:"angebot", knopf:"Ein echtes Angebot", sub:"Sie bieten etwas, das sie selbst etwas kostet: Zeit, ein Versprechen, einen Besuch, einen Platz. Kein Kampf."},
+  {k:"zuhoeren", knopf:"Sie fragen und hören zu", sub:"Sie wollen verstehen, wie alles anfing. Er erzählt — und macht selbst ein Angebot."},
+  {k:"forderung", knopf:"Nur Forderungen", sub:"„Let her go!“ — ohne etwas zu geben. Er lehnt ab und lässt ihnen einen letzten Versuch."},
+  {k:"drohung", knopf:"Drohung oder Beleidigung", sub:"„We’ll kill you anyway.“ Er hört auf zu lächeln. Kampf — und er schlägt zuerst zu."},
+  {k:"angriff", knopf:"Sie greifen an", sub:"Kaum ein Wort, gleich die Waffen. Kampf."}]},
+
+ /* — Ein echtes Angebot — */
+ {t:"vorlesen", weiche:"gespraech=angebot", spricht:"Vaskir", titel:"Er nimmt an", text:[
+  `He listens without moving. When you have finished, he asks you to say it again — slowly — and while you speak, he writes it down on a single sheet of paper, word for word.`,
+  `“This is worse for me than the old one,” he says. Then he signs it anyway and pushes the paper across the table. “Your turn.”`]},
+ {t:"aufgabe", weiche:"gespraech=angebot", sag:"Before you sign: say the deal out loud, one part each. What does the village get? What does he get? And what do you give?", hinweis:"Kein Kampf. Danach unten eintragen: „Ein neuer Vertrag“ — oder „Jemand bleibt bei ihm“, wenn eine Figur ihren Platz angeboten hat."},
+
+ /* — Sie fragen und hören zu — */
+ {t:"vorlesen", weiche:"gespraech=zuhoeren", spricht:"Vaskir", titel:"Wie es anfing", text:[
+  `“1604,” he says. “A hard winter. Wolves in the streets, fever in every house. They came up this road — the whole village — and asked me what I wanted for my help. I said: company. Somebody to talk to, once every twenty years. The bag, the road, the name on the board — they wrote all that themselves.”`,
+  `He looks at Mirela. “They never asked what happens up here. Nobody ever asked. You are the first.”`,
+  `Then he makes an offer of his own. “She goes down with you today. And once a year, on this night, one of you walks up this road and sits in that chair for one hour. Just to talk. You would be surprised how long an hour can be.”`]},
+ {t:"aufgabe", weiche:"gespraech=zuhoeren", sag:"He has made you an offer. Talk about it — together, out loud. Will you take it? And who will come back every year?", hinweis:"Nehmen sie an → unten „Ein neuer Vertrag“ (oder „Jemand bleibt bei ihm“, wenn jemand gleich bleibt). Lehnen sie ab und greifen an → Kampf laden. Er ist enttäuscht, nicht wütend."},
+
+ /* — Nur Forderungen — */
+ {t:"vorlesen", weiche:"gespraech=forderung", spricht:"Vaskir", titel:"Er lehnt ab", text:[
+  `He smiles, and it is almost kind. “You want something from me, and you offer nothing. That is not a deal. That is a robbery — and I have been robbed before.”`,
+  `“Try again. Once. Or draw your swords.”`]},
+ {t:"aufgabe", weiche:"gespraech=forderung", sag:"One more try. Each of you: what could you give him — something that really costs you? Or will you fight?", hinweis:"Bieten sie jetzt etwas Echtes an, nimmt er an → unten „Ein neuer Vertrag“, kein Kampf. Bleibt es bei Forderungen oder greift jemand an → Kampf laden."},
+
+ /* — Drohung — */
+ {t:"vorlesen", weiche:"gespraech=drohung", spricht:"Vaskir", titel:"Genug geredet", text:[
+  `He stops smiling. For a moment he looks very old, and very tired.`,
+  `“Then we are done talking,” he says — and he is already moving.`]},
+ {t:"regie", weiche:"gespraech=drohung", text:"<b>Er schlägt zuerst zu:</b> Lade den Kampf und drück im Kampfbildschirm eine seiner Attacken, bevor die Gruppe dran ist."},
+ {t:"tun", id:"pakt_scheitert", nur:"e3_pakt", weiche:"gespraech=drohung", text:"Ihr hattet ihn zum Reden gerufen, und die Gruppe hat gedroht — die Verhandlung ist gescheitert, und das ganze Haus hört es.", knopf:{art:"gefahr", v:4}, beschriftung:"Gefahr +4 — das Haus wacht auf"},
+
+ /* — Sie greifen an — */
+ {t:"vorlesen", weiche:"gespraech=angriff", spricht:"Vaskir", titel:"Er legt den Mantel ab", text:[
+  `He does not look surprised. He looks disappointed — the way a teacher looks when nobody has done the homework.`,
+  `“As you wish,” he says, and takes off his coat.`]},
+
+ /* — Kommt es zum Kampf (alle Fälle ausser dem echten Angebot) — */
+ {t:"wenn", weiche:["gespraech=zuhoeren","gespraech=forderung","gespraech=drohung","gespraech=angriff"], gefahrVon:0, gefahrBis:3, titel:"Gefahr 0–3 · Er ist beeindruckt", text:`„You came up my mountain without waking a single one of my people. Do you know how long it has been since anyone did that?“ — Kommt es zum Kampf, hat er <b>nur 40 statt 55 Lebenspunkte</b>. Und hat die Gruppe nicht gedroht, darf sie einmal angreifen, bevor er reagiert.`},
+ {t:"wenn", weiche:["gespraech=zuhoeren","gespraech=forderung","gespraech=drohung","gespraech=angriff"], gefahrVon:4, gefahrBis:7, titel:"Gefahr 4–7 · Er hat gewartet", text:`Er weiss seit Stunden, dass sie da sind, und wollte sehen, wie weit sie kommen. Kommt es zum Kampf: volle 55 Lebenspunkte.`},
+ {t:"wenn", weiche:["gespraech=zuhoeren","gespraech=forderung","gespraech=drohung","gespraech=angriff"], gefahrVon:8, gefahrBis:10, titel:"Gefahr 8–10 · Das Haus ist wach", text:`Jede Lampe brennt. Kommt es zum Kampf: volle 55 Lebenspunkte. Sag der Gruppe, woran das liegt — sie haben es sich verdient und wissen es.`},
+ {t:"wenn", weiche:["gespraech=zuhoeren","gespraech=forderung","gespraech=drohung","gespraech=angriff"], gefahrVon:4, gefahrBis:10, nicht:"e3_buch", titel:"Zwei Thralls kommen dazu", text:`Zwei Diener des Hauses stehen mit im Raum, je 9 Lebenspunkte — gelb oben: „Seine Leute“. Der Knopf lädt sie mit.`},
+ {t:"wenn", weiche:["gespraech=zuhoeren","gespraech=forderung","gespraech=drohung","gespraech=angriff"], gefahrVon:4, gefahrBis:10, nur:"e3_buch", titel:"Keine Thralls", text:`Das Buch hat die Diener befreit — sie liegen irgendwo im Haus und schlafen zum ersten Mal seit Jahren. <b>Vaskir kämpft allein.</b>`},
+ {t:"tun", id:"finale_laden", anker:"vaskir", weiche:["gespraech=zuhoeren","gespraech=forderung","gespraech=drohung","gespraech=angriff"], wiederholbar:true, text:"Kommt es zum Kampf: laden. Die Seite nimmt Vaskir und, je nach Gefahr und Wahl, seine Leute. Unter 15 Lebenspunkten hört er auf zu kämpfen.", knopf:{art:"finale"}, beschriftung:"Kampf laden"},
+ /* Nur für den Kampfbildschirm (Titel, Werte, „dazunehmen“) — auf der Seite steht er nicht */
+ {t:"kampf", versteckt:true, ohneKnopf:true, weiche:["gespraech=zuhoeren","gespraech=forderung","gespraech=drohung","gespraech=angriff"], titel:"Count Vaskir", text:"Trag den Schaden der Spieler in seine Leiste ein; für seinen Zug drückst du eine seiner Attacken. Unter 15 Lebenspunkten hört er auf und redet — dann entscheidet die Gruppe: töten, Vertrag oder gehen lassen.", gegner:["vaskir"], zusatz:["thrall","spawn"]},
+
+ {t:"optionen", id:"e4", titel:"Wie ist es ausgegangen?", weiche:["gespraech=angebot","gespraech=zuhoeren","gespraech=forderung","gespraech=drohung","gespraech=angriff"], optionen:[
+  {b:"A", name:"Vaskir ist tot", flagge:"ausgang_tot", was:"Er fiel im Kampf unter 15 Lebenspunkte, gab auf — und die Gruppe hat es zu Ende gebracht. Zu Staub, im Licht der ersten Sonne.", wirkung:{gefahr:0}},
+  {b:"B", name:"Ein neuer Vertrag", flagge:"ausgang_vertrag", was:"Verhandelt — am Tisch oder mit dem Schwert an seiner Kehle. Kein Gast mehr alle zwanzig Jahre; dafür das, was die Gruppe gibt. Er unterschreibt.", wirkung:{gefahr:0}},
+  {b:"C", name:"Jemand bleibt bei ihm", flagge:"ausgang_tausch", was:"Eine Figur nimmt Mirelas Platz — ganz, oder geteilt: ein Jahr, eine Nacht wie diese jedes Jahr.", wirkung:{gefahr:0}},
+  {b:"D", name:"Er ist entkommen", flagge:"ausgang_flucht", was:"Nebel durchs Fenster. Er lebt, er ist weg, und er hat nichts versprochen.", wirkung:{gefahr:0}}]},
  {t:"weiter", text:"Sobald du unten eingetragen hast, wie es ausging."}]},
 
 /* ===== 10 ===== */
 {n:"Epilog", verlauf:[
-  {bei:"ep_tam", nur:"kueche", wenn:"Versprechen gehalten", dann:"Tam kocht ab heute im Wirtshaus", art:"gut"},
-  {bei:"ep_tam", nur:"kueche", wenn:"Versprechen gebrochen", dann:"beiläufig sagen, ohne Vorwurf", art:"schlecht"},
-  {bei:"ep_brief", nur:"bibliothek", wenn:"Brief eingeworfen", dann:"nach zwei Wochen eine Antwort im Gepäck", art:"gut"},
+  {bei:"ep_tam", nur:"kueche", weiche:"tam_bitte=zugesagt", wenn:"Versprechen gehalten", dann:"Tam kocht ab heute im Wirtshaus", art:"gut"},
+  {bei:"ep_tam", nur:"kueche", weiche:"tam_bitte=zugesagt", wenn:"Versprechen gebrochen", dann:"beiläufig sagen, ohne Vorwurf", art:"schlecht"},
+  {bei:"ep_brief", nur:"bibliothek", weiche:"fuehrung=gefuehrt", wenn:"Brief eingeworfen", dann:"nach zwei Wochen eine Antwort im Gepäck", art:"gut"},
   {wenn:"Alle wollen dasselbe", dann:"Karte klicken, Schlusstext vorlesen, fertig", art:"gut"},
   {wenn:"Sie sind sich nicht einig", dann:"auch gut — klick, was die Mehrheit will, und lass die anderen ihren Satz trotzdem sagen"},
   {wenn:"Jemand sagt nur ein Wort", dann:"„That’s not an answer. Why?“ — die letzte Sprechübung des Abends"}],
@@ -1548,20 +1617,21 @@ const KAPITEL = [
  {t:"ziel", text:"Der Morgen danach: die Folgen eurer Entscheidungen — und die letzte Wahl, die einzige ohne Werte. Das letzte Wort haben die Schüler.", zeit:"8 Min."},
  {t:"vorlesen", titel:"Der Weg hinaus", text:[
   `Six o’clock. The sun comes up over the pass, and the castle looks smaller in daylight — a tired old house on a rock. You walk down through the courtyard and out through the gate that nobody ever closed.`]},
- {t:"wenn", notstopp:"tausch", titel:"Notstopp · Jemand ist geblieben", text:`Einer von euch hat Mirelas Platz genommen — oder ihn geteilt: ein Jahr, ein Besuch, ein Name im Buch. Vaskir hat es angenommen, wie er alles annimmt, was etwas kostet. Mirela geht mit euch hinunter. <b>Frag die Figur, die geblieben ist</b>, was sie dort oben als Erstes tut — und die beiden anderen, was sie im Dorf erzählen.`},
- {t:"wenn", notstopp:"vertrag", titel:"Notstopp · Der Vertrag ist geändert", text:`Kein Gast mehr alle zwanzig Jahre. Dafür etwas, das euch etwas kostet — was genau, hat die Gruppe vor dem Grafen gesagt; wiederhole es hier laut. Mirela geht mit euch hinunter. Lene bleibt neun.`},
- {t:"wenn", notstopp:"kampf", titel:"Notstopp · Es wurde gekämpft", text:`Der Kampf war kurz, weil die Nacht kurz war. Wie er ausging, steht unten bei den Ausgängen — lies nur den, der gilt.`},
- {t:"wenn", nur:"ausgang_vertrag", titel:"Ein neuer Vertrag", text:`Auf einem Blatt Papier steht ein Vertrag, und er ist kurz. Vaskir hat ihn zweimal gelesen, „This is worse for me than the old one“ gesagt und trotzdem unterschrieben. Er hatte seit dreihundert Jahren keinen Besuch, den er nicht selbst bestellt hat. Mirela geht mit euch hinunter — heute jedenfalls.`},
- {t:"wenn", nur:"ausgang_tot", titel:"Der Graf ist tot", text:`Von ihm ist nichts übrig als ein Sessel voller Staub. Mit ihm endet der Vertrag von 1604 — Mirela ist frei, und Lene auch. Unten im Tal geht Dornwald ohne Schutz in den Winter. Im Februar kommen die Wölfe zurück, und das weiss die Gruppe.`},
+ {t:"wenn", nur:"ausgang_vertrag", nicht:"e3_buch", titel:"Ein neuer Vertrag", text:`Auf einem einzelnen Blatt Papier steht ein neuer Vertrag, und er ist kurz: kein Gast mehr alle zwanzig Jahre — dafür das, was die Gruppe ihm gegeben hat. Vaskir hat ihn zweimal gelesen, „This is worse for me than the old one“ gesagt und trotzdem unterschrieben. Mirela geht mit euch hinunter, und Lene wird nie eine Tasche packen müssen. <b>Lass die Gruppe die Bedingungen noch einmal laut sagen</b> — was bekommt das Dorf, was bekommt er, was geben sie?`},
+ {t:"wenn", alle:["ausgang_vertrag","e3_buch"], titel:"Ein neuer Vertrag", text:`Das Blutbuch ist Asche, und mit ihm jeder alte Vertrag. Auf einem einzelnen Blatt steht jetzt ein neuer, und er ist kurz: kein Gast mehr — dafür das, was die Gruppe ihm gegeben hat. Vaskir hat ihn zweimal gelesen, „This is worse for me than the old one“ gesagt und trotzdem unterschrieben: der erste Vertrag seit 1604, den jemand freiwillig eingeht. Mirela geht mit euch hinunter, und Lene wird nie eine Tasche packen müssen. <b>Lass die Gruppe die Bedingungen noch einmal laut sagen</b> — was bekommt das Dorf, was bekommt er, was geben sie?`},
+ {t:"wenn", nur:"ausgang_tausch", titel:"Jemand ist geblieben", text:`Einer von euch hat Mirelas Platz genommen — ganz, oder geteilt: ein Jahr, eine Nacht wie diese jedes Jahr. Vaskir hat es angenommen, wie er alles annimmt, was etwas kostet. Mirela geht mit euch hinunter. <b>Frag die Figur, die geblieben ist</b>, was sie dort oben als Erstes tut — und die beiden anderen, was sie im Dorf erzählen. Ist jemand ganz geblieben, sagt diese Figur bei der letzten Wahl unten nur einen Satz: was sie den anderen mitgibt.`},
+ {t:"wenn", nur:"ausgang_tot", nicht:"e3_buch", titel:"Der Graf ist tot", text:`Von ihm ist nichts übrig als ein Sessel voller Staub. Mit ihm endet der Vertrag von 1604 — Mirela ist frei, und Lene auch. Unten im Tal geht Dornwald ohne Schutz in den Winter. Im Februar kommen die Wölfe zurück, und das weiss die Gruppe.`},
+ {t:"wenn", alle:["ausgang_tot","e3_buch"], titel:"Der Graf ist tot", text:`Von ihm ist nichts übrig als ein Sessel voller Staub. Der Vertrag von 1604 war schon Asche, bevor er fiel — jetzt ist auch der fort, der ihn hätte erneuern können. Mirela ist frei, und Lene auch. Unten im Tal geht Dornwald ohne Schutz in den Winter. Im Februar kommen die Wölfe zurück, und das weiss die Gruppe.`},
  {t:"wenn", nur:"ausgang_flucht", titel:"Er ist entkommen", text:`Nebel durchs Fenster, mehr nicht. Mirela geht mit euch hinunter, und niemand hat unterschrieben. In zwanzig Jahren, oder früher, wird jemand oben ein Licht sehen.`},
- {t:"wenn", alle:["e3_raus","ausgang_flucht"], titel:"Mirela auf dem Weg hinunter", text:`Sie spricht auf dem ganzen Weg kein Wort. Im Dorf öffnet sich keine einzige Tür. Erst Tobias kommt gelaufen — und Mirela sagt den Satz, der hängenbleibt: „So who is going instead of me?“`},
- {t:"wenn", nur:"e3_buch", titel:"Das Blutbuch brannte", text:`Im ganzen Haus wachen Menschen auf, die nicht wissen, welches Jahr ist. Einer davon ist Corvin Ash. Er fragt, welches Jahr wir haben, und setzt sich auf die Treppe.`},
+ {t:"wenn", alle:["e3_raus","ausgang_flucht"], titel:"Mirela auf dem Weg hinunter", text:`Sie spricht auf dem ganzen Weg kein Wort. Im Dorf sieht ihr niemand in die Augen. Erst Tobias kommt gelaufen — und Mirela sagt den Satz, der hängenbleibt: „So who is going instead of me?“`},
+ {t:"wenn", nur:"e3_buch", nicht:"weg_c", titel:"Das Blutbuch brannte", text:`Im ganzen Haus wachen Menschen auf, die nicht wissen, welches Jahr ist. Einer von ihnen sitzt auf der Treppe im Hof, als ihr vorbeikommt, und fragt euch, welches Jahr wir haben.`},
+ {t:"wenn", alle:["e3_buch","weg_c"], titel:"Das Blutbuch brannte", text:`Im ganzen Haus wachen Menschen auf, die nicht wissen, welches Jahr ist. Einer davon ist Corvin Ash, der euch in der Nacht heraufgefahren hat. Er fragt, welches Jahr wir haben, und setzt sich auf die Treppe.`},
  {t:"wenn", anker:"ep_tam", nur:"kueche", warDort:"What You Find", weiche:"tam_bitte=zugesagt", titel:"Tam — ihr habt es versprochen", text:`Er steht am Tor mit einem Sack, in dem drei Töpfe und ein Messer sind. Er fragt nicht, ob es noch gilt — er geht einfach neben euch her. <b>Haltet ihr Wort</b>, kocht er ab heute im Wirtshaus, und Greta hat zum ersten Mal seit zwanzig Jahren jemanden, der ihr widerspricht. <b>Lasst ihr ihn stehen</b>, sag es beiläufig, ohne Vorwurf: „Tam waits at the gate. He waits for a long time.“`},
  {t:"wenn", anker:"ep_tam_nein", nur:"kueche", warDort:"What You Find", weiche:"tam_bitte=abgelehnt", titel:"Tam — ihr habt ehrlich Nein gesagt", text:`Er steht nicht am Tor. Er steht am Küchenfenster und hebt die verbrannte Hand, als ihr über den Hof geht. Ein ehrliches Nein hat er angenommen; er hat die Töpfe vom Feuer genommen und wartet auf den nächsten, der die Treppe herunterkommt. Wer will, ruft ihm etwas zu — er antwortet nicht, aber er nickt.`},
  {t:"wenn", anker:"ep_tam_offen", nur:"kueche", warDort:"What You Find", weicheOffen:"tam_bitte", titel:"Tam — ihr habt ihm nichts gesagt", text:`Er hat auf eine Antwort gewartet und keine bekommen. Er steht am Tor, ohne Sack, und sieht euch nach. Sag der Gruppe, dass er gefragt hat — und dass niemand geantwortet hat. Lass das so stehen. (Steht hier, weil unten in der Küche nichts festgehalten wurde.)`},
- {t:"wenn", anker:"ep_brief", nur:"bibliothek", titel:"Bellamys Brief", text:`Nur, wenn sie den Brief bekommen haben. Die Adressatin ist seit 180 Jahren tot, ihr Haus steht noch. Wer den Brief dort durch den Schlitz wirft, hat Wort gehalten — und findet zwei Wochen später eine Antwort im eigenen Gepäck, in einer Handschrift von 1844.`},
- {t:"wenn", alle:["kapelle","anneke"], nicht:"e3_buch", titel:"Anneke — sie kennt euch", text:`Sie steht in der Kapellentür, als ihr vorbeigeht, und sagt zum ersten Mal seit zwanzig Jahren ihren eigenen Namen laut. Dann fragt sie, ob jemand Greta etwas ausrichten kann.`},
- {t:"wenn", nur:"kapelle", nicht:["anneke","e3_buch"], titel:"Anneke — ihr habt gekämpft", text:`Sie sitzt im Taufbecken, wo ihr sie gelassen habt, und sieht euch nach. Sie hat nach Greta gefragt, und niemand hat geantwortet. Lass das so stehen.`},
+ {t:"wenn", anker:"ep_brief", nur:"bibliothek", warDort:"What You Find", weiche:"fuehrung=gefuehrt", titel:"Bellamys Brief", text:`Bellamy hat ihnen am Spiegel einen Brief mitgegeben. Die Adressatin ist seit 180 Jahren tot, ihr Haus steht noch. Wer den Brief dort durch den Schlitz wirft, hat Wort gehalten — und findet zwei Wochen später eine Antwort im eigenen Gepäck, in einer Handschrift von 1844.`},
+ {t:"wenn", nur:"kapelle", warDort:"What You Find", weiche:"anneke_name=erkannt", nicht:"e3_buch", titel:"Anneke — sie kennt euch", text:`Sie steht in der Kapellentür, als ihr vorbeigeht, und sagt zum ersten Mal seit zwanzig Jahren ihren eigenen Namen laut. Dann fragt sie, ob jemand Greta etwas ausrichten kann.`},
+ {t:"wenn", nur:"kapelle", warDort:"What You Find", weiche:"anneke_name=kampf", nicht:"e3_buch", titel:"Anneke — ihr habt gekämpft", text:`Sie sitzt im Taufbecken, wo ihr sie gelassen habt, und sieht euch nach. Sie hat nach Greta gefragt, und niemand hat geantwortet. Lass das so stehen.`},
  {t:"wenn", nur:"e3_buch", titel:"Anneke — frei", text:`Aus der Kapelle, an der ihr vorbeigeht, kommt ein Mädchen von etwa neunzehn in einem Kleid, das vor zwanzig Jahren weiss war — Anneke, ohne Vertrag. Wer in der Kapelle war, kennt sie; die anderen sehen sie zum ersten Mal. Sie sieht in die Sonne, als hätte sie sie noch nie gesehen, und fragt, ob jemand Greta etwas ausrichten kann.`},
  {t:"wenn", gefahrVon:0, gefahrBis:3, titel:"Barometer 0–3", text:`Niemand im Schloss hat euch kommen hören. Das ist die seltenste Art, diesen Abend zu gewinnen — sag der Gruppe ausdrücklich, dass sie das geschafft hat.`},
  {t:"wenn", gefahrVon:8, gefahrBis:10, titel:"Barometer 8–10", text:`Was auch immer sie erreicht haben, sie haben es unter Lärm erreicht. Eine Figur ihrer Wahl trägt etwas mit hinunter, das nicht mehr weggeht: einen weissen Streifen im Haar, eine Hand, die nicht mehr warm wird, oder einen Namen, den sie im Schlaf sagt.`},
@@ -1598,7 +1668,7 @@ const KAPITEL = [
  {t:"vorlesen", nur:"weiter_schloss", titel:"Schluss · Nachtfels", text:[
   `You move in on the second day, because the second day is when the fire goes out and somebody has to light it again.`,
   `Bellamy shows you the room where the letters arrive: a stone slot in the west wall, and behind it four hundred years of letters that nobody ever answered. The first one you open is dated 1809 and asks for help.`,
-  `In the spring a boy from the village walks all the way up the road with a basket, and he does not knock — because Tam has left the kitchen door open. That is how it starts.`]},
+  `In the spring a boy from the village walks all the way up the road with a basket, and he does not knock — because the kitchen door is standing open. That is how it starts.`]},
  {t:"wenn", alle:["weiter_dorf","ausgang_tot"], titel:"Sie bleiben, und der Vertrag ist tot", text:`Darauf zeigt der ganze Abend: Sie haben dem Tal seinen Schutz genommen und stellen sich jetzt selbst an die Stelle. Sag es laut — sie haben es verdient, dass jemand ausspricht, was sie da gerade tun.`},
  {t:"wenn", alle:["weiter_jagd","ausgang_vertrag"], titel:"Sie ziehen weiter, und der Vertrag steht", text:`Vaskir hält sein Wort, solange jemand kommt und ihn daran erinnert. Frag sie, wer das tut, wenn sie in Eisenbach sind. Eine Antwort genügt — und meistens fällt dabei Tobias’ Name.`},
  {t:"wenn", alle:["weiter_schloss","e3_buch"], titel:"Sie ziehen ein, und das Buch ist verbrannt", text:`Im Haus wachen Menschen auf, die vierhundert Jahre gedient haben und jetzt frei sind — und nirgendwohin können. Die Gruppe erbt kein leeres Schloss, sondern ein volles. Das ist kein Happy End, das ist eine Aufgabe, und ein guter letzter Satz.`},
@@ -2015,9 +2085,10 @@ function sprecherHTML(name){
 function frischerZustand(namen){
   return { schritt:0, gefahr:0,
     gruppe:GRUPPE_VORLAGE.map((g,i)=>({name:(namen&&namen[i])||"", rolle:g.rolle, hp:g.max, max:g.max})),
-    wissen:{}, flaggen:{}, gewaehlt:{}, getan:{}, abgehakt:{}, weichen:{}, gegner:[], chronik:[], besucht:{0:true},
+    wissen:{}, flaggen:{}, gewaehlt:{}, getan:{}, abgehakt:{}, weichen:{}, gegner:[], chronik:[], besucht:{0:true}, besuchtMit:{},
     patrouille:{status:"keine", vor:null}, imZwischenakt:false, zwischenaktZiel:null, kampfOffen:false,
-    uhr:{rest:90*60000, laeuft:false, stempel:0}, notstopp:{fall:null, wer:null, gesehen:false} };
+    uhr:{rest:90*60000, laeuft:false, stempel:0}, notstopp:{fall:null, wer:null, gesehen:false, spaeter:null, erledigt:false},
+    finale:{} };   /* finale: {geladen, tiefst} — ob gegen Vaskir gekämpft wurde und wie tief er fiel */
 }
 let Z = frischerZustand();
 function laden(){ try{ const r=localStorage.getItem(SCHLUESSEL); if(r){const g=JSON.parse(r); if(g&&typeof g==="object"){ const f=frischerZustand(); Z=Object.assign(f,g); Z.uhr=Object.assign(f.uhr,g.uhr||{}); Z.notstopp=Object.assign(f.notstopp,g.notstopp||{}); }} }catch(e){}
@@ -2066,7 +2137,6 @@ function zeichneRueckgaengig(){ const b=$("rueckgaengig"); if(b){ b.disabled=!VE
    Finale 15, Abschluss 8 — und 8 Minuten Reserve. Die Uhr weiss, bis wann
    jede Seite fertig sein sollte; liegt die Gruppe dahinter, wird sie gelb.    */
 const UHR_DAUER = 90*60000;
-let letzteUhrLage = "";
 const BUDGET_MIN = {"So führst du den Abend":2,"The Carriage":3,"The Inn":8,"The Way Up":4,"Up the Mountain":10,
   "The Courtyard":8,"What You Find":8,"The Tower Room":11,"The Blood Ledger":5,"Count Vaskir":15,"Six O’Clock":8};
 function uhrRest(){ const u=Z.uhr; return u.rest - (u.laeuft ? Math.max(0, Date.now()-u.stempel) : 0); }
@@ -2087,9 +2157,7 @@ function zeichneUhr(){
   s.textContent = !Z.uhr.laeuft && l.vergangen<1000 ? "Uhr starten" : l.knapp ? "Zeit knapp · "+minHinten+" min hinten" : "Soll bis "+Math.round(l.soll/60000)+" min";
   if(k) k.textContent = Z.uhr.laeuft ? "Ⅱ" : "▶";
   el.className="uhr"+(l.spaet?" spaet":l.knapp?" knapp":"")+(Z.uhr.laeuft?"":" steht");
-  const lage=(l.knapp?"k":"")+(l.spaet?"s":"");
-  if(lage!==letzteUhrLage){ letzteUhrLage=lage; if(!Z.kampfOffen) zeichneSzene(); }
-  if(l.spaet && !Z.notstopp.gesehen && !Z.kampfOffen && Z.uhr.laeuft) notstoppOeffnen(true);
+  if(l.spaet && Z.uhr.laeuft && !Z.kampfOffen && notstoppFaellig()) notstoppOeffnen(true);
 }
 if(typeof requestAnimationFrame==="function" && typeof setInterval==="function") setInterval(()=>{ if(Z.uhr.laeuft) zeichneUhr(); }, 1000);
 const $ = id => document.getElementById(id);
@@ -2105,6 +2173,12 @@ function notiere(text){
 /* ---- Flaggen-Abfragen: eine Stelle für alles ---- */
 function hat(k){ return !!Z.flaggen[k] || !!Z.wissen[k]; }
 const liste = x => x===undefined ? [] : (Array.isArray(x) ? x : [x]);
+/* „warDort“ am Block: Die Seite muss erlebt worden sein — und zwar mit einer der Flaggen aus „nur“
+   (die Küche zählt nur, wenn „Hinter der Tür“ mit der Küchentür aufgeschlagen war, nicht mit einer anderen). */
+function warDort(b){
+  const i=KAPITEL.findIndex(k=>k.titel===b.warDort), nur=liste(b.nur);
+  return nur.length ? nur.some(f=>!!(Z.besuchtMit||{})[i+":"+f]) : !!(Z.besucht||{})[i];
+}
 /* „weiche“ am Block: nur zeigen, wenn die Spielleitung den passenden Knopf gedrückt hat */
 function weicheGilt(spec){
   const id=spec.slice(0, spec.indexOf("=")), k=spec.slice(spec.indexOf("=")+1);
@@ -2115,7 +2189,7 @@ function gilt(b){
   if(b.weiche && !liste(b.weiche).some(weicheGilt)) return false;
   if(b.weicheOffen && (Z.weichen||{})[b.weicheOffen]!==undefined) return false;
   if(b.notstopp && (Z.notstopp||{}).fall!==b.notstopp) return false;
-  if(b.warDort && !(Z.besucht||{})[KAPITEL.findIndex(k=>k.titel===b.warDort)]) return false;   /* nur, wenn die Gruppe die Seite wirklich erlebt hat */
+  if(b.warDort && !warDort(b)) return false;   /* nur, wenn die Gruppe die Seite wirklich erlebt hat — mit dieser Tür */
   if(nur.length && !nur.some(hat)) return false;          /* nur:  mindestens eine */
   if(alle.length && !alle.every(hat)) return false;       /* alle: jede */
   if(nicht.some(hat)) return false;                       /* nicht: keine */
@@ -2131,7 +2205,7 @@ function entscheidungOffen(id){ return Z.gewaehlt[id]===undefined; }
 function voraussetzungFehlt(id){
   /* liefert die Kennung der fehlenden Vorgänger-Entscheidung, sonst null */
   const e=ENTSCHEIDUNGEN[id]; if(!e||!e.braucht) return null;
-  return entscheidungOffen(e.braucht) ? e.braucht : voraussetzungFehlt(e.braucht);
+  return entscheidungOffen(e.braucht) ? e.braucht : null;
 }
 function ortAufloesen(spec){
   if(typeof spec==="string") return spec;
@@ -2197,6 +2271,7 @@ function aendereHP(i,d,grund){
 function ladeGegner(k, hp){
   const v=BESTIARIUM[k]; if(!v) return;
   Z.gegner.push({k, name:v.name, hp:hp||v.hp, max:hp||v.hp});
+  if(k==="vaskir"){ if(!Z.finale) Z.finale={}; Z.finale.geladen=true; const h=hp||v.hp; Z.finale.tiefst=Math.min(Z.finale.tiefst===undefined?h:Z.finale.tiefst, h); }
   notiere("<b>"+v.name+"</b> im Kampf ("+(hp||v.hp)+" HP)");
   zeichneGegner(); sichern();
 }
@@ -2248,6 +2323,9 @@ function zeichneGegner(){
   $("gegner-leer").hidden = Z.gegner.length>0;
   $("gegner").innerHTML=Z.gegner.map((g,i)=>{
     const v=BESTIARIUM[g.k], p=Math.max(0,(g.hp/g.max)*100);
+    if(g.geflohen) return '<div class="gegner geflohen"><p class="g-flucht">Abgehauen — er zieht den Schwanz ein und verschwindet im Nebel.</p>'+
+      '<div class="g-kopf"><h4>'+g.name+'</h4><span class="hpwert"><b>'+g.hp+'</b>/'+g.max+'</span></div>'+
+      '<div class="hpzeile"><span class="bar"><i style="width:'+p+'%"></i></span><button class="weg" data-weg="'+i+'" title="aus dem Kampf entfernen">×</button></div></div>';
     return '<div class="gegner'+(g.hp<=0?" tot":"")+'">'+
      '<div class="g-kopf"><h4>'+g.name+'</h4><span class="hpwert"><b>'+g.hp+'</b>/'+g.max+'</span></div>'+
      '<div class="hpzeile"><span class="bar"><i style="width:'+p+'%"></i></span><button class="weg" data-weg="'+i+'" title="aus dem Kampf entfernen">×</button></div>'+
@@ -2257,6 +2335,8 @@ function zeichneGegner(){
      '<span class="att">'+v.att.map((a,j)=>'<button data-att="'+i+'" data-j="'+j+'">'+a.n+' '+a.d+'</button>').join("")+'</span></div>'+
      (g.k==="vaskir" && g.hp>0 ? (g.blutruf
         ? '<p class="bonus weg">✦ Blutruf eingesetzt — die Spawn stehen im Kampf.</p>'
+        : g.hp-BLUTRUF_KOSTEN<15
+        ? '<p class="bonus weg">✦ Blutruf geht nicht mehr — dafür ist er zu schwach.</p>'
         : '<div class="bonus"><button data-blutruf="'+i+'">✦ Bonusaktion · Blutruf</button><span>opfert 12 Lebenspunkte, ruft 2 Vampire Spawn</span></div>') : '')+
      '<div id="wurf'+i+'"></div></div>';}).join("");
   const kk=$("kampfknopf"); if(kk){ kk.textContent="⚔ Charaktere / Kampf"+(Z.gegner.length?" · "+Z.gegner.length+" Gegner":""); kk.className="kampfknopf"+(Z.gegner.length?" aktiv":""); }
@@ -2274,11 +2354,26 @@ function gegnerAngriff(i,j){
   notiere("<b>"+g.name+"</b> "+a.n+" trifft für "+sch);
 }
 
+/* ---- Schaden an einem Gegner ----
+   Wer ein „flieht“ im Bestiarium hat (die Wölfe), haut unter dieser Zahl ab — die Karte sagt es.
+   Bei Vaskir merkt sich die Seite den tiefsten Stand: Unter 15 gibt er auf, und erst dann
+   steht „Vaskir ist tot“ unter den möglichen Ausgängen.                                       */
+function gegnerSchaden(i, v){
+  const m=Z.gegner[i]; if(!m || m.hp<=0 || m.geflohen) return;
+  m.hp=Math.max(0,m.hp-v);
+  notiere("<b>"+m.name+"</b> −"+v+" → "+m.hp+"/"+m.max+(m.hp===0?" · <b>fällt</b>":""));
+  const fl=(BESTIARIUM[m.k]||{}).flieht;
+  if(fl && m.hp>0 && m.hp<fl){ m.geflohen=true; notiere("<b>"+m.name+"</b> haut ab"); }
+  if(m.k==="vaskir"){ if(!Z.finale) Z.finale={}; Z.finale.tiefst=Math.min(Z.finale.tiefst===undefined?m.hp:Z.finale.tiefst, m.hp); zeichneSzene(); }   /* Ausgänge unten neu */
+  zeichneGegner(); sichern();
+}
+function kampfbereit(g){ return g.hp>0 && !g.geflohen; }
+
 /* ---- Blutruf: Vaskirs Bonusaktion im Kampf ----
    Er opfert eigenes Blut (6 Lebenspunkte je Spawn) und bekommt zwei Verbündete. Einmal pro Kampf. */
 const BLUTRUF_KOSTEN = 12;
 function blutrufOeffnen(i){
-  const g=Z.gegner[i]; if(!g || g.k!=="vaskir" || g.blutruf) return;
+  const g=Z.gegner[i]; if(!g || g.k!=="vaskir" || g.blutruf || g.hp-BLUTRUF_KOSTEN<15) return;
   const jetzt=gewinnchance(600), vorher=Z.gegner;
   Z.gegner=vorher.map(x=>Object.assign({},x));
   Z.gegner[i].hp=Math.max(1,g.hp-BLUTRUF_KOSTEN);
@@ -2291,7 +2386,7 @@ function blutrufOeffnen(i){
   const d=$("blutruf"); if(d.showModal) d.showModal(); else d.open=true;
 }
 function blutruf(i){
-  const g=Z.gegner[i]; if(!g || g.k!=="vaskir" || g.blutruf) return;
+  const g=Z.gegner[i]; if(!g || g.k!=="vaskir" || g.blutruf || g.hp-BLUTRUF_KOSTEN<15) return;
   g.hp=Math.max(1,g.hp-BLUTRUF_KOSTEN); g.blutruf=true;
   notiere("<b>Blutruf</b> — Vaskir opfert "+BLUTRUF_KOSTEN+" Lebenspunkte → "+g.hp+"/"+g.max);
   ladeGegner("spawn"); ladeGegner("spawn");
@@ -2339,15 +2434,58 @@ function folgenZurueck(flaggen){
     if(b.t==="tun" && Z.getan[b.id] && liste(b.nur).concat(liste(b.alle)).some(f=>flaggen.includes(f))) tunZurueck(b.id);
   }
   WISSEN.forEach(e=>{ if(e.braucht && flaggen.includes(e.braucht) && Z.wissen[e.k]){ delete Z.wissen[e.k]; notiere("Zurückgenommen: "+e.txt); } });
+  for(const k of KAPITEL) for(const b of k.bloecke){
+    if(b.t==="weiche" && Z.weichen && Z.weichen[b.id]!==undefined && liste(b.nur).concat(liste(b.alle)).some(f=>flaggen.includes(f))) delete Z.weichen[b.id];
+  }
 }
 
 /* ---- Entscheidungen ---- */
+/* Eine Entscheidung ganz aufheben (bei Umwahl einer früheren, von der sie abhängt) */
+function entwaehle(entId){
+  const g=Z.gewaehlt[entId], block=optionenBlock(entId); if(!g||!block) return;
+  const o=block.optionen[g.opt];
+  if(g.gefahr) setzeGefahr(-g.gefahr, "Wahl zurückgenommen");
+  delete Z.flaggen[o.flagge]; delete Z.gewaehlt[entId];
+  folgenZurueck([o.flagge]);
+  notiere("Aufgehoben: "+o.name);
+}
+/* Welche Ausgänge des Finales nach dem Verlauf möglich sind:
+   tot      — nur wenn Vaskir im Kampf unter 15 Lebenspunkte gefallen ist (er gibt auf, oder er fällt)
+   Vertrag  — nach einem Gespräch, in dem verhandelt wurde, oder wenn er unter 15 aufgibt
+   bleibt   — nur aus einem Gespräch (oder dem Notstopp „Jemand bleibt“)
+   entkommen — nur, wenn gekämpft wurde                                                       */
+function vaskirBesiegt(){ const f=Z.finale||{}; return f.tiefst!==undefined && f.tiefst<15; }
+function ausgangMoeglich(fl){
+  const g=(Z.weichen||{}).gespraech, ns=(Z.notstopp||{}).fall, f=Z.finale||{};
+  if(fl==="ausgang_tot") return vaskirBesiegt();
+  if(fl==="ausgang_vertrag") return vaskirBesiegt() || ["angebot","zuhoeren","forderung"].includes(g) || ns==="vertrag";
+  if(fl==="ausgang_tausch") return g==="angebot" || g==="zuhoeren" || ns==="tausch";
+  if(fl==="ausgang_flucht") return !!f.geladen;
+  return true;
+}
+function ausgangHinweis(){
+  const g=(Z.weichen||{}).gespraech, f=Z.finale||{}, t=[];
+  if(!["zuhoeren","forderung","drohung","angriff"].includes(g) && !f.geladen) return "";
+  if(!f.geladen) t.push("Wird gekämpft, erscheinen hier weitere Ausgänge.");
+  else if(!vaskirBesiegt()) t.push("„Vaskir ist tot“"+(ausgangMoeglich("ausgang_vertrag")?"":" und „Ein neuer Vertrag“")+" erscheinen, sobald er im Kampf unter 15 Lebenspunkte fällt — dann gibt er auf.");
+  return t.length ? '<p class="ophinweis">'+t.join(" ")+'</p>' : "";
+}
+/* Der Notstopp setzt den Ausgang direkt — auch wenn die Gruppe nie bis zum Finale kam */
+function setzeAusgangDirekt(fl){
+  const b=optionenBlock("e4"), i=b.optionen.findIndex(o=>o.flagge===fl); if(i<0) return;
+  const vorher=Z.gewaehlt.e4;
+  if(vorher){ if(vorher.opt===i) return; delete Z.flaggen[b.optionen[vorher.opt].flagge]; }
+  Z.flaggen[fl]=true; Z.gewaehlt.e4={opt:i, gefahr:0};
+  notiere("Ausgang: <b>"+b.optionen[i].name+"</b>");
+}
 function optionenBlock(entId){ for(const k of KAPITEL) for(const b of k.bloecke) if(b.t==="optionen"&&b.id===entId) return b; return null; }
 function waehle(entId, i){
   const block=optionenBlock(entId); if(!block) return;
   if(voraussetzungFehlt(entId)) return;
+  if(entId==="e4" && !ausgangMoeglich(block.optionen[i].flagge)) return;
   const vorher=Z.gewaehlt[entId];
   if(vorher && vorher.opt===i) return;
+  if(vorher && entId==="e3"){ entwaehle("e5"); entwaehle("e4"); Z.finale={}; }   /* anderes Finale: Gespräch, Kampf und Ausgang von vorn */
   if(vorher){
     const altOpt=block.optionen[vorher.opt];
     notiere("Umgewählt: "+altOpt.name+" zurückgenommen");
@@ -2465,29 +2603,32 @@ function blockHTML(b, idx, h, lauf){
         '<span class="anriss">'+anriss(b.text,190)+'</span><span class="mehr">mehr</span></summary>'+
         '<div class="voll">'+b.text+'</div></details>'+(hilfe?'<div class="hilfe">'+hilfe+'</div>':''); }
     case "personen":
-      return zeile(b.leute.length===1?"Mögliche Antworten":"","personen", b.leute.map(l=>{
+      return zeile("","personen", b.leute.map(l=>{
         const eintraege=l.fragen||l.sagt, keys=eintraege.map((_,j)=>(Z.schritt+":"+l.name+":"+j));
         const offen=keys.filter(k=>!Z.abgehakt[k]).length, stumm=offen===0;
         const pst = ZEIGE_STIMMEN && STIMMEN[l.name] ? '<span class="pstimme">'+STIMMEN[l.name]+'</span>' : "";
+        const titel='<h5 class="boxtitel">Mögliche Antworten von <b>'+l.name+'</b></h5>';
         const kopf='<div class="pk"><h4>'+l.name+'</h4><span class="rolle">'+l.wer+'</span>'+pst+
           '<span class="spielt">'+(stumm?"Ausgeredet. Sagt nichts mehr und beachtet die Gruppe nicht — „"+l.name+" looks away and says nothing more.“":l.spielt)+'</span>'+
           '<span class="zaehler">'+(eintraege.length-offen)+" von "+eintraege.length+' gefragt</span></div>';
-        if(stumm) return '<article class="person stumm">'+kopf+'</article>';
+        if(stumm) return titel+'<article class="person stumm">'+kopf+'</article>';
         const zeilen = l.fragen
           ? l.fragen.map((f,j)=>{const w=!!Z.abgehakt[keys[j]];
               return '<div class="f'+(w?" erledigt":"")+'">'+hakHTML(keys[j],w)+'<span>'+f[0]+'</span></div>'+
                      '<div class="a'+(w?" erledigt":"")+'">'+rede(f[1])+'</div>';}).join("")
           : l.sagt.map((t,j)=>{const w=!!Z.abgehakt[keys[j]];
               return '<div class="a breit'+(w?" erledigt":"")+'">'+hakHTML(keys[j],w)+' '+rede("„"+t+"“")+'</div>';}).join("");
-        return '<article class="person">'+kopf+'<div class="fragen">'+zeilen+'</div>'+
+        return titel+'<article class="person">'+kopf+'<div class="fragen">'+zeilen+'</div>'+
           '<p class="notfalls"><b>Notfalls:</b> '+l.notfalls+'</p></article>';
-      }).join("")+(b.sonst?'<p class="sonst">'+b.sonst+'</p>':''), b.leute.length===1?("Charakter: "+b.leute[0].name):"", hilfe);
+      }).join("")+(b.sonst?'<p class="sonst">'+b.sonst+'</p>':''), "", hilfe);
     case "fa":
-      return zeile("Mögliche Antworten","fa", '<div class="fakarte"><div class="fragen">'+
+      const faTitel = b.wer ? 'Mögliche Antworten von <b>'+b.wer+'</b>'
+        : (b.titel ? b.titel.charAt(0).toUpperCase()+b.titel.slice(1) : "Mögliche Antworten");
+      return zeile("","fa", '<h5 class="boxtitel">'+faTitel+(b.abhaken?' <span>· jede nur einmal</span>':'')+'</h5><div class="fakarte"><div class="fragen">'+
         b.paare.map(p=>{ const k=Z.schritt+":"+p[0], w=b.abhaken&&!!Z.abgehakt[k];
           return '<div class="f'+(w?" erledigt":"")+'">'+(b.abhaken?hakHTML(k,w):'')+'<span>'+p[0]+'</span></div>'+
                  '<div class="a'+(w?" erledigt":"")+'">'+rede(p[1])+'</div>';}).join("")+'</div></div>',
-        [b.wer?("Charakter: "+b.wer):b.titel, b.abhaken?"jede nur einmal":""].filter(Boolean).join(" · "), hilfe);
+        "", hilfe);
     case "tun": {
       const fertig = b.knopf.art==="wissen" ? !!Z.wissen[b.knopf.k] : (b.wiederholbar ? false : !!Z.getan[b.id]);
       return zeile("Knopf","tun",'<div class="tunzeile"><p>'+b.text+'</p><button class="'+(fertig?"getan":"")+
@@ -2495,7 +2636,7 @@ function blockHTML(b, idx, h, lauf){
     case "weiche": {
       const g=(Z.weichen||{})[b.id], fest=b.art==="festhalten";
       return zeile(fest?"Festhalten":"Was ist passiert?","weiche",
-        '<div class="wbox'+(fest?" fest":"")+'"><h4>'+b.titel+'</h4><div class="wzwei">'+
+        '<div class="wbox'+(fest?" fest":"")+'"><h4>'+b.titel+'</h4><div class="wzwei'+(b.optionen.length>=3?" drei":"")+'">'+
         b.optionen.map(o=>'<button class="'+(g===o.k?"gewaehlt":"")+'" data-weiche="'+b.id+'" data-wk="'+o.k+'">'+
           '<b>'+(g===o.k?"✓ ":"")+o.knopf+'</b><span>'+o.sub+'</span></button>').join("")+'</div>'+
         (fest
@@ -2514,7 +2655,9 @@ function blockHTML(b, idx, h, lauf){
     case "optionen": {
       const fehlt=voraussetzungFehlt(b.id);
       if(fehlt) return '<div class="hinweisfehlt">Erst muss <b>'+ENTSCHEIDUNGEN[fehlt].name+'</b> gewählt sein — die Karten hier hängen daran.</div>';
+      const zeigen=(o,i)=>b.id!=="e4" || ausgangMoeglich(o.flagge) || (Z.gewaehlt.e4 && Z.gewaehlt.e4.opt===i);
       return zeile(b.titel||"Entscheidung","optionen", '<div class="entblock" id="ent-'+b.id+'"><div class="optionen">'+b.optionen.map((o,i)=>{
+        if(!zeigen(o,i)) return "";
         const g=Z.gewaehlt[b.id], gew=g&&g.opt===i, wk=o.wirkung, chips=[];
         if(b.id!=="e4" && b.id!=="e5") chips.push('<span class="chip '+(wk.gefahr>0?"gefahr":"ruhe")+'">Gefahr '+(wk.gefahr>0?"+"+wk.gefahr:"±0")+
           (wk.gefahrWenn?' · +'+wk.gefahrWenn.gefahr+' mit '+WISSEN.find(x=>x.k===wk.gefahrWenn.wissen).txt:'')+'</span>');
@@ -2523,7 +2666,8 @@ function blockHTML(b, idx, h, lauf){
           '<h4>'+o.name+'</h4><p class="was">'+o.was+'</p><ul class="bil">'+
           liste(o.pro).map(p=>'<li class="pro">'+p+'</li>').join("")+liste(o.con).map(p=>'<li class="con">'+p+'</li>').join("")+
           '</ul>'+(chips.length?'<div class="chips">'+chips.join("")+'</div>':'')+
-          '<button class="waehlen" data-ent="'+b.id+'" data-opt="'+i+'">'+(gew?"✓ gewählt":"Diese Karte wählen")+'</button></div></article>';}).join("")+'</div></div>'); }
+          '<button class="waehlen" data-ent="'+b.id+'" data-opt="'+i+'">'+(gew?"✓ gewählt":"Diese Karte wählen")+'</button></div></article>';}).join("")+'</div>'+
+          (b.id==="e4"?ausgangHinweis():"")+'</div>'); }
   }
   return "";
 }
@@ -2537,12 +2681,7 @@ function aktionenHTML(k, fehlt){
     }
     if(b.t==="kampf" && !b.ohneKnopf)
       knoepfe.push('<button class="rot" data-laden="'+b.gegner.join(",")+'" data-extra="'+(b.extra||"")+'" data-oeffnen="1">⚔ '+b.titel+' laden</button>');
-    if(b.t==="optionen" && !voraussetzungFehlt(b.id))
-      knoepfe.push('<button class="sprung" data-sprung="ent-'+b.id+'">'+(b.titel||"Zur Entscheidung")+'</button>');
   });
-  const l=uhrLage();
-  if(l.knapp && !fehlt) knoepfe.push('<button class="knapp" data-uebergang="1">⏱ Zeit knapp — kurzer Übergang</button>');
-  if((l.spaet || Z.notstopp.gesehen) && Z.schritt<KAPITEL.findIndex(x=>x.art==="kampf")) knoepfe.push('<button class="notstopp" data-notstopp-auf="1">☾ Der Graf kommt — Schluss auf einer Seite</button>');
   const w=k.bloecke.find(b=>b.t==="weiter");
   return (knoepfe.length?'<span class="lab">Knöpfe</span>'+knoepfe.join(""):'')+
          (w?'<span class="weiterwenn"><b>Weiter</b>'+w.text+'</span>':'');
@@ -2563,7 +2702,7 @@ function karten(bloecke){
 }
 function sichtbareBloecke(k){
   if(k.braucht && entscheidungOffen(k.braucht)) return [];
-  return k.bloecke.filter(b=>b.t!=="ziel"&&b.t!=="weiter"&&gilt(b));
+  return k.bloecke.filter(b=>b.t!=="ziel"&&b.t!=="weiter"&&!b.versteckt&&gilt(b));
 }
 /* Zweite Ebene: Gelegenheiten für einzelne Figuren — leise, unter der Szene, nie Pflicht */
 function sichtbareChancen(k){
@@ -2719,8 +2858,8 @@ const NOTSTOPP = {
   sag: "You have five minutes before sunrise. Each of you: say one thing to him — what you want, and what you will give for it. Then decide together.",
   dm:  "Dreht sich nicht mehr um Würfel. Was die drei sagen, zählt. Lass jede Figur einen Satz sagen, dann klick den Weg an, den die Gruppe nimmt.",
   faelle: {
-    tausch:  {name:"Jemand bleibt", was:"Eine Figur nimmt Mirelas Platz — ganz, oder geteilt: ein Jahr, ein Besuch, ein Name im Buch.",
-              lies:`He nods, slowly. “That is the first honest offer I have heard in four hundred years.” He holds out the book. Mirela stands up. She does not say thank you. She says your name.`,
+    tausch:  {name:"Jemand bleibt", was:"Eine Figur nimmt Mirelas Platz — ganz, oder geteilt: ein Jahr, eine Nacht wie diese jedes Jahr.",
+              lies:`He nods, slowly. “That is the first honest offer I have heard in four hundred years.” He holds out his hand, and whoever stays takes it. Mirela stands up. She does not say thank you. She says your name.`,
               sag:"Who stays? Say it — and say what you ask for in return."},
     kampf:   {name:"Kämpfen", was:"Kein Angebot, kein Wort — die Klingen. Der Kampf wird geladen; bei Gefahr unter 4 hat er 40 Lebenspunkte.",
               lies:`“Then it is this,” he says, almost kindly, and the last lamp goes out.`,
@@ -2730,14 +2869,24 @@ const NOTSTOPP = {
               sag:"Say the deal out loud. What does the village get? What does he get? What do you give?"}
   }
 };
+/* Der Notstopp hängt an der Zeit, nicht an einem Knopf: Die Uhr ruft ihn bei zehn Minuten Rest.
+   „später“ schiebt ihn auf — er kommt beim nächsten Umblättern wieder, spätestens nach zwei Minuten. */
+function notstoppFaellig(){
+  const n=Z.notstopp, d=$("notstopp");
+  if(n.erledigt || (d && d.open)) return false;
+  if(!n.gesehen) return true;
+  return n.spaeter!=null && uhrRest() <= n.spaeter - 2*60000;
+}
 function notstoppOeffnen(vonSelbst){
   const d=$("notstopp"); if(!d) return;
-  if(vonSelbst){ Z.notstopp.gesehen=true; sichern(); notiere("<b>Notstopp</b> — zehn Minuten: der Graf kommt"); }
+  if(vonSelbst && !Z.notstopp.gesehen) notiere("<b>Notstopp</b> — zehn Minuten: der Graf kommt");
+  Z.notstopp.gesehen=true; Z.notstopp.spaeter=null; sichern();
   zeichneNotstopp();
   if(d.open) return;
   if(typeof d.showModal==="function") d.showModal(); else d.open=true;
 }
-function notstoppSchliessen(){ const d=$("notstopp"); if(d){ if(d.close) d.close(); else d.open=false; } zeichneSzene(); }
+function notstoppAufschieben(){ if(!Z.notstopp.erledigt && Z.notstopp.spaeter==null){ Z.notstopp.spaeter=uhrRest(); sichern(); } }
+function notstoppSchliessen(){ notstoppAufschieben(); const d=$("notstopp"); if(d){ if(d.close) d.close(); else d.open=false; } zeichneSzene(); }
 function zeichneNotstopp(){
   const el=$("notstopp-text"); if(!el) return;
   const f=Z.notstopp.fall, F=f?NOTSTOPP.faelle[f]:null;
@@ -2750,7 +2899,9 @@ function zeichneNotstopp(){
     if(f==="kampf"){
       const geladen=Z.gegner.some(g=>g.k==="vaskir");
       html+='<div class="ns-reihe"><button class="rot" data-ns-kampf="1">'+(geladen?"⚔ Zum Kampf":"⚔ Vaskir laden und kämpfen")+'</button><span class="ns-dm">Danach hier: wie ging es aus?</span></div>'+
-        '<div class="ns-reihe">'+optionenBlock("e4").optionen.map((o,i)=>'<button class="'+((Z.gewaehlt.e4||{}).opt===i?"gewaehlt":"")+'" data-ns-ausgang="'+i+'">'+o.name+'</button>').join("")+'</div>';
+        '<div class="ns-reihe">'+optionenBlock("e4").optionen.map((o,i)=>ausgangMoeglich(o.flagge)
+          ? '<button class="'+((Z.gewaehlt.e4||{}).opt===i?"gewaehlt":"")+'" data-ns-ausgang="'+i+'">'+o.name+'</button>' : "").join("")+
+        (vaskirBesiegt()?'':'<span class="ns-dm">„Vaskir ist tot“ und „Ein neuer Vertrag“ erst, wenn er unter 15 Lebenspunkte fällt.</span>')+'</div>';
     }
     const bereit = f!=="kampf" || (Z.gewaehlt.e4!==undefined);
     html+='<div class="ns-reihe"><button class="gold" data-ns-morgen="1" '+(bereit?"":"disabled")+'>→ Zum Morgen</button>'+(bereit?"":'<span class="ns-dm">erst den Ausgang wählen</span>')+'</div>';
@@ -2762,34 +2913,15 @@ function notstoppZumMorgen(){
   const f=Z.notstopp.fall; if(!f) return;
   /* Was der Epilog braucht: e1/e2 sind gesetzt, sobald die Gruppe unterwegs war; e3 und e4 setzt der Notstopp, falls offen */
   if(entscheidungOffen("e3") && !voraussetzungFehlt("e3")) waehle("e3", optionenBlock("e3").optionen.findIndex(o=>o.flagge==="e3_pakt"));
-  if(f!=="kampf" && entscheidungOffen("e4") && !voraussetzungFehlt("e4")) waehle("e4", optionenBlock("e4").optionen.findIndex(o=>o.flagge==="ausgang_vertrag"));
+  if(f==="tausch") setzeAusgangDirekt("ausgang_tausch");
+  if(f==="vertrag") setzeAusgangDirekt("ausgang_vertrag");
+  if(f==="kampf" && entscheidungOffen("e4")) return;   /* erst den Ausgang des Kampfs wählen */
   notiere("<b>Notstopp</b>: "+NOTSTOPP.faelle[f].name);
+  Z.notstopp.erledigt=true;
   const d=$("notstopp"); if(d){ if(d.close) d.close(); else d.open=false; }
   const ende=KAPITEL.findIndex(k=>k.titel==="Six O’Clock");
   if(Z.kampfOffen) schliesseKampf();
   geheZu(ende);
-}
-
-/* ---- Zeit knapp: der kurze Übergang je Seite ---- */
-const UEBERGANG = {
-  "The Carriage":   ["Die Vorstellung kürzen: ein Satz je Figur, dann direkt die Ankunft.", "Marek does not wait for more. The carriage stops. You are here."],
-  "The Inn":        ["Je Figur eine Frage, dann gibt Greta die Karte — und Pieter ruft den Namen selbst.", "Greta puts a map on the bar. Pieter shouts: “Ask her about Anneke!” The candles are burning down."],
-  "The Way Up":     ["Keine Diskussion mehr: jede Figur ein Wort, dann Mehrheit.", "One word each: road, mine, or coach. Then you go."],
-  "Up the Mountain":["Die Stationen nur ansagen, den Kampf laden, wenn er fällig ist — den Rest erzählst du in zwei Sätzen.", "The way up is long and cold. You arrive at the castle before you are ready."],
-  "The Courtyard":  ["Keine Inspektion mehr: Türen zeigen, wählen.", "Three doors. No time to look closer. Choose."],
-  "What You Find":  ["Die Person sagt ihren einen Satz und führt euch — Festhalten nicht vergessen.", "There is no time to talk. The mirror at the end of the west corridor is waiting. Walk backwards."],
-  "The Tower Room": ["Mirela erzählt den Vertrag in drei Sätzen selbst (Notfallzeile). Dann sofort die Wahl.", "Mirela says: “One guest every twenty years. Vaskir protects the village. They chose Lene. I came instead. Now — what will you do?”"],
-  "The Blood Ledger":["Ein Satz je Figur, dann Karte klicken.", "One sentence each. Then you decide."],
-  "Count Vaskir":   ["Verhandlung statt Kampf, oder Kampf mit halben Lebenspunkten — trag 28 statt 55 ein.", "The sun is close. He knows it. So do you."],
-  "Six O’Clock":    ["Nur die eine Folge lesen, die gilt, und die letzte Wahl mit einem Satz je Figur.", "Morning. One sentence each: where do you go, and why?"]
-};
-function uebergangOeffnen(){
-  const k=aktuelleSzene(), u=UEBERGANG[k.titel]; const d=$("uebergang"), el=$("uebergang-text"); if(!d||!el) return;
-  const l=uhrLage();
-  el.innerHTML = '<p class="ns-dm">Ihr liegt '+Math.max(0,Math.round(l.hinten/60000))+' Minuten hinter dem Plan, '+Math.floor(Math.max(0,l.rest)/60000)+' Minuten bleiben. Kämpfe bleiben, wie sie sind; offene Entscheidungen bleiben bei der Gruppe.</p>'+
-    (u ? '<p class="ns-dm"><b>So kürzt du diese Seite:</b> '+u[0]+'</p><div class="ns-lies" style="margin-top:12px"><p>'+rede(u[1])+'</p></div>' : '<p class="ns-dm">Für diese Seite gibt es keinen Übergang — sie ist schon kurz.</p>')+
-    '<div class="ns-reihe"><button class="gold" data-uebergang-weiter="1">→ Weiter zur nächsten Seite</button></div>';
-  if(typeof d.showModal==="function") d.showModal(); else d.open=true;
 }
 
 /* ---- Gewinnchance: dieselbe Rechnung wie quelle/kampf_sim.py, im Browser ----
@@ -2800,7 +2932,7 @@ const ANGRIFF = {Arcanist:{ab:7,d:"2d8+2"}, Blade:{ab:6,d:"1d10+4"}, Lightbearer
 function wuerfleText(f, krit){ const m=/^(\d+)d(\d+)(?:\+(\d+))?$/.exec(f); if(!m) return 0; let n=+m[1]*(krit?2:1), s=+m[3]||0; for(let i=0;i<n;i++) s+=w(+m[2]); return s; }
 function gewinnchance(laeufe){
   const helden=Z.gruppe.filter(g=>g.hp>0).map(g=>({hp:g.hp, a:ANGRIFF[g.rolle]||ANGRIFF.Blade}));
-  const feinde=Z.gegner.filter(g=>g.hp>0).map(g=>({hp:g.hp, d:BESTIARIUM[g.k].att[0].d}));
+  const feinde=Z.gegner.filter(kampfbereit).map(g=>({hp:g.hp-((BESTIARIUM[g.k].flieht||1)-1), d:BESTIARIUM[g.k].att[0].d}));
   if(!helden.length || !feinde.length) return null;
   let siege=0, runden=0;
   for(let n=0;n<laeufe;n++){
@@ -2831,7 +2963,7 @@ function zeichneChance(){
                   offen:"Offen — ein echter Kampf. Tränke werden gebraucht.",
                   gefaehrlich:"Gefährlich: Ohne Tränke verliert die Gruppe öfter, als sie gewinnt. Einen Gegner weniger?"}[stufe];
   el.innerHTML='<div class="chance '+stufe+'"><div class="cz"><small>Gewinnchance der Gruppe</small>'+p+' %</div>'+
-    '<div class="cu">'+urteil+'<br>Ø '+c.runden.toFixed(1)+' Runden · '+Z.gegner.filter(g=>g.hp>0).length+' Gegner gegen '+Z.gruppe.filter(g=>g.hp>0).length+' Figuren, mit den Lebenspunkten von jetzt · ohne Tränke und Talente, achthundertmal gerechnet</div></div>';
+    '<div class="cu">'+urteil+'<br>Ø '+c.runden.toFixed(1)+' Runden · '+Z.gegner.filter(kampfbereit).length+' Gegner gegen '+Z.gruppe.filter(g=>g.hp>0).length+' Figuren, mit den Lebenspunkten von jetzt · ohne Tränke und Talente, achthundertmal gerechnet</div></div>';
 }
 
 /* ---- Kampfbildschirm: eigener Vollbild-Modus über der Szene ---- */
@@ -2860,12 +2992,12 @@ function zeichneKampf(){
   Blut.pause(Z.kampfOffen); GefahrFX.pause(Z.kampfOffen);
 }
 function oeffneKampf(){ Z.kampfOffen=true; zeichneKampf(); sichern(); }
-function schliesseKampf(){ Z.kampfOffen=false; zeichneKampf(); sichern(); if(Z.notstopp.fall==="kampf" && Z.schritt<KAPITEL.findIndex(k=>k.art==="kampf")) notstoppOeffnen(false); }
+function schliesseKampf(){ Z.kampfOffen=false; zeichneKampf(); zeichneSzene(); sichern(); if(Z.notstopp.fall==="kampf" && Z.schritt<KAPITEL.findIndex(k=>k.art==="kampf")) notstoppOeffnen(false); }
 function kampfVorbei(){
   Z.gruppe.forEach(h=>h.hp=h.max);
   const n=Z.gegner.length; Z.gegner=[];
   notiere("<b>Kampf vorbei</b> — alle auf volle Lebenspunkte"+(n?", "+n+" Gegner entfernt":""));
-  Z.kampfOffen=false; zeichneGruppe(); zeichneGegner(); zeichneKampf(); sichern();
+  Z.kampfOffen=false; zeichneGruppe(); zeichneGegner(); zeichneKampf(); zeichneSzene(); sichern();
 }
 function zeichnePfad(){
   const chip=(i)=> (Z.patrouille.status==="steht_bevor" && Z.patrouille.vor===i)
@@ -2882,7 +3014,10 @@ function geheZu(i){
   }
   Z.imZwischenakt=false; Z.zwischenaktZiel=null;
   Z.schritt=i; Z.besucht[Z.schritt]=true;
+  if(!Z.besuchtMit) Z.besuchtMit={};
+  Object.keys(Z.flaggen).forEach(f=>{ if(Z.flaggen[f]) Z.besuchtMit[i+":"+f]=true; });
   zeichneSzene(); sichern(); if(window.scrollTo) window.scrollTo({top:0,behavior:"smooth"});
+  if(Z.notstopp.gesehen && !Z.notstopp.erledigt && Z.uhr.laeuft && !Z.kampfOffen && uhrLage().spaet) notstoppOeffnen(false);
 }
 
 /* ====================== SELBSTPRÜFUNG ====================== */
@@ -2933,7 +3068,7 @@ function pruefeStory(){
       if(b.t==="aufgabe" && !b.sag) p.push(`Schritt ${i} Block ${j}: Aufgabe ohne wörtliche Rede (sag)`);
       if(b.t==="weiche"){
         if(!b.id || !b.titel) p.push(`Schritt ${i} Block ${j}: Weiche ohne Kennung oder Frage`);
-        if(!b.optionen || b.optionen.length!==2) p.push(`Schritt ${i} Block ${j}: Weiche braucht genau zwei Knöpfe`);
+        if(!b.optionen || b.optionen.length<2) p.push(`Schritt ${i} Block ${j}: Weiche braucht mindestens zwei Knöpfe`);
         else b.optionen.forEach(o=>{ if(!o.k||!o.knopf||!o.sub) p.push(`Schritt ${i} Block ${j}: Weichenknopf unvollständig`); });
       }
       liste(b.weiche).forEach(spec=>{
@@ -3000,20 +3135,16 @@ function pruefeStory(){
 document.addEventListener("click", e=>{
   const t=e.target;
   const s=t.closest("[data-schritt]"); if(s){ const f=$("szenenfach"); if(f) f.open=false; return geheZu(+s.dataset.schritt); }
-  const sp=t.closest("[data-sprung]"); if(sp){ const z=$(sp.dataset.sprung); if(z&&z.scrollIntoView) z.scrollIntoView({behavior:"smooth",block:"start"}); return; }
   const g=t.closest("[data-gefahr]"); if(g) return setzeGefahr(+g.dataset.gefahr,"von Hand");
   const ent=t.closest("[data-ent]"); if(ent) return waehle(ent.dataset.ent,+ent.dataset.opt);
   const tu=t.closest("[data-tun]"); if(tu) return tunAusfuehren(tu.dataset.tun);
   const we=t.closest("[data-weiche]"); if(we) return stelleWeiche(we.dataset.weiche, we.dataset.wk);
-  if(t.closest("[data-uebergang]")) return uebergangOeffnen();
-  if(t.closest("[data-uebergang-weiter]")){ const d=$("uebergang"); if(d&&d.close) d.close(); return geheZu(Z.schritt+1); }
-  if(t.closest("[data-notstopp-auf]")) return notstoppOeffnen(false);
   const ns=t.closest("[data-notstopp]"); if(ns) return notstoppWaehle(ns.dataset.notstopp);
   const nw=t.closest("[data-ns-wer]"); if(nw){ aktion(()=>{ Z.notstopp.wer=+nw.dataset.nsWer; }); sichern(); return zeichneNotstopp(); }
   if(t.closest("[data-ns-kampf]")){ if(!Z.gegner.some(g=>g.k==="vaskir")){ Z.gegner=[]; ladeGegner("vaskir", Z.gefahr<=3?40:55); notiere("<b>Notstopp</b>: Vaskir geladen"); }
     if(entscheidungOffen("e3") && !voraussetzungFehlt("e3")) waehle("e3", optionenBlock("e3").optionen.findIndex(o=>o.flagge==="e3_pakt"));
     const d=$("notstopp"); if(d&&d.close) d.close(); return oeffneKampf(); }
-  const na=t.closest("[data-ns-ausgang]"); if(na){ if(!voraussetzungFehlt("e4")) waehle("e4",+na.dataset.nsAusgang); return zeichneNotstopp(); }
+  const na=t.closest("[data-ns-ausgang]"); if(na){ const o=optionenBlock("e4").optionen[+na.dataset.nsAusgang]; if(o && ausgangMoeglich(o.flagge)) aktion(()=>setzeAusgangDirekt(o.flagge)); sichern(); return zeichneNotstopp(); }
   if(t.closest("[data-ns-morgen]")) return notstoppZumMorgen();
   const hk=t.closest("[data-hak]"); if(hk){ const k=hk.dataset.hak; aktion(()=>{ if(Z.abgehakt[k]) delete Z.abgehakt[k]; else Z.abgehakt[k]=true; }); zeichneSzene(); sichern(); return; }
   const l=t.closest("[data-laden]"); if(l){ ladeKampf(l.dataset.laden.split(","), l.dataset.extra||null); if(l.dataset.oeffnen) oeffneKampf(); return; }
@@ -3024,7 +3155,7 @@ document.addEventListener("click", e=>{
   if(t.closest("#kampf-vorbei")) return kampfVorbei();
   const weg=t.closest("[data-weg]"); if(weg){ aktion(()=>{ const g2=Z.gegner.splice(+weg.dataset.weg,1)[0]; notiere("<b>"+g2.name+"</b> verlässt den Kampf"); }); zeichneGegner(); sichern(); return; }
   const gd=t.closest("[data-gdmg]"); if(gd){ const i=+gd.dataset.gdmg, v=Math.max(0,parseInt($("gin"+i).value,10)||0);
-    aktion(()=>{ const m=Z.gegner[i]; m.hp=Math.max(0,m.hp-v); notiere("<b>"+m.name+"</b> −"+v+" → "+m.hp+"/"+m.max+(m.hp===0?" · <b>fällt</b>":"")); }); zeichneGegner(); sichern(); return; }
+    aktion(()=>gegnerSchaden(i,v)); zeichneGegner(); sichern(); return; }
   const at=t.closest("[data-att]"); if(at) return gegnerAngriff(+at.dataset.att,+at.dataset.j);
   const br=t.closest("[data-blutruf]"); if(br) return blutrufOeffnen(+br.dataset.blutruf);
   if(t.closest("#blutruf-ja")){ const d=$("blutruf"); if(d.close) d.close(); else d.open=false; return blutruf(+$("blutruf-ja").dataset.i); }
@@ -3036,7 +3167,7 @@ document.addEventListener("keydown", e=>{
   const tag=(e.target&&e.target.tagName)||"";
   if((e.ctrlKey||e.metaKey) && !e.altKey && (e.key==="z"||e.key==="Z") && tag!=="INPUT" && tag!=="TEXTAREA"){ e.preventDefault(); rueckgaengig(); return; }
   if(tag==="INPUT"||tag==="TEXTAREA"||e.altKey||e.ctrlKey||e.metaKey) return;
-  if(["bildschau","kampfhilfe","notstopp","uebergang","blutruf"].some(id=>{ const d=$(id); return d && d.open; })) return;   /* Esc schliesst <dialog> selbst */
+  if(["bildschau","kampfhilfe","notstopp","blutruf"].some(id=>{ const d=$(id); return d && d.open; })) return;   /* Esc schliesst <dialog> selbst */
   if(e.key==="Escape" && $("gefahrlade").open){ $("gefahrlade").open=false; $("gefahrlade").querySelector("summary").focus(); e.preventDefault(); return; }
   if(e.key==="Escape"){ ["szenenfach","einstellungen"].forEach(id=>{const f=$(id); if(f) f.open=false;}); }
   if(e.key==="Escape" && Z.kampfOffen){ schliesseKampf(); e.preventDefault(); return; }
@@ -3048,7 +3179,7 @@ $("kampfhilfe-text").innerHTML = KAMPF_ANLEITUNG;
 $("kampfhilfe-auf").onclick=()=>{ const d=$("kampfhilfe"); if(d.showModal) d.showModal(); else d.open=true; };
 $("kampfhilfe-zu").onclick=()=>{ const d=$("kampfhilfe"); if(d.close) d.close(); else d.open=false; };
 $("notstopp-zu").onclick=notstoppSchliessen;
-$("uebergang-zu").onclick=()=>{ const d=$("uebergang"); if(d.close) d.close(); else d.open=false; };
+if($("notstopp").addEventListener) $("notstopp").addEventListener("close", notstoppAufschieben);
 $("bildzeigen").onclick=zeigeBild;
 $("rueckgaengig").onclick=rueckgaengig;
 $("uhr-schalter").onclick=uhrSchalte;
