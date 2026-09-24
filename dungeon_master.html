@@ -914,6 +914,28 @@ details.fach[open] summary::after{content:"zuklappen"}
   <img id="bs-bild" alt="">
   <button class="bs-zu" id="bs-zu" title="schliessen (Esc)">✕</button>
 </dialog>
+<!-- Alle Fenster stehen auf oberster Ebene: ein <dialog> in einem ausgeblendeten Bereich (etwa dem geschlossenen Kampfbildschirm) sperrt die Seite, bleibt aber unsichtbar. -->
+<dialog class="hilfeschau notstopp" id="notstopp" aria-label="Der Graf kommt — Schluss auf einer Seite">
+  <div class="hs-kopf"><h3>Der Graf kommt zu euch</h3><button class="hs-zu" id="notstopp-zu">später</button></div>
+  <div class="hs-text" id="notstopp-text"></div>
+</dialog>
+<dialog class="hilfeschau" id="uebergang" aria-label="Zeit knapp — kurzer Übergang">
+  <div class="hs-kopf"><h3>Zeit knapp — der kurze Übergang</h3><button class="hs-zu" id="uebergang-zu">schliessen</button></div>
+  <div class="hs-text" id="uebergang-text"></div>
+</dialog>
+<dialog class="hilfeschau" id="blutruf" aria-label="Bonusaktion Blutruf">
+  <div class="hs-kopf"><h3>Bonusaktion · Blutruf</h3><button class="hs-zu" id="blutruf-nein">abbrechen</button></div>
+  <div class="hs-text">
+    <p class="br-vorlesen">Vaskir bites into his own hand. Two drops fall on the floorboards — then two more. Where they land, something stands up that was a person tonight.</p>
+    <p><b>Was es kostet:</b> 12 Lebenspunkte von Vaskir (6 je Spawn) — sag den Schülern, dass sie es sehen. <b>Was er bekommt:</b> zwei Vampire Spawn, je 30 Lebenspunkte, <em>Claws 2d6+5</em>. Einmal pro Kampf. Fällt Vaskir, fallen sie mit ihm; unter 15 Lebenspunkten redet er.</p>
+    <p class="br-chance" id="blutruf-chance"></p>
+    <div class="br-knoepfe"><button id="blutruf-ja">Blutruf ausführen</button></div>
+  </div>
+</dialog>
+<dialog class="hilfeschau" id="kampfhilfe" aria-label="Wie ein Kampf funktioniert">
+  <div class="hs-kopf"><h3>Wie es funktioniert</h3><button class="hs-zu" id="kampfhilfe-zu">schliessen</button></div>
+  <div class="hs-text" id="kampfhilfe-text"></div>
+</dialog>
 
 <div class="raum">
   <main class="szene">
@@ -952,27 +974,6 @@ details.fach[open] summary::after{content:"zuklappen"}
       <div id="k-regeln"></div>
     </div>
   </div>
-  <dialog class="hilfeschau notstopp" id="notstopp" aria-label="Der Graf kommt — Schluss auf einer Seite">
-    <div class="hs-kopf"><h3>Der Graf kommt zu euch</h3><button class="hs-zu" id="notstopp-zu">später</button></div>
-    <div class="hs-text" id="notstopp-text"></div>
-  </dialog>
-  <dialog class="hilfeschau" id="uebergang" aria-label="Zeit knapp — kurzer Übergang">
-    <div class="hs-kopf"><h3>Zeit knapp — der kurze Übergang</h3><button class="hs-zu" id="uebergang-zu">schliessen</button></div>
-    <div class="hs-text" id="uebergang-text"></div>
-  </dialog>
-  <dialog class="hilfeschau" id="blutruf" aria-label="Bonusaktion Blutruf">
-    <div class="hs-kopf"><h3>Bonusaktion · Blutruf</h3><button class="hs-zu" id="blutruf-nein">abbrechen</button></div>
-    <div class="hs-text">
-      <p class="br-vorlesen">Vaskir bites into his own hand. Two drops fall on the floorboards — then two more. Where they land, something stands up that was a person tonight.</p>
-      <p><b>Was es kostet:</b> 12 Lebenspunkte von Vaskir (6 je Spawn) — sag den Schülern, dass sie es sehen. <b>Was er bekommt:</b> zwei Vampire Spawn, je 30 Lebenspunkte, <em>Claws 2d6+5</em>. Einmal pro Kampf. Fällt Vaskir, fallen sie mit ihm; unter 15 Lebenspunkten redet er.</p>
-      <p class="br-chance" id="blutruf-chance"></p>
-      <div class="br-knoepfe"><button id="blutruf-ja">Blutruf ausführen</button></div>
-    </div>
-  </dialog>
-  <dialog class="hilfeschau" id="kampfhilfe" aria-label="Wie ein Kampf funktioniert">
-    <div class="hs-kopf"><h3>Wie es funktioniert</h3><button class="hs-zu" id="kampfhilfe-zu">schliessen</button></div>
-    <div class="hs-text" id="kampfhilfe-text"></div>
-  </dialog>
   <footer class="k-fuss">
     <ul class="k-log" id="chronik-kampf"></ul>
     <button class="gruenknopf" id="kampf-vorbei">Kampf vorbei — alle heilen, zurück zur Szene</button>
