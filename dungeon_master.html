@@ -52,7 +52,6 @@
 .uhr.spaet{border-color:rgba(190,52,42,.7)}
 .uhr.spaet b,.uhr.spaet small{color:var(--red)}
 .uhr.steht b{color:var(--dim)}
-#rueckgaengig:disabled{opacity:.3}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html{height:100%}
@@ -800,7 +799,6 @@ details.fach[open] summary::after{content:"zuklappen"}
   <span class="warnbox" id="warnbox"></span>
   <span class="barrechts">
     <span class="uhr" id="uhr" title="Unterrichtsuhr — 90 Minuten, pausierbar"><b id="uhr-zeit">90:00</b><small id="uhr-soll"></small><button id="uhr-schalter">▶</button><button id="uhr-plus" title="fünf Minuten dazu">+5</button></span>
-    <button id="rueckgaengig" class="knopf" title="Rückgängig — den letzten Spielschritt zurücknehmen (Strg+Z)" disabled>↶</button>
     <button id="kampfknopf" class="knopf kampfknopf" title="Charakter-Übersicht und Kampf öffnen">⚔ Charaktere / Kampf</button>
     <button class="knopf pfeil" id="zurueck" title="zurück"><span>←</span><em id="zurueck-t"></em></button>
     <button class="knopf pfeil" id="vor" title="weiter"><span>→</span><em id="vor-t"></em></button>
@@ -825,7 +823,7 @@ details.fach[open] summary::after{content:"zuklappen"}
         <li data-st="1"><em>4–7</em> du darfst einem Kampf einen Gegner dazugeben</li>
         <li data-st="2"><em>8–10</em> jeder Kampf ein Gegner mehr; Patrouille vor dem nächsten Akt</li>
       </ol>
-      <small>Änderungen gelten sofort. ↶ nimmt sie zurück.</small></div>
+      <small>Änderungen gelten sofort.</small></div>
   </details>
   <span class="gs-blitz" id="gs-blitz" aria-hidden="true"></span>
   <svg class="gs-zaehne" id="gs-zaehne" viewBox="0 0 124 78" aria-hidden="true">
@@ -1127,7 +1125,7 @@ const KAPITEL = [
  {t:"regie", titel:"Wer die Gruppe ist", text:`Das ist vorgegeben, das müssen die Schüler nicht erfinden: <b>Sie sind Vampirjäger.</b> Nicht berühmt, noch nicht. Ein Gerücht hat sie hergeführt — in diesen Bergen liege ein Tal, in dem Menschen nach Plan verschwinden. Sie wollen wissen, ob es stimmt.
  <p>Erfinden dürfen sie: Namen, Herkunft, wie sie sich kennen, was sie können. Der Auftrag steht fest.</p>`},
  {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`<b>1 · Gold lesen.</b> Englische Erzählung und Figurenrede — wörtlich. <b>2 · Grün fragen.</b> Jede Figur äussert eine eigene Absicht oder Frage und danach einen Grund oder eine Reaktion. <b>3 · Ergebnis klicken.</b> Nur markieren, was am Tisch passiert ist — Antworten abhaken, Entscheidungen anklicken.
- <p>Rechts neben dem Text stehen die Hilfen auf der Höhe der Stelle, zu der sie gehören. Unten steht immer, wann es weitergeht. Die <b>Gefahr</b> stellst du an der Säule rechts ein — die Lasche <b>‹ GEFAHR</b> klappt die Knöpfe heraus: 0–3 ruhig, 4–7 du darfst in einem Kampf einen Gegner dazunehmen, 8–10 eine Patrouille vor dem nächsten Akt. <b>Rückgängig</b> oben nimmt den letzten Spielschritt zurück.</p>`},
+ <p>Rechts neben dem Text stehen die Hilfen auf der Höhe der Stelle, zu der sie gehören. Unten steht immer, wann es weitergeht. Die <b>Gefahr</b> stellst du an der Säule rechts ein — die Lasche <b>‹ GEFAHR</b> klappt die Knöpfe heraus: 0–3 ruhig, 4–7 du darfst in einem Kampf einen Gegner dazunehmen, 8–10 eine Patrouille vor dem nächsten Akt.</p>`},
  {t:"sagen", text:["Speak English. Mistakes are fine. If you need a word, ask for help. Just don’t speak in full German sentences — who knows what consequences it might have… (evil laugh). Take a moment, then try.","Everyone gets a turn. Listen, and add your own idea. You do not need a special voice."]},
  {t:"fa", titel:"wenn etwas klemmt", paare:[
    ["Niemand sagt etwas","20 Sekunden Denkzeit. Dann: „What do you notice? What could you do?“ Nur Wörter oder offene Anfänge anbieten, keine ganzen Sätze."],
@@ -1140,7 +1138,6 @@ const KAPITEL = [
    ["Unvorbereitete Idee","Harmlos und passend: zulassen. Unmöglich: „That will not work here. What else could you try?“"],
    ["0 Lebenspunkte","Eigener Trank laut Spielerblatt, oder bewusstlos bis nach dem Kampf. Die Person beschreibt eine Erinnerung oder Wahrnehmung — keine zusätzliche Aktion, kein neuer Hinweis. Danach volle Heilung."],
    ["Probe","Zwei Sechser, Summe mindestens 7. Handlung zuerst beschreiben, dann würfeln. Kein Würfeln für Aussprache oder Grammatik. Talentwürfe richten sich nach dem Spielerblatt."],
-   ["Ein Fehlklick","<b>Rückgängig</b> oben in der Leiste nimmt den letzten vollständigen Spielschritt zurück. Bei Umwahl werden davon abhängige Entscheidungen und Zusagen verworfen."],
    ["Zeit knapp","Kürzer vorlesen, eine Antwortrunde statt zwei. Zehn Minuten vor Schluss kommt der Graf von selbst, solange die Uhr läuft. Bei Unterbrechungen die Uhr anhalten."]]},
  {t:"weiter", text:"Wenn du das gelesen hast, die Namen eingetragen sind und die Uhr läuft."}]},
 
@@ -3165,7 +3162,6 @@ document.addEventListener("click", e=>{
 });
 document.addEventListener("keydown", e=>{
   const tag=(e.target&&e.target.tagName)||"";
-  if((e.ctrlKey||e.metaKey) && !e.altKey && (e.key==="z"||e.key==="Z") && tag!=="INPUT" && tag!=="TEXTAREA"){ e.preventDefault(); rueckgaengig(); return; }
   if(tag==="INPUT"||tag==="TEXTAREA"||e.altKey||e.ctrlKey||e.metaKey) return;
   if(["bildschau","kampfhilfe","notstopp","blutruf"].some(id=>{ const d=$(id); return d && d.open; })) return;   /* Esc schliesst <dialog> selbst */
   if(e.key==="Escape" && $("gefahrlade").open){ $("gefahrlade").open=false; $("gefahrlade").querySelector("summary").focus(); e.preventDefault(); return; }
@@ -3181,7 +3177,6 @@ $("kampfhilfe-zu").onclick=()=>{ const d=$("kampfhilfe"); if(d.close) d.close();
 $("notstopp-zu").onclick=notstoppSchliessen;
 if($("notstopp").addEventListener) $("notstopp").addEventListener("close", notstoppAufschieben);
 $("bildzeigen").onclick=zeigeBild;
-$("rueckgaengig").onclick=rueckgaengig;
 $("uhr-schalter").onclick=uhrSchalte;
 $("uhr-plus").onclick=()=>uhrPlus(5);
 $("bildschau").onclick=()=>{ const d=$("bildschau"); if(d.close) d.close(); else d.open=false; };

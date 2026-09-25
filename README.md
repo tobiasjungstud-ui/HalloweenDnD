@@ -62,7 +62,7 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
 2. Die Spielleitung liest Seite 1 der Konsole. Fünf Minuten, mehr braucht es nicht.
 3. Die Konsole führt durch elf Seiten. Ganz oben eine schmale Leiste, die beim Scrollen
    stehen bleibt: Szene, die **Uhr** (90 Minuten, pausierbar, mit dem Soll je Seite),
-   **Rückgängig**, der Reiter *Charakter-Übersicht / Kampf*, das Blättern und ganz rechts
+   der Reiter *Charakter-Übersicht / Kampf*, das Blättern und ganz rechts
    das **Zahnrad** mit den Einstellungen (Stimmen, Blut, Neue Runde). Darunter die Szene als Regiebuch: am linken Rand steht, was ein Absatz ist —
    **Vorlesen**, **Gesprächsaufforderung** (endet immer mit einer klaren Aufforderung),
    **Hintergrund** (auf einen Satz eingeklappt). Die Antwortkästen der Figuren tragen keinen
@@ -252,7 +252,7 @@ drei Vampire Spawn bleiben ein Gleichstand (49,9 %, vorher 50,0 %).
 Gefahrenbalkens hängt eine Lasche **‹ GEFAHR**. Sie klappt eine Schublade heraus mit
 −1 +1 +2 und den drei Stufen (0–3 ruhig · 4–7 ein Gegner mehr möglich · 8–10 jeder
 Kampf ein Gegner mehr, Patrouille), die aktuelle hervorgehoben. Esc oder ein zweiter
-Klick klappt sie zu; ↶ nimmt eine Änderung zurück. Die Leiste oben ist dadurch um
+Klick klappt sie zu. Die Leiste oben ist dadurch um
 die Knöpfe kürzer.
 
 **Im Kampfbildschirm** steht oben rechts **„? Wie es funktioniert“** — die drei
@@ -271,7 +271,7 @@ im Kampfbildschirm, in seiner eigenen Karte: **✦ Bonusaktion · Blutruf**. Ein
 6 je Spawn — und der Gewinnchance der Gruppe vorher und nachher. Erst „Blutruf
 ausführen“ zieht ihm die 12 ab und stellt **zwei Vampire Spawn** dazu (je 30
 Lebenspunkte, `Claws 2d6+5`, härter als alles andere im Haus). Einmal pro Kampf;
-↶ nimmt ihn zurück. Unter 15 hört Vaskir auf zu kämpfen und redet, und fällt er,
+Unter 15 hört Vaskir auf zu kämpfen und redet, und fällt er,
 fallen die Spawn mit ihm.
 
 Die Zahlen sind **ausgerechnet, nicht geschätzt**: `quelle/kampf_sim.py` spielt den
@@ -362,11 +362,6 @@ der Küchentür aufgeschlagen war — nicht, wenn die Küche erst später gewäh
 wurde. Corvin nur, wer mit ihm gefahren ist. Ist das Blutbuch verbrannt, sagen auch der
 Vertrag und der Tod des Grafen, dass der alte Vertrag schon Asche war.
 
-**Rückgängig.** Der Knopf ↶ in der Leiste (oder Strg+Z) nimmt den letzten vollständigen
-Spielschritt zurück — eine Entscheidung, einen Gefahrenwechsel, einen geladenen Kampf,
-eine Notiz. Blättern und die Uhr zählen nicht als Schritt; nach einer Entscheidung nimmt
-Rückgängig also die Entscheidung zurück, nicht das Umblättern. Zwanzig Schritte tief.
-
 **Wortstützen.** Unter dem Text jeder Seite liegt zugeklappt die Handvoll Wörter, die
 die Schüler für diese Szene brauchen (*to warn · a debt · to trade*) — für die
 Spielleitung, um sie zu geben, wenn jemand stecken bleibt. Das Helfer-Blatt trägt keine
@@ -403,7 +398,7 @@ ganz oben im `<script>` der Vorlage.
 Die Storylogik hat einen Prüfstand, der das echte Skript der Konsole lädt und alle 1680
 Entscheidungspfade von Anfang bis Ende durchspielt — Ortskontinuität, Sichtbarkeit, Gefahr,
 Lebenspunkte, Gegner, Epilogkarten, Umwählen, vorzeitiges und doppeltes Auslösen, dazu
-Uhr, Rückgängig und Notstopper:
+Uhr und Notstopper:
 
 ```bash
 node quelle/pruefe_dm.js          # „Keine Befunde.“ oder eine Liste
