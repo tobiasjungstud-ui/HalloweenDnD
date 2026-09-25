@@ -1114,8 +1114,8 @@ const BILDER = {
 const KAPITEL = [
 /* ===== 0 ===== */
 {n:"Anleitung", verlauf:[
-  {wenn:"Ein Fehler, der das Verständnis nicht stört", dann:"Nicht korrigieren. Als Figur richtig zurückgeben: „You went up there alone? Brave.“ — nie „No: went!“"},
-  {wenn:"Du willst trotzdem etwas festhalten", dann:"Nach der Szene, ein Satz, als Geschenk: „New phrase for you: …“ — höchstens einer pro Seite"}],
+  {wenn:"Die Gruppe fragt nach der richtigen Lösung", dann:"Es gibt keine — jeder Weg führt ans Ende, jeder kostet etwas anderes. Sag das ruhig so"},
+  {wenn:"Eine Idee steht nirgends", dann:"Im Zweifel ja — und dafür kostet es etwas (Zeit, Gefahr +1). Ein Nein hält das Spiel an"}],
  titel:"So führst du den Abend", art:"info", bloecke:[
  {t:"ziel", text:"Diese Seite führt dich Satz für Satz. Du musst nichts vorbereiten und die Geschichte nicht kennen.", zeit:"2 Min."},
  {t:"regie", titel:"Was du brauchst", text:`Drei Spielerblätter auf drei Geräten (<b>Arcanist</b>, <b>Blade</b>, <b>Lightbearer</b>), das Helfer-Blatt als Ausdruck und <b>zwei Sechser</b>. Namen unter <b>Charaktere / Kampf</b> eintragen.
@@ -1124,7 +1124,7 @@ const KAPITEL = [
  {t:"regie", titel:"Wer die Gruppe ist", text:`Das ist vorgegeben, das müssen die Schüler nicht erfinden: <b>Sie sind Vampirjäger.</b> Nicht berühmt, noch nicht. Ein Gerücht hat sie hergeführt — in diesen Bergen liege ein Tal, in dem Menschen nach Plan verschwinden. Sie wollen wissen, ob es stimmt.
  <p>Erfinden dürfen sie: Namen, Herkunft, wie sie sich kennen, was sie können. Der Auftrag steht fest.</p>`},
  {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`<b>1 · Gold lesen.</b> Englische Erzählung und Figurenrede — wörtlich. <b>2 · Grün fragen.</b> Jede Figur äussert eine eigene Absicht oder Frage und danach einen Grund oder eine Reaktion. <b>3 · Ergebnis klicken.</b> Nur markieren, was am Tisch passiert ist — Antworten abhaken, Entscheidungen anklicken.
- <p>Rechts neben dem Text stehen die <b>Tipps</b> auf der Höhe der Stelle, zu der sie gehören: typische Stolpersteine genau dort und was du dann sagst. Unten steht immer, wann es weitergeht. Die <b>Gefahr</b> stellst du an der Säule rechts ein — die Lasche <b>‹ GEFAHR</b> klappt die Knöpfe heraus: 0–3 ruhig, 4–7 du darfst in einem Kampf einen Gegner dazunehmen, 8–10 eine Patrouille vor dem nächsten Akt.</p>`},
+ <p>Rechts neben dem Text stehen die <b>Tipps</b> auf der Höhe der Stelle, zu der sie gehören: was du dort besser nicht verrätst, wo du Tempo machst, wann du schweigst. Unten steht immer, wann es weitergeht. Die <b>Gefahr</b> stellst du an der Säule rechts ein — die Lasche <b>‹ GEFAHR</b> klappt die Knöpfe heraus: 0–3 ruhig, 4–7 du darfst in einem Kampf einen Gegner dazunehmen, 8–10 eine Patrouille vor dem nächsten Akt.</p>`},
  {t:"sagen", text:["Speak English. Mistakes are fine. If you need a word, ask for help. Just don’t speak in full German sentences — who knows what consequences it might have… (evil laugh). Take a moment, then try.","Everyone gets a turn. Listen, and add your own idea. You do not need a special voice."]},
  {t:"fa", titel:"wenn etwas klemmt", paare:[
    ["Niemand sagt etwas","20 Sekunden Denkzeit. Dann: „What do you notice? What could you do?“ Nur Wörter oder offene Anfänge anbieten, keine ganzen Sätze."],
@@ -1142,10 +1142,10 @@ const KAPITEL = [
 
 /* ===== 1 ===== */
 {n:"Prolog", verlauf:[
-  {bei:"vermutung", wenn:"„I mean, they are afraid.“", dann:"„I mean“ heisst „ich will sagen“. Für eine Meinung: „I think …“ oder „Maybe …“ — kurz vorsprechen, weiter"},
-  {bei:"marek", wenn:"„I have fifteen years.“", dann:"„I’m fifteen.“ — Alter immer mit be. Marek gibt es richtig zurück: „Fifteen? And already hunting vampires.“"},
-  {bei:"marek", wenn:"„We are hunters since two years.“", dann:"„We’ve been hunters for two years.“ — since nur mit Zeitpunkt (since June), for mit Dauer. Marek fragt einfach nach: „For two years? Hm.“"},
-  {bei:"marek", wenn:"Jemand erfindet etwas Wildes über sich", dann:"Gelten lassen — Marek glaubt kein Wort und fragt genau deshalb weiter. Erfinden ist Sprechen"}],
+  {bei:"vermutung", wenn:"Eine Vermutung trifft ins Schwarze", dann:"Kein Zeichen geben, auch kein Lächeln. Aber merk sie dir — im Wirtshaus: „Someone guessed this in the carriage.“"},
+  {bei:"marek", wenn:"Vor Mareks Frage", dann:"Nach „The driver does not slow down“ zwei Sekunden Stille. Die Pause macht den Wald unheimlich, nicht der Text"},
+  {bei:"marek", wenn:"Wen Marek zuerst ansieht", dann:"Nicht den Lautesten. Er nennt die Figur, die am weitesten hinten sitzt — so kommen alle drei dran"},
+  {bei:"ankunft", wenn:"Die Ankunft", dann:"Zügig durchlesen, ohne Rückfragen bis zum Schloss. Das eine Licht im Fenster ist das Bild, das sie mitnehmen sollen"}],
  chancen:[
   {wer:"Lightbearer", talent:"Healing Touch", cue:"wrapped in a dirty bandage", text:"Mareks rechte Hand ist verbunden.", folge:"Fragt die Heilerin danach oder greift sie zu, bekommt sie einen Satz mehr als alle anderen: „Whatever you do up there — don’t take the coach.“ Mehr erklärt er nicht. Sagt niemand etwas: Er fährt einfach los."}],
  woerter:[["a vampire hunter","ein Vampirjäger / eine Vampirjägerin"],["a rumour","ein Gerücht"],["to disappear","verschwinden"],["to be taken","entführt werden"],["Maybe … / I think …","Vielleicht … / Ich glaube …"],["fog","Nebel"],["damp","feucht, klamm"],["to be afraid of something","vor etwas Angst haben"],["a valley","ein Tal"]],
@@ -1171,7 +1171,7 @@ const KAPITEL = [
     ["What was that in the trees?","„Deer.“ Pause. „Big ones.“"],
     ["Will you wait for us?","„No.“"]],
    notfalls:"Fragt niemand etwas, sagt er von sich aus: „Whatever you do up there — don’t take the coach.“ Dann fährt er weiter."}]},
- {t:"vorlesen", titel:"Die Ankunft", text:[
+ {t:"vorlesen", anker:"ankunft", titel:"Die Ankunft", text:[
   `The carriage stops. Marek does not get down and he does not open the door — you do that yourselves. His right hand, on the reins, is wrapped in a dirty bandage.`,
   `The village is twenty dark houses and a bell tower with no bell in it. There is exactly one building with light in the windows: a tavern, with a black goat painted on the sign.`,
   `Your bags land in the mud beside you. By the time you turn round, the carriage is already moving, and Marek is driving downhill faster than he ever drove up.`,
@@ -1181,9 +1181,9 @@ const KAPITEL = [
 
 /* ===== 2 ===== */
 {n:"Kapitel I", verlauf:[
-  {bei:"inn", wenn:"„Why nobody looks for her?“", dann:"Nicht verbessern — Greta sieht fragend: „Sorry?“ Meist kommt die Frage dann richtig. Sonst vorsprechen: „Why is nobody looking for her?“"},
-  {bei:"inn", wenn:"„Can you say me the way?“", dann:"„Can you tell me …?“ — say me gibt es nicht. Greta darf es beiläufig richtig nehmen: „Tell you? All right.“"},
-  {bei:"inn", wenn:"Alle reden nur mit Greta", dann:"Pieter lacht laut in ihre Frage hinein, Tobias räuspert sich an der Tür — ein Blick zu den beiden genügt, die anderen Figuren gehen hin"}],
+  {bei:"inn", wenn:"Pieters Anneke-Satz", dann:"Laut und schlecht getimt — mitten in eine andere Antwort hinein. Danach schweigt der ganze Raum einen Moment"},
+  {bei:"inn", wenn:"Sie fragen Greta nach Anneke", dann:"Greta antwortet nicht, sie wischt die Theke. Das Schweigen ist die Antwort — nicht auflösen"},
+  {bei:"karte", wenn:"Die Karte liegt da", dann:"Nur hinlegen, nicht erklären. Die drei Wege kommen auf der nächsten Seite — hier genügt, dass sie sie ansehen"}],
  chancen:[
   {wer:"Blade", talent:"Strength", cue:"on two iron hooks", text:"Das Namensbrett ist schwer und hängt an zwei Haken.", folge:"Wer es allein abhebt und umdreht, findet hinten mehr Namen — keine Dorfnamen, fremde. Zwölf. Greta sagt nur: „Hunters. Put it back.“ Eine deutlichere Warnung gibt es an diesem Abend nicht."}],
  woerter:[["an innkeeper","ein Wirt / eine Wirtin"],["a gravedigger","ein Totengräber"],["a board","ein Brett, eine Tafel"],["carved","eingeritzt"],["an arrangement","eine Abmachung"],["to bury somebody","jemanden begraben"],["It is her turn.","Sie ist an der Reihe."],["to pack a bag","eine Tasche packen"]],
@@ -1217,16 +1217,16 @@ const KAPITEL = [
   sonst:"<b>Can we look around the room?</b> — Ja: das Namensbrett (schwer, an zwei Haken; wer es anfasst, hört Greta: „Leave it.“) und hinter der Theke die Karte."},
  {t:"tun", id:"w_anneke", text:"Hat jemand den Namen <b>Anneke</b> gehört?", knopf:{art:"wissen", k:"anneke"}, beschriftung:"Anneke ist gefallen"},
  {t:"regie", text:"Zeig die Karte, sobald jemand nach dem Weg fragt oder sich umsieht. <b>Notfalls</b> legt Greta sie von selbst hin, wenn die Gruppe aufbrechen will: „You’ll need this.“ Ohne die Karte geht es nicht weiter."},
- {t:"vorlesen", titel:"Die Karte — damit endet die Szene", text:[
+ {t:"vorlesen", anker:"karte", titel:"Die Karte — damit endet die Szene", text:[
   `Greta reaches under the bar and puts down an old hunting map. She does not say a word while you look at it.`,
   `Three ways are drawn on it. A wide road along the ridge. A black line going straight through the mountain — an old silver mine. And a third line with two words written next to it: “coach, midnight”.`]},
  {t:"weiter", text:"Wenn jede Figur einmal gefragt hat und die Karte auf dem Tisch liegt."}]},
 
 /* ===== 3 ===== */
 {n:"Entscheidung 1", verlauf:[
-  {bei:"wahl1", wenn:"„Because dangerous.“", dann:"„Because it’s dangerous.“ — nach because kommt ein ganzer Satz mit Verb. Einmal nachsprechen lassen, dann weiter"},
-  {bei:"wahl1", wenn:"„The mine is more safe.“", dann:"„safer“ — kurze Adjektive mit -er: safer, faster, darker. Beiläufig zurück: „Safer, yes. But darker.“"},
-  {bei:"wahl1", wenn:"Sie fragen dich, welcher Weg der beste ist", dann:"Nicht verraten: „I’m only the narrator. What would your character do?“ Keiner ist der richtige — alle drei führen in den Hof"}],
+  {bei:"wahl1", wenn:"Zwei sind dafür, einer dagegen", dann:"Die Minderheit zuerst reden lassen, dann abstimmen. Wer überstimmt wird, soll wenigstens gehört worden sein"},
+  {bei:"wahl1", wenn:"Sie fragen dich, welcher Weg der beste ist", dann:"„I’m only the narrator.“ Nichts empfehlen — auch nicht mit dem Gesicht"},
+  {bei:"wahl1", wenn:"Sie wählen die Kutsche", dann:"Nicht warnen. Dass Corvin sie verrät, erfahren sie oben — genau das macht die Wahl zu einer Wahl"}],
  woerter:[["a road","eine Strasse"],["a mine","ein Bergwerk"],["a coach","eine Kutsche"],["to be seen","gesehen werden"],["dangerous — safe","gefährlich — sicher"],["to decide","sich entscheiden"],["to agree","zustimmen"]],
  titel:"The Way Up", art:"ent", bild:"karte", ort:ORT.wirtshaus, nach:ORT.wirtshaus, bloecke:[
  {t:"ziel", text:"Die Gruppe wählt einen der drei Wege. Alle drei enden im Hof des Schlosses — sie unterscheiden sich nur im Preis.", zeit:"4 Min."},
@@ -1251,13 +1251,13 @@ const KAPITEL = [
 
 /* ===== 4 ===== */
 {n:"Aufstieg", verlauf:[
-  {bei:"wolfe", nur:"weg_a", wenn:"„I help the wolf.“ — und nicht mehr", dann:"„How? What do you do with your hands?“ Geholfen ist erst, was jemand beschreibt: „I open the trap, slowly.“"},
-  {bei:"wolfe", nur:"weg_a", kampf:true, wenn:"Im Kampf nur „I attack.“", dann:"„With what? Where do you hit it?“ — erst der Satz, dann der Knopf. Der gelbe Satz auf dem Spielerblatt ist die Belohnung"},
-  {bei:"sumpf", nur:"weg_a", wenn:"„Help! I am stucked!“", dann:"„I’m stuck!“ — ohne -ed. Als Hilfe reicht ein kurzer Satz: „Take my hand!“ — „Hold on to me!“"},
-  {bei:"wachen", nur:"weg_a", wenn:"Sie planen auf Deutsch, „weil es leise sein muss“", dann:"Flüstern geht auch auf Englisch. Gib vier Wörter vor: „Quiet!“ — „Wait.“ — „Now!“ — „Follow me.“"},
-  {bei:"keller", nur:"weg_b", wenn:"„We are invited from the Count.“", dann:"„The Count invited us.“ — oder „invited by“. Die Wache darf es langsam wiederholen: „Invited. By the Count. I see.“"},
-  {bei:"kutsche", nur:"weg_c", wenn:"Jemand merkt: kein Spiegelbild, kalte Hände, nie Mirelas Name", dann:"Sag nur „Yes. You noticed.“ — nicht erklären. Das Unheimliche wirkt, solange es niemand ausspricht"},
-  {bei:"kutsche", nur:"weg_c", wenn:"Jemand lügt Corvin an", dann:"Mitspielen — Corvin glaubt alles und lächelt. Eine gute Lüge ist gutes Englisch"}],
+  {bei:"wolfe", nur:"weg_a", wenn:"Niemand denkt an den verletzten Wolf", dann:"Einmal erwähnen: „The small one is limping.“ Mehr nicht — die Idee muss von ihnen kommen"},
+  {bei:"wolfe", nur:"weg_a", kampf:true, wenn:"Der erste Kampf zieht sich", dann:"Ein geflohener Wolf ist ein gewonnener Kampf. Nicht bis zum letzten Punkt ausspielen — die Zeit brauchst du oben"},
+  {bei:"sumpf", nur:"weg_a", wenn:"Alle kommen glatt durch", dann:"Trotzdem einen Satz erzählen: ein Stiefel bleibt im Schlamm stecken. Sonst fühlt sich der Sumpf wie ein Formular an"},
+  {bei:"wachen", nur:"weg_a", wenn:"Jemand hat einen Plan (Stein werfen, ablenken)", dann:"Ein guter Plan ersetzt den Wurf: Wer ihn beschreibt, muss nicht würfeln. Pläne belohnen, nicht Glück"},
+  {bei:"keller", nur:"weg_b", wenn:"Die Wache spielen", dann:"Er ist müde, nicht misstrauisch: husten, gähnen, zur Treppe schauen. Er will, dass es vorbei ist — lass ihn glauben wollen"},
+  {bei:"kutsche", nur:"weg_c", wenn:"Jemand merkt: kein Spiegelbild, kalte Hände, nie Mirelas Name", dann:"Nur „Yes. You noticed.“ — nicht erklären. Das Unheimliche wirkt, solange es niemand ausspricht"},
+  {bei:"kutsche", nur:"weg_c", wenn:"Die Fahrt zieht sich", dann:"Zwei Stunden Kutsche sind am Tisch zwei Minuten: drei Fragen von Corvin, dann ist das Tor da"}],
  chancen:[
   {wer:"Lightbearer", talent:"Healing Touch", nur:"weg_a", cue:"an old iron trap still on it", text:"Der kleinere Wolf hat ein Fangeisen am Hinterbein.", folge:"Wer sich ihm langsam nähert und die Wunde schliesst oder das Eisen löst, hilft ihm. Gelingt das ruhig und ohne Waffe in der Hand, ziehen beide Wölfe ab — unten „Geholfen“ anklicken."},
   {wer:"Blade", talent:"Strength", nur:"weg_a", cue:"takes real strength", text:"Der Sumpf gibt Stiefel nur mit Kraft wieder her.", folge:"Wer feststeckt, kann den Blade rufen: Blade zieht ihn heraus, ohne dass jemand eine andere Idee braucht — wenn der Blade-Spieler auf Englisch sagt, wie."},
@@ -1329,9 +1329,9 @@ const KAPITEL = [
 
 /* ===== 5 ===== */
 {n:"Kapitel II", verlauf:[
-  {bei:"tueren", wenn:"„I am agree with Lara.“", dann:"„I agree with Lara.“ — agree ist ein Verb, ohne am. Gib den Satzanfang für die Antwort auf die anderen: „I agree, because …“ / „I see it differently: …“"},
-  {bei:"tueren", wenn:"„I would go in the library.“", dann:"„into the library“. Nicht unterbrechen — beim Nachfragen richtig verwenden: „Into the library — why?“"},
-  {bei:"tueren", wenn:"„Can we look through the window first?“", dann:"Ja — genau dafür ist die Liste unten da. Jede Antwort nur einmal, und dann wird entschieden"}],
+  {bei:"tueren", wenn:"Jemand will allein losgehen", dann:"Nicht verbieten, bremsen: „The others are still at the fountain.“ Die Gruppe bleibt zusammen, sonst zerfällt die Szene"},
+  {bei:"tueren", wenn:"Sie hängen zu lange an der Wahl", dann:"Oben geht ein Fenster an: „A light. Second floor.“ Danach entscheiden sie schnell"},
+  {bei:"tueren", wenn:"Sie kennen den Namen Anneke nicht und wollen in die Kapelle", dann:"Nicht warnen. Ob sie im Wirtshaus zugehört haben, zeigt sich jetzt"}],
  woerter:[["to choose","wählen"],["to explore","erkunden"],["a courtyard","ein Innenhof"],["a fountain","ein Brunnen"],["a chapel","eine Kapelle"],["a library","eine Bibliothek"],["to repeat","wiederholen"],["a liar","ein Lügner"],["a road","eine Strasse"],["a mine","ein Bergwerk"],["a coach","eine Kutsche"],["to be seen","gesehen werden"],["dangerous — safe","gefährlich — sicher"],["to decide","sich entscheiden"],["to agree","zustimmen"]],
  titel:"The Courtyard", art:"szene", braucht:"e1", bild:"tueren", ort:ORT.hof, nach:ORT.hof, bloecke:[
  {t:"ziel", text:"Die Gruppe steht im Hof, sieht drei Türen an — und wählt eine. Alle drei führen zum selben Ziel, dem Spiegel am Ende des Westgangs; sie unterscheiden sich darin, wer euch hinbringt und was es kostet.", zeit:"8 Min."},
@@ -1369,12 +1369,13 @@ const KAPITEL = [
 
 /* ===== 6 ===== */
 {n:"Hinter der Tür", verlauf:[
-  {bei:"bellamy", nur:"bibliothek", wenn:"„I am fifteen. I live in Zurich. I like pizza.“", dann:"Gilt — aber Bellamy seufzt: „True. And terribly dull. Tell me something that costs you a little.“ Der zweite Versuch darf persönlicher werden"},
-  {bei:"bellamy", nur:"bibliothek", wenn:"„I lie never.“", dann:"„I never lie.“ — never, always, often stehen vor dem Verb. Bellamy lächelt: „Never? Now that is a lie.“"},
+  {bei:"bellamy", nur:"bibliothek", wenn:"Bellamy merkt eine Lüge", dann:"Nicht sofort. Er lässt den Satz stehen, sieht lange hin und sagt erst am Ende: „Two true things. And one that wasn’t.“"},
+  {bei:"bellamy", nur:"bibliothek", wenn:"Jemand erzählt etwas wirklich Persönliches", dann:"Nicht nachfragen, nicht kommentieren. Bellamy nickt nur: „Thank you.“ Das bleibt am Tisch"},
   {bei:"anneke_name", nur:"kapelle", wenn:"Jemand sagt den Namen nur leise oder fragend: „Anneke?“", dann:"Zählt. Gesagt ist gesagt — es muss nicht gerufen werden"},
   {bei:"anneke_kampf", nur:"kapelle", weiche:"anneke_name=kampf", kampf:true, wenn:"Mitten im Kampf fällt ihnen der Name doch noch ein", dann:"Sie hält sofort an und fragt: „Is Greta still alive?“ Kampf beenden und oben auf „Ja — jemand ruft Anneke!“ umklicken — das ist der schönere Ausgang"},
-  {bei:"tam", nur:"kueche", wenn:"„We promise that we take you with.“", dann:"„We’ll take you with us.“ — Versprechen mit will, und with braucht ein us. Tam wiederholt es leise, um sicher zu sein"},
-  {bei:"tam", nur:"kueche", wenn:"Jemand verspricht halbherzig, nur um weiterzukommen", dann:"Gilt als Versprechen. Nicht nachhaken — die Rechnung kommt im Epilog"}],
+  {bei:"tam", nur:"kueche", wenn:"Nach Tams Frage", dann:"Still sein und warten, auch zehn Sekunden. Nicht helfen, nicht umformulieren — die Pause gehört Tam"},
+  {bei:"tam", nur:"kueche", wenn:"Jemand verspricht halbherzig, nur um weiterzukommen", dann:"Gilt als Versprechen. Nicht nachhaken — die Rechnung kommt im Epilog"},
+  {bei:"ohnefuehrung", nur:["bibliothek","kueche"], weiche:"fuehrung=allein", wenn:"Sie suchen den Weg allein", dann:"Kurz halten: zwei falsche Türen, ein Moment Angst, dann der Spiegel. Die Strafe ist die Gefahr, nicht verlorene Zeit"}],
  chancen:[
   {wer:"Arcanist", talent:"Magic Hand", nur:"bibliothek", cue:"not quite reaching it", text:"Bellamy kommt mit dem Buch nicht ans oberste Regal.", folge:"Stellt Magic Hand es für ihn hinauf, nennt er das die erste Höflichkeit seit 1912 — und sagt einen Satz mehr: „His book lies one floor under her room. Everything he is, is written in it.“ Das ist die Vorlage für Karte B der letzten Entscheidung."},
   {wer:"Arcanist", talent:"Magic Hand", nur:"kapelle", nicht:"anneke", cue:"a thread of wick left in every one", text:"In jeder Kerze steckt noch ein Rest Docht.", folge:"Zündet Magic Hand sie alle auf einmal, hält Anneke sich die Augen zu: Ihr erster Angriff im Kampf geht ins Leere (drück ihn nicht). Danach kämpft sie wie sonst."},
@@ -1433,9 +1434,8 @@ const KAPITEL = [
 
 /* ===== 7 ===== */
 {n:"Kapitel III", verlauf:[
-  {bei:"mirela", wenn:"„Why did you came here?“", dann:"„Why did you come?“ — nach did die Grundform. Mirela wiederholt die Frage richtig, bevor sie antwortet: „Why did I come? …“"},
-  {bei:"mirela", wenn:"Nur „That is not fair!“", dann:"Nachfragen: „Not fair to whom — to you, to Lene, or to the village?“ Aus dem Ausruf wird ein Gespräch"},
-  {bei:"meinung", wenn:"„I think it is not fair.“", dann:"Natürlicher: „I don’t think it’s fair.“ — im Englischen wandert das not nach vorn"},
+  {bei:"mirela", wenn:"Sie stellen nur Ja-Nein-Fragen", dann:"Dann antwortet Mirela auch nur mit „Yes.“ oder „No.“ Die langen Antworten gibt es auf Why- und What-Fragen"},
+  {bei:"mirela", wenn:"Der Name Lene fällt", dann:"Langsam sagen lassen. Das ist der Moment, in dem die Gruppe begreift: kein Entführungsfall"},
   {bei:"meinung", wenn:"Niemandem fällt eine andere Idee ein", dann:"Frag nach dem Dorf, nicht nach dem Grafen: „What could the village do instead?“ — dann kommen sie von selbst auf Angebote"}],
  chancen:[
   {wer:"Arcanist", talent:"Magic Hand", cue:"the other on the far side of the table", text:"Die zweite Tasse steht ausser Reichweite.", folge:"Hebt Magic Hand sie, ist sie warm. Jemand hat vor Minuten daraus getrunken. Mirela sieht zu und sagt nichts."},
@@ -1473,7 +1473,7 @@ const KAPITEL = [
   {bei:"wahl3", wenn:"Sie wollen sie hinaustragen", dann:"Mirela: „You’re not asking me. You’re carrying me. There is a difference.“"},
   {bei:"wahl3", wenn:"Sie wollen das Buch verbrennen", dann:"Mirela: „And in February, when the wolves come — who protects the village then?“"},
   {bei:"wahl3", wenn:"Sie wollen verhandeln", dann:"Mirela: „He will say yes. He always says yes. That is what worries me.“"},
-  {bei:"wahl3", wenn:"„If we will burn the book …“", dann:"„If we burn the book, he will …“ — im if-Teil kein will. Die Stelle ist wie gemacht für if-Sätze: „And if you do that — what happens then?“"}],
+  {bei:"wahl3", wenn:"Sie können sich nicht einigen", dann:"Mirela entscheidet nicht für sie, sagt aber: „Whatever you do — do it together. He can smell doubt.“"}],
  woerter:[["a road","eine Strasse"],["a mine","ein Bergwerk"],["a coach","eine Kutsche"],["to be seen","gesehen werden"],["dangerous — safe","gefährlich — sicher"],["to decide","sich entscheiden"],["to agree","zustimmen"]],
  titel:"The Blood Ledger", art:"ent", braucht:"e2", bild:"buch", ort:ORT.turm, nach:{e3_raus:ORT.treppe, e3_buch:ORT.studie, e3_pakt:ORT.turm}, bloecke:[
  {t:"ziel", text:"Die letzte Entscheidung. Keine ist sauber, und Mirela hört zu, während sie getroffen wird.", zeit:"5 Min."},
@@ -1502,7 +1502,7 @@ const KAPITEL = [
    „Wie ist es ausgegangen?“ bietet nur an, was nach diesem Verlauf möglich ist (ausgangMoeglich). */
 {n:"Finale", verlauf:[
   {bei:"gespraech", wenn:"„We offer you our friendship.“", dann:"Zu billig. Vaskir lächelt: „Friendship is free. What does it cost you?“ Erst was die Gruppe etwas kostet, gilt als echtes Angebot"},
-  {bei:"gespraech", wenn:"„Let her free!“", dann:"„Let her go!“ oder „Set her free!“ — free ist kein Verb. Vaskir darf es höflich richtig sagen: „Let her go? She was never held.“"},
+  {bei:"gespraech", wenn:"Jemand beleidigt ihn nebenbei, ohne es zu meinen", dann:"Noch keine Drohung. Vaskir hebt eine Augenbraue: „Careful.“ Erst beim zweiten Mal „Drohung“ anklicken"},
   {bei:"gespraech", wenn:"Sie wissen nicht, was sie bieten könnten", dann:"Laut mitdenken, ohne zu lösen: „What do you have that he doesn’t? Time? A promise?“ Mirela hat gesagt, was er will"},
   {bei:"vaskir", weiche:["gespraech=zuhoeren","gespraech=forderung","gespraech=drohung","gespraech=angriff"], kampf:true, wenn:"Er fällt unter 15 und fragt „Well?“", dann:"Nicht gleich klicken. Jede Figur sagt einen Satz: „Kill him, because …“ / „Let him go, because …“ — die Entscheidung gehört allen drei"}],
  chancen:[
@@ -1599,7 +1599,7 @@ const KAPITEL = [
 
 /* ===== 10 ===== */
 {n:"Epilog", verlauf:[
-  {bei:"schluss", wenn:"„I want that we stay.“", dann:"„I want to stay.“ oder „I want us to stay.“ — want that gibt es nicht"},
+  {bei:"schluss", wenn:"Die Zeit ist knapp", dann:"Die Absätze oben kürzen, nie die Schlussrunde. Das letzte Wort gehört den Schülern"},
   {bei:"schluss", wenn:"Sie sind sich nicht einig", dann:"Auch gut — klick, was die Mehrheit will, und lass die anderen ihren Satz trotzdem sagen"},
   {bei:"schluss", wenn:"Jemand fragt, was aus einer Figur wurde", dann:"Zurückfragen: „What do you think happened to her?“ — und die Antwort als wahr nehmen"}],
  woerter:[["differently","anders"],["wrong — right","falsch — richtig"],["safety","Sicherheit"],["a life, lives","ein Leben, Leben"],["to be worth it","es wert sein"],["to stay behind","zurückbleiben"],["to move in","einziehen"],["to protect somebody","jemanden beschützen"],["on the road","unterwegs"],["to make up your mind","sich entscheiden"],["to owe somebody something","jemandem etwas schulden"],["for good","für immer"],["It's up to you.","Das liegt bei dir."]],
@@ -2274,8 +2274,8 @@ function ladeKampf(gegner, extra){
 
 /* ---- Zwischenakt: die Patrouille ---- */
 const PATROUILLE = {n:"Zwischenakt", titel:"The Patrol", art:"kampf", verlauf:[
-  {bei:"patrouille", kampf:true, wenn:"Jemand ruft „Attention!“", dann:"„Watch out!“ oder „Look out!“ — attention heisst Aufmerksamkeit"},
-  {bei:"patrouille", kampf:true, wenn:"Sie verteilen die Aufgaben auf Deutsch", dann:"Gib drei Sätze vor: „I’ll take the hound.“ — „Stay behind me.“ — „Cover the healer!“"}],
+  {bei:"patrouille", kampf:true, wenn:"Die Gruppe vergisst die Tränke", dann:"Einmal erinnern: „You still have a potion.“ Dieser Kampf ist der, für den sie gedacht sind"},
+  {bei:"patrouille", kampf:true, wenn:"Der Hund fällt", dann:"Kurz innehalten, die Wachen sehen einander an. Dann spüren die Spieler selbst, dass die gleich aufgeben"}],
  chancen:[
   {wer:"Blade", talent:"Strength", cue:"on a long chain", text:"Der Hund hängt an einer langen Kette.", folge:"Fängt Blade die Kette, hängt der Hund eine Runde fest: kein Biss. Die Wachen müssen zu euch kommen."},
   {wer:"Arcanist", talent:"Magic Hand", cue:"One lamp — only one —", text:"Die Patrouille hat eine einzige Lampe.", folge:"Löscht Magic Hand sie, stehen drei Wachen im Dunkeln — eine davon läuft davon. Zwei bleiben (im Kampfbildschirm eine ×)."}],

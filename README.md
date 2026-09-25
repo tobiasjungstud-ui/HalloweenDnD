@@ -69,10 +69,10 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
    Randtitel; direkt über jedem Kasten steht **„Mögliche Antworten von …“** mit dem Namen. Folgen mehrere Vorlesetexte aufeinander, stehen sie als **ein** Block
    da: die Randnotiz steht nur einmal, und im Text trennen goldene Linien mit dem Titel die
    Abschnitte (*——— Die Treppe ———*, *——— Das Turmzimmer ———*). Rechts daneben, **auf der Höhe der Stelle, zu der sie gehören**, stehen die
-   Hilfen: **Tipps** — was eine Lehrperson an dieser Stelle nebenbei sagen würde: der typische
-   Fehler, der hier fällt, und der Satz, mit dem du reagierst („„I have fifteen years.“ →
-   „I’m fifteen.“ — Marek gibt es richtig zurück“). Was schon im Text, in einer Antwort oder
-   auf einem Knopf steht, wiederholen sie nicht. Dazu die
+   Hilfen: **Tipps zur Spielleitung** — was du an dieser Stelle besser nicht verrätst, wo du
+   Tempo machst, wann du schweigst („Jemand merkt: kein Spiegelbild → nur „Yes. You noticed.“ —
+   nicht erklären“). Was schon im Text, in einer Antwort oder auf einem Knopf steht,
+   wiederholen sie nicht. Dazu die
    **Stärken der Figuren** neben dem Absatz, der die Gelegenheit ankündigt. Steht daneben
    nichts, gibt es an dieser Stelle nichts zu beachten. Wo sich eine Szene gabelt, steht
    **Was ist passiert?** über zwei benannten Knöpfen („Ja — er führt euch“ / „Nein — ihr
