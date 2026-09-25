@@ -22,7 +22,7 @@ Spielen, kein Konto, keine Daten verlassen das Gerät.
 
 | Datei | Für wen | Was darauf steht |
 |---|---|---|
-| `dungeon_master.html` | Spielleitung | **V2:** elf Seiten Regiebuch — links die Randbeschriftung, in der Mitte der Text, rechts auf gleicher Höhe die Hilfe (Gefahr, Wenn-dann, Stärken); Lebenspunkte und Kampf im Reiter *Charakter-Übersicht / Kampf* |
+| `dungeon_master.html` | Spielleitung | **V2:** elf Seiten Regiebuch — links die Randbeschriftung, in der Mitte der Text, rechts auf gleicher Höhe die Hilfe (Gefahr, Tipps, Stärken); Lebenspunkte und Kampf im Reiter *Charakter-Übersicht / Kampf* |
 | `dungeon_master_v1.html` | Spielleitung | **V1**, die frühere Darstellung (vier Farbbalken, drei Spalten, Kampf in der Seitenleiste) — gleiche Daten, gleiche Logik, weiterhin lauffähig |
 | `spickzettel.html` | Spielleitung | Eine Seite: der DM-Bildschirm auf einen Blick — neun Bereiche, vier Randbeschriftungen, vier Handgriffe |
 | `spieler_magier.html` | The Arcanist, 18 HP | Fireball · Magic Hand · Arcane Darts — Talent ausserhalb des Kampfs: *Magic Hand* |
@@ -69,8 +69,10 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
    Randtitel; direkt über jedem Kasten steht **„Mögliche Antworten von …“** mit dem Namen. Folgen mehrere Vorlesetexte aufeinander, stehen sie als **ein** Block
    da: die Randnotiz steht nur einmal, und im Text trennen goldene Linien mit dem Titel die
    Abschnitte (*——— Die Treppe ———*, *——— Das Turmzimmer ———*). Rechts daneben, **auf der Höhe der Stelle, zu der sie gehören**, stehen die
-   Hilfen: **Wenn … dann** — was hier von der
-   Antwort der Gruppe abhängt („alle würfeln 7 oder mehr → an den Wachen vorbei“) — und die
+   Hilfen: **Tipps** — was eine Lehrperson an dieser Stelle nebenbei sagen würde: der typische
+   Fehler, der hier fällt, und der Satz, mit dem du reagierst („„I have fifteen years.“ →
+   „I’m fifteen.“ — Marek gibt es richtig zurück“). Was schon im Text, in einer Antwort oder
+   auf einem Knopf steht, wiederholen sie nicht. Dazu die
    **Stärken der Figuren** neben dem Absatz, der die Gelegenheit ankündigt. Steht daneben
    nichts, gibt es an dieser Stelle nichts zu beachten. Wo sich eine Szene gabelt, steht
    **Was ist passiert?** über zwei benannten Knöpfen („Ja — er führt euch“ / „Nein — ihr
@@ -99,7 +101,7 @@ Damit jede Person ihren Link auf dem eigenen Gerät öffnen kann:
    ausserhalb eines Kampfs (Sumpf, schlechte Luft) wird dort eingetragen. Er öffnet sich,
    sobald ein Kampf geladen wird, oder jederzeit über den Knopf oben rechts (freier Kampf,
    Gegner von Hand). Links die Gruppe mit ihren Talenten, in der Mitte die Gegner mit
-   Attacken, Werten und Verstärkung, rechts die Wenn-dann-Regeln dieser Szene, unten das
+   Attacken, Werten und Verstärkung, rechts die Tipps für diesen Kampf, unten das
    Log. Jeder Gegner trägt zwei Zeilen: **wie er aussieht** (zum Vorlesen) und **wie du ihn
    führst** — wen er angreift, wann er aufgibt, was ihn stoppt. Ein Test lässt keinen
    Gegner ohne beides durch; „Kampf vorbei“ heilt alle und kehrt zur Szene zurück, „← Szene“ lässt den Kampf

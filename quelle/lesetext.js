@@ -155,7 +155,7 @@ T.KAPITEL.forEach((k,i)=>{
     }
   });
   if(!schueler && (k.verlauf||[]).length){
-    kinder.push(...kasten([[...etikett("WENN … DANN (NUR DM)","555555")],
+    kinder.push(...kasten([[...etikett("TIPPS (NUR DM)","555555")],
       ...k.verlauf.map(r=>[new TextRun({text:(bedingung(r)?bedingung(r).replace("▸ ","")+" — ":"")+r.wenn+"  →  ",font:"Georgia",size:17,bold:true,color:"333333"}),
         new TextRun({text:r.dann,font:"Georgia",size:17,color:"333333"})])],grau,"BFBFBF"));
   }
