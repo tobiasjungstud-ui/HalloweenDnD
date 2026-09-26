@@ -12,9 +12,13 @@ const elemente = {};
 function el(id){
   if(!elemente[id]){
     const e = { id, innerHTML:"", textContent:"", className:"", hidden:false, disabled:false, value:"",
-      style:{}, dataset:{}, onclick:null, merkmale:{}, querySelector(){ return null; },
-      setAttribute(n,v){ this.merkmale[n] = String(v); },
-      getAttribute(n){ return n in this.merkmale ? this.merkmale[n] : null; } };
+      style:{ setProperty(k,v){ this[k]=v; } }, dataset:{}, onclick:null, merkmale:{}, kinder:[],
+      querySelector(){ return null; }, querySelectorAll(){ return []; },
+      setAttribute(n,v){ this.merkmale[n] = String(v); }, removeAttribute(n){ delete this.merkmale[n]; },
+      getAttribute(n){ return n in this.merkmale ? this.merkmale[n] : null; },
+      /* für die Lichtquellen: Ebenen, Regler und der Editor bauen Knoten und hören auf Ereignisse */
+      addEventListener(){}, appendChild(k){ this.kinder.push(k); return k; }, append(...k){ this.kinder.push(...k); },
+      replaceChildren(...k){ this.kinder = k; }, focus(){}, select(){}, showModal(){ this.open=true; }, close(){ this.open=false; } };
     const klassen = () => e.className ? e.className.split(/\s+/).filter(Boolean) : [];
     e.classList = {
       contains(k){ return klassen().includes(k); },
@@ -26,8 +30,10 @@ function el(id){
   }
   return elemente[id];
 }
-global.document = { getElementById: el, addEventListener(){}, };
-global.window = { scrollTo(){}, matchMedia(){ return {matches:false}; } };
+let knotenZaehler = 0;
+global.document = { getElementById: el, addEventListener(){}, documentElement: el("__wurzel__"),
+  createElement(tag){ const k = el("__knoten"+(knotenZaehler++)); k.tagName = tag; return k; } };
+global.window = { scrollTo(){}, matchMedia(){ return {matches:false}; }, addEventListener(){} };
 global.confirm = () => true;
 const warnungen = []; const echtWarn = console.warn; console.warn = (...a)=>warnungen.push(a);
 

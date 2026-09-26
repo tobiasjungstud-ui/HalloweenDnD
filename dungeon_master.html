@@ -788,6 +788,106 @@ details.fach[open] summary::after{content:"zuklappen"}
 .wzwei.drei{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media (max-width:1100px){.wzwei.drei{grid-template-columns:1fr 1fr}}
 .ophinweis{margin:10px 0 0;font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.5}
+
+/* Lichtquellen: bildgebundene, sanft pulsierende Lichtkränze. */
+.licht-ebene{position:absolute;pointer-events:none;overflow:hidden;mix-blend-mode:screen}
+.szenenbild{overflow:hidden}
+.szenenbild::after{z-index:2;pointer-events:none}
+.lichtpunkt{position:absolute;display:block;border-radius:50%;
+ background:radial-gradient(ellipse,rgba(255,242,198,.95) 0%,rgba(255,195,94,.65) 13%,rgba(255,148,48,.3) 37%,rgba(255,140,45,0) 72%);
+ transform:translate(-50%,-50%) scale(calc(var(--licht-radius,1.4) * var(--quelle-radius,1)));
+ opacity:calc(.78 * var(--licht-kraft,1) * var(--quelle-kraft,1));
+ animation:licht-atmen var(--licht-dauer,5s) ease-in-out var(--licht-start,0s) infinite;
+ will-change:opacity}
+@keyframes licht-atmen{
+ 0%,100%{opacity:calc(.23 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+ 21%{opacity:calc(.65 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+ 38%{opacity:calc(.38 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+ 66%{opacity:calc(.95 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+ 83%{opacity:calc(.50 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+}
+.bildschau .licht-ebene{z-index:1}
+.bildschau .bs-zu{z-index:3}
+@media(prefers-reduced-motion:reduce){.lichtpunkt{animation:none;opacity:calc(.65 * var(--licht-kraft,1) * var(--quelle-kraft,1))}}
+
+
+.licht-regler{display:flex;flex-direction:column;gap:7px;padding-top:12px;border-top:1px solid var(--line)}
+.licht-regler label,.licht-regler .licht-skala{display:flex;justify-content:space-between;gap:8px}
+.licht-regler output{color:var(--gold);font-variant-numeric:tabular-nums}
+.licht-regler input{width:100%;margin:4px 0;accent-color:var(--gold);cursor:pointer}
+.licht-regler input:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+html.licht-aus .licht-ebene{display:none}
+
+#licht-editor{width:min(1400px,96vw);height:94vh;max-width:96vw;max-height:94vh;box-sizing:border-box;padding:0;border:1px solid #665344;border-radius:8px;background:#15161b;color:#e8e0d5;font:14px/1.5 var(--sans);overflow:hidden}
+#licht-editor::backdrop{background:#000d}
+.le-layout{height:100%;display:grid;grid-template-rows:auto 1fr}
+.le-top{display:flex;gap:14px;align-items:center;padding:12px 18px;border-bottom:1px solid #41362e}
+.le-top strong{flex:1}.le-main{display:grid;grid-template-columns:minmax(0,1fr) 270px;min-height:0}
+.le-scroll{overflow:auto;background:#08090c;position:relative}
+.le-stage{position:relative;line-height:0;margin:auto;width:100%;isolation:isolate;touch-action:pan-y}
+.le-stage>img{display:block;width:100%;height:auto;pointer-events:none;user-select:none}
+.le-stage>.licht-ebene{inset:0;width:100%;height:100%}
+.le-markers{position:absolute;inset:0;pointer-events:none}
+.le-marker{position:absolute;transform:translate(-50%,-50%);padding:0;border:1px solid #fff;background:#16161699;color:white;border-radius:50%;width:18px;height:18px;line-height:16px;font:10px var(--sans);pointer-events:auto;touch-action:none;box-shadow:0 0 0 1px #000;cursor:move}
+.le-marker.aktiv{outline:2px solid #ffb566;outline-offset:3px}
+.le-side{padding:16px;overflow:auto;display:flex;flex-direction:column;gap:12px;border-left:1px solid #41362e}
+.le-side label{display:flex;flex-direction:column;gap:5px}
+.le-side select,.le-side button,.le-top button{font:inherit;color:#eee;background:#25262d;border:1px solid #665344;border-radius:4px;padding:7px 9px}
+.le-side input[type=range]{width:100%;accent-color:#e9ac6d}
+.le-side input[type=color]{width:100%;height:32px;background:transparent;border:1px solid #665344}
+.le-side p{margin:0;color:#c4b8aa;font-size:12px}
+.le-side .le-check{display:flex;flex-direction:row;align-items:center}
+.le-side button:disabled{opacity:.4;cursor:default}
+#le-status{font-size:12px;color:#e9bc86;min-height:36px}
+.le-actions{display:flex;gap:6px}.le-actions button{flex:1}
+.le-no-markers .le-markers{display:none}
+@media(max-width:700px){.le-main{grid-template-columns:minmax(0,1fr) 210px}.le-side{padding:10px}.le-top{padding:8px}}
+
+
+@keyframes licht-kerze{
+ 0%,100%{opacity:calc(.65 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+ 13%{opacity:calc(.82 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+ 19%{opacity:calc(.16 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+ 27%{opacity:calc(.76 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+ 57%{opacity:calc(.60 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+ 64%{opacity:calc(.87 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+ 83%{opacity:calc(.58 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+}
+@keyframes licht-feuer{
+ 0%,100%{opacity:calc(.72 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+ 9%{opacity:calc(.95 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+ 18%{opacity:calc(.09 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+ 29%{opacity:calc(.86 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+ 37%{opacity:calc(.61 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+ 49%{opacity:calc(1 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+ 58%{opacity:calc(.14 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+ 67%{opacity:calc(.92 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+ 84%{opacity:calc(.55 * var(--licht-kraft,1) * var(--quelle-kraft,1))}
+}
+#le-modus-label[hidden]{display:none}
+#le-arten{border-block:1px solid #514234;padding:10px 0}
+#le-arten summary{cursor:pointer;color:#efc29a}
+.le-art{padding:10px 0;border-bottom:1px solid #302b28}
+.le-art label{font-size:12px;margin-top:5px}
+@media(prefers-reduced-motion:reduce){.lichtpunkt{animation:none!important}}
+
+
+#licht-admin{width:320px;max-width:calc(100vw - 48px);padding:22px;border:1px solid #665344;border-radius:8px;background:var(--panel);color:var(--text);font:14px/1.5 var(--sans)}
+#licht-admin::backdrop{background:#000b}
+#licht-admin h2{margin:0 0 16px;font-size:18px}
+#licht-admin label{display:block;margin-bottom:8px}
+#licht-admin-code{box-sizing:border-box;width:100%;padding:10px;background:var(--bg);color:var(--text);border:1px solid #665344;border-radius:4px;font:inherit}
+#licht-admin-fehler{min-height:21px;margin:8px 0 16px;color:#f2a898}
+.licht-admin-aktionen{display:flex;justify-content:flex-end;gap:10px}
+.licht-admin-aktionen button{padding:7px 11px;border:1px solid #665344;border-radius:4px}
+.licht-admin-aktionen button[type=submit]{color:var(--gold)}
+
+.licht-fach>summary{list-style:none;display:flex;align-items:center;gap:8px;cursor:pointer}
+.licht-fach>summary::-webkit-details-marker{display:none}
+.licht-fach>summary span{margin-left:auto;transition:transform .15s}
+.licht-fach[open]>summary span{transform:rotate(180deg)}
+.licht-fach .licht-regler{margin:3px 10px 8px;padding-top:9px}
+#licht-admin-auf{margin-top:3px;border-top:1px solid var(--line);border-radius:0}
 </style>
 
 <div id="rahmen" aria-hidden="true"></div><div id="rahmenkante" aria-hidden="true"></div>
@@ -805,10 +905,22 @@ details.fach[open] summary::after{content:"zuklappen"}
     <details class="einstellfach" id="einstellungen">
       <summary aria-label="Einstellungen" title="Einstellungen"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m9 3 1-2h4l1 2 2 1 2-.2 2 3-1 2v3l1 2-2 3-2-.2-2 1-1 2h-4l-1-2-2-1-2 .2-2-3 1-2V9L3 7l2-3 2 .2Z" transform="translate(0 1)"/><circle cx="12" cy="11.5" r="3"/></svg></summary>
       <div class="einst-pop"><b>Einstellungen</b>
+        <details class="licht-fach" id="licht-fach">
+          <summary class="knopf">Lichtglühen <span aria-hidden="true">▾</span></summary>
+          <div class="licht-regler">
+          <label for="licht-intensitaet"><span>Stärke</span><output id="licht-wert" for="licht-intensitaet">85 %</output></label>
+          <input id="licht-intensitaet" type="range" min="0" max="200" step="1" value="85" aria-describedby="licht-hinweis">
+          <small class="licht-skala"><span>Aus</span><span>Sehr stark</span></small>
+          <small id="licht-hinweis">Wirkt sofort auf Hintergrund und grosse Bildansicht.</small>
+          </div>
+        </details>
+
         <button id="stimmschalter" class="knopf schalter" aria-pressed="false" title="Stimmangaben einblenden"><span class="w"></span>Stimmen der Figuren</button>
         <button id="blutschalter" class="knopf schalter" aria-pressed="false" title="Blut im Messrohr"><span class="w"></span>Blut im Gefahrenbalken</button>
         <button class="knopf" id="zuruecksetzen">Neue Runde</button>
-        <small>„Neue Runde“ setzt alles auf den Anfang zurück.</small></div>
+        <small>„Neue Runde“ setzt alles auf den Anfang zurück.</small>
+        <button class="knopf" id="licht-admin-auf" type="button">Admin</button>
+      </div>
     </details>
   </span>
 </header>
@@ -921,6 +1033,48 @@ details.fach[open] summary::after{content:"zuklappen"}
   </div>
 
 </aside>
+
+
+
+<dialog id="licht-admin" aria-labelledby="licht-admin-titel">
+ <form id="licht-admin-form">
+  <h2 id="licht-admin-titel">Admin-Zugang</h2>
+  <label for="licht-admin-code">Code für den Lichtquellen-Editor</label>
+  <input id="licht-admin-code" type="password" inputmode="numeric" autocomplete="off" required aria-describedby="licht-admin-fehler">
+  <p id="licht-admin-fehler" role="status" aria-live="polite"></p>
+  <div class="licht-admin-aktionen"><button type="button" id="licht-admin-abbrechen">Abbrechen</button><button type="submit">Entsperren</button></div>
+ </form>
+</dialog>
+<dialog id="licht-editor" aria-labelledby="le-titel">
+ <div class="le-layout">
+  <header class="le-top"><strong id="le-titel">Lichtquellen exakt setzen</strong><button id="le-zu" type="button">Fertig ✕</button></header>
+  <div class="le-main">
+   <div class="le-scroll" id="le-scroll"><div class="le-stage" id="le-stage"><img id="le-bild" alt="Originalbild – Lichtquellen durch Klicken setzen" draggable="false"><div class="le-markers" id="le-markers"></div></div></div>
+   <aside class="le-side">
+    <label>Bild<select id="le-szene"></select></label>
+    <p>Klicke genau auf die Flamme – jede Kerze einzeln. Punkte zum Korrigieren ziehen. Mit Tab kannst du Punkte auswählen, mit Pfeiltasten fein verschieben.</p>
+    <label>Bildgrösse <input id="le-zoom" type="range" min="50" max="250" step="10" value="100"></label>
+    <strong id="le-auswahl">Neue Lichtquelle</strong>
+    <label>Lichtquelle<select id="le-typ"><option value="kerze">Kerze · warmes Hellorange</option><option value="feuer">Feuer · kräftiges Orange</option><option value="mond">Mondlicht · kühles Blau</option></select></label>
+    <label id="le-modus-label">Diese Kerze<select id="le-modus"><option value="flackern">Flackert</option><option value="ruhig">Leuchtet ruhig</option></select></label>
+    <label>Farbe<input id="le-farbe" type="color" value="#ffb566"></label>
+    <label>Lichtradius <input id="le-radius" type="range" min=".5" max="20" step=".1" value="3"></label>
+    <details id="le-arten"><summary>Einstellungen pro Lichtart</summary><div id="le-arten-inhalt"></div></details>
+    <label>Glühstärke gesamt <input id="le-staerke" type="range" min="0" max="200" step="1" value="85"></label>
+    <label class="le-check"><input id="le-marken" type="checkbox" checked>Markierungen zeigen</label>
+    <div class="le-actions"><button type="button" id="le-neu">Neue Quelle</button><button type="button" id="le-loeschen" disabled>Punkt löschen</button></div>
+    <button type="button" id="le-undo" disabled>Rückgängig</button>
+    <button type="button" id="le-leeren">Punkte dieses Bildes löschen</button>
+    <p>Deine finalen Lichtquellen sind fest eingebaut. Änderungen wirken sofort in beiden Ansichten.</p>
+    <button type="button" id="le-export">Markierungen exportieren</button>
+    <button type="button" id="le-import">Markierungen importieren</button>
+    <input id="le-datei" type="file" accept=".json,application/json" hidden>
+    <p>Die Punkte bleiben in diesem Browser gespeichert. Exportiere spätere Änderungen als Sicherung oder zum Übernehmen in eine neue HTML-Version.</p>
+    <output id="le-status" aria-live="polite"></output>
+   </aside>
+  </div>
+ </div>
+</dialog>
 
 <div class="szenenbild" id="szenenbild" aria-hidden="true"></div>
 <button class="bildzeigen" id="bildzeigen" hidden title="Das Bild dieser Szene gross zeigen — zum Herzeigen am Tisch">⤢ zeigen</button>
@@ -2747,6 +2901,94 @@ function hilfeVerteilen(k, bl){
    damit auch ein Querformat passt, ohne dass es irgendwo eingetragen werden muss.
    Ohne Image (Prüfstand) bleibt es bei der Voreinstellung 2:3.                */
 const BILD_SV = {};
+
+/* x/y and halo width/height are percentages of the original image.
+   The overlay follows the exact cover/contain projection, including cropping. */
+/* Final_Lichter.json: exact user-defined positions, colours and settings baked in.
+   Revision-specific storage prevents older drafts from overriding these defaults. */
+const LICHT_POSITIONEN_KEY="nachtfels-lichtpunkte-final-0a5bba1264b5";
+const LICHT_FARBEN={kerze:"#ffb566",feuer:"#ff942e",mond:"#a8cfff"};
+const LICHT_ART_KEY="nachtfels-lichtarten-final-0a5bba1264b5";
+let LICHT_ARTEN={"mond":{"kraft":102,"radius":100,"tempo":100},"kerze":{"kraft":200,"radius":200,"tempo":200},"feuer":{"kraft":120,"radius":120,"tempo":122}};
+function pruefeLichtArten(data){
+ const out={};
+ for(const k of Object.keys(LICHT_FARBEN)){
+  const v=data[k];
+  if(!v||!Number.isFinite(v.kraft)||v.kraft<0||v.kraft>200||!Number.isFinite(v.radius)||v.radius<50||v.radius>200||!Number.isFinite(v.tempo)||v.tempo<25||v.tempo>200)throw Error("Ungültige Einstellungen");
+  out[k]={kraft:v.kraft,radius:v.radius,tempo:v.tempo};
+ }
+ return out;
+}
+try{const raw=localStorage.getItem(LICHT_ART_KEY);if(raw)LICHT_ARTEN=pruefeLichtArten(JSON.parse(raw));}catch(e){}
+function lichtArtenAnwenden(){
+ for(const [typ,v] of Object.entries(LICHT_ARTEN)){
+  document.documentElement.style.setProperty("--"+typ+"-kraft",v.kraft/100);
+  document.documentElement.style.setProperty("--"+typ+"-radius",v.radius/100);
+ }
+}
+lichtArtenAnwenden();
+let BILD_LICHTER={"fahrt":[[29.543912748525802,47.61432621892884,3,2,"#ffb566","kerze","flackern"],[39.563220790064186,47.72565186383482,3,2,"#ffb566","kerze","flackern"]],"wirtshaus":[[48.64740047278363,0.714915645172232,3,2,"#ffb566","kerze","flackern"],[56.26203484822393,0.24735037650484526,3,2,"#ffb566","kerze","flackern"],[75.59919845953942,1.3160709906017294,3,2,"#ffb566","kerze","flackern"],[98.34290902828874,11.268531709378962,3,2,"#ffb566","kerze","flackern"],[73.29476963539302,32.97691918322192,3,2,"#ffb566","kerze","flackern"],[75.69939101711101,47.00387724324352,3,2,"#ffb566","kerze","flackern"],[77.0018942655416,48.07259785734041,3,2,"#ffb566","kerze","flackern"],[11.175383941011633,42.862584863618096,3,2,"#ffb566","kerze","flackern"],[7.468259310863065,27.499726035975392,3,2,"#ffb566","kerze","flackern"],[8.870955116865225,27.566521074356448,3,2,"#ffb566","kerze","flackern"],[21.895987601171,21.15419738977514,3,2,"#ffb566","kerze","flackern"],[23.398875964744743,23.224843579587855,3,2,"#ffb566","kerze","flackern"],[25.60311223131957,22.490098157396247,3,2,"#ffb566","kerze","flackern"],[44.03854282449082,23.492023733112074,3,2,"#ff942e","feuer","flackern"],[29.21082705825258,38.34348304814983,6.3,4.199999999999999,"#ff942e","feuer","flackern"],[28.508696400895474,40.72514363542433,2.8,1.8666666666666665,"#ff942e","feuer","flackern"],[31.414280570471377,39.18885775266006,2.4,1.5999999999999999,"#ff942e","feuer","flackern"],[31.21389545532821,34.98077033465358,2.4,1.5999999999999999,"#ff942e","feuer","flackern"]],"karte":[[7.869029541149397,3.1976949104751164,20,11.25703564727955,"#ffb566","kerze","flackern"]],"kutsche":[[27.80734849789439,50.276834123915236,9.2,6.133333333333333,"#ffb566","kerze","flackern"],[45.24085351534981,51.21196466125001,8.2,5.466666666666666,"#ffb566","kerze","flackern"]],"stollen":[[17.788092740736104,57.05360919216128,20,11.25703564727955,"#ffb566","kerze","flackern"],[47.54528233949622,43.06798956717891,6.5,3.658536585365854,"#ffb566","kerze","flackern"],[17.88255144462419,55.87413169372959,20,11.25703564727955,"#ffb566","kerze","flackern"]],"galgen":[[9.672495577437887,56.99721556464119,7.9,4.446529080675423,"#ffb566","kerze","flackern"]],"hof":[[9.098416347286582,49.090514859939155,2,1.3333333333333333,"#ffb566","kerze","flackern"],[10.273650922867386,47.87221274219725,2,1.3333333333333333,"#ffb566","kerze","flackern"],[10.974998825868466,48.60695816438885,2,1.3333333333333333,"#ffb566","kerze","flackern"],[11.576154171297963,49.00772839467518,2,1.3333333333333333,"#ffb566","kerze","flackern"],[12.87865741972854,50.143244047153125,2,1.3333333333333333,"#ffb566","kerze","flackern"],[37.22544890962318,54.88569177220805,2,1.3333333333333333,"#ffb566","kerze","flackern"],[38.12718192776743,54.95248681058909,2,1.3333333333333333,"#ffb566","kerze","flackern"],[51.35259952721637,32.7097390296977,2,1.3333333333333333,"#ffb566","kerze","flackern"],[52.45471766050378,31.974993607506093,2,1.3333333333333333,"#ffb566","kerze","flackern"],[53.75722090893436,31.974993607506093,2,1.3333333333333333,"#ffb566","kerze","flackern"],[54.6589539270786,31.974993607506093,2,1.3333333333333333,"#ffb566","kerze","flackern"],[56.16184229065235,31.440633300457648,2,1.3333333333333333,"#ffb566","kerze","flackern"],[57.36415298151134,31.70781345398187,2,1.3333333333333333,"#ffb566","kerze","flackern"],[59.66858180565775,32.84332910645981,2,1.3333333333333333,"#ffb566","kerze","flackern"],[58.7668487875135,32.175378722649256,2,1.3333333333333333,"#ffb566","kerze","flackern"],[53.556835793791194,35.11436041141569,2,1.3333333333333333,"#ffb566","kerze","flackern"],[56.26203484822393,35.11436041141569,2,1.3333333333333333,"#ffb566","kerze","flackern"],[52.755295333218534,28.635241688453327,2,1.3333333333333333,"#ffb566","kerze","flackern"],[55.05972415736493,28.76883176521544,2,1.3333333333333333,"#ffb566","kerze","flackern"],[75.59919845953942,6.860059176229316,2,1.3333333333333333,"#ffb566","kerze","flackern"],[74.99804311410992,6.125313754037707,2,1.3333333333333333,"#ffb566","kerze","flackern"],[44.33912049720557,49.80926885524784,4.9,3.2666666666666666,"#ffb566","kerze","flackern"],[64.6782096842369,51.813120006679505,4.9,3.2666666666666666,"#ffb566","kerze","flackern"],[93.73405137999593,54.68530665706488,4.9,3.2666666666666666,"#ffb566","kerze","flackern"]],"tueren":[[29.5106219766113,25.811539546031298,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[27.70715594032281,25.698752290991116,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[26.10407501917748,24.965635133229945,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[23.49906852231633,23.668581700267872,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[21.695602486027834,22.822677287466515,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[21.49521737088467,18.3111870858593,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[22.697528061743665,18.029218948258848,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[25.4027271161764,20.566932186662907,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[28.709081516038637,21.582017482024533,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[29.81119964932605,21.582017482024533,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[30.813125225041876,21.24365571690399,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[33.919094509760946,21.24365571690399,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[36.524101006622104,20.90529395178345,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[36.824678679336856,21.35644297194417,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[37.7264116974811,22.202347384745526,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[38.62814471562534,19.382666008741012,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[22.396950389028916,14.13805864937262,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[23.398875964744743,13.461335119131537,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[22.59733550417208,12.051494431129282,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[24.300608982888992,14.13805864937262,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[25.60311223131957,14.2508459044128,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[24.300608982888992,15.829867474975329,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[25.803497346462734,16.16822924009587,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[26.80542292217856,16.5629846327365,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[27.907541055465973,14.13805864937262,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[30.612740109898713,14.363633159452982,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[33.117554049188286,14.307239531932892,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[35.12140520061994,16.111835612575778,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[32.71678381890195,16.844952770336953,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[34.921020085476776,15.209537572254336,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[35.22159775819153,14.645601297053432,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[35.92294566119261,15.265931199774426,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[36.824678679336856,12.784611588890455,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[37.92679681262426,12.107888058649372,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[38.92872238834009,13.066579726490907,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[37.1252563520516,16.78855914281686,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[46.24277909106564,44.3086493726209,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[47.0443195516383,44.083074862540535,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[47.84586001221097,43.34995770477936,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[48.64740047278363,42.898808684618636,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[49.24855581821313,42.27847878189765,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[50.25048139392896,41.82732976173693,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[50.75144418178687,42.67323417453828,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[51.65317719993112,42.898808684618636,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[52.55491021807537,43.57553221485972,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[54.157991139220684,44.3086493726209,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[50.45086650907212,44.02668123502044,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[49.54913349092788,44.365043000140986,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[48.346822800068885,44.47783025518117,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[51.55298464235953,44.47783025518117,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[52.55491021807537,44.816192020301706,1.1,0.6191369606003753,"#ffb566","kerze","flackern"],[77.90362728368584,39.74076554349358,3.8,2.1388367729831144,"#ffb566","kerze","ruhig"],[96.3671311033415,53.681031148881175,3.8,2.1388367729831144,"#ffb566","kerze","ruhig"],[5.636730504966168,51.36261057289856,3.8,2.1388367729831144,"#ffb566","kerze","ruhig"],[15.767364191410529,40.58508789535777,3.8,2.1388367729831144,"#ffb566","kerze","ruhig"],[19.10713353858999,54.99689147579022,3.8,2.1388367729831144,"#ffb566","kerze","ruhig"],[51.72554749604272,56.12477175599798,3.8,2.1388367729831144,"#ffb566","kerze","ruhig"],[47.495172989615405,56.688711896101864,3.8,2.1388367729831144,"#ffb566","kerze","ruhig"],[31.241628833342034,72.72967588127885,9.6,5.4033771106941835,"#ffb566","kerze","ruhig"],[16.21266677103446,67.65421462034395,1.9,1.0694183864915572,"#ffb566","kerze","ruhig"],[65.5299274643845,78.49439731345184,1.9,1.0694183864915572,"#ffb566","kerze","ruhig"],[65.41860181947851,80.87547790500155,1.9,1.0694183864915572,"#ffb566","kerze","ruhig"],[85.12324096783732,81.69005810737382,12.3,6.923076923076923,"#ff942e","feuer","ruhig"],[83.34203064934161,82.0660182007764,12.3,6.923076923076923,"#ff942e","feuer","ruhig"],[77.77574840404252,82.75527837201447,12.3,6.923076923076923,"#ff942e","feuer","ruhig"],[67.08848649306825,20.47122289831944,2.1,1.1819887429643527,"#ffb566","kerze","ruhig"],[77.10779453460663,22.726983458734953,2.1,1.1819887429643527,"#ffb566","kerze","ruhig"],[83.00805371462367,23.29092359883883,2.1,1.1819887429643527,"#ffb566","kerze","ruhig"],[98.9276209361791,20.784522976154925,2.1,1.1819887429643527,"#ffb566","kerze","ruhig"],[88.12903338029884,4.743558990977937,2.1,1.1819887429643527,"#ffb566","kerze","ruhig"],[80.78154081650403,2.9890785550992036,20,11.25703564727955,"#a8cfff","mond","ruhig"]],"bellamy":[[29.81119964932605,13.138792784048508,4.2,2.8,"#ffb566","kerze","flackern"],[0.8555505111385945,53.0154306975385,4.2,2.8,"#ffb566","kerze","flackern"],[56.96338275122501,30.371912686360762,4.2,2.8,"#ffb566","kerze","flackern"],[49.849711163642624,59.49454942050085,4.2,2.8,"#ffb566","kerze","flackern"],[5.764985832146156,63.30186660822101,20,13.333333333333332,"#ffb566","kerze","ruhig"],[56.362227405795515,40.925528750567494,1,0.6666666666666666,"#ffb566","kerze","ruhig"],[56.362227405795515,45.20041120695503,1,0.6666666666666666,"#ffb566","kerze","ruhig"],[57.263960423939764,42.12783944142649,1,0.6666666666666666,"#ffb566","kerze","ruhig"],[70.58957058096028,38.32052225370634,1,0.6666666666666666,"#ffb566","kerze","ruhig"],[71.79188127181928,37.65257186989579,1,0.6666666666666666,"#ffb566","kerze","ruhig"],[73.09438452024986,38.32052225370634,1,0.6666666666666666,"#ffb566","kerze","ruhig"],[84.91710631369664,34.51320506598619,1,0.6666666666666666,"#ffb566","kerze","ruhig"],[83.71479562283764,42.72899478685599,1,0.6666666666666666,"#ffb566","kerze","ruhig"],[84.91710631369664,42.72899478685599,1,0.6666666666666666,"#ffb566","kerze","ruhig"],[86.41999467727038,42.72899478685599,1,0.6666666666666666,"#ffb566","kerze","ruhig"],[66.18109804781064,51.345554738012126,1,0.6666666666666666,"#ffb566","kerze","ruhig"],[67.48360129624122,50.744399392582615,1,0.6666666666666666,"#ffb566","kerze","ruhig"],[68.88629710224338,51.54593985315529,1,0.6666666666666666,"#ffb566","kerze","ruhig"],[68.98648965981495,54.484921541921715,1,0.6666666666666666,"#ffb566","kerze","ruhig"],[70.68976313853187,54.484921541921715,1,0.6666666666666666,"#ffb566","kerze","ruhig"],[72.49322917482036,54.55171658030277,1,0.6666666666666666,"#ffb566","kerze","ruhig"],[87.02115002269989,57.02313300040181,1,0.6666666666666666,"#ffb566","kerze","ruhig"],[87.92288304084413,56.288387578210205,1,0.6666666666666666,"#ffb566","kerze","ruhig"],[89.52596396198945,56.956337962020754,1,0.6666666666666666,"#ffb566","kerze","ruhig"],[96.94021322228659,57.357108192307095,1,0.6666666666666666,"#ff942e","feuer","flackern"],[79.00574541697326,61.765580725456736,10.2,6.799999999999999,"#ff942e","feuer","flackern"],[82.01152214412073,60.22929484269247,10.2,6.799999999999999,"#ff942e","feuer","flackern"],[84.6165286409819,57.82467346097447,10.2,6.799999999999999,"#ff942e","feuer","flackern"],[80.30824866540382,60.09570476593036,10.2,6.799999999999999,"#ff942e","feuer","flackern"]],"tam":[[19.591558777024595,58.759803998309245,14.3,9.533333333333333,"#ff942e","feuer","flackern"],[11.776539286441128,57.89146849935554,20,13.333333333333332,"#ff942e","feuer","flackern"],[3.961519795857664,56.08800246306704,10.6,7.066666666666666,"#ff942e","feuer","flackern"],[11.976924401584295,50.944784507725785,10.6,7.066666666666666,"#ff942e","feuer","flackern"],[7.368066753291481,54.818896733826996,4.5,3,"#ff942e","feuer","flackern"],[31.414280570471377,59.093779190214526,4.5,3,"#ff942e","feuer","flackern"],[0.9557430687101773,54.01735627325432,4.5,3,"#ff942e","feuer","flackern"],[9.071340232008392,56.02120742468598,4.5,3,"#ff942e","feuer","flackern"],[4.362290026143995,58.893394075071356,4.5,3,"#ff942e","feuer","flackern"],[14.181160668159118,51.813120006679505,4.5,3,"#ff942e","feuer","flackern"],[11.676346728869547,43.86451043933393,7.2,4.8,"#ff942e","feuer","flackern"],[52.755295333218534,39.52283294456534,0.9,0.6,"#ffb566","kerze","flackern"],[57.263960423939764,45.26720624533609,0.9,0.6,"#ffb566","kerze","flackern"],[60.870892496516745,30.238322609598654,0.9,0.6,"#ffb566","kerze","flackern"],[72.49322917482036,20.285861890821423,0.9,0.6,"#ffb566","kerze","flackern"],[74.39688776868043,19.61791150701087,0.9,0.6,"#ffb566","kerze","flackern"],[77.80343472611425,17.146495086911827,0.9,0.6,"#ffb566","kerze","flackern"],[87.12134258027146,17.079700048530768,0.9,0.6,"#ffb566","kerze","flackern"],[91.32942999827794,18.949961123200318,0.9,0.6,"#ffb566","kerze","flackern"],[87.22153513784305,35.8491058336073,0.9,0.6,"#ffb566","kerze","flackern"],[89.2253862892747,35.38154056493991,0.9,0.6,"#ffb566","kerze","flackern"],[92.7321258042801,35.04756537303464,0.9,0.6,"#ffb566","kerze","flackern"],[94.53559184056859,35.51513064170202,0.9,0.6,"#ffb566","kerze","flackern"],[95.83809508899918,35.715515756845186,0.9,0.6,"#ffb566","kerze","flackern"],[98.54329414343191,40.65834859704328,0.9,0.6,"#ffb566","kerze","flackern"],[83.21383283497973,41.259503942472776,0.9,0.6,"#ffb566","kerze","flackern"],[78.50478262911534,43.12976501714232,0.9,0.6,"#ffb566","kerze","flackern"],[79.60690076240274,52.08030016020373,0.9,0.6,"#ffb566","kerze","flackern"],[81.6107519138344,49.8760638936289,0.9,0.6,"#ffb566","kerze","flackern"],[83.61460306526605,49.8760638936289,0.9,0.6,"#ffb566","kerze","flackern"],[89.92673419227579,52.01350512182267,0.9,0.6,"#ffb566","kerze","flackern"],[91.63000767099268,51.21196466125001,0.9,0.6,"#ffb566","kerze","flackern"],[93.63385882242434,52.88184062077639,0.9,0.6,"#ffb566","kerze","flackern"]],"anneke":[[22.29675783145733,47.07067228162458,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[23.799646195031077,46.20233678267086,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[25.502919673747986,46.87028716648142,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[37.325641467194764,45.33400128371714,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[38.327567042910594,44.66605089990659,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[39.73026284891276,45.13361616857397,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[42.43546190334549,44.0648955544771,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[57.965308326940836,44.26528066962026,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[59.868966920800915,44.465665784763424,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[61.77262551466099,44.26528066962026,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[64.07705433880739,44.53246082314448,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[66.58186827809696,44.465665784763424,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[71.39111104153295,38.85488256075478,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[72.8939994051067,38.05334210018212,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[74.99804311410992,38.92167759913584,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[67.68398641138438,34.58000010436725,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[64.97878735695164,33.3108943751272,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[61.97301062980416,32.44255887617348,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[60.36992970865883,33.778459643794584,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[58.86704134508508,33.778459643794584,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[56.66280507851026,34.6467951427483,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[50.15028883635737,34.913975296272525,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[48.54720791521205,34.913975296272525,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[47.24470466678147,34.045639797318806,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[44.539505612348734,33.043714221602976,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[41.53372888520125,33.711664605413524,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[43.43738747906132,34.713590181129355,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[39.42968517619801,34.713590181129355,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[35.12140520061994,37.518981793133676,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[37.02506379448002,38.78808752237373,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[33.6185168370462,38.92167759913584,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[18.08867041345085,62.5671211860294,0.6,0.39999999999999997,"#ffb566","kerze","flackern"],[19.892136449739343,62.23314599412413,1.8,1.2,"#ffb566","kerze","flackern"],[71.89207382939085,67.57674906460855,1.8,1.2,"#ffb566","kerze","flackern"],[65.1791724720948,69.31342006251599,1.8,1.2,"#ffb566","kerze","flackern"],[62.17339574494732,70.0481654847076,1.8,1.2,"#ffb566","kerze","flackern"],[61.47204784194624,68.17790441003804,1.8,1.2,"#ffb566","kerze","flackern"],[74.39688776868043,68.57867464032438,1.8,1.2,"#ffb566","kerze","flackern"],[17.988477855879268,75.32497351681096,6.8,4.533333333333333,"#ffb566","kerze","flackern"],[21.595409928456252,76.46048916928889,3.1,2.0666666666666664,"#ffb566","kerze","flackern"],[23.89983875260266,77.12843955309945,3.1,2.0666666666666664,"#ffb566","kerze","flackern"],[29.41042941903972,77.06164451471838,3.1,2.0666666666666664,"#ffb566","kerze","flackern"],[15.784241589304445,76.12651397738361,3.1,2.0666666666666664,"#ffb566","kerze","flackern"],[30.612740109898713,70.11496052308864,3.1,2.0666666666666664,"#ffb566","kerze","flackern"],[27.506770825179643,69.11303494737282,3.1,2.0666666666666664,"#ffb566","kerze","flackern"],[69.58764500524445,69.11303494737282,3.1,2.0666666666666664,"#ffb566","kerze","flackern"],[36.32371589147893,65.50610287479583,0.7,0.4666666666666666,"#ffb566","kerze","flackern"],[28.308311285752307,65.84007806670111,0.7,0.4666666666666666,"#ffb566","kerze","flackern"],[33.21774660675987,65.03853760612844,0.7,0.4666666666666666,"#ffb566","kerze","flackern"],[38.62814471562534,66.10725822022533,0.7,0.4666666666666666,"#ffb566","kerze","flackern"],[40.73218842462858,59.69493453564403,0.7,0.4666666666666666,"#ffb566","kerze","flackern"],[71.39111104153295,59.82852461240613,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[75.29862078682467,59.628139497262964,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[73.79573242325094,59.160574228595586,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[71.59149615667611,57.4906982690692,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[68.98648965981495,59.160574228595586,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[65.98071293266747,59.4277543821198,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[66.78225339324013,61.698785687075684,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[67.58379385381281,63.30186660822101,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[75.99996868982576,65.30571775965267,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[77.80343472611425,65.50610287479583,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[35.722560546049436,61.631990648694625,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[38.02698937019585,60.16249980431141,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[40.33141819434225,58.35903376802292,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[42.73603957606024,58.292238729641866,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[43.637772594204485,60.29608988107352,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[44.03854282449082,65.57289791317689,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[45.74181630320773,66.3076433353685,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[31.61466568561454,65.90687310508217,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[35.02121264304836,66.04046318184427,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[74.99804311410992,49.74247381686679,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[76.30054636254052,49.47529366334257,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[76.30054636254052,50.87798946934473,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[79.60690076240274,50.21003908553418,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[81.10978912597648,50.276834123915236,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[82.51248493197865,52.21389023696583,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[84.6165286409819,51.0783745844879,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[86.62037979241354,52.01350512182267,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[33.41813172190303,49.60888374010468,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[31.71485824318612,49.94285893200996,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[28.9094666311818,50.610809315820504,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[29.009659188753385,48.74054824115096,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[27.005808037321728,48.00580281895935,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[88.72442350141678,38.92167759913584,0.5,0.3333333333333333,"#ffb566","kerze","flackern"],[84.0153732955524,27.165750844070114,0.5,0.3333333333333333,"#ffb566","kerze","flackern"]],"mirela":[[37.22544890962318,32.97691918322192,1.3,0.8666666666666667,"#ffb566","kerze","flackern"],[40.0308405216275,31.974993607506093,1.3,0.8666666666666667,"#ffb566","kerze","flackern"],[41.834306557915994,31.106658108552377,1.3,0.8666666666666667,"#ffb566","kerze","flackern"],[71.29091848396136,13.205587822429566,1.3,0.8666666666666667,"#ffb566","kerze","flackern"],[73.49515475053619,13.673153091096951,1.3,0.8666666666666667,"#ffb566","kerze","flackern"],[76.60112403525525,10.934556517473688,1.3,0.8666666666666667,"#ffb566","kerze","flackern"],[82.8130626046934,37.38539171637157,1.3,0.8666666666666667,"#ffb566","kerze","flackern"],[91.93058534370743,39.18885775266006,9.9,6.6,"#ff942e","feuer","flackern"],[95.637709973856,39.58962798294639,9.9,6.6,"#ff942e","feuer","flackern"],[91.32942999827794,41.72706921114016,5.5,3.6666666666666665,"#ff942e","feuer","flackern"],[88.0230755984157,39.92360317485167,5.5,3.6666666666666665,"#ff942e","feuer","flackern"],[92.33135557399376,37.452186754752624,15,10,"#ff942e","feuer","flackern"]],"buch":[[74.99804311410992,55.553642156018604,4.9,3.2666666666666666,"#ffb566","kerze","ruhig"],[90.22731186499054,77.79638993691,4.9,3.2666666666666666,"#ffb566","kerze","ruhig"],[98.04233135557399,71.98522159775818,4.9,3.2666666666666666,"#ffb566","kerze","ruhig"],[86.9209574651283,21.28778746653725,4.9,3.2666666666666666,"#ff8566","kerze","ruhig"],[85.41806910155455,20.48624700596459,2.1,1.4,"#ff8566","kerze","ruhig"],[83.21383283497973,21.554967620061472,2.1,1.4,"#ff8566","kerze","ruhig"],[17.186937395306607,24.42715427044685,2.1,1.4,"#ff8566","kerze","ruhig"],[14.080968110587536,24.56074434720896,2.1,1.4,"#ff8566","kerze","ruhig"],[5.564600717002991,24.159974116922626,2.1,1.4,"#ff8566","kerze","ruhig"],[2.859401662570252,23.42522869473102,2.1,1.4,"#ff8566","kerze","ruhig"],[1.5568984141396747,21.554967620061472,2.1,1.4,"#ff8566","kerze","ruhig"]],"graf":[[0.9557430687101773,24.293564193684738,2.1,1.4,"#ffb566","kerze","ruhig"],[2.6590165474270866,22.5568931957773,2.1,1.4,"#ffb566","kerze","ruhig"],[5.364215601859825,24.42715427044685,2.1,1.4,"#ffb566","kerze","ruhig"],[6.967296523005151,26.2974153451164,2.1,1.4,"#ffb566","kerze","ruhig"],[61.97301062980416,14.942258820337,2.1,1.4,"#ffb566","kerze","flackern"],[63.475898993377896,13.071997745667455,2.1,1.4,"#ffb566","kerze","flackern"],[97.74175368285924,17.146495086911827,2.1,1.4,"#ffb566","kerze","flackern"],[79.306323089688,48.940933356294124,7.8,5.199999999999999,"#ffb566","kerze","flackern"],[97.74175368285924,43.99810051609604,7.8,5.199999999999999,"#ffb566","kerze","flackern"],[80.70901889569015,49.80926885524784,2.1,1.4,"#ffb566","kerze","flackern"],[65.88052037509588,14.741873705193836,2.1,1.4,"#ffb566","kerze","flackern"]],"morgen":[[75.69939101711101,31.961427301022677,20,35.50295857988166,"#ffb566","kerze","ruhig"]]};
+try{const raw=localStorage.getItem(LICHT_POSITIONEN_KEY);if(raw)BILD_LICHTER=pruefeLichtDaten(JSON.parse(raw));}catch(e){}
+function pruefeLichtDaten(data){
+ const src=data.lights||data,out={};
+ if(!src||typeof src!=="object"||Array.isArray(src))throw Error("Ungültige Lichtdaten");
+ for(const key of Object.keys(BILDER)){
+  if(src[key]===undefined)continue;
+  if(!Array.isArray(src[key])||src[key].length>400)throw Error("Ungültige Punktliste");
+  out[key]=src[key].map(p=>{
+   if(!Array.isArray(p)||p.length<6||!p.slice(0,4).every(Number.isFinite)||p[0]<0||p[0]>100||p[1]<0||p[1]>100||p[2]<.3||p[2]>30||p[3]<.1||p[3]>60||!/^#[0-9a-f]{6}$/i.test(p[4])||!Object.hasOwn(LICHT_FARBEN,p[5]))throw Error("Ungültiger Lichtpunkt");
+   if(p[6]!==undefined&&!["ruhig","flackern"].includes(p[6]))throw Error("Ungültiger Kerzenmodus");
+   return [...p.slice(0,6),p[6]||"flackern"];
+  });
+ }
+ return out;
+}
+function lichtFarbe(dot,p){
+ const hex=p[4]||LICHT_FARBEN.kerze;
+ const rgb=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)).join(",");
+ dot.style.background="radial-gradient(ellipse,rgba("+rgb+",.95) 0%,rgba("+rgb+",.65) 13%,rgba("+rgb+",.3) 37%,rgba("+rgb+",0) 72%)";
+ const typ=p[5]||"kerze",v=LICHT_ARTEN[typ];
+ dot.dataset.lichtart=typ;
+ dot.style.setProperty("--quelle-kraft","var(--"+typ+"-kraft,1)");
+ dot.style.setProperty("--quelle-radius","var(--"+typ+"-radius,1)");
+ if(typ==="mond"||(typ==="kerze"&&p[6]==="ruhig"))dot.style.animation="none";
+ else{
+  dot.style.animationName=typ==="feuer"?"licht-feuer":"licht-kerze";
+  const seed=p[0]*.7+p[1]*.3;
+  dot.style.animationDuration=((typ==="feuer"?.85+(seed%1):2.4+(seed%2.2))*100/v.tempo)+"s";
+ }
+}
+const LICHT_EBENEN = new Map();
+function lichtEbene(host, key, contain){
+ let info=LICHT_EBENEN.get(host);
+ if(!info){
+  const layer=document.createElement("div");
+  layer.className="licht-ebene";layer.setAttribute("aria-hidden","true");
+  host.appendChild(layer);
+  info={layer,key:null,contain};LICHT_EBENEN.set(host,info);
+  if(typeof ResizeObserver==="function") new ResizeObserver(()=>lichtFormen(host)).observe(host);
+ }
+ if(info.key!==key){
+  info.key=key;info.layer.replaceChildren();
+  (BILD_LICHTER[key]||[]).forEach((p,i)=>{
+   const dot=document.createElement("i");dot.className="lichtpunkt";
+   dot.style.cssText="left:"+p[0]+"%;top:"+p[1]+"%;width:"+p[2]+"%;height:"+p[3]+"%;--licht-dauer:"+(4.3+(i*1.37)%3.8)+"s;--licht-start:"+(-i*1.73-1)+"s";
+   lichtFarbe(dot,p);
+   info.layer.appendChild(dot);
+  });
+ }
+ lichtFormen(host);
+}
+function lichtFormen(host){
+ const info=LICHT_EBENEN.get(host);if(!info)return;
+ const sv=BILD_SV[info.key];if(!sv){info.layer.style.visibility="hidden";return;}
+ const w=host.clientWidth,h=host.clientHeight;
+ const imageW=info.contain?Math.min(w,h*sv):Math.max(w,h*sv);
+ const imageH=imageW/sv;
+ Object.assign(info.layer.style,{visibility:"visible",left:(w-imageW)/2+"px",top:(h-imageH)/2+"px",width:imageW+"px",height:imageH+"px"});
+}
+window.addEventListener("resize",()=>LICHT_EBENEN.forEach((v,h)=>lichtFormen(h)));
+
 function bildVermessen(schluessel){
   if(BILD_SV[schluessel] !== undefined || typeof Image !== "function") return;
   BILD_SV[schluessel] = null;
@@ -2756,6 +2998,7 @@ function bildVermessen(schluessel){
     BILD_SV[schluessel] = probe.naturalWidth / probe.naturalHeight;
     const el = $("szenenbild");
     if(el && el.getAttribute("data-bild") === schluessel) bildFormen(el, schluessel);
+    LICHT_EBENEN.forEach((v,h)=>{if(v.key===schluessel)lichtFormen(h);});
   };
   probe.src = BILDER[schluessel];
 }
@@ -2764,6 +3007,7 @@ function bildFormen(el, schluessel){
   if(!sv) return;
   if(el.style && el.style.setProperty) el.style.setProperty("--bild-sv", sv.toFixed(4));
   el.classList.toggle("quer", sv > 0.75);
+  lichtFormen(el);
 }
 
 /* Das Bild dieser Szene. Hängt es an einer Flagge, die noch offen ist, bleibt
@@ -2779,6 +3023,7 @@ function zeichneBild(k){
       el.setAttribute("data-bild", schluessel);
       bildVermessen(schluessel);
       bildFormen(el, schluessel);
+      lichtEbene(el, schluessel, false);
     }
     el.classList.add("da");
   } else {
@@ -2798,6 +3043,7 @@ function zeigeBild(){
   b.src = BILDER[schluessel];
   b.alt = "Szenenbild zu „"+aktuelleSzene().titel+"“";
   if(typeof d.showModal === "function") d.showModal(); else d.open = true;
+  lichtEbene(d, schluessel, true);
 }
 
 function zeichneSzene(){
@@ -3156,7 +3402,7 @@ document.addEventListener("click", e=>{
 document.addEventListener("keydown", e=>{
   const tag=(e.target&&e.target.tagName)||"";
   if(tag==="INPUT"||tag==="TEXTAREA"||e.altKey||e.ctrlKey||e.metaKey) return;
-  if(["bildschau","kampfhilfe","notstopp","blutruf"].some(id=>{ const d=$(id); return d && d.open; })) return;   /* Esc schliesst <dialog> selbst */
+  if(["licht-admin","licht-editor","bildschau","kampfhilfe","notstopp","blutruf"].some(id=>{ const d=$(id); return d && d.open; })) return;   /* Esc schliesst <dialog> selbst */
   if(e.key==="Escape" && $("gefahrlade").open){ $("gefahrlade").open=false; $("gefahrlade").querySelector("summary").focus(); e.preventDefault(); return; }
   if(e.key==="Escape"){ ["szenenfach","einstellungen"].forEach(id=>{const f=$(id); if(f) f.open=false;}); }
   if(e.key==="Escape" && Z.kampfOffen){ schliesseKampf(); e.preventDefault(); return; }
@@ -3194,6 +3440,190 @@ function alles(){ zeichneUhr(); zeichneRueckgaengig(); zeichneStimmschalter(); z
 waehle=aktioniert(waehle); tunAusfuehren=aktioniert(tunAusfuehren); setzeGefahr=aktioniert(setzeGefahr); aendereHP=aktioniert(aendereHP);
 ladeKampf=aktioniert(ladeKampf); kampfVorbei=aktioniert(kampfVorbei); stelleWeiche=aktioniert(stelleWeiche); setzeWissen=aktioniert(setzeWissen);
 patrouilleFertig=aktioniert(patrouilleFertig); blutruf=aktioniert(blutruf); notstoppWaehle=aktioniert(notstoppWaehle); notstoppZumMorgen=aktioniert(notstoppZumMorgen);
+
+const LICHT_SCHLUESSEL="nachtfels-licht-intensitaet-v1";
+function setzeLichtIntensitaet(wert, speichern=true){
+ const n=Number(wert);
+ const v=Number.isFinite(n)?Math.max(0,Math.min(200,n)):85;
+ const root=document.documentElement;
+ root.style.setProperty("--licht-kraft",String(v/85));
+ root.style.setProperty("--licht-helligkeit",String(1+v/35));
+ root.style.setProperty("--licht-radius",String(1+v/140));
+ root.classList.toggle("licht-aus",v===0);
+ const input=document.getElementById("licht-intensitaet"),out=document.getElementById("licht-wert");
+ if(input){input.value=String(v);input.setAttribute("aria-valuetext",v===0?"Aus":v+" Prozent");}
+ if(out)out.textContent=v===0?"Aus":v+" %";
+ if(speichern)try{localStorage.setItem(LICHT_SCHLUESSEL,String(v));}catch(e){}
+}
+{
+ let start=85;
+ try{const saved=localStorage.getItem(LICHT_SCHLUESSEL);if(saved!==null)start=saved;}catch(e){}
+ setzeLichtIntensitaet(start,false);
+ document.getElementById("licht-intensitaet").addEventListener("input",e=>setzeLichtIntensitaet(e.target.value));
+}
+
+
+const LE_NAMEN={fahrt:"Ankunft im Wald",wirtshaus:"The Inn",karte:"The Way Up – Karte",galgen:"The Old Road",stollen:"The Kessler Mine",kutsche:"The Coach",hof:"Schlosshof",tueren:"Three Doors",bellamy:"Bellamy",tam:"Tam",anneke:"The Chapel",mirela:"Mirela",buch:"The Blood Ledger",graf:"Der Graf",morgen:"Six o’clock"};
+let leKey="fahrt",leIndex=-1,leUndo=[],leDrag=null;
+function lePunkte(){return BILD_LICHTER[leKey]||(BILD_LICHTER[leKey]=[]);}
+function leMerken(){leUndo.push(JSON.stringify(BILD_LICHTER));if(leUndo.length>60)leUndo.shift();$("le-undo").disabled=false;}
+function leAktualisieren(){
+ LICHT_EBENEN.forEach((info,host)=>{const key=info.key;info.key=null;lichtEbene(host,key,info.contain);});
+}
+function leSpeichern(){
+ let ok=true;
+ try{localStorage.setItem(LICHT_POSITIONEN_KEY,JSON.stringify(BILD_LICHTER));}catch(e){ok=false;}
+ leAktualisieren();
+ $("le-status").textContent=lePunkte().length+" Lichtquellen · "+(ok?"gespeichert":"Bitte exportieren – Browserspeicher nicht verfügbar.");
+}
+function leMarker(){
+ const box=$("le-markers");box.replaceChildren();
+ lePunkte().forEach((p,i)=>{
+  const b=document.createElement("button");b.type="button";b.className="le-marker"+(leIndex===i?" aktiv":"");b.dataset.index=i;
+  b.style.left=p[0]+"%";b.style.top=p[1]+"%";b.textContent=i+1;b.setAttribute("aria-label","Lichtquelle "+(i+1)+": "+p[5]);box.appendChild(b);
+ });
+}
+function leAuswahl(i){
+ leIndex=i;const p=lePunkte()[i];
+ $("le-auswahl").textContent=p?"Lichtquelle "+(i+1):"Neue Lichtquelle";
+ $("le-loeschen").disabled=!p;
+ if(p){$("le-typ").value=p[5];$("le-farbe").value=p[4];$("le-radius").value=p[2];$("le-modus").value=p[6]||"flackern";$("le-modus-label").hidden=p[5]!=="kerze";}
+ leMarker();
+}
+function leBild(key){
+ leKey=key;leIndex=-1;$("le-szene").value=key;$("le-bild").src=BILDER[key];
+ $("le-scroll").scrollTop=0;$("le-scroll").scrollLeft=0;
+ $("le-zoom").value=100;$("le-stage").style.width="100%";
+ bildVermessen(key);lichtEbene($("le-stage"),key,true);leAuswahl(-1);
+ $("le-status").textContent=lePunkte().length+" Lichtquellen";
+}
+function leXY(e){
+ const r=$("le-stage").getBoundingClientRect();
+ return [Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100)),Math.max(0,Math.min(100,(e.clientY-r.top)/r.height*100))];
+}
+function leEigenschaft(){
+ const p=lePunkte()[leIndex];if(!p)return;
+ p[2]=+$("le-radius").value;
+ p[3]=p[2]*(BILD_SV[leKey]||$("le-bild").naturalWidth/$("le-bild").naturalHeight||2/3);
+ p[4]=$("le-farbe").value;p[5]=$("le-typ").value;p[6]=$("le-modus").value;leSpeichern();
+}
+Object.keys(BILDER).forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=LE_NAMEN[k]||k;$("le-szene").appendChild(o);});
+function leOeffnen(){
+ $("einstellungen").open=false;$("licht-editor").showModal();
+ $("le-staerke").value=$("licht-intensitaet").value;
+ leBild($("szenenbild").dataset.bild||"fahrt");
+};
+
+$("licht-admin-auf").onclick=()=>{
+ $("einstellungen").open=false;
+ $("licht-admin-form").reset();
+ $("licht-admin-fehler").textContent="";
+ $("licht-admin-code").removeAttribute("aria-invalid");
+ $("licht-admin").showModal();
+ $("licht-admin-code").focus();
+};
+$("licht-admin-abbrechen").onclick=()=>$("licht-admin").close();
+$("licht-admin-form").onsubmit=e=>{
+ e.preventDefault();
+ const input=$("licht-admin-code");
+ if(input.value!=="132"){
+  $("licht-admin-fehler").textContent="Falscher Code. Bitte erneut versuchen.";
+  input.setAttribute("aria-invalid","true");input.focus();input.select();return;
+ }
+ $("licht-admin").close();leOeffnen();
+};
+$("licht-admin").addEventListener("close",()=>{$("licht-admin-code").value="";});
+$("le-zu").onclick=()=>$("licht-editor").close();
+$("le-szene").onchange=e=>leBild(e.target.value);
+$("le-bild").onload=()=>{
+ BILD_SV[leKey]=$("le-bild").naturalWidth/$("le-bild").naturalHeight;
+ lichtFormen($("le-stage"));
+};
+$("le-zoom").oninput=e=>{$("le-stage").style.width=e.target.value+"%";lichtFormen($("le-stage"));};
+$("le-marken").onchange=e=>$("le-stage").classList.toggle("le-no-markers",!e.target.checked);
+$("le-neu").onclick=()=>leAuswahl(-1);
+$("le-modus").onchange=()=>{leMerken();leEigenschaft();};
+$("le-loeschen").onclick=()=>{if(leIndex<0)return;leMerken();lePunkte().splice(leIndex,1);leAuswahl(-1);leSpeichern();};
+$("le-leeren").onclick=()=>{leMerken();BILD_LICHTER[leKey]=[];leAuswahl(-1);leSpeichern();};
+$("le-undo").onclick=()=>{if(!leUndo.length)return;BILD_LICHTER=JSON.parse(leUndo.pop());$("le-undo").disabled=!leUndo.length;leAuswahl(-1);leSpeichern();};
+$("le-typ").onchange=()=>{leMerken();$("le-farbe").value=LICHT_FARBEN[$("le-typ").value];$("le-modus-label").hidden=$("le-typ").value!=="kerze";leEigenschaft();};
+["le-radius","le-farbe"].forEach(id=>{$(id).addEventListener("pointerdown",()=>{if(leIndex>=0)leMerken();});$(id).addEventListener("keydown",()=>{if(leIndex>=0)leMerken();});$(id).oninput=leEigenschaft;});
+$("le-staerke").oninput=e=>setzeLichtIntensitaet(e.target.value);
+$("le-stage").addEventListener("click",e=>{
+ if(e.target.closest(".le-marker")||leDrag||!$("le-marken").checked||!$("le-bild").complete||!$("le-bild").naturalWidth)return;
+ const pos=leXY(e),w=+$("le-radius").value;
+ leMerken();lePunkte().push([...pos,w,w*BILD_SV[leKey],$("le-farbe").value,$("le-typ").value,$("le-modus").value]);
+ leAuswahl(lePunkte().length-1);leSpeichern();
+});
+$("le-markers").addEventListener("pointerdown",e=>{
+ const b=e.target.closest(".le-marker");if(!b)return;
+ e.preventDefault();leIndex=+b.dataset.index;leMerken();
+ // Keep the captured node alive while dragging.
+ $("le-auswahl").textContent="Lichtquelle "+(leIndex+1);$("le-loeschen").disabled=false;
+ const p=lePunkte()[leIndex];$("le-typ").value=p[5];$("le-farbe").value=p[4];$("le-radius").value=p[2];$("le-modus").value=p[6]||"flackern";$("le-modus-label").hidden=p[5]!=="kerze";
+ $("le-markers").querySelectorAll("button").forEach(n=>n.classList.toggle("aktiv",n===b));
+ b.setPointerCapture(e.pointerId);leDrag={node:b,pointer:e.pointerId};
+});
+$("le-markers").addEventListener("pointermove",e=>{
+ if(!leDrag||leDrag.pointer!==e.pointerId)return;
+ const xy=leXY(e),p=lePunkte()[leIndex];p[0]=xy[0];p[1]=xy[1];
+ leDrag.node.style.left=p[0]+"%";leDrag.node.style.top=p[1]+"%";leAktualisieren();
+});
+function leDragEnd(e){if(!leDrag)return;leSpeichern();setTimeout(()=>{leDrag=null;leMarker();},0);}
+$("le-markers").addEventListener("pointerup",leDragEnd);
+$("le-markers").addEventListener("pointercancel",leDragEnd);
+$("le-markers").addEventListener("focusin",e=>{
+ const b=e.target.closest(".le-marker");if(!b)return;
+ leIndex=+b.dataset.index;const p=lePunkte()[leIndex];
+ $("le-auswahl").textContent="Lichtquelle "+(leIndex+1);$("le-loeschen").disabled=false;
+ $("le-typ").value=p[5];$("le-farbe").value=p[4];$("le-radius").value=p[2];$("le-modus").value=p[6]||"flackern";$("le-modus-label").hidden=p[5]!=="kerze";
+});
+$("le-markers").addEventListener("keydown",e=>{
+ const b=e.target.closest(".le-marker");if(!b)return;
+ leIndex=+b.dataset.index;const p=lePunkte()[leIndex],step=e.shiftKey?.5:.05;
+ const dir={ArrowLeft:[-step,0],ArrowRight:[step,0],ArrowUp:[0,-step],ArrowDown:[0,step]}[e.key];
+ if(dir){e.preventDefault();leMerken();p[0]=Math.max(0,Math.min(100,p[0]+dir[0]));p[1]=Math.max(0,Math.min(100,p[1]+dir[1]));b.style.left=p[0]+"%";b.style.top=p[1]+"%";leSpeichern();}
+ if(e.key==="Delete"||e.key==="Backspace"){e.preventDefault();$("le-loeschen").click();}
+});
+$("le-export").onclick=()=>{
+ const blob=new Blob([JSON.stringify({version:3,lights:BILD_LICHTER,settings:LICHT_ARTEN},null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="nachtfels_lichtquellen.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ $("le-status").textContent="Export gestartet. Diese JSON-Datei kannst du mir schicken.";
+};
+$("le-import").onclick=()=>$("le-datei").click();
+$("le-datei").onchange=async e=>{
+ const file=e.target.files[0];if(!file)return;
+ try{
+  if(file.size>1000000)throw Error("Datei zu gross");
+  const data=JSON.parse(await file.text()),points=pruefeLichtDaten(data);
+  const settings=data.settings?pruefeLichtArten(data.settings):LICHT_ARTEN;
+  leMerken();LICHT_ARTEN=settings;lichtArtenAnwenden();leArtenUI();try{localStorage.setItem(LICHT_ART_KEY,JSON.stringify(LICHT_ARTEN));}catch(e){}Object.assign(BILD_LICHTER,points);leAuswahl(-1);leSpeichern();
+ }catch(err){$("le-status").textContent="Import nicht möglich: "+err.message;}
+ e.target.value="";
+};
+
+
+function leArtenUI(){
+ const host=$("le-arten-inhalt");host.replaceChildren();
+ for(const [typ,titel] of [["mond","Mondlicht · konstant"],["kerze","Kerzen · ruhig / flackernd"],["feuer","Feuer · unregelmässig"]]){
+  const group=document.createElement("div");group.className="le-art";
+  const heading=document.createElement("strong");heading.textContent=titel;group.appendChild(heading);
+  for(const [key,label,min,max] of [["kraft","Stärke",0,200],["radius","Radius",50,200],["tempo","Tempo",25,200]]){
+   if(typ==="mond"&&key==="tempo")continue;
+   const lab=document.createElement("label"),title=document.createElement("span"),range=document.createElement("input");
+   title.textContent=label+" · "+LICHT_ARTEN[typ][key]+" %";range.type="range";range.min=min;range.max=max;range.step=1;range.value=LICHT_ARTEN[typ][key];
+   range.oninput=()=>{
+    LICHT_ARTEN[typ][key]=+range.value;title.textContent=label+" · "+range.value+" %";
+    lichtArtenAnwenden();leAktualisieren();
+    try{localStorage.setItem(LICHT_ART_KEY,JSON.stringify(LICHT_ARTEN));$("le-status").textContent="Einstellungen gespeichert.";}catch(e){$("le-status").textContent="Bitte Einstellungen exportieren.";}
+   };
+   lab.append(title,range);group.appendChild(lab);
+  }
+  host.appendChild(group);
+ }
+}
+leArtenUI();
+
 laden(); alles();
 { const befunde=pruefeStory(); if(befunde.length) console.warn("Story-Prüfung:", befunde); }
 </script>

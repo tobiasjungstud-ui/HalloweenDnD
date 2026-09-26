@@ -369,6 +369,15 @@ die Schüler für diese Szene brauchen (*to warn · a debt · to trade*) — fü
 Spielleitung, um sie zu geben, wenn jemand stecken bleibt. Das Helfer-Blatt trägt keine
 Hinweise mehr.
 
+**Lichtquellen.** Über jedem Szenenbild liegen Lichtkränze genau auf den Flammen, Feuern
+und dem Mond — auch in der grossen Bildansicht. Kerzen flackern (einzeln auch ruhig
+einstellbar), Feuer flackert unregelmässig, Mondlicht bleibt konstant. Die Punkte sind in
+`BILD_LICHTER` fest eingebaut. In den Einstellungen (Zahnrad) regelt der Reiter
+**Lichtglühen** die Gesamtstärke (0 = aus). **Admin** öffnet mit dem Code `132` den Editor:
+Punkte je Bild setzen, ziehen, löschen, Farbe, Radius und Art je Punkt, Stärke, Radius und
+Tempo je Lichtart; Änderungen bleiben im Browser und lassen sich als JSON exportieren und
+wieder importieren.
+
 ## V1 und V2
 
 `dungeon_master_v1.html` ist die frühere Darstellung, unverändert und lauffähig. V2
