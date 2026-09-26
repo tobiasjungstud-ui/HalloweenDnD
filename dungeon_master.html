@@ -795,10 +795,15 @@ details.fach[open] summary::after{content:"zuklappen"}
 .szenenbild::after{z-index:2;pointer-events:none}
 .lichtpunkt{position:absolute;display:block;border-radius:50%;
  background:radial-gradient(ellipse,rgba(255,242,198,.95) 0%,rgba(255,195,94,.65) 13%,rgba(255,148,48,.3) 37%,rgba(255,140,45,0) 72%);
- transform:translate(-50%,-50%) scale(calc(var(--licht-radius,1.4) * var(--quelle-radius,1) * var(--flacker-g,1)));
+ /* --fx/--fy: die Flamme wiegt sich; --flacker-g: der Schein wächst mit der Helligkeit */
+ transform:translate(calc(-50% + var(--fx,0%)),calc(-50% + var(--fy,0%))) scale(calc(var(--licht-radius,1.4) * var(--quelle-radius,1) * var(--flacker-g,1)));
  /* --flacker wirkt NACH der Begrenzung auf 1: bei hoher Stärke bliebe es sonst nur ein Blinken */
  opacity:calc(min(1, .78 * var(--licht-kraft,1) * var(--quelle-kraft,1)) * var(--flacker,1));
  will-change:opacity,transform}
+.lichtpunkt::after{content:"";position:absolute;inset:28%;border-radius:50%;
+ background:radial-gradient(ellipse,rgba(255,250,232,.95) 0%,rgba(255,226,160,.55) 35%,rgba(255,200,120,0) 72%);
+ opacity:var(--kern,.55);transform:scale(var(--kern-g,1))}
+.lichtpunkt[data-lichtart="mond"]::after{display:none}
 .bildschau .licht-ebene{z-index:1}
 .bildschau .bs-zu{z-index:3}
 @media(prefers-reduced-motion:reduce){.lichtpunkt{opacity:calc(min(1, .65 * var(--licht-kraft,1) * var(--quelle-kraft,1)))}}
@@ -2934,12 +2939,16 @@ const FLACKERND = new Set();
 let flackerLaeuft = false;
 function lichtHash(n){ const x=Math.sin(n*127.1+311.7)*43758.5453; return x-Math.floor(x); }
 function lichtRauschen(x, s){ const i=Math.floor(x), f=x-i, u=f*f*(3-2*f); return lichtHash(i+s)*(1-u)+lichtHash(i+1+s)*u; }
+/* Drei Rauschen übereinander — wie eine echte Flamme: langsames Wandern (Luft im Raum),
+   Flattern (die Flamme selbst), feines Zucken. Dazu ab und zu ein Luftzug, unter dem sie
+   sich duckt. Alles weich interpoliert, deshalb flackert es deutlich, ohne zu springen. */
 function flackerWert(t, s, feuer){
- const wandern=lichtRauschen(t*.35,s)-.5, zittern=lichtRauschen(t*2.1,s+17)-.5, flirren=lichtRauschen(t*7.3,s+41)-.5;
- let w = 1 + (feuer?.44:.24)*wandern + (feuer?.28:.14)*zittern + (feuer?.16:.06)*flirren;
- const zug=lichtRauschen(t*(feuer?.5:.22),s+73), schwelle=feuer?.72:.8;
- if(zug>schwelle){ const k=(zug-schwelle)/(1-schwelle); w *= 1-(feuer?.45:.38)*k*k*(3-2*k); }
- return Math.max(.3, Math.min(1, (feuer?.8:.84)*w));
+ const n=(f,o)=>lichtRauschen(t*f,s+o)-.5;
+ let w = feuer ? 1 + .42*n(.6,0) + .42*n(3.2,17) + .32*n(11,41)
+               : 1 + .32*n(.4,0) + .30*n(2.5,17) + .18*n(9,41);
+ const zug=lichtRauschen(t*(feuer?.6:.3),s+73), schwelle=feuer?.68:.74;
+ if(zug>schwelle){ const k=(zug-schwelle)/(1-schwelle); w *= 1-(feuer?.5:.45)*k*k*(3-2*k); }
+ return Math.max(feuer?.22:.3, Math.min(1, (feuer?.76:.8)*w));
 }
 function flackerSchleife(jetzt){
  if(!FLACKERND.size){ flackerLaeuft=false; return; }
@@ -2947,9 +2956,15 @@ function flackerSchleife(jetzt){
   const t=jetzt/1000;
   FLACKERND.forEach(d=>{
    if(!d.el.isConnected){ FLACKERND.delete(d); return; }
-   const f=flackerWert(t*d.tempo, d.samen, d.feuer);
-   d.el.style.setProperty("--flacker", f.toFixed(3));
-   d.el.style.setProperty("--flacker-g", (.95+.07*f).toFixed(3));
+   const tt=t*d.tempo, f=flackerWert(tt, d.samen, d.feuer), st=d.el.style;
+   const wiegen=lichtRauschen(tt*(d.feuer?1.8:1.1), d.samen+91)-.5;
+   st.setProperty("--flacker", f.toFixed(3));
+   st.setProperty("--flacker-g", ((d.feuer?.84:.88)+(d.feuer?.24:.18)*f).toFixed(3));
+   st.setProperty("--fx", (wiegen*(d.feuer?10:6)).toFixed(2)+"%");
+   st.setProperty("--fy", ((.8-f)*(d.feuer?9:6)).toFixed(2)+"%");
+   const kern=Math.max(0,Math.min(1,(f-.3)/.7));
+   st.setProperty("--kern", (kern*kern*(d.feuer?1:.9)).toFixed(3));
+   st.setProperty("--kern-g", (.8+.35*kern).toFixed(3));
   });
  }
  requestAnimationFrame(flackerSchleife);
