@@ -397,6 +397,21 @@ gezeichneten Porträts) und schreibt die drei fertigen Dateien in die Wurzel. Di
 Klassen — Lebenspunkte, Aktionen, Trefferchancen, Signaturfarbe — stehen im Objekt `KLASSEN`
 ganz oben im `<script>` der Vorlage.
 
+### Das Tutorial vor dem ersten Zug
+
+Jedes Spielerblatt öffnet zuerst ein verbindliches Tutorial (`TUTORIAL`-Array in der Vorlage,
+neun Schritte): Spielmechanik — was ein DM ist, wie ein Zug abläuft, wie viel Freiraum es
+gibt, dann Kampf und Lebenspunkte —, danach der Charakter, zuletzt Name und bis zu vier
+Charakterzüge (vordefiniert oder selbst getippt). Jede Seite ist an ihre geschätzte Lesezeit
+gebunden (135 Wörter/Minute, mindestens 3.5 Sekunden); der Knopf bleibt bis dahin gesperrt —
+Durchklicken ist nicht möglich. Nur der letzte Schritt (Name und Charakterzüge) ist sofort
+bedienbar, weil dort eingegeben statt gelesen wird.
+
+Einmal abgeschlossen, bleibt es das (`S.tutorialFertig`, in `localStorage`); ein Neustart über
+„Start a new game“ zeigt es nicht erneut. Für ein neues Kind am selben Gerät steht im Fuss der
+Seite „Replay the tutorial“ — das setzt nur das Tutorial zurück, nicht Lebenspunkte oder Log.
+Die gewählten Charakterzüge erscheinen als kleine Marken unter dem Namen auf dem Blatt.
+
 Die Storylogik hat einen Prüfstand, der das echte Skript der Konsole lädt und alle 1680
 Entscheidungspfade von Anfang bis Ende durchspielt — Ortskontinuität, Sichtbarkeit, Gefahr,
 Lebenspunkte, Gegner, Epilogkarten, Umwählen, vorzeitiges und doppeltes Auslösen, dazu

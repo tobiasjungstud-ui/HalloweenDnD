@@ -20,7 +20,8 @@
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-html,body{height:100%}
+html{height:100%}
+body{min-height:100%}
 body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
 h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance}
 button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
@@ -165,9 +166,72 @@ input{font:inherit;color:inherit}
 .log .leer{display:block;color:var(--dim);font-size:13.5px;padding:14px 2px;border-bottom:1px solid var(--line)}
 footer.fine{font-size:12.5px;color:var(--dim);border-top:1px solid var(--line);padding-top:14px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
 @media (prefers-reduced-motion:reduce){*,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* ---------- Tutorial gate — mandatory, paced by reading time ---------- */
+.tutorial{min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:40px 18px 60px;background:radial-gradient(120% 90% at 50% -10%,#14141f,var(--ink) 65%)}
+.tcard{width:100%;max-width:640px;border:1px solid var(--line-hi);background:linear-gradient(180deg,var(--stone),var(--crypt));padding:clamp(22px,4vw,38px);display:flex;flex-direction:column;gap:16px;box-shadow:0 30px 80px -30px rgba(0,0,0,.7)}
+.teyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin:0}
+.teyebrow.p2{color:var(--klasse)}
+.tstep{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:2px 0 0}
+.ttitle{font-size:clamp(23px,4vw,32px);margin-top:6px}
+.tbody p{margin:0 0 12px;font-size:15.5px;line-height:1.6;color:var(--ash)}
+.tbody p:last-child{margin-bottom:0}
+.tchar{display:flex;flex-direction:column;gap:16px;margin-top:2px}
+.tpool{display:flex;flex-wrap:wrap;gap:8px}
+.tchip{border:1px solid var(--line-hi);background:var(--crypt);color:var(--ash);padding:6px 13px;font-size:13px;border-radius:20px;transition:.15s}
+.tchip:hover:not(:disabled){border-color:var(--gold);color:var(--gold)}
+.tchip:disabled{opacity:.3;cursor:not-allowed}
+.tchosen{display:flex;flex-wrap:wrap;gap:8px;min-height:30px}
+.ttag{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--klasse);color:var(--klasse);padding:5px 5px 5px 13px;border-radius:20px;font-size:13px}
+.ttag.leer{border-color:var(--line);color:var(--dim);padding:5px 13px}
+.ttag button{color:var(--klasse);font-size:15px;line-height:1;padding:3px 5px}
+.tcustom{display:flex;gap:8px}
+.tcustom input{flex:1;background:var(--crypt);border:1px solid var(--line);padding:9px 11px;font-family:var(--body);font-size:14px;color:var(--bone)}
+.tcustom button{border:1px solid var(--line-hi);padding:9px 15px;color:var(--ash);white-space:nowrap}
+.tcustom button:hover:not(:disabled){border-color:var(--gold);color:var(--gold)}
+.tcustom input:disabled,.tcustom button:disabled{opacity:.4;cursor:not-allowed}
+.thint{margin:0;font-size:12px;color:var(--dim)}
+.tfoot{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.tbar{height:3px;background:var(--line);overflow:hidden}
+.tbar i{display:block;height:100%;width:0;background:var(--gold)}
+#tnext{align-self:flex-end;border:1px solid var(--line-hi);background:var(--stone-hi);color:var(--ash);padding:12px 22px;font-family:var(--display);font-size:17px;min-width:190px;text-align:center;transition:.2s}
+#tnext:disabled{cursor:not-allowed;opacity:.8}
+#tnext:not(:disabled){border-color:var(--gold);color:var(--gold);background:rgba(217,164,65,.08)}
+#tnext:not(:disabled):hover{background:var(--gold);color:#100d05}
+
+/* ---------- Identity traits, chosen at the end of the tutorial ---------- */
+.idtraits{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.idtraits span{border:1px solid var(--klasse);color:var(--klasse);font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;padding:3px 9px;border-radius:20px;text-transform:uppercase}
 </style>
 
-<div class="blatt">
+<div class="tutorial" id="tutorial" role="dialog" aria-modal="true" aria-label="Tutorial">
+  <div class="tcard">
+    <p class="teyebrow" id="tkicker">Welcome</p>
+    <p class="tstep" id="tstep">Step 1 of 9</p>
+    <h2 class="ttitle" id="ttitle"></h2>
+    <div class="tbody" id="tbody"></div>
+    <div class="tchar" id="tchar" hidden>
+      <label class="field" for="heldname2"><span class="label">Your character's name</span>
+        <input id="heldname2" type="text" maxlength="28" placeholder="Write it here" autocomplete="off"></label>
+      <div>
+        <span class="label">Pick up to four words — or write your own</span>
+        <div class="tpool" id="traitpool" style="margin-top:9px"></div>
+      </div>
+      <div class="tcustom">
+        <input id="traitcustom" type="text" maxlength="24" placeholder="Your own word…" autocomplete="off">
+        <button id="traitcustombtn">+ Add</button>
+      </div>
+      <div class="tchosen" id="traitchosen"></div>
+      <p class="thint" id="traithinweis"></p>
+    </div>
+    <div class="tfoot">
+      <div class="tbar"><i id="tbarfill"></i></div>
+      <button id="tnext" disabled>Reading…</button>
+    </div>
+  </div>
+</div>
+
+<div class="blatt" hidden>
   <aside class="plate">
     <div class="frame" id="portraet"><!--__PORTRAET__--></div>
     <div class="nameplate">
@@ -175,6 +239,7 @@ footer.fine{font-size:12.5px;color:var(--dim);border-top:1px solid var(--line);p
       <p>__KLASSENNAME__</p>
       <p class="narben" id="narben"></p>
     </div>
+    <div class="idtraits" id="idtraits"></div>
     <div class="vitals">
       <div class="vitals-head">
         <span class="label">Hit points</span>
@@ -245,6 +310,7 @@ footer.fine{font-size:12.5px;color:var(--dim);border-top:1px solid var(--line);p
     <footer class="fine">
       <span>The Bride of Nachtfels — one evening, three heroes, one castle.</span>
       <button id="neu" style="color:var(--dim);text-decoration:underline">Start a new game</button>
+      <button id="tutorialWiederholen" style="color:var(--dim);text-decoration:underline">Replay the tutorial</button>
     </footer>
   </main>
 </div>
@@ -286,7 +352,45 @@ const KLASSEN = {
 const K = KLASSEN["__ID__"];
 const SCHLUESSEL = "nachtfels.spieler2." + K.id;
 
-let S = { name:"", hp:K.hpmax, log:[], zaehler:0, narben:[], bonus:0, wahnsinn:false, schicksalOffen:false, trank:true };
+/* ---------- Tutorial: verbindlich, text-basiert, jede Seite an ihre Lesezeit gebunden.
+   Der letzte Schritt ist keine Lesezeit-Seite, sondern die Eingabe: Name und Charakterzüge. ---------- */
+const TUTORIAL = [
+  {kicker:"Welcome", title:"Welcome, hunter.", body:[
+    "Tonight, you're not a student. You're a hunter, climbing a mountain road toward a castle called Nachtfels.",
+    "For the next 90 minutes, everyone speaks only English — every plan, every joke, every scream.",
+    "This is your character sheet. Before you can use it, read these few short pages. They won't take long — and then the story starts."]},
+  {kicker:"Part 1 · How this works", title:"A story you help tell", body:[
+    "This is a role-playing game, like Dungeons &amp; Dragons — but built for one lesson.",
+    "There's no board and no screen. Your teacher becomes the Dungeon Master (DM): they describe the world and play every character you meet.",
+    "You and two classmates play the three heroes. Nobody wins or loses the story — it just becomes whatever your choices make it."]},
+  {kicker:"Part 1 · How this works", title:"You speak. The story moves.", body:[
+    "Here's how a turn works: the DM reads a scene out loud, in English.",
+    "Then it's your turn. Say what your character does, thinks, or asks — one sentence is enough, but more is better.",
+    "The DM answers, sometimes as a person in the story, sometimes as the narrator. Then the story moves on."]},
+  {kicker:"Part 1 · How this works", title:"Guided, not endless", body:[
+    "In a normal D&amp;D game, players can try absolutely anything. Tonight is shorter, so the story is more guided.",
+    "At key moments, you'll choose between a few clear paths. In between, you're free to describe how you act, what you say, what you look at.",
+    "You can't do everything — but you can always speak, ask, and decide."]},
+  {kicker:"Part 1 · How this works", title:"When it comes to a fight", body:[
+    "Sometimes talking isn't enough, and a fight begins. Combat uses this sheet, dice, and hit points (HP).",
+    "Say what you do out loud first — “I attack!” — then press the matching button. The dice decide if you hit, and how hard.",
+    "Read the yellow sentence out loud: that's your turn, and the table hears it."]},
+  {kicker:"Part 1 · How this works", title:"Getting hurt — and healing", body:[
+    "Every hero has hit points (HP). Take damage, and they drop. Get healed, and they rise.",
+    "At 0 HP you're down, not dead. Drink your potion (once per game) — or wait: after the fight, the Lightbearer heals everyone for free.",
+    "Every roll is written in the log below, so nothing is ever forgotten."]},
+  {kicker:"Part 2 · Your character", title:"Someone else, for one evening", body:[
+    "Tonight you're playing a hero — a monster hunter with a talent nobody else in the group has.",
+    "You can give them a voice: an attitude, a habit, a reason for being here. Or you can just say what you'd do, plainly.",
+    "Both are completely fine. There's no wrong way to play this."]},
+  {kicker:"Part 2 · Your character", title:"If you lose the thread", body:[
+    "It's fine to zone out for a second — this story is long. If you're lost, just ask in English: “Wait, what's happening?” is a perfectly good sentence.",
+    "On the next page, you'll choose a few words that describe your character. Glance at them whenever you need a reminder of who you are tonight."]}
+];
+const TRAIT_POOL = ["Brave","Reckless","Loyal","Curious","Stubborn","Calm","Protective","Sarcastic","Kind","Suspicious","Hot-headed","Quiet"];
+const TRAIT_MAX = 4;
+
+let S = { name:"", hp:K.hpmax, log:[], zaehler:0, narben:[], bonus:0, wahnsinn:false, schicksalOffen:false, trank:true, traits:[], tutorialFertig:false };
 function laden(){ try{ const r=localStorage.getItem(SCHLUESSEL); if(r){const g=JSON.parse(r); if(g&&typeof g==="object") S=Object.assign(S,g);} }catch(e){} }
 function sichern(){ try{ localStorage.setItem(SCHLUESSEL, JSON.stringify(S)); }catch(e){} }
 
@@ -309,6 +413,7 @@ function zeigePaar(p){
 const paar=()=>[w(6),w(6)];
 const pasch6=p=>p[0]===6&&p[1]===6, pasch1=p=>p[0]===1&&p[1]===1;
 let laeuft=false;
+let tIndex=0, tTimer=null, tFertig=null;
 
 function notiere(text, ergebnis, sorte){
   S.zaehler++;
@@ -360,6 +465,80 @@ function zeigeDice(wurf){
     + '<span class="dmgtotal">'+wurf.summe+'</span>';
 }
 function sag(text){ const b=$("sagbox"); b.classList.remove("leer"); $("sagtext").textContent=text; }
+
+/* ---------- Tutorial: eine Seite ist erst lesbar geklickt, wenn ihre geschätzte Lesezeit um ist.
+   ~135 Wörter/Minute — langsamer als ein geübter Leser, weil hier auf Englisch gelesen wird.       */
+function setName(v){
+  S.name=v; sichern();
+  $("heldname").value=v; $("heldname2").value=v; $("gravur").textContent=v;
+}
+function zeichneAngezeigteTraits(){
+  const el=$("idtraits"); if(!el) return;
+  el.innerHTML=(S.traits||[]).map(t=>"<span>"+t+"</span>").join("");
+}
+function zeichneTraits(){
+  const gewaehlt=S.traits||[], voll=gewaehlt.length>=TRAIT_MAX;
+  const frei=TRAIT_POOL.filter(t=>!gewaehlt.some(g=>g.toLowerCase()===t.toLowerCase()));
+  $("traitpool").innerHTML=frei.map(t=>'<button class="tchip" data-trait="'+t+'"'+(voll?" disabled":"")+'>+ '+t+'</button>').join("");
+  $("traitchosen").innerHTML=gewaehlt.length
+    ? gewaehlt.map(t=>'<span class="ttag">'+t+'<button data-entfernen="'+t.replace(/"/g,"&quot;")+'" aria-label="Remove">×</button></span>').join("")
+    : '<span class="ttag leer">No traits chosen yet</span>';
+  $("traitcustom").disabled=voll; $("traitcustombtn").disabled=voll;
+  $("traithinweis").textContent = voll ? "Four is enough — remove one to add another." : (TRAIT_MAX-gewaehlt.length)+" more can be added.";
+}
+function traitHinzufuegen(name){
+  const t=(name||"").trim(); if(!t) return;
+  S.traits=S.traits||[];
+  if(S.traits.length>=TRAIT_MAX || S.traits.some(g=>g.toLowerCase()===t.toLowerCase())) return;
+  S.traits.push(t.length>24?t.slice(0,24):t);
+  sichern(); zeichneTraits(); zeichneAngezeigteTraits();
+}
+function traitEntfernen(name){
+  S.traits=(S.traits||[]).filter(g=>g!==name);
+  sichern(); zeichneTraits(); zeichneAngezeigteTraits();
+}
+function starteLesezeit(text){
+  const worte=text.trim().split(/\s+/).length;
+  const ms=Math.max(3500, Math.round(worte/135*60000));
+  clearInterval(tTimer); clearTimeout(tFertig);
+  const btn=$("tnext"); btn.disabled=true;
+  const bar=$("tbarfill"); bar.style.transition="none"; bar.style.width="0%";
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ bar.style.transition="width "+ms+"ms linear"; bar.style.width="100%"; }));
+  let rest=Math.ceil(ms/1000);
+  btn.textContent="Reading… "+rest+"s";
+  tTimer=setInterval(()=>{ rest--; if(rest>0) btn.textContent="Reading… "+rest+"s"; },1000);
+  tFertig=setTimeout(()=>{ clearInterval(tTimer); btn.disabled=false; btn.textContent="Continue →"; },ms);
+}
+function freigebenSofort(beschriftung){
+  clearInterval(tTimer); clearTimeout(tFertig);
+  const bar=$("tbarfill"); bar.style.transition="none"; bar.style.width="100%";
+  const btn=$("tnext"); btn.disabled=false; btn.textContent=beschriftung;
+}
+function zeigeTutorialSchritt(i){
+  tIndex=i;
+  $("tstep").textContent="Step "+(i+1)+" of "+(TUTORIAL.length+1);
+  if(i<TUTORIAL.length){
+    const s=TUTORIAL[i];
+    $("tkicker").textContent=s.kicker;
+    $("tkicker").className="teyebrow"+(s.kicker.indexOf("Part 2")===0?" p2":"");
+    $("ttitle").textContent=s.title;
+    $("tbody").innerHTML=s.body.map(p=>"<p>"+p+"</p>").join("");
+    $("tchar").hidden=true;
+    starteLesezeit(s.body.join(" "));
+  } else {
+    $("tkicker").textContent="Begin"; $("tkicker").className="teyebrow p2";
+    $("ttitle").textContent="Name your hero. Choose who they are.";
+    $("tbody").innerHTML="<p>Last step. Give your hero a name, then pick a few words that describe them — or write your own. You can change your mind any time, even during the game.</p>";
+    $("tchar").hidden=false;
+    zeichneTraits();
+    freigebenSofort("Enter the castle");
+  }
+}
+function beendeTutorial(){
+  S.tutorialFertig=true; sichern();
+  $("tutorial").hidden=true;
+  document.querySelector(".blatt").hidden=false;
+}
 
 function rolle(i){
   if(laeuft) return;
@@ -530,16 +709,30 @@ document.addEventListener("click", e=>{
   const hp=e.target.closest("[data-hp]"); if(hp){ setzeHP(+hp.dataset.hp, +hp.dataset.hp<0?"Took damage":"Was healed"); return; }
   const heal=e.target.closest("[data-heal]"); if(heal){ setzeHP(+heal.dataset.heal,"Healing on myself"); $("after").innerHTML=""; return; }
   const weg=e.target.closest("[data-weg]"); if(weg){ notiere("<b>Healing</b> given to a friend","+"+weg.dataset.weg+" HP","heal"); $("after").innerHTML=""; return; }
+  const chip=e.target.closest("[data-trait]"); if(chip && !chip.disabled){ traitHinzufuegen(chip.dataset.trait); return; }
+  const rm=e.target.closest("[data-entfernen]"); if(rm){ traitEntfernen(rm.dataset.entfernen); return; }
 });
 $("schicksal").onclick=schicksal;
 $("trank").onclick=trinken;
 $("vollheil").onclick=nachKampfHeilen;
 $("wurffrei").onclick=freierWurf;
-$("heldname").addEventListener("input", e=>{ S.name=e.target.value; $("gravur").textContent=S.name; sichern(); });
+$("heldname").addEventListener("input", e=>setName(e.target.value));
+$("heldname2").addEventListener("input", e=>setName(e.target.value));
+$("traitcustombtn").onclick=()=>{ traitHinzufuegen($("traitcustom").value); $("traitcustom").value=""; };
+$("traitcustom").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); traitHinzufuegen($("traitcustom").value); $("traitcustom").value=""; } });
+$("tnext").onclick=()=>{
+  if($("tnext").disabled) return;
+  if(tIndex<TUTORIAL.length) zeigeTutorialSchritt(tIndex+1); else beendeTutorial();
+};
+$("tutorialWiederholen").onclick=()=>{
+  document.querySelector(".blatt").hidden=true;
+  $("tutorial").hidden=false;
+  zeigeTutorialSchritt(0);
+};
 $("neu").onclick=()=>{
   if(!confirm("Start a new game? Your hit points and the whole roll log are cleared.")) return;
-  S={name:S.name, hp:K.hpmax, log:[], zaehler:0, narben:[], bonus:0, wahnsinn:false, schicksalOffen:false, trank:true};
-  zeichneNarben(); zeichneTrank();
+  S={name:S.name, traits:S.traits||[], tutorialFertig:S.tutorialFertig, hp:K.hpmax, log:[], zaehler:0, narben:[], bonus:0, wahnsinn:false, schicksalOffen:false, trank:true};
+  zeichneNarben(); zeichneTrank(); zeichneAngezeigteTraits();
   zeichneHP(); zeichneLog(); sichern();
   $("verdict").className="verdict warten"; $("verdict").textContent="Pick one of the three below.";
   $("detail").textContent="The sheet rolls for you and tells you what happened.";
@@ -548,8 +741,10 @@ $("neu").onclick=()=>{
 };
 
 laden(); zeigePaar([6,6]);
-$("heldname").value=S.name; $("gravur").textContent=S.name;
-zeichneHP(); zeichneAktionen(); zeichneLog(); zeichneNarben(); zeichneTrank();
+$("heldname").value=S.name; $("heldname2").value=S.name; $("gravur").textContent=S.name;
+zeichneHP(); zeichneAktionen(); zeichneLog(); zeichneNarben(); zeichneTrank(); zeichneAngezeigteTraits();
+if(S.tutorialFertig){ $("tutorial").hidden=true; document.querySelector(".blatt").hidden=false; }
+else { zeigeTutorialSchritt(0); }
 </script>
 <template id="p-magier">
 <svg viewBox="0 0 300 400" role="img" aria-label="A hooded arcanist, face in shadow, holding a glowing rune sphere">
