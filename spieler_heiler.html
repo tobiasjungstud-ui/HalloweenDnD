@@ -128,11 +128,6 @@ input{font:inherit;color:inherit}
 .pip.d8,.pip.d10{clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);border:none;background:var(--stone-hi)}
 @keyframes drop{from{opacity:0;transform:translateY(-14px) rotate(-18deg)}}
 .dmgtotal{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--klasse);margin-left:4px;font-variant-numeric:tabular-nums}
-.sagbox{margin-top:14px;border:1px solid var(--gold-dim);background:rgba(217,164,65,.07);padding:12px 15px}
-.sagbox .label{color:var(--gold);display:block;margin-bottom:5px}
-.sagbox p{margin:0;font-size:clamp(17px,2.4vw,21px);color:var(--bone);font-style:italic;line-height:1.35}
-.sagbox.leer{border-color:var(--line);background:none}
-.sagbox.leer p{color:var(--dim);font-style:normal;font-size:15px}
 .after{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
 .after button{border:1px solid var(--klasse);color:var(--klasse);padding:8px 15px;font-size:14px}
 .after button:hover{background:var(--klasse);color:#07070b}
@@ -331,7 +326,6 @@ footer.fine{font-size:12.5px;color:var(--dim);border-top:1px solid var(--line);p
         <p class="verdict warten" id="verdict">Pick one of the three below.</p>
         <p class="detail" id="detail">The sheet rolls for you and tells you what happened.</p>
         <div class="dmgline" id="dmgline"></div>
-        <div class="sagbox leer" id="sagbox"><span class="label">Say this</span><p id="sagtext">Your sentence appears here after you roll.</p></div>
         <div class="after" id="after"></div>
       </div>
     </section>
@@ -518,7 +512,6 @@ function zeigeDice(wurf){
     + (wurf.mod?'<span style="color:var(--dim);font-family:var(--mono)">+'+wurf.mod+'</span>':'')
     + '<span class="dmgtotal">'+wurf.summe+'</span>';
 }
-function sag(text){ const b=$("sagbox"); b.classList.remove("leer"); $("sagtext").textContent=text; }
 
 /* ---------- Tutorial: eine Seite ist erst lesbar geklickt, wenn ihre geschätzte Lesezeit um ist.
    ~135 Wörter/Minute — langsamer als ein geübter Leser, weil hier auf Englisch gelesen wird.       */
@@ -603,7 +596,7 @@ function rolle(i){
   $("after").innerHTML=""; $("dmgline").innerHTML="";
   $("was").textContent=a.name;
   $("verdict").className="verdict warten"; $("verdict").textContent="Rolling…";
-  $("detail").textContent=""; $("sagbox").classList.add("leer"); $("sagtext").textContent="…";
+  $("detail").textContent="";
   $("die").classList.remove("landed","crit","miss");
 
   const brauchtWurf = (a.art==="angriff"||a.art==="trick");
@@ -626,7 +619,6 @@ function ende(a, p){
     $("verdict").className="verdict "+(klappt?"hit":"miss");
     $("verdict").textContent = klappt ? "It works!" : "Nothing happens.";
     $("detail").textContent = klappt ? "Tell your DM exactly what your hand does." : "The hand slips. Try something else next turn.";
-    sag(klappt ? "My magic hand does it — it works!" : "My magic hand fails. Nothing happens.");
     notiere("<b>Magic Hand</b>", klappt?"works":"fails", klappt?"hit":"miss");
   }
   else if(a.art==="heilen"){
@@ -634,7 +626,6 @@ function ende(a, p){
     $("verdict").className="verdict hit"; $("verdict").textContent = "+"+h.summe+" hit points";
     $("detail").textContent="Choose one person in your group — or keep it yourself.";
     zeigeDice(h);
-    sag("I heal you for "+h.summe+" hit points!");
     $("after").innerHTML='<button data-heal="'+h.summe+'">Keep it myself (+'+h.summe+')</button><button data-weg="'+h.summe+'">I gave it to a friend</button>';
     notiere("<b>Healing Light</b>", "+"+h.summe+" HP", "heal");
   }
@@ -643,7 +634,6 @@ function ende(a, p){
     $("verdict").className="verdict hit"; $("verdict").textContent = "+"+h.summe+" for everyone";
     $("detail").textContent="Everyone in the group adds this to their own sheet — you too.";
     zeigeDice(h);
-    sag("Everybody gets "+h.summe+" hit points back!");
     $("after").innerHTML='<button data-heal="'+h.summe+'">Add '+h.summe+' to my own sheet</button>';
     notiere("<b>Circle of Light</b>", "+"+h.summe+" all", "heal");
   }
@@ -655,7 +645,6 @@ function ende(a, p){
       $("verdict").className="verdict miss"; $("verdict").textContent="Miss";
       $("detail").textContent="Bad luck. Your turn is over — the next player is up.";
       $("dmgline").innerHTML='<span style="color:var(--dim);font-size:14px">no damage</span>';
-      sag(a.selbstschaden ? "I missed — and I hurt myself doing it." : "I missed!");
       notiere("<b>"+a.name+"</b>", "miss", "miss");
     } else {
       const d=wuerfle(S.wahnsinn?"3d6":a.dmg,krit);
@@ -665,10 +654,6 @@ function ende(a, p){
       $("verdict").className="verdict "+(krit?"crit":"hit");
       $("verdict").textContent = krit ? ("Critical hit! "+d.summe+" damage") : (d.summe+" damage");
       $("detail").textContent = krit ? "Double six — double dice. Say it loudly." : "Tell your DM the number so it can be taken off the monster.";
-      let satz = krit ? "Critical hit! I hit for "+d.summe+" damage!" : "I hit for "+d.summe+" damage.";
-      if(a.stun) satz += " And it loses its next turn!";
-      if(a.selbstschaden) satz += " But I take "+a.selbstschaden+" damage myself.";
-      sag(satz);
       notiere("<b>"+a.name+"</b>"+(krit?" — CRITICAL":""), d.summe+" dmg", "hit");
     }
     if(a.selbstschaden) setzeHP(-a.selbstschaden, "Reckless Charge — you took the hit as well");
@@ -692,7 +677,6 @@ function dreheWuerfel(danach){
   const p=paar();
   $("after").innerHTML=""; $("dmgline").innerHTML=""; $("die").classList.remove("landed","crit","miss");
   $("verdict").className="verdict warten"; $("verdict").textContent="Rolling…"; $("detail").textContent="";
-  $("sagbox").classList.add("leer"); $("sagtext").textContent="…";
   const fertig=()=>{ zeigePaar(p); danach(p); laeuft=false; };
   if(ruhig) return fertig();
   $("die").classList.add("rolling");
@@ -708,14 +692,12 @@ function trinken(){
   S.hp=Math.min(K.hpmax,S.hp+10); zeichneHP(); zeichneTrank();
   $("was").textContent="Potion"; $("verdict").className="verdict hit"; $("verdict").textContent=unten?"Back on your feet":"+10 hit points";
   $("detail").textContent="That was your only potion."; $("dmgline").innerHTML=""; $("after").innerHTML="";
-  sag(unten?"I drink my potion — I’m back on my feet!":"I drink my potion. Ten hit points back.");
   notiere("<b>Healing potion</b>"+(unten?" — revived":""), "+10 HP → "+S.hp, "heal"); sichern();
 }
 function nachKampfHeilen(){
   const vorher=S.hp; S.hp=K.hpmax; zeichneHP();
   $("was").textContent="After the fight"; $("verdict").className="verdict hit"; $("verdict").textContent="Back to full";
   $("detail").textContent=K.id==="heiler"?"Tell everyone: they set their sheets back to full too.":"Only after a fight, and only when the Lightbearer says so."; $("dmgline").innerHTML=""; $("after").innerHTML="";
-  sag(K.id==="heiler"?"The fight is over. I heal all of you — everybody back to full!":"Thank you — I’m back to full.");
   notiere("<b>Healed by the Lightbearer</b> after the fight", "+"+(K.hpmax-vorher)+" HP → "+S.hp, "heal");
 }
 function freierWurf(){
@@ -726,7 +708,6 @@ function freierWurf(){
     $("verdict").className="verdict "+(pasch6(p)?"crit":gut?"hit":"miss");
     $("verdict").textContent="You rolled "+augen;
     $("detail").textContent=gut?"Seven or more — that usually works. Your DM tells you what happens.":"Under seven — that usually does not work. Your DM tells you what happens.";
-    $("sagbox").classList.add("leer"); $("sagtext").textContent="Nothing to script here — just tell your DM the number.";
     notiere("<b>2d6</b>", p[0]+" + "+p[1]+" = "+augen, gut?"hit":"miss");
   });
 }
@@ -740,19 +721,16 @@ function schicksal(){
       S.bonus+=3;
       $("die").classList.add("crit"); $("verdict").className="verdict crit"; $("verdict").textContent="You come back stronger";
       $("detail").textContent="Double six. From now on, every hit you land does +3 damage.";
-      sag("I'm back — and I'm stronger. Plus three damage from now on!");
       notiere("<b>Fate</b> — double six", "+3 dmg", "hit");
     } else if(pasch1(p)){
       S.wahnsinn=true;
       $("die").classList.add("miss"); $("verdict").className="verdict miss"; $("verdict").textContent="Something in you broke";
       $("detail").textContent="Double one. Your damage is a mystery now: the sheet rolls three dice instead of yours — sometimes 3, sometimes 18.";
-      sag("I'm back… I think. Don't stand too close to me.");
       notiere("<b>Fate</b> — double one", "madness", "miss");
     } else {
       const n=NARBEN[w(NARBEN.length)-1]; S.narben.push(n);
       $("verdict").className="verdict hit"; $("verdict").textContent="You come back with a scar";
       $("detail").textContent="It stays with you: "+n+".";
-      sag("I'm back — with a scar. "+n.charAt(0).toUpperCase()+n.slice(1)+".");
       notiere("<b>Fate</b> — scar", ""+augen, "");
     }
     zeichneNarben(); zeichneAktionen(); zeichneHP(); sichern();
@@ -790,12 +768,11 @@ $("tutorialWiederholen").onclick=()=>{
 $("neu").onclick=()=>{
   if(!confirm("Start a new game? Your hit points and the whole roll log are cleared.")) return;
   S={name:S.name, traits:S.traits||[], tutorialFertig:S.tutorialFertig, hp:K.hpmax, log:[], zaehler:0, narben:[], bonus:0, wahnsinn:false, schicksalOffen:false, trank:true, imKampf:false};
-  zeichneNarben(); zeichneTrank(); zeichneAngezeigteTraits();
+  zeichneNarben(); zeichneTrank(); zeichneAngezeigteTraits(); zeichneAktionen();
   zeichneHP(); zeichneLog(); sichern();
   $("verdict").className="verdict warten"; $("verdict").textContent="Pick one of the three below.";
   $("detail").textContent="The sheet rolls for you and tells you what happened.";
   $("dmgline").innerHTML=""; $("after").innerHTML="";
-  $("sagbox").classList.add("leer"); $("sagtext").textContent="Your sentence appears here after you roll.";
 };
 
 laden(); zeigePaar([6,6]);
