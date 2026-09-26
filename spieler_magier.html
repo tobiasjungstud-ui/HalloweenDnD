@@ -143,11 +143,21 @@ input{font:inherit;color:inherit}
 .action .nums span{border:1px solid var(--line-hi);padding:3px 8px;color:var(--ash)}
 .action .nums span.sicher{border-color:#3a5a4c;color:var(--moss)}
 .action .nums span.risiko{border-color:var(--blood);color:var(--blood-hi)}
-.action .go,.action .kampfgo,.action .heilgo{width:100%;border:1px solid var(--line-hi);background:var(--stone);padding:12px;font-family:var(--display);font-size:18px;transition:.15s;color:inherit}
+.action .go{width:100%;border:1px solid var(--line-hi);background:var(--stone);padding:12px;font-family:var(--display);font-size:18px;transition:.15s;color:inherit}
 .action .go:hover{background:var(--klasse);color:#07070b;border-color:var(--klasse)}
-.action .kampfgo:hover{background:var(--blood);color:#0d0708;border-color:var(--blood)}
-.action .heilgo{border-color:#2f5a48;color:var(--moss)}
-.action .heilgo:hover{background:#2f5a48;color:var(--bone)}
+
+/* ---------- Ausserhalb eines Kampfes: ein Knopf statt einer Karte, dazu ein kleiner Info-Kreis ---------- */
+.ruhezeile{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:22px}
+.ruheknopf{display:flex;align-items:center;gap:8px}
+.kampfgo,.heilgo{border:1px solid var(--line-hi);background:var(--stone);padding:10px 20px;font-family:var(--display);font-size:17px;transition:.15s}
+.kampfgo:hover{background:var(--blood);color:#0d0708;border-color:var(--blood)}
+.heilgo{border-color:#2f5a48;color:var(--moss)}
+.heilgo:hover{background:#2f5a48;color:var(--bone)}
+.info{position:relative}
+.info summary{list-style:none;cursor:pointer;width:21px;height:21px;border:1px solid var(--line-hi);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--dim)}
+.info summary::-webkit-details-marker{display:none}
+.info summary:hover,.info[open] summary{color:var(--gold);border-color:var(--gold)}
+.info p{position:absolute;z-index:5;top:28px;left:0;margin:0;width:230px;max-width:60vw;padding:10px 12px;font-size:12.5px;line-height:1.45;color:var(--ash);background:var(--stone-hi);border:1px solid var(--line-hi);box-shadow:0 12px 26px -10px rgba(0,0,0,.65)}
 
 /* ---------- Protokoll ---------- */
 .log h2{font-size:20px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
@@ -380,7 +390,6 @@ const KLASSEN = {
     ]}
 };
 const K = KLASSEN["magier"];
-const NACHKAMPF_TEXT = "After the fight: healed by the Lightbearer → full"; /* dieselbe Beschriftung wie der Knopf After the fight: healed by the Lightbearer → full in .extras, hier für den JS-Zugriff */
 const SCHLUESSEL = "nachtfels.spieler2." + K.id;
 
 /* ---------- Tutorial: verbindlich, text-basiert, jede Seite an ihre Lesezeit gebunden.
@@ -486,12 +495,14 @@ function setzeHP(delta, grund){
 function zeichneAktionen(){
   if(!S.imKampf){
     $("aktionen").innerHTML =
-      '<article class="action"><div><span class="kind">Fight</span><h3>Enter combat</h3></div>'+
-      '<p class="desc">Your attacks stay hidden until a fight actually starts. Say what’s happening, then press this.</p>'+
-      '<div class="nums"></div><button class="kampfgo" id="kampfstart">⚔ We’re fighting</button></article>'+
-      '<article class="action"><div><span class="kind">Healing</span><h3>Healed outside a fight</h3></div>'+
-      '<p class="desc">Healing does not only happen right after a fight — sometimes it happens in between, too.</p>'+
-      '<div class="nums"></div><button class="heilgo" id="heilquick">'+NACHKAMPF_TEXT+'</button></article>';
+      '<div class="ruhezeile">'+
+      '<div class="ruheknopf"><button class="kampfgo" id="kampfstart">⚔ Fight</button>'+
+      '<details class="info"><summary aria-label="What is this?">ⓘ</summary>'+
+      '<p>Your attacks stay hidden until now. Say what’s happening, then press this.</p></details></div>'+
+      '<div class="ruheknopf"><button class="heilgo" id="heilquick">✚ Healed</button>'+
+      '<details class="info"><summary aria-label="What is this?">ⓘ</summary>'+
+      '<p>Full health, whenever the Lightbearer heals you — not only right after a fight.</p></details></div>'+
+      '</div>';
     return;
   }
   $("aktionen").innerHTML = K.aktionen.map((a,i)=>{
