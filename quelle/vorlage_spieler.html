@@ -693,7 +693,7 @@ function freierWurf(){
     $("verdict").className="verdict "+(pasch6(p)?"crit":gut?"hit":"miss");
     $("verdict").textContent="You rolled "+augen;
     $("detail").textContent=gut?"Seven or more — that usually works. Your DM tells you what happens.":"Under seven — that usually does not work. Your DM tells you what happens.";
-    sag("I rolled "+augen+".");
+    $("sagbox").classList.add("leer"); $("sagtext").textContent="Nothing to script here — just tell your DM the number.";
     notiere("<b>2d6</b>", p[0]+" + "+p[1]+" = "+augen, gut?"hit":"miss");
   });
 }
