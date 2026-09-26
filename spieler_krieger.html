@@ -148,8 +148,11 @@ input{font:inherit;color:inherit}
 .action .nums span{border:1px solid var(--line-hi);padding:3px 8px;color:var(--ash)}
 .action .nums span.sicher{border-color:#3a5a4c;color:var(--moss)}
 .action .nums span.risiko{border-color:var(--blood);color:var(--blood-hi)}
-.action .go{width:100%;border:1px solid var(--line-hi);background:var(--stone);padding:12px;font-family:var(--display);font-size:18px;transition:.15s}
+.action .go,.action .kampfgo,.action .heilgo{width:100%;border:1px solid var(--line-hi);background:var(--stone);padding:12px;font-family:var(--display);font-size:18px;transition:.15s;color:inherit}
 .action .go:hover{background:var(--klasse);color:#07070b;border-color:var(--klasse)}
+.action .kampfgo:hover{background:var(--blood);color:#0d0708;border-color:var(--blood)}
+.action .heilgo{border-color:#2f5a48;color:var(--moss)}
+.action .heilgo:hover{background:#2f5a48;color:var(--bone)}
 
 /* ---------- Protokoll ---------- */
 .log h2{font-size:20px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
@@ -383,6 +386,7 @@ const KLASSEN = {
     ]}
 };
 const K = KLASSEN["krieger"];
+const NACHKAMPF_TEXT = "After the fight: healed by the Lightbearer → full"; /* dieselbe Beschriftung wie der Knopf After the fight: healed by the Lightbearer → full in .extras, hier für den JS-Zugriff */
 const SCHLUESSEL = "nachtfels.spieler2." + K.id;
 
 /* ---------- Tutorial: verbindlich, text-basiert, jede Seite an ihre Lesezeit gebunden.
@@ -422,8 +426,11 @@ const TUTORIAL = [
 ];
 const TRAIT_POOL = ["Brave","Reckless","Loyal","Curious","Stubborn","Calm","Protective","Sarcastic","Kind","Suspicious","Hot-headed","Quiet"];
 const TRAIT_MAX = 4;
+/* Vorübergehend aus, zum leichteren Testen — auf true stellen, sobald die Lesezeit
+   wieder gelten soll. Die Schritte, die Reihenfolge und die Sperre selbst bleiben. */
+const TUTORIAL_TIMER_AN = false;
 
-let S = { name:"", hp:K.hpmax, log:[], zaehler:0, narben:[], bonus:0, wahnsinn:false, schicksalOffen:false, trank:true, traits:[], tutorialFertig:false };
+let S = { name:"", hp:K.hpmax, log:[], zaehler:0, narben:[], bonus:0, wahnsinn:false, schicksalOffen:false, trank:true, traits:[], tutorialFertig:false, imKampf:false };
 function laden(){ try{ const r=localStorage.getItem(SCHLUESSEL); if(r){const g=JSON.parse(r); if(g&&typeof g==="object") S=Object.assign(S,g);} }catch(e){} }
 function sichern(){ try{ localStorage.setItem(SCHLUESSEL, JSON.stringify(S)); }catch(e){} }
 
@@ -479,7 +486,20 @@ function setzeHP(delta, grund){
   zeichneHP();
   notiere(grund||(echt<0?"Damage taken":"Healed"), (echt>0?"+":"")+echt+" HP → "+S.hp, echt<0?"harm":"heal");
 }
+/* Ausserhalb eines Kampfes bleiben die Attacken verborgen — erst „We're fighting“
+   zeigt sie. So lässt sich später auch mal eine Attacke selten machen, ohne dass
+   sie ständig als Versuchung dasteht, wenn gerade gar nicht gekämpft wird.        */
 function zeichneAktionen(){
+  if(!S.imKampf){
+    $("aktionen").innerHTML =
+      '<article class="action"><div><span class="kind">Fight</span><h3>Enter combat</h3></div>'+
+      '<p class="desc">Your attacks stay hidden until a fight actually starts. Say what’s happening, then press this.</p>'+
+      '<div class="nums"></div><button class="kampfgo" id="kampfstart">⚔ We’re fighting</button></article>'+
+      '<article class="action"><div><span class="kind">Healing</span><h3>Healed outside a fight</h3></div>'+
+      '<p class="desc">Healing does not only happen right after a fight — sometimes it happens in between, too.</p>'+
+      '<div class="nums"></div><button class="heilgo" id="heilquick">'+NACHKAMPF_TEXT+'</button></article>';
+    return;
+  }
   $("aktionen").innerHTML = K.aktionen.map((a,i)=>{
     const marken=[];
     if(a.dmg){ const heilt=a.art==="heilen"||a.art==="gruppe"; marken.push('<span>'+(heilt?"Heals "+a.dmg:(S.wahnsinn?"Damage ???":"Damage "+a.dmg+(S.bonus?" +"+S.bonus:"")))+'</span>'); }
@@ -490,7 +510,8 @@ function zeichneAktionen(){
     return '<article class="action"><div><span class="kind">'+a.kind+'</span><h3>'+a.name+'</h3></div>'+
       '<p class="desc">'+a.text+'</p><div class="nums">'+marken.join("")+'</div>'+
       '<button class="go" data-i="'+i+'">Roll</button></article>';
-  }).join("");
+  }).join("") + '<p style="grid-column:1/-1;text-align:center;margin:2px 0 0">'+
+    '<button id="kampfende" style="color:var(--dim);text-decoration:underline">The fight is over — hide my attacks again</button></p>';
 }
 function zeigeDice(wurf){
   $("dmgline").innerHTML = wurf.augen.map((z,j)=>'<span class="pip d'+wurf.seiten+'" style="animation-delay:'+(j*70)+'ms">'+z+'</span>').join("")
@@ -531,6 +552,7 @@ function traitEntfernen(name){
   sichern(); zeichneTraits(); zeichneAngezeigteTraits();
 }
 function starteLesezeit(text){
+  if(!TUTORIAL_TIMER_AN) return freigebenSofort("Continue →");
   const worte=text.trim().split(/\s+/).length;
   const ms=Math.max(3500, Math.round(worte/135*60000));
   clearInterval(tTimer); clearTimeout(tFertig);
@@ -744,6 +766,9 @@ document.addEventListener("click", e=>{
   const weg=e.target.closest("[data-weg]"); if(weg){ notiere("<b>Healing</b> given to a friend","+"+weg.dataset.weg+" HP","heal"); $("after").innerHTML=""; return; }
   const chip=e.target.closest("[data-trait]"); if(chip && !chip.disabled){ traitHinzufuegen(chip.dataset.trait); return; }
   const rm=e.target.closest("[data-entfernen]"); if(rm){ traitEntfernen(rm.dataset.entfernen); return; }
+  const ks=e.target.closest("#kampfstart"); if(ks){ S.imKampf=true; sichern(); zeichneAktionen(); return; }
+  const ke=e.target.closest("#kampfende"); if(ke){ S.imKampf=false; sichern(); zeichneAktionen(); return; }
+  const hq=e.target.closest("#heilquick"); if(hq){ nachKampfHeilen(); return; }
 });
 $("schicksal").onclick=schicksal;
 $("trank").onclick=trinken;
@@ -764,7 +789,7 @@ $("tutorialWiederholen").onclick=()=>{
 };
 $("neu").onclick=()=>{
   if(!confirm("Start a new game? Your hit points and the whole roll log are cleared.")) return;
-  S={name:S.name, traits:S.traits||[], tutorialFertig:S.tutorialFertig, hp:K.hpmax, log:[], zaehler:0, narben:[], bonus:0, wahnsinn:false, schicksalOffen:false, trank:true};
+  S={name:S.name, traits:S.traits||[], tutorialFertig:S.tutorialFertig, hp:K.hpmax, log:[], zaehler:0, narben:[], bonus:0, wahnsinn:false, schicksalOffen:false, trank:true, imKampf:false};
   zeichneNarben(); zeichneTrank(); zeichneAngezeigteTraits();
   zeichneHP(); zeichneLog(); sichern();
   $("verdict").className="verdict warten"; $("verdict").textContent="Pick one of the three below.";
