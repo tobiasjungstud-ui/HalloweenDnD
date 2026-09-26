@@ -128,6 +128,15 @@ input{font:inherit;color:inherit}
 .pip.d8,.pip.d10{clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);border:none;background:var(--stone-hi)}
 @keyframes drop{from{opacity:0;transform:translateY(-14px) rotate(-18deg)}}
 .dmgtotal{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--klasse);margin-left:4px;font-variant-numeric:tabular-nums}
+
+/* ---------- The big dice for an attack: shaped like the weapon's own die, not always 2d6.
+   2d6 stays reserved for what is genuinely always 2d6 — the free roll and the fate roll. ---------- */
+.wgross{display:flex;flex-wrap:wrap;align-items:center;gap:9px;width:128px;flex:none}
+.wgross .pipg{width:52px;height:52px;font-size:20px}
+.wgross.crit .pipg{border-color:var(--gold);color:var(--gold);box-shadow:0 0 14px rgba(217,164,65,.35)}
+.wgross.miss .pipg{opacity:.4}
+.wgross-mod{color:var(--dim);font-family:var(--mono);font-size:18px}
+.wgross-summe{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--klasse);font-variant-numeric:tabular-nums;width:100%}
 .after{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
 .after button{border:1px solid var(--klasse);color:var(--klasse);padding:8px 15px;font-size:14px}
 .after button:hover{background:var(--klasse);color:#07070b}
@@ -361,6 +370,7 @@ footer.fine{font-size:12.5px;color:var(--dim);border-top:1px solid var(--line);p
           <span class="w6" id="w6a"></span><span class="w6" id="w6b"></span>
           <span class="face" id="wurfzahl">12</span>
         </div>
+        <div class="wgross" id="wgross" aria-hidden="true" hidden></div>
         <div class="readout">
           <div style="display:flex;align-items:center;gap:10px"><p class="what" id="was" style="margin:0">Your turn</p><button class="frei" id="wurffrei">Just roll 2d6</button></div>
           <p class="verdict warten" id="verdict">Pick one of the three below.</p>
@@ -477,6 +487,9 @@ function wuerfle(f, doppelt){
   const mod = m[3]?+m[3]:0;
   return {augen, seiten:+m[2], mod, summe:augen.reduce((a,b)=>a+b,0)+mod};
 }
+/* Wie viele Würfel mit wie vielen Seiten eine Formel wie "1d10+4" zeigt — für die
+   großen Würfel einer Attacke, unabhängig davon, ob am Ende gewürfelt wird.        */
+function dieformen(f){ const m=/^(\d+)d(\d+)/.exec(f); return {n:+m[1], seiten:+m[2]}; }
 const ruhig = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 /* Gewürfelt wird mit zwei Sechsern — wie am Tisch. Ein Sechserpasch ist der kritische Treffer. */
 const PUNKTE={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
@@ -561,6 +574,16 @@ function zeigeDice(wurf){
     + (wurf.mod?'<span style="color:var(--dim);font-family:var(--mono)">+'+wurf.mod+'</span>':'')
     + '<span class="dmgtotal">'+wurf.summe+'</span>';
 }
+/* Die großen Würfel einer Attacke: geformt wie a.dmg (d10, d6, drei d6 …), nicht wie
+   ein Standardwurf. augen==null zeigt einen verbrauchten Wurf ohne Zahl — der Fall
+   "getroffen hat es nicht" — statt eine Zahl zu erfinden, wo keine Attacke war.      */
+function zeigeGrosseWuerfel(seiten, anzahl, augen, mod, summe){
+  let html = Array.from({length:anzahl},(_,j)=>
+    '<span class="pipg pip d'+seiten+'" style="animation-delay:'+(j*70)+'ms">'+(augen?augen[j]:"–")+'</span>').join("");
+  if(augen && mod) html += '<span class="wgross-mod">+'+mod+'</span>';
+  if(augen && summe!=null) html += '<span class="wgross-summe">'+summe+'</span>';
+  $("wgross").innerHTML = html;
+}
 
 /* ---------- Tutorial: eine Seite ist erst lesbar geklickt, wenn ihre geschätzte Lesezeit um ist.
    ~135 Wörter/Minute — langsamer als ein geübter Leser, weil hier auf Englisch gelesen wird.       */
@@ -642,21 +665,38 @@ function rolle(i){
   const a=K.aktionen[i];
   if(S.hp<=0 && a.art!=="heilen" && a.art!=="gruppe"){ $("detail").textContent="You are down at 0 hit points. You cannot act."; return; }
   laeuft=true;
-  $("after").innerHTML=""; $("dmgline").innerHTML="";
+  $("after").innerHTML=""; $("dmgline").innerHTML=""; $("wgross").innerHTML="";
   $("was").textContent=a.name;
   $("verdict").className="verdict warten"; $("verdict").textContent="Rolling…";
   $("detail").textContent="";
   $("die").classList.remove("landed","crit","miss");
 
+  /* Eine Attacke zeigt ihre eigenen Würfel (d10, d6, drei d6 …), kein Ersatz-2d6.
+     2d6 bleibt für das, was wirklich immer 2d6 ist: der freie Wurf und der Schicksalswurf. */
+  const zeigtEigeneWuerfel = a.art==="angriff";
+  $("die").hidden = zeigtEigeneWuerfel;
+  $("wgross").hidden = !zeigtEigeneWuerfel;
+  $("wgross").className = "wgross";
+
   const brauchtWurf = (a.art==="angriff"||a.art==="trick");
   const p = brauchtWurf ? paar() : null;
   if(!brauchtWurf){ $("wurfzahl").textContent="✦"; return ende(a,null); }
+  if(zeigtEigeneWuerfel) return dreheGrosseWuerfel(a, p);
   if(ruhig){ zeigePaar(p); return ende(a,p); }
   $("die").classList.add("rolling");
   const bis=performance.now()+850;
   (function dreh(){
     if(performance.now()<bis){ zeigePaar(paar()); setTimeout(dreh,58); }
     else { $("die").classList.remove("rolling"); $("die").classList.add("landed"); zeigePaar(p); ende(a,p); }
+  })();
+}
+function dreheGrosseWuerfel(a, p){
+  const echt = S.wahnsinn ? "3d6" : a.dmg, form = dieformen(echt), n = pasch6(p) ? form.n*2 : form.n;
+  if(ruhig){ zeigeGrosseWuerfel(form.seiten, n, null); return ende(a,p); }
+  const bis=performance.now()+850;
+  (function dreh(){
+    if(performance.now()<bis){ zeigeGrosseWuerfel(form.seiten, n, Array.from({length:n},()=>w(form.seiten))); setTimeout(dreh,58); }
+    else ende(a,p);
   })();
 }
 
@@ -689,17 +729,18 @@ function ende(a, p){
   else { /* Angriff */
     const krit = pasch6(p);
     const trifft = krit || augen>=a.ab;
+    const echt = S.wahnsinn ? "3d6" : a.dmg, form = dieformen(echt);
     if(!trifft){
-      $("die").classList.add("miss");
+      $("wgross").className="wgross miss";
+      zeigeGrosseWuerfel(form.seiten, form.n, null);
       $("verdict").className="verdict miss"; $("verdict").textContent="Miss";
       $("detail").textContent="Bad luck. Your turn is over — the next player is up.";
-      $("dmgline").innerHTML='<span style="color:var(--dim);font-size:14px">no damage</span>';
       notiere("<b>"+a.name+"</b>", "miss", "miss");
     } else {
-      const d=wuerfle(S.wahnsinn?"3d6":a.dmg,krit);
+      const d=wuerfle(echt,krit);
       if(S.bonus){ d.mod+=S.bonus; d.summe+=S.bonus; }
-      zeigeDice(d);
-      $("die").classList.toggle("crit",krit);
+      $("wgross").className="wgross"+(krit?" crit":"");
+      zeigeGrosseWuerfel(d.seiten, d.augen.length, d.augen, d.mod, d.summe);
       $("verdict").className="verdict "+(krit?"crit":"hit");
       $("verdict").textContent = krit ? ("Critical hit! "+d.summe+" damage") : (d.summe+" damage");
       $("detail").textContent = krit ? "Double six — double dice. Say it loudly." : "Tell your DM the number so it can be taken off the monster.";
@@ -724,6 +765,8 @@ function zeichneNarben(){
 function dreheWuerfel(danach){
   if(laeuft) return; laeuft=true;
   const p=paar();
+  /* Immer 2d6, ausnahmslos — falls die letzte Attacke die großen Würfel zeigte. */
+  $("die").hidden=false; $("wgross").hidden=true;
   $("after").innerHTML=""; $("dmgline").innerHTML=""; $("die").classList.remove("landed","crit","miss");
   $("verdict").className="verdict warten"; $("verdict").textContent="Rolling…"; $("detail").textContent="";
   const fertig=()=>{ zeigePaar(p); danach(p); laeuft=false; };
@@ -736,6 +779,7 @@ function dreheWuerfel(danach){
 function zeichneTrank(){ const b=$("trank"); b.disabled=!S.trank; b.textContent=S.trank?"Healing potion — drink it (once per game)":"Healing potion — used"; }
 function trinken(){
   if(!S.trank) return;
+  if(!confirm("Drink your healing potion now? You only get one, for the whole game.")) return;
   S.trank=false;
   const unten=S.hp===0;
   S.hp=Math.min(K.hpmax,S.hp+10); zeichneHP(); zeichneTrank();
