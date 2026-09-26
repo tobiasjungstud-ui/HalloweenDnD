@@ -134,6 +134,27 @@ input{font:inherit;color:inherit}
 
 /* ---------- Aktionen ---------- */
 .actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(246px,1fr));gap:14px}
+
+/* ---------- Fight window: a Blood Moon Tarot skin, only while a fight is on ---------- */
+#kampffenster{position:relative;display:flex;flex-direction:column;gap:24px;transition:padding .2s}
+#kampffenster.kampf-modus{padding:26px 26px 10px;border:1.5px solid var(--klasse);
+  box-shadow:inset 0 0 0 6px var(--ink), inset 0 0 0 7px color-mix(in srgb, var(--klasse) 38%, transparent);
+  background:radial-gradient(65% 80% at 50% -6%, color-mix(in srgb, var(--klasse) 16%, transparent), transparent 62%)}
+.kampf-eck{display:none;position:absolute;width:13px;height:13px;color:var(--klasse);opacity:.85}
+.kampf-modus .kampf-eck{display:block}
+.kampf-ziffer{display:none;position:absolute;font-family:var(--display);font-size:13px;letter-spacing:.08em;color:var(--klasse)}
+.kampf-modus .kampf-ziffer{display:block}
+#kampfcaption{display:none;margin:0;text-align:center;font-family:var(--display);font-size:19px;letter-spacing:.24em;color:var(--bone)}
+.kampf-modus #kampfcaption{display:block}
+.kampf-modus .stage{background:radial-gradient(75% 100% at 50% -10%, color-mix(in srgb, var(--klasse) 22%, transparent), var(--stone) 65%);border-color:color-mix(in srgb, var(--klasse) 55%, var(--line-hi))}
+.kampf-modus .actions{align-items:end;padding-top:6px}
+.kampf-modus .action{box-shadow:0 16px 30px -14px rgba(0,0,0,.7);transform:rotate(var(--kippe,0deg));transition:transform .15s}
+.kampf-modus .action:hover{transform:rotate(var(--kippe,0deg)) translateY(-6px)}
+.kampf-modus .action:nth-of-type(1){--kippe:-3deg}
+.kampf-modus .action:nth-of-type(2){--kippe:0deg;margin-bottom:10px}
+.kampf-modus .action:nth-of-type(3){--kippe:3deg}
+.kampf-modus .action .kind{display:none}
+.kampf-modus .action h3::before{content:attr(data-ziffer) "  ";color:var(--klasse);font-family:var(--display)}
 .action{border:1px solid var(--line);background:var(--crypt);padding:16px;display:flex;flex-direction:column;gap:10px;transition:.18s}
 .action:hover{border-color:var(--line-hi);background:var(--stone)}
 .action h3{font-size:22px}
@@ -326,21 +347,31 @@ footer.fine{font-size:12.5px;color:var(--dim);border-top:1px solid var(--line);p
         <input id="heldname" type="text" maxlength="28" placeholder="Write it here" autocomplete="off"></label>
     </header>
 
-    <section class="stage" aria-live="polite">
-      <div class="die" id="die" aria-hidden="true">
-        <span class="w6" id="w6a"></span><span class="w6" id="w6b"></span>
-        <span class="face" id="wurfzahl">12</span>
-      </div>
-      <div class="readout">
-        <div style="display:flex;align-items:center;gap:10px"><p class="what" id="was" style="margin:0">Your turn</p><button class="frei" id="wurffrei">Just roll 2d6</button></div>
-        <p class="verdict warten" id="verdict">Pick one of the three below.</p>
-        <p class="detail" id="detail">The sheet rolls for you and tells you what happened.</p>
-        <div class="dmgline" id="dmgline"></div>
-        <div class="after" id="after"></div>
-      </div>
-    </section>
+    <div class="kampffenster" id="kampffenster">
+      <div class="kampf-eck" style="top:9px;left:11px"><svg viewBox="0 0 16 16"><path d="M8 0 11 5 16 8 11 11 8 16 5 11 0 8 5 5Z" fill="currentColor"/></svg></div>
+      <div class="kampf-eck" style="top:9px;right:11px"><svg viewBox="0 0 16 16"><path d="M8 0 11 5 16 8 11 11 8 16 5 11 0 8 5 5Z" fill="currentColor"/></svg></div>
+      <div class="kampf-eck" style="bottom:9px;left:11px"><svg viewBox="0 0 16 16"><path d="M8 0 11 5 16 8 11 11 8 16 5 11 0 8 5 5Z" fill="currentColor"/></svg></div>
+      <div class="kampf-eck" style="bottom:9px;right:11px"><svg viewBox="0 0 16 16"><path d="M8 0 11 5 16 8 11 11 8 16 5 11 0 8 5 5Z" fill="currentColor"/></svg></div>
+      <span class="kampf-ziffer" style="top:11px;left:32px">III</span>
+      <span class="kampf-ziffer" style="bottom:11px;right:32px;transform:rotate(180deg)">III</span>
+      <p class="kampfcaption" id="kampfcaption"></p>
 
-    <section class="actions" id="aktionen"></section>
+      <section class="stage" aria-live="polite">
+        <div class="die" id="die" aria-hidden="true">
+          <span class="w6" id="w6a"></span><span class="w6" id="w6b"></span>
+          <span class="face" id="wurfzahl">12</span>
+        </div>
+        <div class="readout">
+          <div style="display:flex;align-items:center;gap:10px"><p class="what" id="was" style="margin:0">Your turn</p><button class="frei" id="wurffrei">Just roll 2d6</button></div>
+          <p class="verdict warten" id="verdict">Pick one of the three below.</p>
+          <p class="detail" id="detail">The sheet rolls for you and tells you what happened.</p>
+          <div class="dmgline" id="dmgline"></div>
+          <div class="after" id="after"></div>
+        </div>
+      </section>
+
+      <section class="actions" id="aktionen"></section>
+    </div>
 
     <section class="log">
       <h2>Roll log <span id="siegel">0 rolls</span></h2>
@@ -492,7 +523,14 @@ function setzeHP(delta, grund){
 /* Ausserhalb eines Kampfes bleiben die Attacken verborgen — erst „We're fighting“
    zeigt sie. So lässt sich später auch mal eine Attacke selten machen, ohne dass
    sie ständig als Versuchung dasteht, wenn gerade gar nicht gekämpft wird.        */
+/* Nur der Anblick eines Kampfes leiht sich vom Blood-Moon-Tarot-Entwurf: der Rahmen
+   ums Fenster, die Eckzeichen, römische Ziffern statt "Weapon", ein leichtes Fächern
+   der drei Karten. Geklickt, gewürfelt und ausgewertet wird genau wie vorher.        */
+const KAMPF_TITEL = {krieger:"THE BLADE", magier:"THE ARCANIST", heiler:"THE LIGHTBEARER"};
+const ZIFFERN = ["I","II","III"];
 function zeichneAktionen(){
+  $("kampffenster").classList.toggle("kampf-modus", S.imKampf);
+  $("kampfcaption").textContent = S.imKampf ? KAMPF_TITEL[K.id] : "";
   if(!S.imKampf){
     $("aktionen").innerHTML =
       '<div class="ruhezeile">'+
@@ -512,7 +550,7 @@ function zeichneAktionen(){
       (a.risiko||"Usually works")+'</span>');
     if(a.stun) marken.push('<span class="sicher">Stuns</span>');
     if(a.selbstschaden) marken.push('<span class="risiko">You take '+a.selbstschaden+'</span>');
-    return '<article class="action"><div><span class="kind">'+a.kind+'</span><h3>'+a.name+'</h3></div>'+
+    return '<article class="action"><div><span class="kind">'+a.kind+'</span><h3 data-ziffer="'+ZIFFERN[i]+'">'+a.name+'</h3></div>'+
       '<p class="desc">'+a.text+'</p><div class="nums">'+marken.join("")+'</div>'+
       '<button class="go" data-i="'+i+'">Roll</button></article>';
   }).join("") + '<p style="grid-column:1/-1;text-align:center;margin:2px 0 0">'+
