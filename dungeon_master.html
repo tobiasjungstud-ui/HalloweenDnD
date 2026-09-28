@@ -304,8 +304,12 @@ input{font:inherit;color:inherit}
 .fragen>div.breit{grid-column:1/-1}
 .fragen .f{font-family:var(--sans);font-size:13px;color:var(--text);display:flex;gap:8px;align-items:flex-start;line-height:1.45}
 .hak{color:var(--gold);flex:none;padding:0;line-height:1.3;font-size:14px}
-.fragen .a{font-size:16px;color:var(--muted);font-style:italic;line-height:1.5}
-.fragen .a em{font-style:normal;font-family:var(--sans);font-size:12.5px;color:var(--dim);display:block;margin-top:3px}
+/* Default: eine Randbemerkung, kein Zitat — klein, blass, aufrecht. Das Zitat selbst
+   (immer als .rede von rede() gesetzt) hebt sich davon klar ab: gross, golden, kursiv,
+   auf eigener Zeile. So bleibt in der ganzen Antwort erkennbar, was gesagt wird. */
+.fragen .a{font-family:var(--sans);font-size:13px;color:var(--dim);font-style:normal;line-height:1.55}
+.fragen .a .rede{display:block;font-size:16.5px;font-family:var(--serif);line-height:1.5}
+.fragen .a em:not(.rede){display:block;margin-top:3px}
 .fragen .erledigt{background:rgba(127,182,148,.07)}
 .fragen .erledigt .f,.fragen .erledigt.f{color:var(--green-soft)}
 .fragen .erledigt .hak,.fragen .erledigt.f .hak{color:var(--green)}
@@ -2755,7 +2759,7 @@ function blockHTML(b, idx, h, lauf){
         const pst = ZEIGE_STIMMEN && STIMMEN[l.name] ? '<span class="pstimme">'+STIMMEN[l.name]+'</span>' : "";
         const titel='<h5 class="boxtitel">Mögliche Antworten von <b>'+l.name+'</b></h5>';
         const kopf='<div class="pk"><h4>'+l.name+'</h4><span class="rolle">'+l.wer+'</span>'+pst+
-          '<span class="spielt">'+(stumm?"Ausgeredet. Sagt nichts mehr und beachtet die Gruppe nicht — „"+l.name+" looks away and says nothing more.“":l.spielt)+'</span>'+
+          '<span class="spielt">'+rede(stumm?"Ausgeredet. Sagt nichts mehr und beachtet die Gruppe nicht — „"+l.name+" looks away and says nothing more.“":l.spielt)+'</span>'+
           '<span class="zaehler">'+(eintraege.length-offen)+" von "+eintraege.length+' gefragt</span></div>';
         if(stumm) return titel+'<article class="person stumm">'+kopf+'</article>';
         const zeilen = l.fragen
@@ -2765,7 +2769,7 @@ function blockHTML(b, idx, h, lauf){
           : l.sagt.map((t,j)=>{const w=!!Z.abgehakt[keys[j]];
               return '<div class="a breit'+(w?" erledigt":"")+'">'+hakHTML(keys[j],w)+' '+rede("„"+t+"“")+'</div>';}).join("");
         return titel+'<article class="person">'+kopf+'<div class="fragen">'+zeilen+'</div>'+
-          '<p class="notfalls"><b>Notfalls:</b> '+l.notfalls+'</p></article>';
+          '<p class="notfalls"><b>Notfalls:</b> '+rede(l.notfalls)+'</p></article>';
       }).join("")+(b.sonst?'<p class="sonst">'+b.sonst+'</p>':''), "", hilfe);
     case "fa":
       const faTitel = b.wer ? 'Mögliche Antworten von <b>'+b.wer+'</b>'
@@ -2868,7 +2872,7 @@ function regelnHTML(rs, titel){
 }
 function chanceHTML(c, name){
   return '<details class="hbox staerke"><summary><b>'+name+' · '+c.talent+'</b>'+
-    '<span class="cue">Vorgelesen: “'+c.cue+'”</span></summary><p><b>'+c.text+'</b> '+c.folge+'</p></details>';
+    '<span class="cue">Vorgelesen: “'+c.cue+'”</span></summary><p><b>'+rede(c.text)+'</b> '+rede(c.folge)+'</p></details>';
 }
 /* Der Text eines Blocks, in dem der angekündigte Satz einer Stärke stehen kann */
 function blockText(b){

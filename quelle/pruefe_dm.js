@@ -235,8 +235,10 @@ function spiele(p, protokoll){
     pruefe((k.verlauf||[]).filter(T.gilt).length<=8, wo+": mehr als acht Regeln in der mittleren Spalte");
     if(!NEU) pruefe(!text().includes('class="staerke'), wo+": Gelegenheiten stehen noch in der Hauptspalte");
     if(!NEU) pruefe(["Magic Hand","Strength","Healing Touch"].every(t=>st.includes(t)), wo+": Stärken-Abschnitt nennt nicht alle drei Talente");
-    const gz=NEU?text():st;
-    chancen.forEach(c=>pruefe(gz.includes(c.text) && gz.includes(c.folge) && gz.includes(c.cue), wo+": Gelegenheit fehlt rechts: "+c.wer+" · "+c.talent));
+    const gz=NEU?text():st, gzOhneTags=gz.replace(/<[^>]+>/g,"");
+    /* c.text/c.folge werden jetzt durch rede() geschickt (Zitate golden hervorgehoben) —
+       das setzt <em>-Tags mitten hinein, darum hier ohne Markup vergleichen. */
+    chancen.forEach(c=>pruefe(gzOhneTags.includes(c.text) && gzOhneTags.includes(c.folge) && gz.includes(c.cue), wo+": Gelegenheit fehlt rechts: "+c.wer+" · "+c.talent));
     const gelb=sichtbar.filter(b=>b.t==="vorlesen"||b.t==="sagen").flatMap(b=>b.text);
     chancen.forEach(c=>pruefe(gelb.some(t=>t.includes(c.cue)), wo+": Ankündigung „"+c.cue+"“ wird auf diesem Pfad nicht vorgelesen"));
     if(!NEU){
