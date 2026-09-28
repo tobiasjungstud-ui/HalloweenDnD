@@ -892,6 +892,7 @@ html.licht-aus .licht-ebene{display:none}
           </div>
         </details>
 
+        <button id="kurzschalter" class="knopf schalter" aria-pressed="false" title="Lange Fassung zeigen"><span class="w"></span>Kurzfassung (weniger Vorlesetext)</button>
         <button id="stimmschalter" class="knopf schalter" aria-pressed="false" title="Stimmangaben einblenden"><span class="w"></span>Stimmen der Figuren</button>
         <button id="blutschalter" class="knopf schalter" aria-pressed="false" title="Blut im Messrohr"><span class="w"></span>Blut im Gefahrenbalken</button>
         <button class="knopf" id="zuruecksetzen">Neue Runde</button>
@@ -1251,11 +1252,14 @@ const KAPITEL = [
  {t:"ziel", text:"Diese Seite führt dich Satz für Satz. Du musst nichts vorbereiten und die Geschichte nicht kennen.", zeit:"2 Min."},
  {t:"regie", titel:"Was du brauchst", text:`Drei Spielerblätter auf drei Geräten (<b>Arcanist</b>, <b>Blade</b>, <b>Lightbearer</b>), das Helfer-Blatt als Ausdruck und <b>zwei Sechser</b>. Namen unter <b>Charaktere / Kampf</b> eintragen.
  <p>Die Figurenwerte auf der Konsole und auf den Spielergeräten sind <b>nicht automatisch synchronisiert</b>: Was du hier einträgst, tragen die Spieler dort ebenfalls ein — und umgekehrt.</p>
- <p>Oben in der Leiste läuft eine <b>pausierbare 90-Minuten-Uhr</b>. Sie weiss, wie viel Zeit jede Seite haben darf, und wird gelb, wenn ihr hinten liegt. <b>Zehn Minuten vor Schluss holt die Uhr den Grafen selbst</b>, wenn die Gruppe noch nicht bei ihm ist: Es geht ein Fenster auf, du musst nichts auslösen. „später“ schiebt es bis zum nächsten Umblättern auf.</p>`},
+ <p>Oben in der Leiste läuft eine <b>pausierbare 90-Minuten-Uhr</b>. Sie weiss, wie viel Zeit jede Seite haben darf, und wird gelb, wenn ihr hinten liegt. <b>Zehn Minuten vor Schluss holt die Uhr den Grafen selbst</b>, wenn die Gruppe noch nicht bei ihm ist: Es geht ein Fenster auf, du musst nichts auslösen. „später“ schiebt es bis zum nächsten Umblättern auf.</p>`, kurz:`Drei Spielerblätter, das Helfer-Blatt gedruckt, <b>zwei Sechser</b>. Namen unter <b>Charaktere / Kampf</b> eintragen.
+ <p>Werte auf Konsole und Spielergeräten sind <b>nicht synchron</b> — beide tragen ein.</p>
+ <p>Oben läuft eine <b>90-Minuten-Uhr</b>. <b>10 Minuten vor Schluss holt sie den Grafen von selbst</b>, falls nötig — „später“ verschiebt bis zum nächsten Umblättern.</p>`},
  {t:"regie", titel:"Wer die Gruppe ist", text:`Das ist vorgegeben, das müssen die Schüler nicht erfinden: <b>Sie sind Vampirjäger.</b> Nicht berühmt, noch nicht. Ein Gerücht hat sie hergeführt — in diesen Bergen liege ein Tal, in dem Menschen nach Plan verschwinden. Sie wollen wissen, ob es stimmt.
- <p>Erfinden dürfen sie: Namen, Herkunft, wie sie sich kennen, was sie können. Der Auftrag steht fest.</p>`},
+ <p>Erfinden dürfen sie: Namen, Herkunft, wie sie sich kennen, was sie können. Der Auftrag steht fest.</p>`, kurz:`<b>Sie sind Vampirjäger</b> — ein Gerücht führte sie her: Menschen verschwinden im Tal, alle zwanzig Jahre. Namen, Herkunft, Fähigkeiten dürfen sie erfinden; der Auftrag steht fest.`},
  {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`<b>1 · Gold lesen.</b> Englische Erzählung und Figurenrede — wörtlich. <b>2 · Grün fragen.</b> Jede Figur äussert eine eigene Absicht oder Frage und danach einen Grund oder eine Reaktion. <b>3 · Ergebnis klicken.</b> Nur markieren, was am Tisch passiert ist — Antworten abhaken, Entscheidungen anklicken.
- <p>Rechts neben dem Text stehen die <b>Tipps</b> auf der Höhe der Stelle, zu der sie gehören: was du dort besser nicht verrätst, wo du Tempo machst, wann du schweigst. Unten steht immer, wann es weitergeht. Die <b>Gefahr</b> stellst du an der Säule rechts ein — die Lasche <b>‹ GEFAHR</b> klappt die Knöpfe heraus: 0–3 ruhig, 4–7 du darfst in einem Kampf einen Gegner dazunehmen, 8–10 eine Patrouille vor dem nächsten Akt.</p>`},
+ <p>Rechts neben dem Text stehen die <b>Tipps</b> auf der Höhe der Stelle, zu der sie gehören: was du dort besser nicht verrätst, wo du Tempo machst, wann du schweigst. Unten steht immer, wann es weitergeht. Die <b>Gefahr</b> stellst du an der Säule rechts ein — die Lasche <b>‹ GEFAHR</b> klappt die Knöpfe heraus: 0–3 ruhig, 4–7 du darfst in einem Kampf einen Gegner dazunehmen, 8–10 eine Patrouille vor dem nächsten Akt.</p>`, kurz:`<b>1 · Gold</b> vorlesen, wörtlich. <b>2 · Grün</b> — jede Figur sagt eine Absicht und einen Grund. <b>3</b> Ergebnis anklicken.
+ <p>Rechts stehen <b>Tipps</b> zur jeweiligen Stelle. Die <b>Gefahr</b> stellst du an der Säule ein: 0–3 ruhig, 4–7 ein Gegner mehr möglich, 8–10 Patrouille.</p>`},
  {t:"sagen", text:["Speak English. Mistakes are fine. If you need a word, ask for help. Just don’t speak in full German sentences — who knows what consequences it might have… (evil laugh). Take a moment, then try.","Everyone gets a turn. Listen, and add your own idea. You do not need a special voice."]},
  {t:"fa", titel:"wenn etwas klemmt", paare:[
    ["Niemand sagt etwas","20 Sekunden Denkzeit. Dann: „What do you notice? What could you do?“ Nur Wörter oder offene Anfänge anbieten, keine ganzen Sätze."],
@@ -1282,17 +1286,17 @@ const KAPITEL = [
  woerter:[["a vampire hunter","ein Vampirjäger / eine Vampirjägerin"],["a rumour","ein Gerücht"],["to disappear","verschwinden"],["to be taken","entführt werden"],["Maybe … / I think …","Vielleicht … / Ich glaube …"],["fog","Nebel"],["damp","feucht, klamm"],["to be afraid of something","vor etwas Angst haben"],["a valley","ein Tal"]],
  titel:"The Carriage", art:"szene", bild:"fahrt", ort:ORT.strasse, nach:ORT.vorWirtshaus, bloecke:[
  {t:"ziel", text:"Die Gruppe stellt sich vor, erfährt ihren Auftrag und steigt vor dem Wirtshaus aus.", zeit:"3 Min."},
- {t:"regie", titel:"Hintergrund", text:"Sechs Stunden Kutschfahrt bergauf. Der Fahrer heisst <b>Marek</b>: grimmig, wortkarg — er stellt die erste Frage des Abends, und die Vorstellung ist die erste Sprechübung. Die Szene endet vor dem Wirtshaus."},
+ {t:"regie", titel:"Hintergrund", text:"Sechs Stunden Kutschfahrt bergauf. Der Fahrer heisst <b>Marek</b>: grimmig, wortkarg — er stellt die erste Frage des Abends, und die Vorstellung ist die erste Sprechübung. Die Szene endet vor dem Wirtshaus.", kurz:`Sechs Stunden Fahrt. <b>Marek</b>: grimmig, wortkarg — stellt die erste Frage, die Vorstellung ist die erste Sprechübung. Endet vor dem Wirtshaus.`},
  {t:"vorlesen", titel:"Wer ihr seid — das liest du zuerst", text:[
   `You are vampire hunters. Not famous ones. Not yet.`,
   `Three weeks ago you heard a rumour: in a valley in these mountains, people disappear. Once every twenty years — and always exactly one.`,
   `Three nights ago it happened again. A young woman, Mirela Vance, was taken from the village of Dornwald.`,
-  `And nobody in Dornwald is looking for her. Nobody.`]},
+  `And nobody in Dornwald is looking for her. Nobody.`], kurz:[`You are vampire hunters. Not famous ones. Not yet.`,`Three weeks ago you heard a rumour: people disappear from a valley in these mountains. Once every twenty years.`,`Three nights ago it happened again — Mirela Vance, from the village of Dornwald. And nobody there is looking for her.`]},
  {t:"aufgabe", anker:"vermutung", sag:"Why is nobody looking for her? What do you think is going on in Dornwald? Each of you: one idea. Start with “Maybe …” or “I think …”.", hinweis:"Eine Runde, eine Vermutung je Figur. Nichts bestätigen, nichts widerlegen — die Antwort kommt im Wirtshaus."},
  {t:"vorlesen", titel:"Die Fahrt", text:[
   `The carriage has been climbing for six hours. Outside there is nothing but pine trees and fog, and everything in here is damp — your coats, your bags, the seats.`,
   `Then something moves in the trees. It stays level with the carriage for twenty seconds — fast, low, quiet. Then it is gone. The driver does not slow down. He does not look.`,
-  `And then, for the first time in six hours, he speaks — without turning round.`]},
+  `And then, for the first time in six hours, he speaks — without turning round.`], kurz:[`The carriage has been climbing for six hours, through fog and pine trees.`,`Something moves alongside it for a moment — fast, low, quiet. Then it's gone. The driver does not slow down.`,`Then, for the first time, he speaks — without turning round.`]},
  {t:"sagen", wer:"Marek", text:["Nobody comes up here in November. So — who are you? And what do you want in a place like this?"]},
  {t:"aufgabe", anker:"marek", sag:"Marek doesn’t move the horses. He’s waiting — for every one of you. And he’s heard plenty of one-word answers in his life. They don’t impress him. Tell him what he wants to know!", hinweis:"Zwei bis drei Sätze je Figur. Stockt es, hakt Marek nach: „Where are you from?“ — „What can you actually do?“ — „Why would anyone come up here in November?“ — „Who is paying you?“"},
  {t:"personen", leute:[
@@ -1307,7 +1311,7 @@ const KAPITEL = [
   `The village is twenty dark houses and a bell tower with no bell in it. There is exactly one building with light in the windows: a tavern, with a black goat painted on the sign.`,
   `Your bags land in the mud beside you. By the time you turn round, the carriage is already moving, and Marek is driving downhill faster than he ever drove up.`,
   `High above the village, on bare rock, stands a castle. One window is lit.`,
-  `You walk towards the old tavern slowly. Under your boots the mud is half frozen, and the light in the windows is the only warm thing for miles.`]},
+  `You walk towards the old tavern slowly. Under your boots the mud is half frozen, and the light in the windows is the only warm thing for miles.`], kurz:[`The carriage stops. Marek does not get down — you open the door yourselves. His hand, on the reins, is wrapped in a dirty bandage.`,`The village is twenty dark houses. Only one has light: a tavern with a black goat on the sign.`,`Your bags land in the mud. The carriage is already turning — Marek drives downhill faster than he came up.`,`High above, on bare rock, a castle. One window is lit.`]},
  {t:"weiter", text:"Wenn alle drei gesprochen haben und die Gruppe vor der Wirtshaustür steht."}]},
 
 /* ===== 2 ===== */
@@ -1320,10 +1324,10 @@ const KAPITEL = [
  woerter:[["an innkeeper","ein Wirt / eine Wirtin"],["a gravedigger","ein Totengräber"],["a board","ein Brett, eine Tafel"],["carved","eingeritzt"],["an arrangement","eine Abmachung"],["to bury somebody","jemanden begraben"],["It is her turn.","Sie ist an der Reihe."],["to pack a bag","eine Tasche packen"]],
  titel:"The Inn", art:"szene", bild:"wirtshaus", ort:ORT.vorWirtshaus, nach:ORT.wirtshaus, bloecke:[
  {t:"ziel", text:"Die Gruppe spricht mit drei Menschen, erfährt zwei Dinge und bekommt am Ende die Karte.", zeit:"8 Min."},
- {t:"regie", titel:"Hintergrund", text:"Im Wirtshaus sitzen elf Menschen. <b>Drei sind ansprechbar:</b> Greta (Wirtin, drei Finger), Old Pieter (Totengräber, betrunken) und Tobias (Junge an der Tür). Die anderen acht antworten nicht — spricht jemand sie an: „They look into their drinks and say nothing.“ <b>Wichtig:</b> Der Name <b>Anneke</b> muss fallen. Anneke Koll war Gretas jüngere Schwester — darum fragt sie in der Kapelle „Is Greta still alive?“. Am Ende der Szene liegt die Karte mit den drei Wegen auf dem Tisch."},
+ {t:"regie", titel:"Hintergrund", text:"Im Wirtshaus sitzen elf Menschen. <b>Drei sind ansprechbar:</b> Greta (Wirtin, drei Finger), Old Pieter (Totengräber, betrunken) und Tobias (Junge an der Tür). Die anderen acht antworten nicht — spricht jemand sie an: „They look into their drinks and say nothing.“ <b>Wichtig:</b> Der Name <b>Anneke</b> muss fallen. Anneke Koll war Gretas jüngere Schwester — darum fragt sie in der Kapelle „Is Greta still alive?“. Am Ende der Szene liegt die Karte mit den drei Wegen auf dem Tisch.", kurz:`Elf Menschen im Wirtshaus. <b>Drei ansprechbar:</b> Greta (Wirtin), Old Pieter (Totengräber), Tobias (Junge). Die anderen antworten nicht. <b>Wichtig:</b> Der Name <b>Anneke</b> muss fallen — Gretas Schwester, darum fragt sie später „Is Greta still alive?“. Am Ende liegt die Karte auf dem Tisch.`},
  {t:"vorlesen", titel:"Der Raum", text:[
   `You push the door open. Inside it is warm and far too quiet. Eleven people are sitting in a room built for forty, and every one of them stops talking.`,
-  `Above the fireplace hangs a long, heavy board of oak, on two iron hooks, with names carved into it. The last one is fresh — you can still see the pale wood inside the letters. It says: MIRELA VANCE.`]},
+  `Above the fireplace hangs a long, heavy board of oak, on two iron hooks, with names carved into it. The last one is fresh — you can still see the pale wood inside the letters. It says: MIRELA VANCE.`], kurz:[`You push the door open. It's warm and far too quiet — eleven people in a room built for forty, and all of them stop talking.`,`Above the fireplace hangs a heavy board, on two iron hooks, with names carved into it. The newest is fresh: MIRELA VANCE.`]},
  {t:"vorlesen", titel:"Die drei, die euch ansehen", text:[
   `Greta, behind the bar, has three fingers on one hand. Old Pieter sits by the fire with a bottle. Tobias, a boy, waits by the door. These three look at you. The others look down.`]},
  {t:"aufgabe", sag:"Each of you: choose someone and ask a question. Then ask about something you heard of the case — ask for specific information.", hinweis:"Abhaken, sobald eine Frage gestellt ist — jede nur einmal, egal von wem. Wer bei einer Person alles gefragt hat, bekommt von ihr nichts mehr."},
@@ -1347,10 +1351,10 @@ const KAPITEL = [
    notfalls:"Redet niemand mit ihm, läuft er ihnen an der Tür nach und sagt den Satz mit dem Koffer."}],
   sonst:"<b>Can we look around the room?</b> — Ja: das Namensbrett (schwer, an zwei Haken; wer es anfasst, hört Greta: „Leave it.“) und hinter der Theke die Karte."},
  {t:"tun", id:"w_anneke", text:"Hat jemand den Namen <b>Anneke</b> gehört?", knopf:{art:"wissen", k:"anneke"}, beschriftung:"Anneke ist gefallen"},
- {t:"regie", text:"Zeig die Karte, sobald jemand nach dem Weg fragt oder sich umsieht. <b>Notfalls</b> legt Greta sie von selbst hin, wenn die Gruppe aufbrechen will: „You’ll need this.“ Ohne die Karte geht es nicht weiter."},
+ {t:"regie", text:"Zeig die Karte, sobald jemand nach dem Weg fragt oder sich umsieht. <b>Notfalls</b> legt Greta sie von selbst hin, wenn die Gruppe aufbrechen will: „You’ll need this.“ Ohne die Karte geht es nicht weiter.", kurz:`Zeig die Karte, sobald jemand danach fragt. <b>Notfalls</b> legt Greta sie von selbst hin: „You’ll need this.“ Ohne Karte geht’s nicht weiter.`},
  {t:"vorlesen", anker:"karte", titel:"Die Karte — damit endet die Szene", text:[
   `Greta reaches under the bar and puts down an old hunting map. She does not say a word while you look at it.`,
-  `Three ways are drawn on it. A wide road along the ridge. A black line going straight through the mountain — an old silver mine. And a third line with two words written next to it: “coach, midnight”.`]},
+  `Three ways are drawn on it. A wide road along the ridge. A black line going straight through the mountain — an old silver mine. And a third line with two words written next to it: “coach, midnight”.`], kurz:[`Greta puts an old hunting map on the bar, without a word.`,`Three ways are drawn on it: a road along the ridge, a mine straight through the mountain, and a third line marked “coach, midnight”.`]},
  {t:"weiter", text:"Wenn jede Figur einmal gefragt hat und die Karte auf dem Tisch liegt."}]},
 
 /* ===== 3 ===== */
@@ -1361,12 +1365,12 @@ const KAPITEL = [
  woerter:[["a road","eine Strasse"],["a mine","ein Bergwerk"],["a coach","eine Kutsche"],["to be seen","gesehen werden"],["dangerous — safe","gefährlich — sicher"],["to decide","sich entscheiden"],["to agree","zustimmen"]],
  titel:"The Way Up", art:"ent", bild:"karte", ort:ORT.wirtshaus, nach:ORT.wirtshaus, bloecke:[
  {t:"ziel", text:"Die Gruppe wählt einen der drei Wege. Alle drei enden im Hof des Schlosses — sie unterscheiden sich nur im Preis.", zeit:"4 Min."},
- {t:"regie", titel:"Hintergrund", text:"Preis und Gefahr jedes Wegs stehen auf den drei Karten unten — du musst sie nicht vorher kennen. Frag reihum: „And what do you think?“ Klick danach die gewählte Karte an — ab dann steht auf den nächsten Seiten nur noch euer Weg."},
+ {t:"regie", titel:"Hintergrund", text:"Preis und Gefahr jedes Wegs stehen auf den drei Karten unten — du musst sie nicht vorher kennen. Frag reihum: „And what do you think?“ Klick danach die gewählte Karte an — ab dann steht auf den nächsten Seiten nur noch euer Weg.", kurz:`Preis und Gefahr stehen auf den drei Karten. Frag reihum: „And what do you think?“ Dann anklicken — ab da gilt nur noch der gewählte Weg.`},
  {t:"sagen", text:[
   "You have the map. There are three ways up that mountain.",
   "One: the old road along the ridge. Wide, fast, and you can be seen from everywhere.",
   "Two: the Kessler mine. Straight through the rock, and it comes out somewhere under the castle. Dark, and the air down there is two hundred years old.",
-  "Three: the coach. Every night at midnight the castle’s own coach comes down for food. You could be on it. Comfortable, fast — and it belongs to the house."]},
+  "Three: the coach. Every night at midnight the castle’s own coach comes down for food. You could be on it. Comfortable, fast — and it belongs to the house."], kurz:[`You have the map. Three ways up that mountain.`,`One: the old road. Wide, fast — but you can be seen.`,`Two: the Kessler mine. Straight through the rock. Dark, and the air is two hundred years old.`,`Three: the coach. It comes down for food at midnight. Fast and comfortable — but it belongs to the house.`]},
  {t:"aufgabe", anker:"wahl1", sag:"What are you going to do? The candles are burning down. Everybody say it: which way, and why. Then you decide.", hinweis:"Reihum. Bei Streit: „One minute, then we vote.“"},
  {t:"optionen", id:"e1", optionen:[
   {b:"A", name:"The old road", flagge:"weg_a", was:"Der lange Weg über den Grat: durch den Wald, über den Sumpf, an den Wachen vorbei. Das Abenteuer.",
@@ -1399,10 +1403,10 @@ const KAPITEL = [
  woerter:[["a guard","eine Wache"],["a guest","ein Gast"],["to expect somebody","jemanden erwarten"],["a cellar","ein Keller"],["a swamp, a bog","ein Sumpf"],["to be stuck","feststecken"],["to pull somebody out","jemanden herausziehen"],["to sneak","schleichen"]],
  titel:"Up the Mountain", art:"szene", braucht:"e1", bild:{weg_a:"galgen", weg_b:"stollen", weg_c:"kutsche"}, ort:ORT.wirtshaus, nach:ORT.hof, bloecke:[
  {t:"ziel", text:"Die Gruppe steigt auf ihrem Weg zum Schloss hinauf — mit dem, was der Weg kostet (Kampf, schlechte Luft, Wachen) — und steht am Ende im Hof.", zeit:"10 Min."},
- {t:"regie", nur:"weg_a", titel:"Hintergrund · Strasse", text:"Drei Stationen: die <b>Wölfe</b> am Galgen, der <b>Sumpf</b> und die <b>Wachen am Tor</b>. Kommt es bei den Wölfen zum Kampf, ist es der erste des Abends — nimm dir Zeit: Jeder sagt auf Englisch, was er tut, drückt seinen Knopf und liest seinen gelben Satz vor."},
+ {t:"regie", nur:"weg_a", titel:"Hintergrund · Strasse", text:"Drei Stationen: die <b>Wölfe</b> am Galgen, der <b>Sumpf</b> und die <b>Wachen am Tor</b>. Kommt es bei den Wölfen zum Kampf, ist es der erste des Abends — nimm dir Zeit: Jeder sagt auf Englisch, was er tut, drückt seinen Knopf und liest seinen gelben Satz vor.", kurz:`Drei Stationen: <b>Wölfe</b>, <b>Sumpf</b>, <b>Wachen am Tor</b>. Kommt es zum Kampf mit den Wölfen — der erste des Abends — nimm dir Zeit.`},
  {t:"vorlesen", nur:"weg_a", titel:"Der Wald und der Galgen", text:[
   `You leave the tavern by the back door. The road climbs through the forest, and the fog is so thick that you walk into the gallows before you see it. The wood is grey and the rope is long gone.`,
-  `Two wolves the size of ponies are sitting underneath it, side by side, watching you come. The smaller one holds a back leg off the ground; there is an old iron trap still on it. They are not barking. They are waiting for you to get closer.`]},
+  `Two wolves the size of ponies are sitting underneath it, side by side, watching you come. The smaller one holds a back leg off the ground; there is an old iron trap still on it. They are not barking. They are waiting for you to get closer.`], kurz:[`You leave by the back door. Fog is thick — you walk into the gallows before you see it.`,`Two wolves the size of ponies sit beneath it. The smaller one holds a leg up; there’s an old iron trap still on it. They wait for you to come closer.`]},
  {t:"aufgabe", nur:"weg_a", sag:"Each of you: what will you do, and why? You may protect someone or try to help the hurt wolf. Discuss before you act."},
  {t:"weiche", id:"woelfe", anker:"wolfe", nur:"weg_a", titel:"Was machen die Wölfe?", optionen:[
   {k:"geholfen", knopf:"Geholfen — sie ziehen ab", sub:"Jemand hat dem verletzten Wolf geholfen, ruhig und ohne Waffe. Kein Kampf."},
@@ -1410,18 +1414,18 @@ const KAPITEL = [
   {k:"verpatzt", knopf:"Verpatzt — ein dritter kommt", sub:"Laut, grob oder ungeschickt: Die Wölfe werden wütend, und aus dem Nebel kommt ein dritter."}]},
  {t:"vorlesen", weiche:"woelfe=geholfen", nur:"weg_a", titel:"Die Wölfe ziehen ab", text:[
   `Whatever you did, the smaller wolf understands it. It puts its hurt leg down, carefully, and looks at you for a long time — the way a person would.`,
-  `Then both wolves stand up. They do not run. They walk past you, close enough to touch, and disappear into the fog above the gallows. A minute later, somewhere up the hill, one of them howls — just once.`]},
+  `Then both wolves stand up. They do not run. They walk past you, close enough to touch, and disappear into the fog above the gallows. A minute later, somewhere up the hill, one of them howls — just once.`], kurz:[`The smaller wolf puts its leg down and looks at you — the way a person would.`,`Both wolves stand and walk past you into the fog. A minute later, one howls — just once.`]},
  {t:"kampf", weiche:"woelfe=kampf", nur:"weg_a", titel:"The wolves", text:"Zwei Wölfe, je 14 Lebenspunkte. Fällt einer unter 5 Lebenspunkte, haut er ab — der Kampfbildschirm zeigt es an.", gegner:["wolf","wolf"], extra:"wolf"},
  {t:"vorlesen", weiche:"woelfe=verpatzt", nur:"weg_a", titel:"Ein dritter Wolf", text:[
   `The smaller wolf yelps and snaps at the air. The bigger one gets up, slowly, and shows you its teeth.`,
-  `Then a third shape comes out of the fog behind the gallows — bigger than both of them — and the three wolves spread out around you.`]},
+  `Then a third shape comes out of the fog behind the gallows — bigger than both of them — and the three wolves spread out around you.`], kurz:[`The smaller wolf snaps at the air. The bigger one shows its teeth.`,`A third shape comes out of the fog — bigger than both — and they spread out around you.`]},
  {t:"kampf", weiche:"woelfe=verpatzt", nur:"weg_a", titel:"Three wolves", text:"Drei Wölfe, je 14 Lebenspunkte. Fällt einer unter 5 Lebenspunkte, haut er ab — der Kampfbildschirm zeigt es an.", gegner:["wolf","wolf","wolf"], extra:"wolf"},
  {t:"vorlesen", nur:"weg_a", titel:"Der Sumpf", text:[
-  `Above the gallows the road simply stops. In front of you: black water, white mist, and a path that is only there if you find it. Every step, the ground pulls at your boots — and once it has one, it takes real strength to get it back.`]},
+  `Above the gallows the road simply stops. In front of you: black water, white mist, and a path that is only there if you find it. Every step, the ground pulls at your boots — and once it has one, it takes real strength to get it back.`], kurz:[`The road stops. Black water, white mist, a path only if you find it. Every step, the ground pulls at your boots — and once it has one, it takes real strength to get it back.`]},
  {t:"aufgabe", nur:"weg_a", sag:"Each of you: how will you cross — slowly, fast, or holding on to someone? And if somebody gets stuck, how could you help them?", hinweis:"Erst reden lassen — dann würfeln."},
  {t:"aufgabe", anker:"sumpf", nur:"weg_a", sag:"Now each of you rolls both dice — once. Seven or more: you are across. Under seven: you are stuck. Call for help — in English. Who helps you, and how?", hinweis:"Drei Würfe, einer pro Figur. Wer feststeckt, ruft (<i>Help! I’m stuck!</i>); eine andere Figur sagt auf Englisch, wie sie hilft → kein Schaden. Kommt keine Hilfe: −1 HP im Reiter <b>Charakter-Übersicht / Kampf</b>."},
  {t:"vorlesen", nur:"weg_a", titel:"Die Wachen am Tor", text:[
-  `On the far side of the bog the gate of Nachtfels stands open. Two men in old grey livery stand beside it. Their lamps hang on the wall next to them — the only light for a mile. They do not move. They do not talk. They are looking at the fog.`]},
+  `On the far side of the bog the gate of Nachtfels stands open. Two men in old grey livery stand beside it. Their lamps hang on the wall next to them — the only light for a mile. They do not move. They do not talk. They are looking at the fog.`], kurz:[`The gate of Nachtfels stands open. Two guards stand beside it. Their lamps hang on the wall next to them — the only light for a mile. They don’t move. They’re looking at the fog.`]},
  {t:"aufgabe", anker:"wachen", nur:"weg_a", sag:"Two guards. They belong to the house, and they are not here to welcome anyone. You can try to get past them in the fog — one roll each, seven or more. Or you will be detected — and attacked. Decide together. Quietly.", hinweis:"Würfeln lassen, dann unten anklicken, was passiert ist."},
  {t:"weiche", id:"wache", nur:"weg_a", titel:"Kommen sie an den Wachen vorbei?", optionen:[
   {k:"vorbei", knopf:"Ja — vorbeigeschlichen", sub:"Alle haben 7 oder mehr gewürfelt."},
@@ -1430,15 +1434,15 @@ const KAPITEL = [
  {t:"vorlesen", weiche:["wache=vorbei","wache=entdeckt"], nur:"weg_a", titel:"Im Hof", text:[
   `Past the guards, through the gate that nobody ever closed — and you are standing in a square courtyard of black stone.`]},
 
- {t:"regie", nur:"weg_b", titel:"Hintergrund · Stollen", text:"Vier Stunden Dunkelheit, schlechte Luft (−2 HP für alle, Knopf unten), dann ein Keller unter dem Schloss — und eine <b>Wache mit Lampe</b>. Hier wird nicht gewürfelt, hier wird geredet."},
+ {t:"regie", nur:"weg_b", titel:"Hintergrund · Stollen", text:"Vier Stunden Dunkelheit, schlechte Luft (−2 HP für alle, Knopf unten), dann ein Keller unter dem Schloss — und eine <b>Wache mit Lampe</b>. Hier wird nicht gewürfelt, hier wird geredet.", kurz:`Vier Stunden Dunkelheit, schlechte Luft (−2 HP, Knopf unten), dann ein Keller mit <b>Wache</b>. Hier wird geredet, nicht gewürfelt.`},
  {t:"vorlesen", nur:"weg_b", titel:"Der Stollen", text:[
   `The mine entrance is a hole behind a dead tree above the village, and it is smaller than all of you.`,
   `Four hours in the dark. After two, the air turns sweet and heavy and everybody’s head starts to hurt — you each lose two hit points.`,
-  `After three, you find what is left of the Kessler family: tools, a child’s shoe, and a lamp that somebody put down neatly before they stopped needing it.`]},
+  `After three, you find what is left of the Kessler family: tools, a child’s shoe, and a lamp that somebody put down neatly before they stopped needing it.`], kurz:[`The mine entrance is smaller than all of you.`,`Four hours in the dark. After two, the air turns heavy — you each lose two hit points.`,`After three: what’s left of the Kessler family — tools, a child’s shoe, a lamp set down neatly.`]},
  {t:"tun", id:"stollen_luft", nur:"weg_b", text:"Die schlechte Luft anwenden — dann stimmen die Werte im Reiter Charakter-Übersicht.", knopf:{art:"schaden", v:2}, beschriftung:"−2 HP für alle"},
  {t:"vorlesen", nur:"weg_b", titel:"Der Keller", text:[
   `The tunnel ends at a rotten wooden door. Behind it: a cellar full of barrels, a smell of wine and wet stone, and a stair going up. In the corner, behind an iron grille, a shelf of small bottles — and one of them gives off a faint, pale light.`,
-  `At the top of the stair stands a man with a lamp. He has heard the door. He comes down, slowly, coughing — a cough that has clearly been going on for weeks — and holds the lamp up to your faces.`]},
+  `At the top of the stair stands a man with a lamp. He has heard the door. He comes down, slowly, coughing — a cough that has clearly been going on for weeks — and holds the lamp up to your faces.`], kurz:[`The tunnel ends at a cellar: barrels, wet stone, a stair up. In the corner, behind an iron grille, a bottle glows faintly.`,`A man comes down the stair with a lamp — coughing, a cough that has clearly been going on for weeks — and holds it up to your faces.`]},
  {t:"sagen", wer:"Die Wache", nur:"weg_b", text:["Nobody comes in through the cellar. Who are you, and who let you in?"]},
  {t:"aufgabe", anker:"keller", nur:"weg_b", sag:"He wants an answer, and he wants it now. Guests — say it like you mean it, one sentence each, and give him a reason. No weapons, no dice. Just talk.", hinweis:"Reden lassen, dann unten anklicken, was passiert ist."},
  {t:"weiche", id:"wache", nur:"weg_b", titel:"Glaubt die Wache ihnen?", optionen:[
@@ -1449,13 +1453,13 @@ const KAPITEL = [
  {t:"vorlesen", weiche:["wache=vorbei","wache=entdeckt"], nur:"weg_b", titel:"Hinauf in den Hof", text:[
   `Up the cellar stair, through a low door — and you are standing in a square courtyard of black stone, with the night sky above you for the first time in five hours.`]},
 
- {t:"regie", nur:"weg_c", titel:"Hintergrund · Kutsche", text:`Zwei Stunden mit <b>Corvin Ash</b>, dem Kutscher des Grafen: sehr freundlich, fährt ohne Lampe, sieht nie auf die Strasse. Spiel ihn freundlich und stell den Spielern <b>seine</b> Fragen: „And what are your names?“ — „And what do you want up there?“ — „You’re not from the village, are you?“ Drei Dinge dürfen sie merken: Er sagt nie Mirelas Namen, seine Hände sind kalt, im Fenster spiegelt sich alles ausser ihm. Merkt es niemand — kein Problem, die Gefahr (+4) ist schon eingetragen. Er bringt sie bis in den Hof.`},
+ {t:"regie", nur:"weg_c", titel:"Hintergrund · Kutsche", text:`Zwei Stunden mit <b>Corvin Ash</b>, dem Kutscher des Grafen: sehr freundlich, fährt ohne Lampe, sieht nie auf die Strasse. Spiel ihn freundlich und stell den Spielern <b>seine</b> Fragen: „And what are your names?“ — „And what do you want up there?“ — „You’re not from the village, are you?“ Drei Dinge dürfen sie merken: Er sagt nie Mirelas Namen, seine Hände sind kalt, im Fenster spiegelt sich alles ausser ihm. Merkt es niemand — kein Problem, die Gefahr (+4) ist schon eingetragen. Er bringt sie bis in den Hof.`, kurz:`Zwei Stunden mit <b>Corvin Ash</b>: freundlich, ohne Lampe, sieht nie auf die Strasse. Lass ihn fragen: „And what are your names?“ — „What do you want up there?“ Drei Hinweise, falls sie hinsehen: nie Mirelas Name, kalte Hände, kein Spiegelbild. Merkt es niemand — egal, Gefahr +4 ist schon eingetragen. Er bringt sie in den Hof.`},
  {t:"vorlesen", anker:"kutsche", nur:"weg_c", titel:"Die Kutsche", text:[
   `The coach is waiting at the edge of the village at midnight, exactly as the map said. The driver is a thin man in a good coat who introduces himself as Corvin Ash, and who is very, very friendly.`,
-  `He helps you up with a hand as cold as the door handle. He drives without a lamp. He never looks at the road. And in two hours he asks you more questions than you ask him.`]},
+  `He helps you up with a hand as cold as the door handle. He drives without a lamp. He never looks at the road. And in two hours he asks you more questions than you ask him.`], kurz:[`The coach waits at midnight, as the map said. The driver, Corvin Ash, is very friendly.`,`He helps you up with a hand as cold as the door handle. He drives without a lamp, never looks at the road — and asks more questions than you do.`]},
  {t:"vorlesen", spricht:"Corvin Ash", nur:"weg_c", titel:"Am Tor", text:[
   `At the gate Corvin stops the coach and says four words to the two guards with lamps: “I have three guests.” Somewhere above you, a window lights up. Then another.`,
-  `The coach rolls on through the gate — it stands open; it always does — into a square courtyard of black stone. Corvin starts unloading boxes as if you were not there at all, and you climb down.`]},
+  `The coach rolls on through the gate — it stands open; it always does — into a square courtyard of black stone. Corvin starts unloading boxes as if you were not there at all, and you climb down.`], kurz:[`At the gate Corvin says four words to the guards: “I have three guests.” A window lights up above. Then another.`,`The coach rolls into the courtyard. Corvin unloads boxes as if you weren’t there.`]},
  {t:"weiter", text:"Wenn die Gruppe im Hof steht."}]},
 
 /* ===== 5 ===== */
@@ -1466,14 +1470,14 @@ const KAPITEL = [
  woerter:[["to choose","wählen"],["to explore","erkunden"],["a courtyard","ein Innenhof"],["a fountain","ein Brunnen"],["a chapel","eine Kapelle"],["a library","eine Bibliothek"],["to repeat","wiederholen"],["a liar","ein Lügner"],["a road","eine Strasse"],["a mine","ein Bergwerk"],["a coach","eine Kutsche"],["to be seen","gesehen werden"],["dangerous — safe","gefährlich — sicher"],["to decide","sich entscheiden"],["to agree","zustimmen"]],
  titel:"The Courtyard", art:"szene", braucht:"e1", bild:"tueren", ort:ORT.hof, nach:ORT.hof, bloecke:[
  {t:"ziel", text:"Die Gruppe steht im Hof, sieht drei Türen an — und wählt eine. Alle drei führen zum selben Ziel, dem Spiegel am Ende des Westgangs; sie unterscheiden sich darin, wer euch hinbringt und was es kostet.", zeit:"8 Min."},
- {t:"regie", titel:"Hintergrund", text:"Der Hof: ein gefrorener Brunnen und drei Türen — Kapelle links, Bibliotheksfenster geradeaus, Küchentreppe rechts. Jede Figur sieht sich <b>eine</b> Sache an (Antworten unten), dann entscheidet die Gruppe hier auf dieser Seite."},
- {t:"regie", nur:"weg_b", text:"Ihr kamt aus dem Keller — <b>die niedrige Tür hinter euch</b> ist die, durch die ihr gerade gekommen seid. Sag das ruhig: Es macht den Hof zu einem Ort, an dem sie schon einen Fuss hatten."},
- {t:"regie", nur:"weg_c", text:"Corvin lädt weiter aus und beachtet euch nicht. Wenn jemand ihn anspricht: „I have work to do.“ Er bleibt im Hof — ihr seht ihn heute nicht wieder."},
+ {t:"regie", titel:"Hintergrund", text:"Der Hof: ein gefrorener Brunnen und drei Türen — Kapelle links, Bibliotheksfenster geradeaus, Küchentreppe rechts. Jede Figur sieht sich <b>eine</b> Sache an (Antworten unten), dann entscheidet die Gruppe hier auf dieser Seite.", kurz:`Der Hof: gefrorener Brunnen, drei Türen — Kapelle links, Bibliothek geradeaus, Küche rechts. Jede Figur sieht sich eine Sache an, dann entscheidet die Gruppe hier.`},
+ {t:"regie", nur:"weg_b", text:"Ihr kamt aus dem Keller — <b>die niedrige Tür hinter euch</b> ist die, durch die ihr gerade gekommen seid. Sag das ruhig: Es macht den Hof zu einem Ort, an dem sie schon einen Fuss hatten.", kurz:`Die niedrige Tür hinter euch ist die aus dem Keller — sag das ruhig.`},
+ {t:"regie", nur:"weg_c", text:"Corvin lädt weiter aus und beachtet euch nicht. Wenn jemand ihn anspricht: „I have work to do.“ Er bleibt im Hof — ihr seht ihn heute nicht wieder.", kurz:`Corvin lädt weiter aus, beachtet euch nicht: „I have work to do.“ Ihr seht ihn heute nicht wieder.`},
  {t:"vorlesen", titel:"Der Hof", text:[
   `The cold in here is a different kind of cold: the cold of a room where a window has been open since 1804.`,
-  `In the middle of the courtyard a fountain has frozen in mid-fall, and the ice is not white — it is the colour of weak tea.`]},
+  `In the middle of the courtyard a fountain has frozen in mid-fall, and the ice is not white — it is the colour of weak tea.`], kurz:[`A different kind of cold — like a window left open since 1804.`,`A fountain stands frozen mid-fall. The ice isn’t white; it’s the colour of weak tea.`]},
  {t:"vorlesen", titel:"Drei Türen", text:[
-  `Three ways lead on. On the left a chapel; its door has been broken outwards, into the courtyard. In front of you a tall window, warm and yellow, with bookshelves behind it. And on the right a low stair going down, where it smells of onions and hot fat. Somebody down there is cooking. At two in the morning.`]},
+  `Three ways lead on. On the left a chapel; its door has been broken outwards, into the courtyard. In front of you a tall window, warm and yellow, with bookshelves behind it. And on the right a low stair going down, where it smells of onions and hot fat. Somebody down there is cooking. At two in the morning.`], kurz:[`Three ways lead on: a chapel, its door broken outward; a tall window with bookshelves behind it; and a stair down, smelling of onions. Someone’s cooking, at two in the morning.`]},
  {t:"aufgabe", sag:"Look at the three doors. Each of you: which one would you choose, and why? Respond to another hunter. Then go and explore one thing each — and decide together.", hinweis:"Was sie sich ansehen, steht unten — jede Antwort nur einmal. Entschieden wird hier auf dieser Seite."},
  {t:"fa", abhaken:true, anker:"tueren", titel:"was sie sich ansehen", paare:[
   ["Was ist hinter der Kapellentür?","„Candles. And the door was broken from the inside out. Something came out of there.“"],
@@ -1481,8 +1485,8 @@ const KAPITEL = [
   ["Was ist unten in der Küche?","„Warm air, onions, and somebody humming. It sounds like a boy.“"],
   ["Wo ist Mirela?","„Look up.“ Ganz oben im Turm brennt das eine Fenster. Vom Hof aus führt keine Tür in den Turm — sag das: „No door into the tower from here. The people of this house have their own way up. You’ll have to find it.“"],
   ["Können wir alle drei Türen nehmen?","Nein — und sag auch warum: „One door. Every minute out here, somebody could look out of a window.“"]]},
- {t:"regie", titel:"Was du weisst, sie noch nicht", text:"Der Zugang zum Turm ist ein hoher <b>Spiegel</b> am Ende des Westgangs: Man geht rückwärts hindurch, ohne hinzusehen. Das erfährt die Gruppe erst <em>hinter</em> ihrer Tür — von Bellamy, von der Kreideschrift in der Kapelle oder von Tam. Nicht vorher verraten."},
- {t:"sagen", text:["Three doors. The chapel, broken open. The library, where somebody is awake. Or the kitchen stair, where somebody is cooking. One of them — not three."]},
+ {t:"regie", titel:"Was du weisst, sie noch nicht", text:"Der Zugang zum Turm ist ein hoher <b>Spiegel</b> am Ende des Westgangs: Man geht rückwärts hindurch, ohne hinzusehen. Das erfährt die Gruppe erst <em>hinter</em> ihrer Tür — von Bellamy, von der Kreideschrift in der Kapelle oder von Tam. Nicht vorher verraten.", kurz:`Der Zugang zum Turm ist ein <b>Spiegel</b> im Westgang: rückwärts hindurch, ohne hinzusehen. Das erfährt die Gruppe erst hinter ihrer Tür. Nicht vorher verraten.`},
+ {t:"sagen", text:["Three doors. The chapel, broken open. The library, where somebody is awake. Or the kitchen stair, where somebody is cooking. One of them — not three."], kurz:[`Three doors: the broken chapel, the lit library, or the kitchen stair. One of them — not three.`]},
  {t:"optionen", id:"e2", optionen:[
   {b:"A", name:"The library", flagge:"bibliothek", was:"Dort sitzt Bellamy, seit 1790 Archivar des Hauses und heute ein sehr höflicher Ghul. Er greift nicht an — er handelt.",
    pro:["Der ruhigste Weg: Bellamy kämpft nicht, er redet. Und er bringt euch selbst zum Spiegel."],
@@ -1515,11 +1519,12 @@ const KAPITEL = [
  woerter:[["to promise","versprechen"],["to regret something","etwas bereuen"],["true — to lie","wahr — lügen"],["to trust somebody","jemandem vertrauen"],["a favour","ein Gefallen"]],
  titel:"What You Find", art:"szene", braucht:"e2", bild:{bibliothek:"bellamy", kapelle:"anneke", kueche:"tam"}, ort:ORT.hof, nach:ORT.spiegel, bloecke:[
  {t:"ziel", text:"Die Gruppe geht durch ihre Tür, erlebt, was dahinter wartet (Bellamy, Anneke oder Tam), und steht am Ende hinter der Spiegeltür am Ende des Westgangs.", zeit:"8 Min."},
- {t:"regie", nur:"bibliothek", text:"Bellamy ist <b>nicht gefährlich</b>, solange man höflich bleibt. Er will drei wahre Sätze von jeder Figur. Wer lügt oder ihn beleidigt, bekommt weder Führung noch Brief: Er steigt auf seine Leiter zurück — „The west corridor. Find it yourselves.“ <p>Führt er sie, bittet er am Spiegel um einen Gefallen (steht im Text): einen Brief mit ins Dorf zu nehmen.</p>"},
+ {t:"regie", nur:"bibliothek", text:"Bellamy ist <b>nicht gefährlich</b>, solange man höflich bleibt. Er will drei wahre Sätze von jeder Figur. Wer lügt oder ihn beleidigt, bekommt weder Führung noch Brief: Er steigt auf seine Leiter zurück — „The west corridor. Find it yourselves.“ <p>Führt er sie, bittet er am Spiegel um einen Gefallen (steht im Text): einen Brief mit ins Dorf zu nehmen.</p>", kurz:`Bellamy ist <b>nicht gefährlich</b>, solange man höflich bleibt. Er will drei wahre Sätze je Figur. Wer lügt oder beleidigt: kein Führer, kein Brief — „Find it yourselves.“
+ <p>Sonst führt er zum Spiegel und bittet um einen Gefallen (im Text): einen Brief ins Dorf zu tragen.</p>`},
  {t:"vorlesen", spricht:"Bellamy", nur:"bibliothek", titel:"Die Bibliothek", text:[
   `You cross the courtyard and open the door under the warm window. Bookshelves up to the ceiling, and a very thin man in a very good suit on a wobbling ladder, trying to put a book back on the top shelf — and not quite reaching it.`,
   `He says, without turning round: “Nobody has spoken to me since 1912. Say something. Anything — as long as it is true.”`,
-  `Then he climbs down, and you see his hands, and his teeth, and you understand what he is. He offers you a chair anyway.`]},
+  `Then he climbs down, and you see his hands, and his teeth, and you understand what he is. He offers you a chair anyway.`], kurz:[`You open the door under the warm window: bookshelves to the ceiling, and a thin man on a wobbling ladder, not quite reaching the top shelf.`,`Without turning: “Nobody has spoken to me since 1912. Say something true.”`,`He climbs down. You see his hands, his teeth — and understand what he is. He offers you a chair anyway.`]},
  {t:"aufgabe", anker:"bellamy", nur:"bibliothek", sag:"Three true things about yourself. He can wait — he’s been waiting since 1912. Take thirty seconds, then talk.", hinweis:"Er hört auf die Stimme, nicht auf den Inhalt — Lügen merkt er."},
  {t:"weiche", id:"fuehrung", nur:"bibliothek", titel:"Führt Bellamy sie zum Spiegel?", optionen:[
   {k:"gefuehrt", knopf:"Ja — er führt euch", sub:"Jede Figur hat drei wahre Sätze gesagt."},
@@ -1527,11 +1532,11 @@ const KAPITEL = [
  {t:"vorlesen", weiche:"fuehrung=gefuehrt", spricht:"Bellamy", nur:"bibliothek", titel:"Der Weg zum Spiegel — Bellamy führt euch", text:[
   `Bellamy walks you out of the library and along a corridor with no windows — the west corridor — and stops at the end of it, in front of a tall mirror. “The tower has no stair,” he says. “It has this. Walk backwards through it, and don’t look.”`,
   `Then he takes a letter out of his coat. “Would you carry this down to the village for me? The house is still there. Say yes or no — I will know which one you mean.”`,
-  `He does not come with you. “He forbade it in 1804, and I find I still care what he thinks. Isn’t that the saddest thing you have ever heard?”`]},
- {t:"regie", nur:"kapelle", text:"Anneke steht auf und sagt einen Satz (gelb unten). Dann entscheidet sich, ob es einen Kampf gibt: <b>Nennt jemand sie beim Namen?</b> Den Namen können sie nur aus dem Wirtshaus kennen (Old Pieter). Unten anklicken, was am Tisch passiert."},
+  `He does not come with you. “He forbade it in 1804, and I find I still care what he thinks. Isn’t that the saddest thing you have ever heard?”`], kurz:[`Bellamy leads you along a windowless corridor to a tall mirror. “Walk backwards through it, and don’t look,” he says.`,`He takes out a letter. “Carry this to the village for me? Yes or no.”`,`He doesn’t come with you. “He forbade it in 1804 — and I still care what he thinks.”`]},
+ {t:"regie", nur:"kapelle", text:"Anneke steht auf und sagt einen Satz (gelb unten). Dann entscheidet sich, ob es einen Kampf gibt: <b>Nennt jemand sie beim Namen?</b> Den Namen können sie nur aus dem Wirtshaus kennen (Old Pieter). Unten anklicken, was am Tisch passiert.", kurz:`Anneke steht auf und sagt einen Satz. Dann: <b>Nennt jemand sie beim Namen?</b> (nur aus dem Wirtshaus bekannt). Unten anklicken, was passiert.`},
  {t:"vorlesen", nur:"kapelle", titel:"Die Kapelle", text:[
   `You cross the courtyard and step through the broken door. Candles, hundreds of them, all burnt down to stubs — a thread of wick left in every one. The saint above the altar has no face left.`,
-  `Something sits up in the stone font. It is a girl of about nineteen, in a dress that was white twenty years ago. Her hands, on the rim of the font, are torn open and have been for a long time. She looks at you without any anger at all, and that is worse.`]},
+  `Something sits up in the stone font. It is a girl of about nineteen, in a dress that was white twenty years ago. Her hands, on the rim of the font, are torn open and have been for a long time. She looks at you without any anger at all, and that is worse.`], kurz:[`Candles everywhere, burnt down — a thread of wick left in every one. The saint above the altar has no face left.`,`Something sits up in the stone font: a girl of about nineteen. Her hands, on the rim, are torn open. She looks at you without any anger — which is worse.`]},
  {t:"sagen", wer:"Anneke", nur:"kapelle", text:["Twenty years. And nobody came. Why now?"]},
  {t:"weiche", id:"anneke_name", nur:"kapelle", titel:"Nennt jemand sie beim Namen?", optionen:[
   {k:"erkannt", knopf:"Ja — jemand ruft „Anneke!“", sub:"Sie hält an. Kein Kampf."},
@@ -1540,11 +1545,11 @@ const KAPITEL = [
  <p>Sie erzählt, was vor zwanzig Jahren geschah, und zeigt der Gruppe die Treppe hinter dem Altar. Sag laut, woran das lag: <em>„Because you listened to the old man in the tavern, this fight never happens.“</em></p>`},
  {t:"kampf", anker:"anneke_kampf", weiche:"anneke_name=kampf", nur:"kapelle", titel:"Anneke", text:"22 Lebenspunkte. Sie kämpft ohne Wut, was schlimmer ist. Bei 8 Lebenspunkten hört sie von selbst auf und fragt „Is Greta still alive?“ — lass den Kampf dort enden, nicht bei null. Sie bleibt in der Kapelle zurück.", gegner:["anneke"], extra:"thrall"},
  {t:"vorlesen", weiche:["anneke_name=erkannt","anneke_name=kampf"], nur:"kapelle", titel:"Der Weg zum Spiegel — die Treppe hinter dem Altar", text:[
-  `Behind the altar a narrow stair goes up inside the wall and comes out in a corridor with no windows — the west corridor. At the end of it stands a tall mirror instead of a door. Written on the frame, in chalk, in a child’s handwriting: walk backwards.`]},
- {t:"regie", nur:"kueche", text:"Tam ist seit sechs Jahren hier und kennt jeden Gang. Er bittet <b>einmal</b> (gelb unten). Ein ehrliches Nein ist eine gute Antwort — besser als ein Versprechen, das niemand halten will. Bedroht ihn jemand oder stösst ihn weg, schreit er: <b>Gefahr +3</b> rechts an der Säule."},
+  `Behind the altar a narrow stair goes up inside the wall and comes out in a corridor with no windows — the west corridor. At the end of it stands a tall mirror instead of a door. Written on the frame, in chalk, in a child’s handwriting: walk backwards.`], kurz:[`Behind the altar, a stair leads up to a windowless corridor — and a tall mirror instead of a door. In chalk, a child’s handwriting: walk backwards.`]},
+ {t:"regie", nur:"kueche", text:"Tam ist seit sechs Jahren hier und kennt jeden Gang. Er bittet <b>einmal</b> (gelb unten). Ein ehrliches Nein ist eine gute Antwort — besser als ein Versprechen, das niemand halten will. Bedroht ihn jemand oder stösst ihn weg, schreit er: <b>Gefahr +3</b> rechts an der Säule.", kurz:`Tam ist seit sechs Jahren hier. Er bittet <b>einmal</b>. Ein ehrliches Nein ist eine gute Antwort. Bedroht ihn jemand: er schreit — <b>Gefahr +3</b>.`},
  {t:"vorlesen", spricht:"Tam", nur:"kueche", titel:"Die Küche", text:[
   `You go down the low stair on the right. A boy of about fourteen is cooking for nobody. He puts down his knife with his right hand; the left one he holds against his chest. It is badly burned.`,
-  `He looks at you and says: “You’re here for the woman in the tower.”`]},
+  `He looks at you and says: “You’re here for the woman in the tower.”`], kurz:[`A boy of about fourteen is cooking for nobody. He puts down his knife — the left one he holds against his chest, badly burned.`,`He looks at you: “You’re here for the woman in the tower.”`]},
  {t:"sagen", wer:"Tam", nur:"kueche", text:["Will you take me with you? When you go. Say it. Promise."]},
  {t:"aufgabe", anker:"tam", nur:"kueche", sag:"Each of you: will you help Tam? Explain why, and what you could do. You may say no honestly.", hinweis:"Erst besprechen lassen, dann unten festhalten — das zählt im Epilog. Tam bleibt in jedem Fall noch kurz, um die Töpfe vom Feuer zu nehmen."},
  {t:"weiche", art:"festhalten", id:"tam_bitte", nur:"kueche", titel:"Tams Bitte", optionen:[
@@ -1556,11 +1561,11 @@ const KAPITEL = [
   {k:"allein", knopf:"Nein — ihr sucht selbst", sub:"Angelogen, angefahren oder weggestossen."}]},
  {t:"vorlesen", weiche:"fuehrung=gefuehrt", spricht:"Tam", nur:"kueche", titel:"Der Weg zum Spiegel — Tam führt euch", text:[
   `Tam takes corridors that do not look like corridors. Twice he stops, puts up a hand, and you all wait forty seconds in the dark without knowing what for.`,
-  `Then he points down a corridor with no windows — the west corridor — at a tall mirror at the end of it. “That’s the door. You have to walk backwards. Don’t look at it.” And then, quietly: “I’ll wait here.”`]},
- {t:"regie", anker:"ohnefuehrung", weiche:"fuehrung=allein", nur:["bibliothek","kueche"], titel:"Ohne Führung — wenn niemand euch bringt", text:"Nur, wenn Bellamy oder Tam die Gruppe hat stehen lassen. Dann: jeder würfelt einmal mit den zwei Würfeln. Mindestens eine 7 → sie finden den Westgang leise (gelb unten). Keine 7 → sie finden ihn auch, aber nach zwei falschen Türen: <b>Gefahr +1</b> rechts. Die Geschichte bleibt nie stehen."},
+  `Then he points down a corridor with no windows — the west corridor — at a tall mirror at the end of it. “That’s the door. You have to walk backwards. Don’t look at it.” And then, quietly: “I’ll wait here.”`], kurz:[`Tam takes corridors that don’t look like corridors, stopping twice in the dark for no reason you can see.`,`Then: a windowless corridor, a tall mirror. “Walk backwards. Don’t look.” Quietly: “I’ll wait here.”`]},
+ {t:"regie", anker:"ohnefuehrung", weiche:"fuehrung=allein", nur:["bibliothek","kueche"], titel:"Ohne Führung — wenn niemand euch bringt", text:"Nur, wenn Bellamy oder Tam die Gruppe hat stehen lassen. Dann: jeder würfelt einmal mit den zwei Würfeln. Mindestens eine 7 → sie finden den Westgang leise (gelb unten). Keine 7 → sie finden ihn auch, aber nach zwei falschen Türen: <b>Gefahr +1</b> rechts. Die Geschichte bleibt nie stehen.", kurz:`Nur wenn Bellamy oder Tam die Gruppe stehen liess. Jeder würfelt einmal. Mindestens eine 7 → sie finden den Weg leise. Keine 7 → sie finden ihn trotzdem, <b>Gefahr +1</b>.`},
  {t:"vorlesen", weiche:"fuehrung=allein", nur:["bibliothek","kueche"], titel:"Ohne Führung — der Weg zum Spiegel", text:[
-  `Corridors that all look the same, and nobody to ask. Twice you open a door and close it again, very quietly. Then a corridor with no windows — the west corridor — and at the end of it a tall mirror instead of a door. On the frame, in chalk, in a child’s handwriting: walk backwards.`]},
- {t:"regie", anker:"spiegel", titel:"Wenn sie fragen, was beim Hinsehen passiert", text:"„Nobody who looked has ever told anyone.“ Mehr nicht — und wer trotzdem hinsieht, sieht sich selbst, nur älter. Kein Schaden, keine Gefahr."},
+  `Corridors that all look the same, and nobody to ask. Twice you open a door and close it again, very quietly. Then a corridor with no windows — the west corridor — and at the end of it a tall mirror instead of a door. On the frame, in chalk, in a child’s handwriting: walk backwards.`], kurz:[`Corridors that all look the same. Twice you open a door, close it again. Then a windowless corridor — a tall mirror. In chalk: walk backwards.`]},
+ {t:"regie", anker:"spiegel", titel:"Wenn sie fragen, was beim Hinsehen passiert", text:"„Nobody who looked has ever told anyone.“ Mehr nicht — und wer trotzdem hinsieht, sieht sich selbst, nur älter. Kein Schaden, keine Gefahr.", kurz:`„Nobody who looked has ever told anyone.“ Wer trotzdem hinsieht: sich selbst, nur älter. Kein Schaden.`},
  {t:"weiter", text:"Wenn die Gruppe rückwärts durch den Spiegel gegangen ist."}]},
 
 /* ===== 7 ===== */
@@ -1576,13 +1581,14 @@ const KAPITEL = [
  {t:"ziel", text:"Die Gruppe erfährt die Wahrheit und redet mit Mirela. Hier wird am meisten gesprochen — nimm dir Zeit.", zeit:"11 Min."},
  {t:"regie", nur:"weg_c", text:"Sie <b>haben</b> die Kutsche genommen. Lass sie das Mirela sagen — sie ist einen Moment lang wirklich überrascht: „Then Corvin has become slow.“"},
  {t:"regie", titel:"Hintergrund", text:`Hier fällt zum ersten Mal der Name des Grafen: <b>Vaskir</b>. Mirela erzählt <b>nichts von sich aus</b> — die Gruppe muss sie befragen. Was sie weiss, steht in ihren Antworten unten: der Vertrag von 1604, die Namen auf dem Brett, Lene. Greta schreibt die Namen aufs Brett; 2004 war es der ihrer Schwester Anneke. Mirela ist nicht gefangen, sie hat sich entschieden — und das verteidigt sie.
- <p>Zwei Runden: <b>Erst</b> fragt jede Figur, bis klar ist, warum sie hier ist. <b>Dann</b> sagen sie ihr, was sie vom Vertrag halten — und suchen gemeinsam nach anderen Wegen. Die drei Karten auf der nächsten Seite sind die Wahl; hier dürfen sie noch alles denken.</p>`},
+ <p>Zwei Runden: <b>Erst</b> fragt jede Figur, bis klar ist, warum sie hier ist. <b>Dann</b> sagen sie ihr, was sie vom Vertrag halten — und suchen gemeinsam nach anderen Wegen. Die drei Karten auf der nächsten Seite sind die Wahl; hier dürfen sie noch alles denken.</p>`, kurz:`Hier fällt der Name <b>Vaskir</b>. Mirela erzählt nichts von selbst — sie muss befragt werden: Vertrag von 1604, Namen auf dem Brett, Lene.
+ <p>Erst fragen, bis klar ist, warum sie hier ist. Dann: was die Gruppe vom Vertrag hält, und andere Wege suchen — die drei Karten kommen erst nächste Seite.</p>`},
  {t:"vorlesen", titel:"Die Treppe", text:[
   `Behind the mirror there is a narrow stair, and it goes up for a long time. Nobody says anything. At the top there is a door with light under it.`]},
  {t:"vorlesen", spricht:"Mirela", titel:"Das Turmzimmer", text:[
   `The room at the top is warm. There is a fire, and a pot of tea, and two cups — one at her elbow, the other on the far side of the table.`,
   `Mirela Vance sits in an armchair with a book on her knees. She is not tied up. She is not hurt. She is not even pale. Beside the chair stands a small bag, packed, with green stems sticking out of the top.`,
-  `She looks up and says: “You’re late. The coach comes at midnight — you could have taken the coach.”`]},
+  `She looks up and says: “You’re late. The coach comes at midnight — you could have taken the coach.”`], kurz:[`Warm: a fire, a pot of tea, two cups — one at her elbow, the other on the far side of the table.`,`Mirela sits with a book on her knees. Not tied up, not hurt. A packed bag stands by the chair, with green stems sticking out of the top.`,`She looks up: “You’re late. You could have taken the coach.”`]},
  {t:"aufgabe", anker:"mirela", sag:"She will not explain herself. Ask her — each of you at least one question — and find out why she is here.", hinweis:"Antworten unten, jede nur einmal. Der Name Vaskir und der Vertrag müssen fallen — notfalls über die Notfallzeile."},
  {t:"personen", leute:[
   {name:"Mirela", wer:"Die Frau im Turm", spielt:"Klar, geduldig, entschieden. Sie antwortet auf alles — aber sie rechtfertigt sich nicht, und „wir retten dich“ bringt sie nur zum Lächeln.", fragen:[
@@ -1608,12 +1614,12 @@ const KAPITEL = [
  woerter:[["a road","eine Strasse"],["a mine","ein Bergwerk"],["a coach","eine Kutsche"],["to be seen","gesehen werden"],["dangerous — safe","gefährlich — sicher"],["to decide","sich entscheiden"],["to agree","zustimmen"]],
  titel:"The Blood Ledger", art:"ent", braucht:"e2", bild:"buch", ort:ORT.turm, nach:{e3_raus:ORT.treppe, e3_buch:ORT.studie, e3_pakt:ORT.turm}, bloecke:[
  {t:"ziel", text:"Die letzte Entscheidung. Keine ist sauber, und Mirela hört zu, während sie getroffen wird.", zeit:"5 Min."},
- {t:"regie", titel:"Hintergrund", text:"Eine Stunde bis Sonnenaufgang, Mirela im Sessel, das Blutbuch eine Etage tiefer. Preis und Gefahr stehen auf den Karten unten. Lass sie <b>vor Mirela</b> entscheiden, nicht im Nebenzimmer: Sie widerspricht, und das ist der beste Dialog des Abends."},
+ {t:"regie", titel:"Hintergrund", text:"Eine Stunde bis Sonnenaufgang, Mirela im Sessel, das Blutbuch eine Etage tiefer. Preis und Gefahr stehen auf den Karten unten. Lass sie <b>vor Mirela</b> entscheiden, nicht im Nebenzimmer: Sie widerspricht, und das ist der beste Dialog des Abends.", kurz:`Eine Stunde bis Sonnenaufgang. Lass sie <b>vor Mirela</b> entscheiden, nicht im Nebenzimmer — sie widerspricht, bester Dialog des Abends.`},
  {t:"sagen", text:[
   "One hour until sunrise. You can do three things.",
   "You can take her out of here — now, whether she wants it or not.",
   "You can burn the book downstairs. Every contract in it, four hundred years of them.",
-  "Or you can call him up here and make him a new offer."]},
+  "Or you can call him up here and make him a new offer."], kurz:[`One hour until sunrise. Three things you can do.`,`Take her out of here now — whether she wants it or not.`,`Burn the book downstairs. Every contract, gone.`,`Or call him up here and offer him something new.`]},
  {t:"aufgabe", anker:"wahl3", sag:"What are you going to do? Everybody: one sentence, and why. She’s listening — so start. Who goes first?"},
  {t:"optionen", id:"e3", optionen:[
   {b:"A", name:"Take her out", flagge:"e3_raus", was:"Über die Schulter und hinunter. Das Dorf soll selbst sehen, wie es zurechtkommt.",
@@ -1646,21 +1652,22 @@ const KAPITEL = [
  titel:"Count Vaskir", art:"kampf", braucht:"e3", bild:"graf", ort:{e3_raus:ORT.treppe, e3_buch:ORT.studie, e3_pakt:ORT.turm}, nach:ORT.graf, bloecke:[
  {t:"ziel", text:"Die Begegnung mit dem Grafen. Zuerst wird geredet — wie das Gespräch läuft, klickst du an; darunter steht nur, was daraus folgt: ein Vertrag, ein Kampf oder beides. Am Ende trägst du ein, wie es ausging.", zeit:"15 Min."},
  {t:"regie", titel:"Hintergrund", text:`Der Graf sieht aus wie ein müder Mann von fünfzig. Wie er auftritt, hängt an eurer Wahl und am Barometer — es steht nur der Fall da, der bei euch gilt.
- <p>Fällt im Kampf eine Figur auf 0, ist sie bewusstlos, nicht tot. <b>„Wie ist es ausgegangen?“</b> bietet nur an, was nach eurem Verlauf möglich ist: „Vaskir ist tot“ erst, wenn er im Kampf unter 15 gefallen ist; „Er ist entkommen“ nur nach einem Kampf.</p>`},
- {t:"regie", nur:"e3_pakt", titel:"Die Verhandlung — was er annimmt", text:`Ihr habt ihn zum Reden gerufen, also ist das zuerst ein Gespräch. <b>Eine einzige Regel:</b> Er nimmt jedes Angebot an, das die Gruppe etwas Echtes kostet — Zeit, ein Versprechen, einen Besuch jedes Jahr, einen Platz. Er lehnt alles ab, was nur ihn etwas kostet. Droht die Gruppe, ist die Verhandlung gescheitert: Gefahr +4 (Knopf im Fall „Drohung“).`},
+ <p>Fällt im Kampf eine Figur auf 0, ist sie bewusstlos, nicht tot. <b>„Wie ist es ausgegangen?“</b> bietet nur an, was nach eurem Verlauf möglich ist: „Vaskir ist tot“ erst, wenn er im Kampf unter 15 gefallen ist; „Er ist entkommen“ nur nach einem Kampf.</p>`, kurz:`Der Graf: ein müder Mann von fünfzig. Nur der Fall, der bei euch gilt, steht da.
+ <p>Fällt eine Figur auf 0: bewusstlos, nicht tot. „Wie ist es ausgegangen?“ zeigt nur, was möglich ist.</p>`},
+ {t:"regie", nur:"e3_pakt", titel:"Die Verhandlung — was er annimmt", text:`Ihr habt ihn zum Reden gerufen, also ist das zuerst ein Gespräch. <b>Eine einzige Regel:</b> Er nimmt jedes Angebot an, das die Gruppe etwas Echtes kostet — Zeit, ein Versprechen, einen Besuch jedes Jahr, einen Platz. Er lehnt alles ab, was nur ihn etwas kostet. Droht die Gruppe, ist die Verhandlung gescheitert: Gefahr +4 (Knopf im Fall „Drohung“).`, kurz:`Zuerst wird geredet. <b>Eine Regel:</b> Er nimmt an, was die Gruppe etwas Echtes kostet. Lehnt ab, was nur ihn kostet. Drohung = gescheitert, Gefahr +4.`},
  {t:"vorlesen", nur:"e3_raus", von:ORT.treppe, titel:"Der Weg hinunter", text:[
   `Mirela does not fight you. She screams — once, very loud — and then she goes quiet and lets herself be carried. Down the long stair, backwards through the mirror, into the west corridor.`,
-  `At the far end of the corridor a single lamp is burning — the only light there is — and a man is standing under it. He has clearly been waiting for a while.`]},
+  `At the far end of the corridor a single lamp is burning — the only light there is — and a man is standing under it. He has clearly been waiting for a while.`], kurz:[`Mirela doesn’t fight — she screams once, then goes quiet. Down the stair, backwards through the mirror.`,`At the end of the corridor a single lamp burns — the only light there is. A man stands under it, waiting.`]},
  {t:"vorlesen", nur:"e3_buch", von:ORT.studie, titel:"Das Arbeitszimmer", text:[
   `The study is one floor down: a desk, a lamp, and the book — open, four hundred years of signatures. It burns faster than paper should, and the room goes cold while it burns. The ash does not settle; it hangs in the air like snow that has forgotten to fall. Mirela has followed you down. She says nothing.`,
-  `When you turn round, a man is standing in the doorway. He does not look angry. He looks tired.`]},
+  `When you turn round, a man is standing in the doorway. He does not look angry. He looks tired.`], kurz:[`A desk, a lamp, the book — open, burning. The room goes cold. The ash doesn’t settle; it hangs in the air like snow that forgot to fall.`,`A man stands in the doorway. Not angry. Tired.`]},
  {t:"vorlesen", nur:"e3_pakt", von:ORT.turm, titel:"Der Ruf", text:[
   `You call his name down the stairwell. Nothing happens for a long minute.`,
-  `Then the door opens, and he is simply sitting in the second chair, with the second cup of tea, which was never meant for Mirela. The pot is still steaming on the table between you.`]},
+  `Then the door opens, and he is simply sitting in the second chair, with the second cup of tea, which was never meant for Mirela. The pot is still steaming on the table between you.`], kurz:[`You call his name down the stairwell. Nothing, for a long minute.`,`Then he’s simply sitting in the second chair, with the second cup — never meant for Mirela. The pot is still steaming between you.`]},
  {t:"vorlesen", spricht:"Vaskir", titel:"Der Graf", text:[
   `He is not tall. He is not pale. He looks like a tired man of fifty who has been doing the same job for far too long, and that is the frightening part.`,
   `“Four hundred years,” he says, “and I never took a single one of them. They were brought to me. Every twenty years, up that road, with a bag packed. Ask her who packed hers.”`,
-  `Then he looks at the three of you, one after the other — and his eyes stop on the one who is standing furthest back.`]},
+  `Then he looks at the three of you, one after the other — and his eyes stop on the one who is standing furthest back.`], kurz:[`Not tall, not pale — a tired man of fifty, and that’s the frightening part.`,`“Four hundred years, and I never took one. They were brought to me. Ask her who packed her bag.”`,`He looks at each of you — and stops on the one standing furthest back.`]},
  {t:"vorlesen", gefahrVon:4, gefahrBis:10, nicht:"e3_buch", titel:"Seine Leute", text:[
   `Two of his people stand by the door. Villagers, by their coats. Their eyes are open and see nothing.`]},
  {t:"aufgabe", sag:"He is waiting, and he will answer anything you say. Each of you: say one thing to him — a question, a demand, or an offer. What do you want from him? And what are you willing to give?", hinweis:"Seine Antworten stehen darunter. Danach anklicken, wie das Gespräch gelaufen ist."},
@@ -1683,33 +1690,33 @@ const KAPITEL = [
  /* — Ein echtes Angebot — */
  {t:"vorlesen", weiche:"gespraech=angebot", spricht:"Vaskir", titel:"Er nimmt an", text:[
   `He listens without moving. When you have finished, he asks you to say it again — slowly — and while you speak, he writes it down on a single sheet of paper, word for word.`,
-  `“This is worse for me than the old one,” he says. Then he signs it anyway and pushes the paper across the table. “Your turn.”`]},
+  `“This is worse for me than the old one,” he says. Then he signs it anyway and pushes the paper across the table. “Your turn.”`], kurz:[`He listens, then asks you to say it again — slowly — writing every word.`,`“This is worse for me than the old one,” he says, and signs it anyway. “Your turn.”`]},
  {t:"aufgabe", weiche:"gespraech=angebot", sag:"Before you sign: say the deal out loud, one part each. What does the village get? What does he get? And what do you give?", hinweis:"Kein Kampf. Danach unten eintragen: „Ein neuer Vertrag“ — oder „Jemand bleibt bei ihm“, wenn eine Figur ihren Platz angeboten hat."},
 
  /* — Sie fragen und hören zu — */
  {t:"vorlesen", weiche:"gespraech=zuhoeren", spricht:"Vaskir", titel:"Wie es anfing", text:[
   `“1604,” he says. “A hard winter. Wolves in the streets, fever in every house. They came up this road — the whole village — and asked me what I wanted for my help. I said: company. Somebody to talk to, once every twenty years. The bag, the road, the name on the board — they wrote all that themselves.”`,
   `He looks at Mirela. “They never asked what happens up here. Nobody ever asked. You are the first.”`,
-  `Then he makes an offer of his own. “She goes down with you today. And once a year, on this night, one of you walks up this road and sits in that chair for one hour. Just to talk. You would be surprised how long an hour can be.”`]},
+  `Then he makes an offer of his own. “She goes down with you today. And once a year, on this night, one of you walks up this road and sits in that chair for one hour. Just to talk. You would be surprised how long an hour can be.”`], kurz:[`“1604. A hard winter — wolves, fever. The village asked what I wanted for my help. I said: company. Once every twenty years. The bag, the road — they wrote all that themselves.”`,`“Nobody ever asked what happens up here. You are the first.”`,`Then his own offer: “She goes down with you today. And once a year, one of you sits in that chair for an hour. Just to talk.”`]},
  {t:"aufgabe", weiche:"gespraech=zuhoeren", sag:"He has made you an offer. Talk about it — together, out loud. Will you take it? And who will come back every year?", hinweis:"Nehmen sie an → unten „Ein neuer Vertrag“ (oder „Jemand bleibt bei ihm“, wenn jemand gleich bleibt). Lehnen sie ab und greifen an → Kampf laden. Er ist enttäuscht, nicht wütend."},
 
  /* — Nur Forderungen — */
  {t:"vorlesen", weiche:"gespraech=forderung", spricht:"Vaskir", titel:"Er lehnt ab", text:[
   `He smiles, and it is almost kind. “You want something from me, and you offer nothing. That is not a deal. That is a robbery — and I have been robbed before.”`,
-  `“Try again. Once. Or draw your swords.”`]},
+  `“Try again. Once. Or draw your swords.”`], kurz:[`Almost kind: “You offer nothing. That’s not a deal — that’s a robbery.”`,`“Try again. Once. Or draw your swords.”`]},
  {t:"aufgabe", weiche:"gespraech=forderung", sag:"One more try. Each of you: what could you give him — something that really costs you? Or will you fight?", hinweis:"Bieten sie jetzt etwas Echtes an, nimmt er an → unten „Ein neuer Vertrag“, kein Kampf. Bleibt es bei Forderungen oder greift jemand an → Kampf laden."},
 
  /* — Drohung — */
  {t:"vorlesen", weiche:"gespraech=drohung", spricht:"Vaskir", titel:"Genug geredet", text:[
   `He stops smiling. For a moment he looks very old, and very tired.`,
-  `“Then we are done talking,” he says — and he is already moving.`]},
+  `“Then we are done talking,” he says — and he is already moving.`], kurz:[`He stops smiling — suddenly old, and tired.`,`“Then we are done talking.” He is already moving.`]},
  {t:"regie", weiche:"gespraech=drohung", text:"<b>Er schlägt zuerst zu:</b> Lade den Kampf und drück im Kampfbildschirm eine seiner Attacken, bevor die Gruppe dran ist."},
  {t:"tun", id:"pakt_scheitert", nur:"e3_pakt", weiche:"gespraech=drohung", text:"Ihr hattet ihn zum Reden gerufen, und die Gruppe hat gedroht — die Verhandlung ist gescheitert, und das ganze Haus hört es.", knopf:{art:"gefahr", v:4}, beschriftung:"Gefahr +4 — das Haus wacht auf"},
 
  /* — Sie greifen an — */
  {t:"vorlesen", weiche:"gespraech=angriff", spricht:"Vaskir", titel:"Er legt den Mantel ab", text:[
   `He does not look surprised. He looks disappointed — the way a teacher looks when nobody has done the homework.`,
-  `“As you wish,” he says, and takes off his coat.`]},
+  `“As you wish,” he says, and takes off his coat.`], kurz:[`Not surprised — disappointed, like a teacher when nobody did the homework.`,`“As you wish.” He takes off his coat.`]},
 
  /* — Kommt es zum Kampf (alle Fälle ausser dem echten Angebot) — */
  {t:"wenn", weiche:["gespraech=zuhoeren","gespraech=forderung","gespraech=drohung","gespraech=angriff"], gefahrVon:0, gefahrBis:3, titel:"Gefahr 0–3 · Er ist beeindruckt", text:`„You came up my mountain without waking a single one of my people. Do you know how long it has been since anyone did that?“ — Kommt es zum Kampf, hat er <b>nur 40 statt 55 Lebenspunkte</b>. Und hat die Gruppe nicht gedroht, darf sie einmal angreifen, bevor er reagiert.`},
@@ -1737,7 +1744,7 @@ const KAPITEL = [
  titel:"Six O’Clock", art:"szene", braucht:"e4", bild:"morgen", ort:ORT.graf, nach:ORT.dornwald, bloecke:[
  {t:"ziel", text:"Der Morgen danach: die Folgen eurer Entscheidungen — und die letzte Wahl, die einzige ohne Werte. Das letzte Wort haben die Schüler.", zeit:"8 Min."},
  {t:"vorlesen", titel:"Der Weg hinaus", text:[
-  `Six o’clock. The sun comes up over the pass, and the castle looks smaller in daylight — a tired old house on a rock. You walk down through the courtyard and out through the gate that nobody ever closed.`]},
+  `Six o’clock. The sun comes up over the pass, and the castle looks smaller in daylight — a tired old house on a rock. You walk down through the courtyard and out through the gate that nobody ever closed.`], kurz:[`Six o’clock. The sun comes up, and the castle looks smaller in daylight. You walk down through the courtyard and out through the gate nobody ever closed.`]},
  {t:"wenn", nur:"ausgang_vertrag", nicht:"e3_buch", titel:"Ein neuer Vertrag", text:`Auf einem einzelnen Blatt Papier steht ein neuer Vertrag, und er ist kurz: kein Gast mehr alle zwanzig Jahre — dafür das, was die Gruppe ihm gegeben hat. Vaskir hat ihn zweimal gelesen, „This is worse for me than the old one“ gesagt und trotzdem unterschrieben. Mirela geht mit euch hinunter, und Lene wird nie eine Tasche packen müssen. <b>Lass die Gruppe die Bedingungen noch einmal laut sagen</b> — was bekommt das Dorf, was bekommt er, was geben sie?`},
  {t:"wenn", alle:["ausgang_vertrag","e3_buch"], titel:"Ein neuer Vertrag", text:`Das Blutbuch ist Asche, und mit ihm jeder alte Vertrag. Auf einem einzelnen Blatt steht jetzt ein neuer, und er ist kurz: kein Gast mehr — dafür das, was die Gruppe ihm gegeben hat. Vaskir hat ihn zweimal gelesen, „This is worse for me than the old one“ gesagt und trotzdem unterschrieben: der erste Vertrag seit 1604, den jemand freiwillig eingeht. Mirela geht mit euch hinunter, und Lene wird nie eine Tasche packen müssen. <b>Lass die Gruppe die Bedingungen noch einmal laut sagen</b> — was bekommt das Dorf, was bekommt er, was geben sie?`},
  {t:"wenn", nur:"ausgang_tausch", titel:"Jemand ist geblieben", text:`Einer von euch hat Mirelas Platz genommen — ganz, oder geteilt: ein Jahr, eine Nacht wie diese jedes Jahr. Vaskir hat es angenommen, wie er alles annimmt, was etwas kostet. Mirela geht mit euch hinunter. <b>Frag die Figur, die geblieben ist</b>, was sie dort oben als Erstes tut — und die beiden anderen, was sie im Dorf erzählen. Ist jemand ganz geblieben, sagt diese Figur bei der letzten Wahl unten nur einen Satz: was sie den anderen mitgibt.`},
@@ -1760,7 +1767,7 @@ const KAPITEL = [
   `The road down takes an hour, and for the first time since you got here you can see where you are going. Below you the valley is white with frost, and there is smoke coming out of every chimney in Dornwald.`,
   `The village is awake. The door of the tavern stands open, and Greta is standing in it with her three fingers wrapped around a cup she is not drinking from. She does not go back inside when she sees you.`,
   `Tobias gets to you first. He runs the last thirty metres and then stops, because he has not decided yet whether he is allowed to be happy.`,
-  `And at the bottom of the hill, where the road turns south, a coach is waiting with its lamp still burning. It has been there all night.`]},
+  `And at the bottom of the hill, where the road turns south, a coach is waiting with its lamp still burning. It has been there all night.`], kurz:[`The road down takes an hour. Below, the valley is white with frost, and smoke rises from every chimney in Dornwald.`,`Greta stands in the tavern doorway, a cup in her three fingers. Tobias runs to meet you, not yet sure he’s allowed to be happy.`,`At the bottom of the hill, a coach waits, lamp still burning. It’s been there all night.`]},
  {t:"sagen", wer:"Marek", text:[
   "I said I'd be at the bottom of that hill and driving home. Well. I got as far as the bottom of the hill.",
   "So. Where to?"]},
@@ -1781,15 +1788,15 @@ const KAPITEL = [
  {t:"vorlesen", nur:"weiter_jagd", titel:"Schluss · Die nächste Jagd", text:[
   `You take the coach. Nobody in Dornwald waves, because that is not what they do here — but Greta puts three loaves of bread on the seat and says nothing at all, and Tobias runs beside the wheels until the road turns.`,
   `Two valleys east there is a place called Eisenbach. Nobody has gone missing there this year. Nobody has gone missing there for nineteen years.`,
-  `You have eleven months.`]},
+  `You have eleven months.`], kurz:[`You take the coach. Nobody waves — but Greta puts bread on the seat, and Tobias runs beside the wheels until the road turns.`,`Two valleys east: Eisenbach. Nobody’s gone missing there in nineteen years.`,`You have eleven months.`]},
  {t:"vorlesen", nur:"weiter_dorf", titel:"Schluss · Der Winter", text:[
   `You stay. You sleep through most of the first week, in the room above the tavern that has been empty since before Tobias was born.`,
   `Then the snow comes and the valley closes, and for five months you are the only thing between twenty houses and whatever the winter brings. Lene learns to hold a knife properly. Tobias learns that most of this job is being awake at four in the morning.`,
-  `In April the road opens again. By then you know every name in this village — and the village knows yours.`]},
+  `In April the road opens again. By then you know every name in this village — and the village knows yours.`], kurz:[`You stay. You sleep through most of the first week.`,`Then the valley closes in snow, and for five months you’re all that stands between twenty houses and the winter. Lene learns the knife; Tobias learns early mornings.`,`By April, you know every name in the village — and it knows yours.`]},
  {t:"vorlesen", nur:"weiter_schloss", titel:"Schluss · Nachtfels", text:[
   `You move in on the second day, because the second day is when the fire goes out and somebody has to light it again.`,
   `Bellamy shows you the room where the letters arrive: a stone slot in the west wall, and behind it four hundred years of letters that nobody ever answered. The first one you open is dated 1809 and asks for help.`,
-  `In the spring a boy from the village walks all the way up the road with a basket, and he does not knock — because the kitchen door is standing open. That is how it starts.`]},
+  `In the spring a boy from the village walks all the way up the road with a basket, and he does not knock — because the kitchen door is standing open. That is how it starts.`], kurz:[`You move in on the second day — someone has to light the fire.`,`Bellamy shows you the letter-slot: four hundred years of unanswered letters. The first one asks for help.`,`In spring, a boy walks up with a basket. The kitchen door stands open. That’s how it starts.`]},
  {t:"wenn", alle:["weiter_dorf","ausgang_tot"], titel:"Sie bleiben, und der Vertrag ist tot", text:`Darauf zeigt der ganze Abend: Sie haben dem Tal seinen Schutz genommen und stellen sich jetzt selbst an die Stelle. Sag es laut — sie haben es verdient, dass jemand ausspricht, was sie da gerade tun.`},
  {t:"wenn", alle:["weiter_jagd","ausgang_vertrag"], titel:"Sie ziehen weiter, und der Vertrag steht", text:`Vaskir hält sein Wort, solange jemand kommt und ihn daran erinnert. Frag sie, wer das tut, wenn sie in Eisenbach sind. Eine Antwort genügt — und meistens fällt dabei Tobias’ Name.`},
  {t:"wenn", alle:["weiter_schloss","e3_buch"], titel:"Sie ziehen ein, und das Buch ist verbrannt", text:`Im Haus wachen Menschen auf, die vierhundert Jahre gedient haben und jetzt frei sind — und nirgendwohin können. Die Gruppe erbt kein leeres Schloss, sondern ein volles. Das ist kein Happy End, das ist eine Aufgabe, und ein guter letzter Satz.`},
@@ -1804,6 +1811,25 @@ const SCHLUESSEL = "nachtfels.dm.v5";
 const STIMM_SCHLUESSEL = "nachtfels.dm.stimmen";
 let ZEIGE_STIMMEN = false;
 try{ ZEIGE_STIMMEN = localStorage.getItem(STIMM_SCHLUESSEL)==="1"; }catch(e){}
+/* Kurzfassung: weniger Vorlesetext und weniger Hintergrund — per Default an, damit
+   ein Testlauf nicht an zu viel Text hängen bleibt. „0“ schaltet ausdrücklich auf lang. */
+const KURZ_SCHLUESSEL = "nachtfels.dm.kurz";
+let KURZTEST = true;
+try{ const g = localStorage.getItem(KURZ_SCHLUESSEL); if(g!==null) KURZTEST = g==="1"; }catch(e){}
+function schalteKurz(){
+  KURZTEST = !KURZTEST;
+  try{ localStorage.setItem(KURZ_SCHLUESSEL, KURZTEST?"1":"0"); }catch(e){}
+  zeichneKurzschalter(); zeichneSzene();
+}
+function zeichneKurzschalter(){
+  const b=$("kurzschalter"); if(!b) return;
+  b.className = "knopf schalter"+(KURZTEST?" an":"");
+  b.setAttribute("aria-pressed", KURZTEST?"true":"false");
+  b.title = KURZTEST ? "Lange Fassung zeigen" : "Kurzfassung zeigen";
+}
+/* Liefert den Text, der gerade gilt: die Kurzfassung, wenn es sie gibt und sie an ist,
+   sonst die Langfassung — für "vorlesen", "sagen", "gruppe" (Array) und "regie" (String). */
+function kurzText(b){ return (KURZTEST && b.kurz) ? b.kurz : b.text; }
 function schalteStimmen(){
   ZEIGE_STIMMEN = !ZEIGE_STIMMEN;
   try{ localStorage.setItem(STIMM_SCHLUESSEL, ZEIGE_STIMMEN?"1":"0"); }catch(e){}
@@ -2412,10 +2438,10 @@ const PATROUILLE = {n:"Zwischenakt", titel:"The Patrol", art:"kampf", verlauf:[
   {wer:"Arcanist", talent:"Magic Hand", cue:"One lamp — only one —", text:"Die Patrouille hat eine einzige Lampe.", folge:"Löscht Magic Hand sie, stehen drei Wachen im Dunkeln — eine davon läuft davon. Zwei bleiben (im Kampfbildschirm eine ×)."}],
  bloecke:[
  {t:"ziel", text:"Das Haus hat genug gehört. Eine Patrouille stellt die Gruppe — drei Wachen und ein Hund. Zu schaffen, aber es kostet.", zeit:"15 Min."},
- {t:"regie", titel:"Hintergrund", text:"Dieser Zwischenakt kommt nur, wenn das Barometer <b>8 oder mehr</b> erreicht — einmal pro Abend, vor dem nächsten Akt. Drei Wachen (je 9 HP) und ein Wachhund (14 HP): zusammen 41 Lebenspunkte gegen eure 72. <b>Gerade noch zu schaffen:</b> Ist der Hund gefallen und stehen die Wachen bei der Hälfte, ziehen sie sich zurück — „They don’t want to die for him.“ Die Tränke sind für genau diesen Kampf da; danach heilt die Lightbearer alle. Reden hilft hier nicht — die Wachen antworten nicht, sie haben Befehle. Danach geht die Geschichte weiter, wo sie war."},
+ {t:"regie", titel:"Hintergrund", text:"Dieser Zwischenakt kommt nur, wenn das Barometer <b>8 oder mehr</b> erreicht — einmal pro Abend, vor dem nächsten Akt. Drei Wachen (je 9 HP) und ein Wachhund (14 HP): zusammen 41 Lebenspunkte gegen eure 72. <b>Gerade noch zu schaffen:</b> Ist der Hund gefallen und stehen die Wachen bei der Hälfte, ziehen sie sich zurück — „They don’t want to die for him.“ Die Tränke sind für genau diesen Kampf da; danach heilt die Lightbearer alle. Reden hilft hier nicht — die Wachen antworten nicht, sie haben Befehle. Danach geht die Geschichte weiter, wo sie war.", kurz:`Kommt nur ab Gefahr <b>8</b>, einmal pro Abend. Drei Wachen (9 HP) + Hund (14 HP) gegen eure 72. Fällt der Hund und stehen die Wachen bei der Hälfte, ziehen sie sich zurück. Reden hilft nicht — sie haben Befehle.`},
  {t:"vorlesen", spricht:"Die Wache", titel:"Schritte", text:[
   `Boots. Somewhere close, and getting closer — three pairs, in step. One lamp — only one — swings round the corner, and behind it comes something on a long chain that is too big to be a dog and too quiet to be a wolf.`,
-  `The man with the lamp does not ask who you are. He already knows. “There you are,” he says — and lets go of the chain.`]},
+  `The man with the lamp does not ask who you are. He already knows. “There you are,” he says — and lets go of the chain.`], kurz:[`Boots, getting closer — three pairs, in step. One lamp — only one — swings round the corner, and something on a long chain, too big for a dog.`,`The man with the lamp already knows who you are. “There you are.” He lets go of the chain.`]},
  {t:"aufgabe", sag:"No talking your way out of this one. But talk to each other: who takes the hound? Who covers the healer? Decide it now, out loud, in English."},
  {t:"kampf", anker:"patrouille", titel:"The patrol", text:"Drei Wachen und der Hund — der Knopf lädt alle vier und öffnet den Kampfbildschirm.", gegner:["wache","wache","wache","hund"]},
  {t:"weiter", text:"Wenn die Patrouille gefallen ist oder sich zurückgezogen hat — dann „Zurück zur Geschichte“."}]};
@@ -2705,23 +2731,23 @@ function blockHTML(b, idx, h, lauf){
   switch(b.t){
     case "vorlesen":
       if(lauf) return zeile(lauf.erste?"Vorlesen":"", "vorlesen verbund"+(lauf.erste?" erste":"")+(lauf.letzte?" schluss":""),
-        teiltitelHTML(b.titel)+redeAbsaetze(b.text, b.spricht), "", hilfe);
-      return zeile("Vorlesen","vorlesen", redeAbsaetze(b.text, b.spricht), b.titel, hilfe);
-    case "sagen": return zeile("Das sagst du","sagen", redeZeilen(b.text.map(t=>({t, wer:b.wer||null}))), "", hilfe);
+        teiltitelHTML(b.titel)+redeAbsaetze(kurzText(b), b.spricht), "", hilfe);
+      return zeile("Vorlesen","vorlesen", redeAbsaetze(kurzText(b), b.spricht), b.titel, hilfe);
+    case "sagen": return zeile("Das sagst du","sagen", redeZeilen(kurzText(b).map(t=>({t, wer:b.wer||null}))), "", hilfe);
     case "gruppe": {
-      const inhalt = redeAbsaetze(b.text, b.spricht)+redeZeilen(b.rede);
+      const inhalt = redeAbsaetze(kurzText(b), b.spricht)+redeZeilen(b.rede);
       const kopf = lauf
         ? zeile(lauf.erste?"Vorlesen":"", "vorlesen verbund"+(lauf.erste?" erste":"")+(lauf.letzte?" schluss":""), teiltitelHTML(b.titel)+inhalt, "", b.aufgabe?vor:hilfe)
         : zeile("Vorlesen","vorlesen", inhalt, b.titel, b.aufgabe?vor:hilfe);
       return kopf + (b.aufgabe?zeile(AUFFORDERUNG,"aufgabe", aufgabeHTML(b.aufgabe), "", nach):""); }
     case "aufgabe": return zeile(AUFFORDERUNG,"aufgabe", aufgabeHTML(b), "", hilfe);
     case "regie": {
-      const sub=regieSub(b.titel), roh=ohneTags(b.text);
-      if(roh.length<=220) return zeile("Hintergrund","regie", '<p>'+b.text+'</p>', sub, hilfe);
+      const txt=kurzText(b), sub=regieSub(b.titel), roh=ohneTags(txt);
+      if(roh.length<=220) return zeile("Hintergrund","regie", '<p>'+txt+'</p>', sub, hilfe);
       return '<div class="marg regie">Hintergrund'+(sub?'<small>'+sub+'</small>':'')+'</div>'+
         '<details class="inhalt regie"><summary>'+
-        '<span class="anriss">'+anriss(b.text,190)+'</span><span class="mehr">mehr</span></summary>'+
-        '<div class="voll">'+b.text+'</div></details>'+(hilfe?'<div class="hilfe">'+hilfe+'</div>':''); }
+        '<span class="anriss">'+anriss(txt,190)+'</span><span class="mehr">mehr</span></summary>'+
+        '<div class="voll">'+txt+'</div></details>'+(hilfe?'<div class="hilfe">'+hilfe+'</div>':''); }
     case "personen":
       return zeile("","personen", b.leute.map(l=>{
         const eintraege=l.fragen||l.sagt, keys=eintraege.map((_,j)=>(Z.schritt+":"+l.name+":"+j));
@@ -2812,7 +2838,7 @@ function karten(bloecke){
   bloecke.forEach(b=>{
     const letzte=out[out.length-1];
     const gelb = letzte && (letzte.t==="vorlesen"||letzte.t==="gruppe"||letzte.t==="sagen") && !letzte.aufgabe;
-    const alsGruppe = ()=>{ if(letzte.t==="vorlesen") out[out.length-1]={t:"gruppe", titel:letzte.titel, text:letzte.text, spricht:letzte.spricht, anker:letzte.anker, rede:[]};
+    const alsGruppe = ()=>{ if(letzte.t==="vorlesen") out[out.length-1]={t:"gruppe", titel:letzte.titel, text:letzte.text, kurz:letzte.kurz, spricht:letzte.spricht, anker:letzte.anker, rede:[]};
                             if(letzte.t==="sagen") out[out.length-1]={t:"gruppe", text:[], rede:letzte.text.map(t=>({t, wer:letzte.wer||null}))}; return out[out.length-1]; };
     if(b.t==="sagen" && gelb){ alsGruppe().rede.push(...b.text.map(t=>({t, wer:b.wer||null}))); }
     else if(b.t==="aufgabe" && gelb){ alsGruppe().aufgabe=b; }
@@ -3400,6 +3426,7 @@ document.addEventListener("click", e=>{
   if(t.closest("[data-ns-morgen]")) return notstoppZumMorgen();
   const hk=t.closest("[data-hak]"); if(hk){ const k=hk.dataset.hak; aktion(()=>{ if(Z.abgehakt[k]) delete Z.abgehakt[k]; else Z.abgehakt[k]=true; }); zeichneSzene(); sichern(); return; }
   const l=t.closest("[data-laden]"); if(l){ ladeKampf(l.dataset.laden.split(","), l.dataset.extra||null); if(l.dataset.oeffnen) oeffneKampf(); return; }
+  if(t.closest("#kurzschalter")) return schalteKurz();
   if(t.closest("#stimmschalter")) return schalteStimmen();
   if(t.closest("#blutschalter")) return schalteBlut();
   if(t.closest("#kampfknopf")) return oeffneKampf();
@@ -3451,7 +3478,7 @@ if(typeof window!=="undefined" && window.addEventListener){
     Blut.pause(aus); GefahrFX.pause(aus);
   });
 }
-function alles(){ zeichneUhr(); zeichneRueckgaengig(); zeichneStimmschalter(); zeichneBlutschalter(); zeichneBaro(); zeichneGruppe(); zeichneGegner(); zeichneChronik(); zeichneSzene(); zeichneKampf(); Blut.schalte(ZEIGE_BLUT); }
+function alles(){ zeichneUhr(); zeichneRueckgaengig(); zeichneKurzschalter(); zeichneStimmschalter(); zeichneBlutschalter(); zeichneBaro(); zeichneGruppe(); zeichneGegner(); zeichneChronik(); zeichneSzene(); zeichneKampf(); Blut.schalte(ZEIGE_BLUT); }
 /* Jede dieser Funktionen ist ein Spielschritt für „Rückgängig“ — auch, wenn der Prüfstand sie direkt aufruft */
 waehle=aktioniert(waehle); tunAusfuehren=aktioniert(tunAusfuehren); setzeGefahr=aktioniert(setzeGefahr); aendereHP=aktioniert(aendereHP);
 ladeKampf=aktioniert(ladeKampf); kampfVorbei=aktioniert(kampfVorbei); stelleWeiche=aktioniert(stelleWeiche); setzeWissen=aktioniert(setzeWissen);

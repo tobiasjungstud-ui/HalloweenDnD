@@ -378,6 +378,13 @@ Punkte je Bild setzen, ziehen, löschen, Farbe, Radius und Art je Punkt, Stärke
 Tempo je Lichtart; Änderungen bleiben im Browser und lassen sich als JSON exportieren und
 wieder importieren.
 
+**Kurzfassung.** In den Einstellungen schaltet **„Kurzfassung (weniger Vorlesetext)“** —
+**standardmässig an** — jeden Vorlesetext und jede Hintergrundinfo auf eine gekürzte Fassung
+um. Was story-wichtig ist, bleibt stehen; Ausschmückung fällt weg. Beide Fassungen liegen im
+Code nebeneinander (`text` lang, `kurz` kurz); der Schalter wechselt nur die Anzeige, ohne
+sonst etwas zu ändern — auch Talent-Gelegenheiten funktionieren in beiden Fassungen, ihr
+angekündigter Satz steht wortgleich in der Kurzfassung. Aus schaltet auf die volle Länge.
+
 ## V1 und V2
 
 `dungeon_master_v1.html` ist die frühere Darstellung, unverändert und lauffähig. V2

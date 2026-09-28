@@ -185,7 +185,7 @@ function spiele(p, protokoll){
     if(T.Z().imZwischenakt){
       const Zp=T.Z(), wo0=`Pfad ${JSON.stringify(p)} Schritt ${i}`;
       pruefe(Zp.gefahr>=8 && Zp.patrouille.status==="steht_bevor" && Zp.patrouille.vor<=i, wo0+": Zwischenakt ohne Grund");
-      pruefe(text().includes("The Patrol")||text().includes("Boots."), wo0+": Zwischenakt zeigt nicht die Patrouille");
+      pruefe(text().includes("The Patrol")||text().includes("Boots"), wo0+": Zwischenakt zeigt nicht die Patrouille");
       const vorher=Zp.gegner.length; T.ladeKampf(["wache","wache","wache","hund"], null);
       pruefe(Zp.gegner.filter(g=>g.k==="wache").length>=3 && Zp.gegner.some(g=>g.k==="hund"), wo0+": Patrouille lädt nicht 3 Wachen + Hund");
       T.patrouilleFertig(); patrouilleErlebt=true;
