@@ -385,6 +385,22 @@ Code nebeneinander (`text` lang, `kurz` kurz); der Schalter wechselt nur die Anz
 sonst etwas zu ändern — auch Talent-Gelegenheiten funktionieren in beiden Fassungen, ihr
 angekündigter Satz steht wortgleich in der Kurzfassung. Aus schaltet auf die volle Länge.
 
+**Sprache der Spielleitung.** Der Schalter **„Alles auf Englisch“** hinter dem Zahnrad stellt
+alles, was sonst deutsch ist — Hintergrund, Tipps, Hinweise, Antworten der Figuren, Karten,
+Kampfbildschirm, Leiste, Dialoge, Chronik —, auf Englisch um; aus ist er „Kommentare auf
+Deutsch“ wie bisher. Die Daten bleiben deutsch; übersetzt wird beim Zeichnen über das
+Wörterbuch `EN` im Skript, dessen Schlüssel der deutsche Originaltext ist. Wer einen deutschen
+Text ändert, ändert den Schlüssel dort mit — sonst bleibt die Stelle im Englischen deutsch, und
+`node quelle/pruefe_dm.js --englisch` meldet sie (der Prüfstand spielt dann alle Pfade auf
+Englisch und sucht jede gezeichnete Stelle nach deutschen Resten ab).
+
+**Wortschatz.** Neben dem Vorlesetext steht in der Tipps-Spalte ein Kasten **„Wortschatz“** mit
+den Wörtern, die eine starke Klasse (B1.2, teils B2.1) beim Zuhören trotzdem aufhalten können —
+bewusst wenige, keine Kognaten, nichts, was schon unter „Wortstützen“ steht. Die Liste steht in
+`WORTSCHATZ`; jedes Wort erscheint je Seite einmal, neben dem ersten Block, der es laut
+ausspricht (in der Fassung, die gerade angezeigt wird). Die Erklärung ist deutsch oder, im
+englischen Modus, eine einfache englische Umschreibung.
+
 ## V1 und V2
 
 `dungeon_master_v1.html` ist die frühere Darstellung, unverändert und lauffähig. V2
@@ -436,6 +452,7 @@ Uhr und Notstopper:
 ```bash
 node quelle/pruefe_dm.js          # „Keine Befunde.“ oder eine Liste
 node quelle/pruefe_dm.js --spur   # dazu sieben Durchläufe Schritt für Schritt
+node quelle/pruefe_dm.js --englisch  # dieselben Pfade auf Englisch, mit Suche nach deutschen Resten
 ```
 
 Wer an `KAPITEL` etwas ändert, lässt ihn danach laufen. Die Seite selbst prüft ihre Daten

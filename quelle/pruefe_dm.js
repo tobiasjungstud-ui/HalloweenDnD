@@ -40,6 +40,9 @@ const warnungen = []; const echtWarn = console.warn; console.warn = (...a)=>warn
 /* ---------- Seite laden ---------- */
 const dateiArg = process.argv.indexOf("--datei"); const DATEI = dateiArg>=0 ? process.argv[dateiArg+1] : "dungeon_master.html";
 const html = fs.readFileSync(path.join(__dirname, "..", DATEI), "utf8");
+/* --englisch: dieselben Pfade mit „alles auf Englisch“ — und jede gezeichnete Stelle wird auf deutsche Reste abgesucht */
+const ENGLISCH = process.argv.includes("--englisch");
+if(ENGLISCH) global.localStorage = { getItem:k=>k==="nachtfels.dm.sprache"?"en":null, setItem(){}, removeItem(){} };
 const js = /<script>([\s\S]*)<\/script>/.exec(html)[1];
 vm.runInThisContext(js, {filename:"dungeon_master.html"});
 vm.runInThisContext(`globalThis.T = { Z:()=>Z, setZ:z=>{Z=z;}, KAPITEL, ENTSCHEIDUNGEN, WISSEN, BESTIARIUM, ORT, PATROUILLE,
@@ -71,7 +74,8 @@ vm.runInThisContext(`globalThis.T = { Z:()=>Z, setZ:z=>{Z=z;}, KAPITEL, ENTSCHEI
   ausgangMoeglich: typeof ausgangMoeglich==="function" ? ausgangMoeglich : null,
   setzeAusgangDirekt: typeof setzeAusgangDirekt==="function" ? setzeAusgangDirekt : null,
   notstoppSchliessen: typeof notstoppSchliessen==="function" ? notstoppSchliessen : null,
-  blutruf: typeof blutruf==="function" ? blutruf : null }`);
+  blutruf: typeof blutruf==="function" ? blutruf : null,
+  tr: typeof tr==="function" ? tr : (s=>s), sprache: ()=>typeof SPRACHE!=="undefined" ? SPRACHE : "de" }`);
 console.warn = echtWarn;
 
 /* ---------- Hilfen ---------- */
@@ -80,7 +84,20 @@ const befunde = [];
 let gepruefteZusicherungen = 0;
 function pruefe(bedingung, text){ gepruefteZusicherungen++; if(!bedingung) befunde.push(text); }
 const K = T.KAPITEL;
-function text(){ return el("bloecke").innerHTML; }
+/* Deutsche Reste im englischen Modus: Umlaute oder deutsche Funktionswörter — auch in title/aria-label */
+const DEUTSCH = /[äöüÄÖÜß]|\b(und|oder|nicht|der|das|dem|den|des|ist|sind|wird|werden|wenn|dann|eine|einen|einem|einer|mit|auf|für|von|zu|sie|ihr|euch|wir|kein|keine|nur|noch|auch|bei|nach|vor|aus|hier|jetzt|alle|jede|jeder|sich|dass|weil|oben|unten|Gefahr|Kampf|Seite|Figur|Gruppe|Knopf|Hintergrund|Vorlesen)\b/;
+const resteGesehen = new Set();
+function sucheReste(wo, html){
+  if(!ENGLISCH || !html) return;
+  const roh = String(html).replace(/<[^>]*?\b(?:title|aria-label|placeholder)="([^"]*)"[^>]*>/g," $1 ").replace(/<[^>]+>/g," ").replace(/&[a-z]+;/g," ");
+  const m = DEUTSCH.exec(roh); if(!m) return;
+  const stelle = roh.slice(Math.max(0,m.index-50), m.index+50).replace(/\s+/g," ").trim();
+  if(!resteGesehen.has(stelle)){ resteGesehen.add(stelle); befunde.push("Deutsch im englischen Modus ("+wo+"): …"+stelle+"…"); }
+}
+const RESTE_FELDER = ["zielband","aktionen","warnbox","kschritt","s-n","s-titel","vor-t","zurueck-t","k-titel","k-krume","k-hinweis","k-werte","k-regeln","k-chance","k-staerken","gegner","gruppe-kampf","notstopp-text","pfad","kampfhilfe-text","blutruf-chance","uhr-soll","b-stufe","kgefahr","kampfknopf","chronik-kampf","zufuegen"];
+function allesAbsuchen(){ RESTE_FELDER.forEach(id=>{ const e=el(id); sucheReste(id, e.innerHTML||e.textContent); sucheReste(id+"@title", e.title); }); }
+function text(){ const h=el("bloecke").innerHTML; sucheReste("bloecke", h); return h; }
+const D = s => T.tr(s);
 function optIdx(entId, flagge){ const b=K.flatMap(k=>k.bloecke).find(b=>b.t==="optionen"&&b.id===entId); return b.optionen.findIndex(o=>o.flagge===flagge); }
 function frisch(){ T.setZ(T.frischerZustand()); T.alles(); }
 /* Wo steht was — nach Titel und nach Entscheidung, nicht nach Nummer */
@@ -181,7 +198,7 @@ function spiele(p, protokoll){
       if(p.gespraech) T.stelleWeiche("gespraech", p.gespraech);   /* für die Weichen-Prüfung zurücknehmen */
     }
     if(i===S.e5) T.waehle("e5", optIdx("e5",p.danach));
-    T.geheZu(i); /* neu zeichnen nach Handlungen */
+    T.geheZu(i); allesAbsuchen(); /* neu zeichnen nach Handlungen */
     if(T.Z().imZwischenakt){
       const Zp=T.Z(), wo0=`Pfad ${JSON.stringify(p)} Schritt ${i}`;
       pruefe(Zp.gefahr>=8 && Zp.patrouille.status==="steht_bevor" && Zp.patrouille.vor<=i, wo0+": Zwischenakt ohne Grund");
@@ -228,7 +245,7 @@ function spiele(p, protokoll){
     /* V1 hatte dafür eine eigene Leiste; in V2 stehen Regeln und Stärken als Kästen im Regiebuch */
     /* V2 hat keine eigene Talentübersicht mehr (die „Lage“ ist weg) — die Talente stehen im Kampfbildschirm */
     const st=NEU?"":el("staerken").innerHTML, vl=NEU?text():el("verlauf").innerHTML;
-    pruefe((k.verlauf||[]).filter(T.gilt).every(r=>vl.includes(r.wenn)&&vl.includes(r.dann)), wo+": Wenn-dann-Spalte unvollständig");
+    pruefe((k.verlauf||[]).filter(T.gilt).every(r=>vl.includes(D(r.wenn))&&vl.includes(D(r.dann))), wo+": Wenn-dann-Spalte unvollständig");
     for(const gruppe of GRUPPEN) (k.verlauf||[]).filter(T.gilt).forEach(r=>{
       const nur=T.liste(r.nur).filter(f=>gruppe.includes(f));
       pruefe(nur.length===0 || nur.some(T.hat), wo+": Regel „"+r.wenn+"“ sichtbar, obwohl ihr Zweig nicht gewählt ist"); });
@@ -238,7 +255,7 @@ function spiele(p, protokoll){
     const gz=NEU?text():st, gzOhneTags=gz.replace(/<[^>]+>/g,"");
     /* c.text/c.folge werden jetzt durch rede() geschickt (Zitate golden hervorgehoben) —
        das setzt <em>-Tags mitten hinein, darum hier ohne Markup vergleichen. */
-    chancen.forEach(c=>pruefe(gzOhneTags.includes(c.text) && gzOhneTags.includes(c.folge) && gz.includes(c.cue), wo+": Gelegenheit fehlt rechts: "+c.wer+" · "+c.talent));
+    chancen.forEach(c=>pruefe(gzOhneTags.includes(D(c.text)) && gzOhneTags.includes(D(c.folge)) && gz.includes(c.cue), wo+": Gelegenheit fehlt rechts: "+c.wer+" · "+c.talent));
     const gelb=sichtbar.filter(b=>b.t==="vorlesen"||b.t==="sagen").flatMap(b=>b.text);
     chancen.forEach(c=>pruefe(gelb.some(t=>t.includes(c.cue)), wo+": Ankündigung „"+c.cue+"“ wird auf diesem Pfad nicht vorgelesen"));
     if(!NEU){
@@ -253,18 +270,18 @@ function spiele(p, protokoll){
       if(!r.bei) return;
       const j=bl.findIndex(b=>T.blockAnker(b)===r.bei);
       if(j<0) return;
-      pruefe(faecher[j].includes(r.wenn), wo+": Regel „"+r.wenn+"“ steht nicht beim Anker "+r.bei);
+      pruefe(faecher[j].includes(D(r.wenn)), wo+": Regel „"+r.wenn+"“ steht nicht beim Anker "+r.bei);
     });
     /* Aufeinanderfolgende Vorlesetexte: eine Randnotiz, innen Titellinien */
     const lauf=T.vorleseLauf(bl);
     const eigene = bl.filter((b,j)=>(b.t==="vorlesen"||b.t==="gruppe") && (!lauf[j] || lauf[j].erste)).length;
-    pruefe((text().match(/class="marg vorlesen[^"]*">Vorlesen/g)||[]).length===eigene,
+    pruefe((text().match(new RegExp('class="marg vorlesen[^"]*">'+D("Vorlesen"),"g"))||[]).length===eigene,
       wo+": Zahl der Randnotizen „Vorlesen“ passt nicht zu den Läufen");
     bl.forEach((b,j)=>{
       if(!lauf[j]) return;
-      if(b.titel) pruefe(text().includes('<div class="teiltitel"><span>'+b.titel+'</span>'),
+      if(b.titel) pruefe(text().includes('<div class="teiltitel"><span>'+D(b.titel)+'</span>'),
         wo+": Titellinie fehlt für „"+b.titel+"“");
-      pruefe(!text().includes('<div class="marg vorlesen verbund'+(lauf[j].erste?" erste":"")+'">Vorlesen<small>'),
+      pruefe(!text().includes('<div class="marg vorlesen verbund'+(lauf[j].erste?" erste":"")+'">'+D("Vorlesen")+'<small>'),
         wo+": verbundener Vorlesetext trägt noch einen Untertitel am Rand");
     });
     /* Stärken stehen im Fach des Blocks, in dem ihr angekündigter Satz vorgelesen wird */
@@ -278,10 +295,10 @@ function spiele(p, protokoll){
     sichtbar.filter(b=>b.t==="tun").forEach(b=>pruefe(akt.includes('data-tun="'+b.id+'"'), wo+": Knopf fehlt in der Aktionsleiste: "+b.id));
     sichtbar.filter(b=>b.t==="kampf"&&!b.ohneKnopf).forEach(b=>pruefe(akt.includes('data-laden="'+b.gegner.join(",")+'"'), wo+": Kampfknopf fehlt in der Aktionsleiste"));
     const wB=k.bloecke.find(b=>b.t==="weiter");
-    pruefe(!wB || akt.includes(wB.text), wo+": „Weiter, wenn“ fehlt in der Aktionsleiste");
+    pruefe(!wB || akt.includes(D(wB.text)), wo+": „Weiter, wenn“ fehlt in der Aktionsleiste");
     const zB=k.bloecke.find(b=>b.t==="ziel");
-    pruefe(!zB || el("zielband").innerHTML.includes(zB.text), wo+": Ziel fehlt neben dem Titel");
-    pruefe(!zB || !zB.zeit || el("zielband").innerHTML.includes(zB.zeit), wo+": Zeitangabe fehlt neben dem Titel");
+    pruefe(!zB || el("zielband").innerHTML.includes(D(zB.text)), wo+": Ziel fehlt neben dem Titel");
+    pruefe(!zB || !zB.zeit || el("zielband").innerHTML.includes(D(zB.zeit)), wo+": Zeitangabe fehlt neben dem Titel");
     pruefe(!text().includes('class="marg ziel"'), wo+": Ziel steht noch im Raster der Blöcke");
     /* Szenenbild: sichtbar genau dann, wenn diese Szene auf diesem Weg eines hat.
        Hängt es an einer noch offenen Flagge, bleibt die Fläche leer.            */
@@ -544,7 +561,7 @@ if(HAT_GESPRAECH && T.gegnerSchaden){
   frisch(); T.ladeKampf(["wolf","wolf"], null);
   T.gegnerSchaden(0,9); pruefe(T.Z().gegner[0].hp===5 && !T.Z().gegner[0].geflohen, "Wolf haut schon bei 5 Lebenspunkten ab");
   T.gegnerSchaden(0,1); pruefe(T.Z().gegner[0].geflohen===true, "Wolf unter 5 Lebenspunkten haut nicht ab");
-  pruefe(el("gegner").innerHTML.includes("Abgehauen"), "Die Karte zeigt nicht, dass der Wolf abgehauen ist");
+  pruefe(el("gegner").innerHTML.includes(D("Abgehauen — er zieht den Schwanz ein und verschwindet im Nebel.")), "Die Karte zeigt nicht, dass der Wolf abgehauen ist");
   T.gegnerSchaden(0,3); pruefe(T.Z().gegner[0].hp===4, "Ein geflohener Wolf nimmt noch Schaden");
   T.gegnerSchaden(1,20); pruefe(T.Z().gegner[1].hp===0 && !T.Z().gegner[1].geflohen, "Ein Wolf, der auf 0 fällt, gilt als geflohen");
   /* Die Wolf-Wahl: drei Fälle, und nur „Kampf“ und „Verpatzt“ laden Wölfe — der dritte Wolf nur bei „Verpatzt“ */
@@ -590,15 +607,16 @@ if(T.oeffneKampf){
   frisch(); pruefe(T.Z().kampfOffen===false && el("kampfmodus").hidden===true, "Kampfbildschirm ist beim Start offen");
   T.waehle("e1",optIdx("e1","weg_b")); T.stelleWeiche("wache","entdeckt"); T.tunAusfuehren("keller_kampf");
   pruefe(T.Z().kampfOffen===true && el("kampfmodus").hidden===false, "Laden aus der Szene öffnet den Kampfbildschirm nicht");
-  pruefe(el("k-titel").textContent.length>0 || el("k-chance").innerHTML.includes("Gewinnchance"), "Kampf ohne Szenenkampf zeigt weder Titel noch Gewinnchance");
+  pruefe(el("k-titel").textContent.length>0 || el("k-chance").innerHTML.includes(D("Gewinnchance der Gruppe")), "Kampf ohne Szenenkampf zeigt weder Titel noch Gewinnchance");
   T.schliesseKampf(); pruefe(!T.Z().kampfOffen && el("kampfmodus").hidden===true && T.Z().gegner.length===1, "Schliessen verliert den Kampf");
   T.oeffneKampf(); T.Z().gruppe[1].hp=4; T.kampfVorbei();
   pruefe(!T.Z().kampfOffen && T.Z().gegner.length===0 && T.Z().gruppe.every(h=>h.hp===h.max), "Kampf vorbei heilt nicht oder räumt nicht auf");
   pruefe(T.Z().gefahr===1, "Kampf vorbei hat die Gefahr verändert");
   frisch(); T.geheZu(4); T.waehle("e1",optIdx("e1","weg_a")); T.stelleWeiche("woelfe","kampf"); T.geheZu(4);
   pruefe(el("k-titel").textContent==="The wolves", "Kampftitel zeigt nicht den vorbereiteten Kampf der Szene: "+el("k-titel").textContent);
-  pruefe(el("k-hinweis").innerHTML.includes("Zwei Wölfe"), "Kampfhinweis fehlt");
+  pruefe(el("k-hinweis").innerHTML.includes(ENGLISCH ? "Two wolves" : "Zwei Wölfe"), "Kampfhinweis fehlt");
   pruefe(el("gruppe-kampf").innerHTML.includes("Arcanist"), "Gruppe fehlt im Reiter Charakter-Übersicht / Kampf");
+  allesAbsuchen();
   if(NEU) pruefe(!html.includes('id="gruppe"'), "Lebenspunkte stehen noch auf dem Hauptschirm");
   frisch(); T.waehle("e1",0); T.waehle("e2",0); T.waehle("e3",optIdx("e3","e3_pakt")); if(HAT_GESPRAECH) T.stelleWeiche("gespraech","angriff"); T.geheZu(10); T.tunAusfuehren("finale_laden");
   pruefe(T.Z().kampfOffen===true && T.Z().gegner.some(g=>g.k==="vaskir"), "Finale laden öffnet den Kampfbildschirm nicht");
@@ -622,12 +640,12 @@ if(T.STIMMEN){
     T.waehle("e1",optIdx("e1",weg)); T.waehle("e2",optIdx("e2",tuer));
     T.waehle("e3",optIdx("e3","e3_pakt")); T.geheZu(i);
     const k=T.KAPITEL[i], namen=[...new Set(sprechend(k))];
-    namen.forEach(nm=>pruefe(text().includes(T.STIMMEN[nm]),
+    namen.forEach(nm=>pruefe(text().includes(D(T.STIMMEN[nm])),
       `Schritt ${i} (${weg}/${tuer}): Stimme von ${nm} fehlt im Text`));
   }
   /* Personenkarten tragen die Stimme ihrer Figur */
   frisch(); T.geheZu(2);
-  ["Greta","Old Pieter","Tobias"].forEach(nm=>pruefe(text().includes(T.STIMMEN[nm]), "Stimme fehlt in der Personenkarte: "+nm));
+  ["Greta","Old Pieter","Tobias"].forEach(nm=>pruefe(text().includes(D(T.STIMMEN[nm])), "Stimme fehlt in der Personenkarte: "+nm));
   /* Jede Figur, die spricht, hat eine Stimme */
   T.KAPITEL.concat([T.PATROUILLE]).forEach((k,i)=>k.bloecke.forEach(b=>{
     if(b.t==="sagen" && b.wer) pruefe(!!T.STIMMEN[b.wer], `Schritt ${i}: keine Stimme für ${b.wer}`);
@@ -654,7 +672,8 @@ const durchlaeufe = [
 const spuren = durchlaeufe.map(([name,p])=>[name, spiele(p)]);
 
 /* ---------- Bericht ---------- */
-console.log("Pfade durchgespielt:", pfade.length, "· Zusicherungen geprüft:", gepruefteZusicherungen);
+if(ENGLISCH) pruefe(T.sprache()==="en", "--englisch: die Seite ist nicht auf Englisch umgestellt");
+console.log((ENGLISCH?"[englisch] ":"")+"Pfade durchgespielt:", pfade.length, "· Zusicherungen geprüft:", gepruefteZusicherungen);
 console.log("Erreichte Gefahrenwerte ohne Handeingriff:", [...gefahrWerte].sort((a,b)=>a-b).join(" "));
 if(process.argv.includes("--spur")) spuren.forEach(([name,spur])=>{
   console.log("\n=== "+name+" ===");
