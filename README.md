@@ -385,6 +385,26 @@ Code nebeneinander (`text` lang, `kurz` kurz); der Schalter wechselt nur die Anz
 sonst etwas zu ändern — auch Talent-Gelegenheiten funktionieren in beiden Fassungen, ihr
 angekündigter Satz steht wortgleich in der Kurzfassung. Aus schaltet auf die volle Länge.
 
+**Text in Abschnitten.** Eine Seite kommt Stück für Stück — standardmässig an, abschaltbar hinter
+dem Zahnrad. Ein Abschnitt ist, was am Tisch in einem Zug passiert: erzählen, dann reden, klicken
+oder kämpfen. Darunter steht **„Weiter im Text“** mit dem Titel dessen, was als Nächstes kommt;
+was schon gespielt ist, bleibt stehen und tritt nur zurück. Damit nichts auseinanderreisst
+(`abschnittIndex` im Skript):
+
+- Aufforderung und ihr Antwortkasten bleiben zusammen; eine weitere Aufforderung nach einem
+  Antwortkasten ist eine neue Gesprächsrunde und bekommt einen eigenen Abschnitt.
+- Was ein Klick auf der Seite freischaltet (Weiche, Karte), erscheint im selben Abschnitt, direkt
+  unter dem Klick. Erst wenn danach wieder etwas zu tun ist — etwa ein Kampf —, geht es mit
+  „Weiter“ weiter.
+- Ist im sichtbaren Abschnitt eine Weiche oder Karte noch offen, ist „Weiter“ gesperrt und sagt,
+  was zuerst anzuklicken ist. „ganze Seite zeigen“ deckt trotzdem alles auf.
+- Eine Regie-Notiz allein ist nie ein eigener Abschnitt; redaktionelle Schnitte setzt
+  `abschnitt:true` am Block (der Graf erscheint, der Weg hinunter im Epilog).
+
+Die Knöpfe unten zeigen nur, was schon aufgedeckt ist. Aufdecken ist kein Spielschritt:
+Rückgängig deckt nichts wieder zu, Zurückblättern auch nicht; „Neue Runde“ beginnt jede Seite
+wieder beim ersten Abschnitt.
+
 **Sprache der Spielleitung.** Der Schalter **„Alles auf Englisch“** hinter dem Zahnrad stellt
 alles, was sonst deutsch ist — Hintergrund, Tipps, Hinweise, Antworten der Figuren, Karten,
 Kampfbildschirm, Leiste, Dialoge, Chronik —, auf Englisch um; aus ist er „Kommentare auf

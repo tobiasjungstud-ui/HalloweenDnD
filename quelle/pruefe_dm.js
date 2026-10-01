@@ -75,7 +75,12 @@ vm.runInThisContext(`globalThis.T = { Z:()=>Z, setZ:z=>{Z=z;}, KAPITEL, ENTSCHEI
   setzeAusgangDirekt: typeof setzeAusgangDirekt==="function" ? setzeAusgangDirekt : null,
   notstoppSchliessen: typeof notstoppSchliessen==="function" ? notstoppSchliessen : null,
   blutruf: typeof blutruf==="function" ? blutruf : null,
-  tr: typeof tr==="function" ? tr : (s=>s), sprache: ()=>typeof SPRACHE!=="undefined" ? SPRACHE : "de" }`);
+  tr: typeof tr==="function" ? tr : (s=>s),
+  abschnittIndex: typeof abschnittIndex==="function" ? abschnittIndex : null,
+  abschnittWeiter: typeof abschnittWeiter==="function" ? abschnittWeiter : null,
+  alleAbschnitte: typeof alleAbschnitte==="function" ? alleAbschnitte : null,
+  schalteAbschnitte: typeof schalteAbschnitte==="function" ? schalteAbschnitte : null,
+  zeichneSzene: typeof zeichneSzene==="function" ? zeichneSzene : null, sprache: ()=>typeof SPRACHE!=="undefined" ? SPRACHE : "de" }`);
 console.warn = echtWarn;
 
 /* ---------- Hilfen ---------- */
@@ -111,6 +116,26 @@ const HAT_TAM_BITTE = K.some(k=>k.bloecke.some(b=>b.t==="weiche"&&b.id==="tam_bi
 const HAT_GESPRAECH = K.some(k=>k.bloecke.some(b=>b.t==="weiche"&&b.id==="gespraech"));
 const HAT_BRIEF_WEICHE = K.some(k=>k.bloecke.some(b=>b.titel==="Bellamys Brief"&&b.weiche));
 const KAMPF_FAELLE = ["zuhoeren","forderung","drohung","angriff"];
+
+/* Abschnitte: lückenlos aufsteigend; nichts reisst auseinander, was am Tisch zusammengehört */
+function pruefeAbschnitte(bl, ab, wo){
+  pruefe(ab.length===bl.length && (!ab.length || ab[0]===0), wo+": Abschnitte beginnen nicht bei 0");
+  ab.forEach((a,j)=>{ if(j) pruefe(a===ab[j-1] || a===ab[j-1]+1, wo+": Abschnittsnummern springen"); });
+  const gelb=b=>b.t==="vorlesen"||b.t==="gruppe"||b.t==="sagen";
+  const handlung=b=>["aufgabe","personen","fa","weiche","tun","kampf","optionen"].includes(b.t)||(b.t==="gruppe"&&!!b.aufgabe);
+  const n=ab.length?ab[ab.length-1]+1:0;
+  for(let a=0;a<n;a++) pruefe(bl.some((b,j)=>ab[j]===a&&(gelb(b)||handlung(b))), wo+": Abschnitt "+a+" hat weder Vorlesetext noch etwas zu tun");
+  bl.forEach((b,j)=>{
+    if(!j) return;
+    const v=bl[j-1];
+    /* Aufforderung und ihr Antwortkasten bleiben zusammen */
+    if((b.t==="personen"||b.t==="fa") && (v.t==="aufgabe"||v.aufgabe)) pruefe(ab[j]===ab[j-1], wo+": Antwortkasten von seiner Aufforderung getrennt");
+    /* Was eine Weiche freischaltet, erscheint dort, wo geklickt wurde */
+    if(v.t==="weiche" && T.liste((b.ur||b).weiche).some(sp=>sp.startsWith(v.id+"="))) pruefe(ab[j]===ab[j-1], wo+": Ergebnis der Weiche „"+v.id+"“ steht erst im nächsten Abschnitt");
+    /* Kampfknopf und Wenn-Karte bleiben beim Text, der sie auslöst */
+    if((b.t==="kampf"||b.t==="tun") && gelb(v) && !v.aufgabe) pruefe(ab[j]===ab[j-1], wo+": Knopf „"+(b.titel||b.id)+"“ vom Text davor getrennt");
+  });
+}
 
 /* ---------- 1 · Statische Selbstprüfung ---------- */
 const statisch = T.pruefeStory();
@@ -198,14 +223,14 @@ function spiele(p, protokoll){
       if(p.gespraech) T.stelleWeiche("gespraech", p.gespraech);   /* für die Weichen-Prüfung zurücknehmen */
     }
     if(i===S.e5) T.waehle("e5", optIdx("e5",p.danach));
-    T.geheZu(i); allesAbsuchen(); /* neu zeichnen nach Handlungen */
+    T.geheZu(i); if(T.alleAbschnitte) T.alleAbschnitte(); allesAbsuchen(); /* neu zeichnen nach Handlungen; die Prüfungen sehen die ganze Seite */
     if(T.Z().imZwischenakt){
       const Zp=T.Z(), wo0=`Pfad ${JSON.stringify(p)} Schritt ${i}`;
       pruefe(Zp.gefahr>=8 && Zp.patrouille.status==="steht_bevor" && Zp.patrouille.vor<=i, wo0+": Zwischenakt ohne Grund");
       pruefe(text().includes("The Patrol")||text().includes("Boots"), wo0+": Zwischenakt zeigt nicht die Patrouille");
       const vorher=Zp.gegner.length; T.ladeKampf(["wache","wache","wache","hund"], null);
       pruefe(Zp.gegner.filter(g=>g.k==="wache").length>=3 && Zp.gegner.some(g=>g.k==="hund"), wo0+": Patrouille lädt nicht 3 Wachen + Hund");
-      T.patrouilleFertig(); patrouilleErlebt=true;
+      T.patrouilleFertig(); patrouilleErlebt=true; if(T.alleAbschnitte) T.alleAbschnitte();
       pruefe(!T.Z().imZwischenakt && T.Z().patrouille.status==="erledigt" && T.Z().schritt===i, wo0+": nach der Patrouille nicht am Ziel");
     }
     /* Weichen: beide Fälle durchspielen, damit kein Zweig unbesucht bleibt */
@@ -273,7 +298,8 @@ function spiele(p, protokoll){
       pruefe(faecher[j].includes(D(r.wenn)), wo+": Regel „"+r.wenn+"“ steht nicht beim Anker "+r.bei);
     });
     /* Aufeinanderfolgende Vorlesetexte: eine Randnotiz, innen Titellinien */
-    const lauf=T.vorleseLauf(bl);
+    const ab=T.abschnittIndex ? T.abschnittIndex(bl) : null, lauf=T.vorleseLauf(bl, ab||undefined);
+    if(ab) pruefeAbschnitte(bl, ab, wo);
     const eigene = bl.filter((b,j)=>(b.t==="vorlesen"||b.t==="gruppe") && (!lauf[j] || lauf[j].erste)).length;
     pruefe((text().match(new RegExp('class="marg vorlesen[^"]*">'+D("Vorlesen"),"g"))||[]).length===eigene,
       wo+": Zahl der Randnotizen „Vorlesen“ passt nicht zu den Läufen");
@@ -629,7 +655,7 @@ if(T.STIMMEN){
     (b.t==="sagen" && b.wer) ? [b.wer] : (b.t==="vorlesen" && b.spricht) ? [b.spricht] : []);
   /* Schalter aus: keine Stimmangabe im Text */
   if(T.stimmenAn()) T.schalteStimmen();
-  frisch(); T.waehle("e1",optIdx("e1","weg_a")); T.geheZu(1);
+  frisch(); T.waehle("e1",optIdx("e1","weg_a")); T.geheZu(1); if(T.alleAbschnitte) T.alleAbschnitte();
   pruefe(text().includes('class="wer"'), "Sprechermarke fehlt im Prolog");
   pruefe(!text().includes('class="st"'), "Stimmangabe erscheint, obwohl der Schalter aus ist");
   /* Schalter an: jede sichtbare Sprechermarke trägt ihre drei Wörter */
@@ -638,13 +664,13 @@ if(T.STIMMEN){
   for(const [i,weg,tuer] of [[1,"weg_a","bibliothek"],[4,"weg_c","bibliothek"],[7,"weg_a","bibliothek"],[7,"weg_a","kueche"],[8,"weg_a","kueche"],[10,"weg_a","kueche"]]){
     frisch(); T.schalteStimmen(); T.schalteStimmen();
     T.waehle("e1",optIdx("e1",weg)); T.waehle("e2",optIdx("e2",tuer));
-    T.waehle("e3",optIdx("e3","e3_pakt")); T.geheZu(i);
+    T.waehle("e3",optIdx("e3","e3_pakt")); T.geheZu(i); if(T.alleAbschnitte) T.alleAbschnitte();
     const k=T.KAPITEL[i], namen=[...new Set(sprechend(k))];
     namen.forEach(nm=>pruefe(text().includes(D(T.STIMMEN[nm])),
       `Schritt ${i} (${weg}/${tuer}): Stimme von ${nm} fehlt im Text`));
   }
   /* Personenkarten tragen die Stimme ihrer Figur */
-  frisch(); T.geheZu(2);
+  frisch(); T.geheZu(2); if(T.alleAbschnitte) T.alleAbschnitte();
   ["Greta","Old Pieter","Tobias"].forEach(nm=>pruefe(text().includes(D(T.STIMMEN[nm])), "Stimme fehlt in der Personenkarte: "+nm));
   /* Jede Figur, die spricht, hat eine Stimme */
   T.KAPITEL.concat([T.PATROUILLE]).forEach((k,i)=>k.bloecke.forEach(b=>{
@@ -657,6 +683,39 @@ if(T.STIMMEN){
 /* ---------- 7 · Neue Runde ---------- */
 frisch(); T.waehle("e1",0); T.setzeWissen("anneke",true); T.Z().gruppe[0].name="Vesper";
 el("zuruecksetzen").onclick(); pruefe(T.Z().gefahr===0 && !T.Z().wissen.anneke && T.Z().gruppe[0].name==="Vesper" && !T.Z().gewaehlt.e1, "Neue Runde setzt nicht sauber zurück");
+
+/* ---------- 6e · Abschnitte: die Seite Stück für Stück (nur V2) ---------- */
+if(T.abschnittWeiter){
+  const offen=()=>(text().match(/<div class="abschnitt[ "]/g)||[]).length;
+  const knopf=()=>/data-abschnitt-weiter="1"/.test(text()), gesperrt=()=>/data-abschnitt-weiter="1" disabled/.test(text());
+  /* Strasse: drei Abschnitte; der zweite erst, wenn oben angeklickt ist, was die Wölfe tun */
+  frisch(); T.waehle("e1",optIdx("e1","weg_a")); T.geheZu(S.berg);
+  pruefe(offen()===1 && knopf(), "Abschnitte: eine neue Seite zeigt nicht genau den ersten Abschnitt mit Weiter-Knopf");
+  pruefe(gesperrt(), "Abschnitte: Weiter ist frei, obwohl die Wolf-Weiche offen ist");
+  T.abschnittWeiter(); pruefe(offen()===1, "Abschnitte: Weiter deckt trotz offener Weiche auf");
+  T.stelleWeiche("woelfe","geholfen");
+  pruefe(offen()===1 && text().includes(D("Die Wölfe ziehen ab")) && !gesperrt(), "Abschnitte: das Ergebnis der Weiche erscheint nicht dort, wo geklickt wurde");
+  const v0=T.verlaufLaenge(); T.abschnittWeiter();
+  pruefe(offen()===2 && text().includes('<div class="abschnitt alt" data-abschnitt="0">'), "Abschnitte: zweiter Abschnitt fehlt, oder der erste tritt nicht zurück");
+  pruefe(T.verlaufLaenge()===v0, "Abschnitte: Aufdecken zählt als Spielschritt für Rückgängig");
+  T.abschnittWeiter(); pruefe(offen()===3 && !knopf(), "Abschnitte: dritter Abschnitt fehlt, oder es geht vor der Wachen-Wahl schon weiter");
+  T.stelleWeiche("wache","vorbei"); pruefe(offen()===3 && !knopf() && text().includes(D("Im Hof")), "Abschnitte: „Im Hof“ erscheint nicht direkt unter der Wachen-Wahl");
+  T.stelleWeiche("wache","vorbei"); T.stelleWeiche("wache","entdeckt");
+  pruefe(offen()===3 && knopf() && !gesperrt(), "Abschnitte: nach dem Wachenkampf fehlt der Weiter-Knopf zum Hof");
+  T.geheZu(S.berg+1); T.geheZu(S.berg); pruefe(offen()===3, "Abschnitte: nach dem Zurückblättern ist wieder zugedeckt");
+  T.rueckgaengig(); pruefe(offen()===3, "Abschnitte: Rückgängig deckt Text wieder zu");
+  /* Stollen: Knöpfe unten nur aus aufgedeckten Abschnitten */
+  frisch(); T.waehle("e1",optIdx("e1","weg_b")); T.geheZu(S.berg); T.stelleWeiche("wache","entdeckt");
+  pruefe(el("aktionen").innerHTML.includes('data-tun="stollen_luft"') && !el("aktionen").innerHTML.includes('data-tun="keller_kampf"'),
+    "Abschnitte: die Aktionsleiste zeigt Knöpfe aus verdeckten Abschnitten");
+  T.abschnittWeiter(); pruefe(el("aktionen").innerHTML.includes('data-tun="keller_kampf"'), "Abschnitte: Knopf fehlt nach dem Aufdecken in der Aktionsleiste");
+  /* „ganze Seite zeigen“ und der Schalter */
+  frisch(); T.geheZu(S.inn); pruefe(offen()===1, "Abschnitte: Wirtshaus beginnt nicht beim ersten Abschnitt");
+  T.alleAbschnitte(); pruefe(offen()===2 && !knopf(), "Abschnitte: „ganze Seite zeigen“ deckt nicht alles auf");
+  T.geheZu(1); T.schalteAbschnitte(); pruefe(offen()===1 && !knopf() && text().includes(D("Die Ankunft")), "Abschnitte: ausgeschaltet steht nicht die ganze Seite da");
+  T.schalteAbschnitte(); pruefe(offen()===1 && knopf(), "Abschnitte: wieder eingeschaltet beginnt die Seite nicht beim ersten Abschnitt");
+  T.Z().abschnitte["1"]=3; el("zuruecksetzen").onclick(); T.geheZu(1); pruefe(offen()===1, "Abschnitte: Neue Runde behält aufgedeckte Abschnitte");
+}
 
 /* ---------- 8 · Sieben Durchläufe mit Spur ---------- */
 const G = (gespraech, kampf) => HAT_GESPRAECH ? {gespraech, kampf} : {gespraech:null, kampf:true};

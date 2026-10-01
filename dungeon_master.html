@@ -431,6 +431,25 @@ input{font:inherit;color:inherit}
 .hbox.staerke p b::before{content:none}
 /* Wortschatz: Wörter aus dem Vorlesetext, die eine starke Klasse trotzdem aufhalten können */
 .hbox.wortschatz{padding:9px 12px}
+/* Abschnitte: die Seite kommt Stück für Stück. Die Hülle hat keinen eigenen Kasten (display:contents),
+   damit das Raster aus Rand, Text und Tipps unverändert durchläuft. Was schon gespielt ist, tritt zurück. */
+.abschnitt{display:contents}
+.abschnitt.alt>*{opacity:.58;transition:opacity .2s}
+.abschnitt.alt>*:hover,.abschnitt.alt>*:focus-within{opacity:1}
+.abschnitt>*:first-child{scroll-margin-top:calc(var(--barhoehe) + 24px)}
+.abschnittweiter{grid-column:2;margin:2px 0 36px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;max-width:64ch}
+.abschnittweiter .aw-knopf{display:flex;align-items:center;gap:14px;width:100%;text-align:left;font-family:var(--sans);
+  border:1px solid rgba(201,164,87,.45);border-radius:6px;padding:12px 16px;background:rgba(201,164,87,.06);color:var(--text)}
+.abschnittweiter .aw-knopf:hover:not(:disabled){background:rgba(201,164,87,.13);border-color:var(--gold)}
+.abschnittweiter .aw-knopf:disabled{opacity:.5;cursor:not-allowed;border-style:dashed}
+.abschnittweiter .aw-pfeil{color:var(--gold);font-size:18px;line-height:1}
+.abschnittweiter .aw-text{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.abschnittweiter .aw-text b{font-weight:500;font-size:14px}
+.abschnittweiter .aw-text em{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--gold-soft)}
+.abschnittweiter small{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
+.abschnittweiter .aw-sperre{margin:0;font-family:var(--sans);font-size:12.5px;color:var(--gold)}
+.abschnittweiter .aw-alle{font-family:var(--sans);font-size:11.5px;color:var(--dim);text-decoration:underline;text-underline-offset:3px}
+.abschnittweiter .aw-alle:hover{color:var(--text)}
 .hbox.wortschatz dl{margin:0}
 .hbox.wortschatz dt{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--gold-soft);margin-top:6px}
 .hbox.wortschatz dt:first-child{margin-top:0}
@@ -907,6 +926,7 @@ html.licht-aus .licht-ebene{display:none}
 
         <button id="sprachschalter" class="knopf schalter" aria-pressed="false" title="Alles auf Englisch umstellen"><span class="w"></span>Alles auf Englisch</button>
         <button id="kurzschalter" class="knopf schalter" aria-pressed="false" title="Lange Fassung zeigen"><span class="w"></span>Kurzfassung (weniger Vorlesetext)</button>
+        <button id="abschnittschalter" class="knopf schalter" aria-pressed="false" title="Ganze Seite auf einmal zeigen"><span class="w"></span>Text in Abschnitten</button>
         <button id="stimmschalter" class="knopf schalter" aria-pressed="false" title="Stimmangaben einblenden"><span class="w"></span>Stimmen der Figuren</button>
         <button id="blutschalter" class="knopf schalter" aria-pressed="false" title="Blut im Messrohr"><span class="w"></span>Blut im Gefahrenbalken</button>
         <button class="knopf" id="zuruecksetzen">Neue Runde</button>
@@ -1678,7 +1698,7 @@ const KAPITEL = [
  {t:"vorlesen", nur:"e3_pakt", von:ORT.turm, titel:"Der Ruf", text:[
   `You call his name down the stairwell. Nothing happens for a long minute.`,
   `Then the door opens, and he is simply sitting in the second chair, with the second cup of tea, which was never meant for Mirela. The pot is still steaming on the table between you.`], kurz:[`You call his name down the stairwell. Nothing, for a long minute.`,`Then he’s simply sitting in the second chair, with the second cup — never meant for Mirela. The pot is still steaming between you.`]},
- {t:"vorlesen", spricht:"Vaskir", titel:"Der Graf", text:[
+ {t:"vorlesen", abschnitt:true, spricht:"Vaskir", titel:"Der Graf", text:[
   `He is not tall. He is not pale. He looks like a tired man of fifty who has been doing the same job for far too long, and that is the frightening part.`,
   `“Four hundred years,” he says, “and I never took a single one of them. They were brought to me. Every twenty years, up that road, with a bag packed. Ask her who packed hers.”`,
   `Then he looks at the three of you, one after the other — and his eyes stop on the one who is standing furthest back.`], kurz:[`Not tall, not pale — a tired man of fifty, and that’s the frightening part.`,`“Four hundred years, and I never took one. They were brought to me. Ask her who packed her bag.”`,`He looks at each of you — and stops on the one standing furthest back.`]},
@@ -1777,7 +1797,7 @@ const KAPITEL = [
  {t:"wenn", nur:"e3_buch", titel:"Anneke — frei", text:`Aus der Kapelle, an der ihr vorbeigeht, kommt ein Mädchen von etwa neunzehn in einem Kleid, das vor zwanzig Jahren weiss war — Anneke, ohne Vertrag. Wer in der Kapelle war, kennt sie; die anderen sehen sie zum ersten Mal. Sie sieht in die Sonne, als hätte sie sie noch nie gesehen, und fragt, ob jemand Greta etwas ausrichten kann.`},
  {t:"wenn", gefahrVon:0, gefahrBis:3, titel:"Barometer 0–3", text:`Niemand im Schloss hat euch kommen hören. Das ist die seltenste Art, diesen Abend zu gewinnen — sag der Gruppe ausdrücklich, dass sie das geschafft hat.`},
  {t:"wenn", gefahrVon:8, gefahrBis:10, titel:"Barometer 8–10", text:`Was auch immer sie erreicht haben, sie haben es unter Lärm erreicht. Eine Figur ihrer Wahl trägt etwas mit hinunter, das nicht mehr weggeht: einen weissen Streifen im Haar, eine Hand, die nicht mehr warm wird, oder einen Namen, den sie im Schlaf sagt.`},
- {t:"vorlesen", titel:"Der Weg hinunter", text:[
+ {t:"vorlesen", abschnitt:true, titel:"Der Weg hinunter", text:[
   `The road down takes an hour, and for the first time since you got here you can see where you are going. Below you the valley is white with frost, and there is smoke coming out of every chimney in Dornwald.`,
   `The village is awake. The door of the tavern stands open, and Greta is standing in it with her three fingers wrapped around a cup she is not drinking from. She does not go back inside when she sees you.`,
   `Tobias gets to you first. He runs the last thirty metres and then stops, because he has not decided yet whether he is allowed to be happy.`,
@@ -2649,6 +2669,14 @@ const EN = {
 "Sehr stark":"Very strong",
 "Wirkt sofort auf Hintergrund und grosse Bildansicht.":"Applies immediately to the background and the large image view.",
 "Alles auf Englisch":"Everything in English",
+"Text in Abschnitten":"Text in sections",
+"Ganze Seite auf einmal zeigen":"Show the whole page at once",
+"Text abschnittweise zeigen":"Show the text section by section",
+"Weiter im Text":"Continue",
+"Abschnitt {0} von {1}":"Section {0} of {1}",
+"ganze Seite zeigen":"show whole page",
+"Erst oben anklicken, was am Tisch passiert ist: {0}":"First click above what happened at the table: {0}",
+"Erst oben eine Karte wählen.":"First choose a card above.",
 "Kurzfassung (weniger Vorlesetext)":"Short version (less reading)",
 "Stimmen der Figuren":"Character voices",
 "Blut im Gefahrenbalken":"Blood in the danger bar",
@@ -2869,6 +2897,87 @@ function zeichneKurzschalter(){
 /* Liefert den Text, der gerade gilt: die Kurzfassung, wenn es sie gibt und sie an ist,
    sonst die Langfassung — für "vorlesen", "sagen", "gruppe" (Array) und "regie" (String). */
 function kurzText(b){ return (KURZTEST && b.kurz) ? b.kurz : b.text; }
+/* ---- Abschnitte: die Seite Stück für Stück ----
+   Ein Abschnitt ist, was am Tisch in einem Zug passiert: erzählen, dann reden, klicken oder kämpfen.
+   Ein neuer beginnt, sobald nach einer solchen Handlung wieder erzählt wird. Drei Regeln halten
+   den Zusammenhang:
+   · Was ein Klick auf dieser Seite freischaltet (Weiche, Karte), erscheint im selben Abschnitt —
+     direkt dort, wo geklickt wurde. Erst wenn danach wieder etwas zu tun ist, endet der Abschnitt.
+   · Eine Aufforderung nach einem Antwortkasten ist eine neue Gesprächsrunde: eigener Abschnitt.
+   · Ein Abschnitt ohne Vorlesetext und ohne Handlung (nur eine Regie-Notiz) hängt am vorigen.
+   Redaktionell gesetzte Schnitte: abschnitt:true am Block. Aus („Text in Abschnitten“) ist alles
+   ein Abschnitt — die Seite wie früher. Aufdecken ist kein Spielschritt (zählt nicht für Rückgängig). */
+const ABSCHNITT_SCHLUESSEL = "nachtfels.dm.abschnitte";
+let ABSCHNITTE = true;
+try{ const g=localStorage.getItem(ABSCHNITT_SCHLUESSEL); if(g!==null) ABSCHNITTE = g==="1"; }catch(e){}
+function schalteAbschnitte(){
+  ABSCHNITTE = !ABSCHNITTE;
+  try{ localStorage.setItem(ABSCHNITT_SCHLUESSEL, ABSCHNITTE?"1":"0"); }catch(e){}
+  zeichneAbschnittschalter(); zeichneSzene();
+}
+function zeichneAbschnittschalter(){
+  const b=$("abschnittschalter"); if(!b) return;
+  b.className = "knopf schalter"+(ABSCHNITTE?" an":"");
+  b.setAttribute("aria-pressed", ABSCHNITTE?"true":"false");
+  b.title = tr(ABSCHNITTE ? "Ganze Seite auf einmal zeigen" : "Text abschnittweise zeigen");
+}
+const ERZAEHLT = new Set(["vorlesen","gruppe","sagen","regie","wenn"]);
+function istGelb(b){ return b.t==="vorlesen" || b.t==="gruppe" || b.t==="sagen"; }
+function istHandlung(b){ return ["aufgabe","personen","fa","weiche","tun","kampf","optionen"].includes(b.t) || (b.t==="gruppe" && !!b.aufgabe); }
+/* Hängt Block b an der Wahl w (Weiche oder Entscheidungskarte), die auf derselben Seite steht? */
+function gebundenAn(b, w){
+  const u=b.ur||b;
+  if(w.t==="weiche") return liste(u.weiche).some(sp=>sp.slice(0, sp.indexOf("="))===w.id);
+  const fl=(ENTSCHEIDUNGEN[w.id]||{}).flaggen||[];
+  return liste(u.nur).concat(liste(u.alle)).some(f=>fl.includes(f));
+}
+/* Je gezeichnetem Block (nach karten()) die Nummer seines Abschnitts, ab 0 */
+function abschnittIndex(bl){
+  if(!ABSCHNITTE) return bl.map(()=>0);
+  const roh=[]; let nr=0, zu=false, wahl=null;
+  bl.forEach((b,i)=>{
+    const u=b.ur||b, gebunden=!!wahl && gebundenAn(b, wahl);
+    const neu = i>0 && (u.abschnitt===true || (zu && ERZAEHLT.has(b.t) && !gebunden)
+                || (b.t==="aufgabe" && (bl[i-1].t==="personen" || bl[i-1].t==="fa")));
+    if(neu){ nr++; zu=false; wahl=null; }
+    roh.push(nr);
+    if(istHandlung(b)){ zu=true; wahl = (b.t==="weiche" || b.t==="optionen") ? b : null; }
+  });
+  const kern=[]; bl.forEach((b,i)=>{ if(istGelb(b) || istHandlung(b)) kern[roh[i]]=true; });
+  const neuNr=[]; let z=-1; for(let a=0;a<=nr;a++){ if(a===0 || kern[a]) z++; neuNr[a]=z; }
+  return roh.map(a=>neuNr[a]);
+}
+function seitenSchluessel(){ return Z.imZwischenakt ? "za" : String(Z.schritt); }
+function aufgedeckt(){ return Math.max(1, (Z.abschnitte||{})[seitenSchluessel()] || 1); }
+/* Was den nächsten Abschnitt noch sperrt: eine offene Weiche oder Karte im letzten sichtbaren */
+function abschnittSperre(bl, ab, letzter){
+  const w=bl.find((b,i)=>ab[i]===letzter && b.t==="weiche" && b.art!=="festhalten" && (Z.weichen||{})[b.id]===undefined);
+  if(w) return trf("Erst oben anklicken, was am Tisch passiert ist: {0}", zitat(tr(w.titel)));
+  const o=bl.find((b,i)=>ab[i]===letzter && b.t==="optionen" && entscheidungOffen(b.id));
+  return o ? tr("Erst oben eine Karte wählen.") : "";
+}
+function abschnittWeiterHTML(bl, ab, offen, anzahl){
+  const naechst=bl.find((b,i)=>ab[i]===offen && b.titel && !/^Hintergrund/.test(b.titel) && b.t!=="weiche" && b.t!=="optionen");
+  const sperre=abschnittSperre(bl, ab, offen-1);
+  return '<div class="abschnittweiter"><button class="aw-knopf" data-abschnitt-weiter="1"'+(sperre?" disabled":"")+'>'+
+    '<span class="aw-pfeil" aria-hidden="true">▾</span><span class="aw-text"><b>'+tr("Weiter im Text")+'</b>'+
+    (naechst?'<em>'+tr(naechst.titel)+'</em>':'')+'</span><small>'+trf("Abschnitt {0} von {1}", offen+1, anzahl)+'</small></button>'+
+    (sperre?'<p class="aw-sperre">'+sperre+'</p>':'')+
+    '<button class="aw-alle" data-abschnitt-alle="1">'+tr("ganze Seite zeigen")+'</button></div>';
+}
+/* Den nächsten Abschnitt aufdecken — nicht über eine offene Weiche hinweg */
+function abschnittWeiter(){
+  const k=aktuelleSzene(); if(k.braucht && entscheidungOffen(k.braucht)) return;
+  const bl=karten(sichtbareBloecke(k)), ab=abschnittIndex(bl), anzahl=bl.length?ab[bl.length-1]+1:0, n=Math.min(aufgedeckt(), anzahl);
+  if(n>=anzahl || abschnittSperre(bl, ab, n-1)) return;
+  if(!Z.abschnitte) Z.abschnitte={};
+  Z.abschnitte[seitenSchluessel()]=n+1; sichern(); zeichneSzene();
+  if(typeof document.querySelector==="function"){
+    const h=document.querySelector('.abschnitt[data-abschnitt="'+n+'"]'), e=h && h.firstElementChild;
+    if(e && e.scrollIntoView) e.scrollIntoView({behavior:"smooth", block:"start"});
+  }
+}
+function alleAbschnitte(){ if(!Z.abschnitte) Z.abschnitte={}; Z.abschnitte[seitenSchluessel()]=99; sichern(); zeichneSzene(); }
 function schalteStimmen(){
   ZEIGE_STIMMEN = !ZEIGE_STIMMEN;
   try{ localStorage.setItem(STIMM_SCHLUESSEL, ZEIGE_STIMMEN?"1":"0"); }catch(e){}
@@ -3274,7 +3383,7 @@ function frischerZustand(namen){
     wissen:{}, flaggen:{}, gewaehlt:{}, getan:{}, abgehakt:{}, weichen:{}, gegner:[], chronik:[], besucht:{0:true}, besuchtMit:{},
     patrouille:{status:"keine", vor:null}, imZwischenakt:false, zwischenaktZiel:null, kampfOffen:false,
     uhr:{rest:90*60000, laeuft:false, stempel:0}, notstopp:{fall:null, wer:null, gesehen:false, spaeter:null, erledigt:false},
-    finale:{} };   /* finale: {geladen, tiefst} — ob gegen Vaskir gekämpft wurde und wie tief er fiel */
+    finale:{}, abschnitte:{} };   /* abschnitte: je Seite, wie viele Abschnitte aufgedeckt sind · finale: {geladen, tiefst} — ob gegen Vaskir gekämpft wurde und wie tief er fiel */
 }
 let Z = frischerZustand();
 function laden(){ try{ const r=localStorage.getItem(SCHLUESSEL); if(r){const g=JSON.parse(r); if(g&&typeof g==="object"){ const f=frischerZustand(); Z=Object.assign(f,g); Z.uhr=Object.assign(f.uhr,g.uhr||{}); Z.notstopp=Object.assign(f.notstopp,g.notstopp||{}); }} }catch(e){}
@@ -3285,7 +3394,7 @@ function laden(){ try{ const r=localStorage.getItem(SCHLUESSEL); if(r){const g=J
    sonst nähme „Rückgängig“ nach einer Entscheidung nur das Umblättern zurück.  */
 const VERLAUF_SCHLUESSEL = "nachtfels.dm.verlauf";
 let VERLAUF = [], stelleZurueck = false;
-function spielstand(z){ const k=Object.assign({},z); delete k.schritt; delete k.kampfOffen; delete k.uhr; delete k.chronik; delete k.besucht; return JSON.stringify(k); }
+function spielstand(z){ const k=Object.assign({},z); delete k.abschnitte; delete k.schritt; delete k.kampfOffen; delete k.uhr; delete k.chronik; delete k.besucht; return JSON.stringify(k); }
 function sichern(){ try{ localStorage.setItem(SCHLUESSEL, JSON.stringify(Z)); }catch(e){} zeichneRueckgaengig(); }
 /* Ein Spielschritt ist eine ganze Handlung — eine Entscheidung samt Gefahr und
    Flaggen, nicht ihre drei Speicherpunkte. Deshalb wird am Anfang der Handlung
@@ -3309,7 +3418,7 @@ function rueckgaengig(){
   if(!VERLAUF.length) return;
   const uhr=Z.uhr, alt=JSON.parse(VERLAUF.pop());
   stelleZurueck=true;
-  Z=Object.assign(frischerZustand(), alt); Z.uhr=uhr;
+  const ab=Z.abschnitte; Z=Object.assign(frischerZustand(), alt); Z.uhr=uhr; Z.abschnitte=ab;
   try{ localStorage.setItem(VERLAUF_SCHLUESSEL, JSON.stringify(VERLAUF)); }catch(e){}
   notiere(tr("<b>Rückgängig</b> — letzter Spielschritt zurückgenommen"));
   alles(); sichern();
@@ -3750,14 +3859,14 @@ function regieSub(titel){
 }
 /* Folgen mehrere Vorlesetexte aufeinander, sind sie ein Block: eine Randnotiz „Vorlesen“,
    und im Text trennen Linien mit dem Titel die Abschnitte.                               */
-function vorleseLauf(bl){
+function vorleseLauf(bl, grenzen){
   const teil = bl.map(()=>null);
   const gehoert = b => b.t==="vorlesen" || b.t==="gruppe";
   let i=0;
   while(i<bl.length){
     if(!gehoert(bl[i])){ i++; continue; }
     let j=i;
-    while(j<bl.length && gehoert(bl[j])){ j++; if(bl[j-1].aufgabe) break; }
+    while(j<bl.length && gehoert(bl[j]) && (!grenzen || grenzen[j]===grenzen[i])){ j++; if(bl[j-1].aufgabe) break; }
     if(j-i>=2) for(let k=i;k<j;k++) teil[k]={erste:k===i, letzte:k===j-1};
     i=j;
   }
@@ -3859,8 +3968,8 @@ function blockHTML(b, idx, h, lauf){
   return "";
 }
 /* Alle Knöpfe einer Szene zusätzlich unten, damit sie unter Druck auffindbar sind */
-function aktionenHTML(k, fehlt){
-  const sb = fehlt ? [] : sichtbareBloecke(k), knoepfe=[];
+function aktionenHTML(k, fehlt, offen){
+  const sb = fehlt ? [] : sichtbareBloecke(k).filter(b=>!offen || offen.has(b)), knoepfe=[];
   sb.forEach(b=>{
     if(b.t==="tun"){
       const fertig = b.knopf.art==="wissen" ? !!Z.wissen[b.knopf.k] : (b.wiederholbar ? false : !!Z.getan[b.id]);
@@ -3879,8 +3988,8 @@ function karten(bloecke){
   bloecke.forEach(b=>{
     const letzte=out[out.length-1];
     const gelb = letzte && (letzte.t==="vorlesen"||letzte.t==="gruppe"||letzte.t==="sagen") && !letzte.aufgabe;
-    const alsGruppe = ()=>{ if(letzte.t==="vorlesen") out[out.length-1]={t:"gruppe", titel:letzte.titel, text:letzte.text, kurz:letzte.kurz, spricht:letzte.spricht, anker:letzte.anker, rede:[]};
-                            if(letzte.t==="sagen") out[out.length-1]={t:"gruppe", text:[], rede:letzte.text.map(t=>({t, wer:letzte.wer||null}))}; return out[out.length-1]; };
+    const alsGruppe = ()=>{ if(letzte.t==="vorlesen") out[out.length-1]={t:"gruppe", titel:letzte.titel, text:letzte.text, kurz:letzte.kurz, spricht:letzte.spricht, anker:letzte.anker, rede:[], ur:letzte};
+                            if(letzte.t==="sagen") out[out.length-1]={t:"gruppe", text:[], rede:letzte.text.map(t=>({t, wer:letzte.wer||null})), ur:letzte}; return out[out.length-1]; };
     if(b.t==="sagen" && gelb){ alsGruppe().rede.push(...b.text.map(t=>({t, wer:b.wer||null}))); }
     else if(b.t==="aufgabe" && gelb){ alsGruppe().aufgabe=b; }
     else out.push(b);
@@ -4137,7 +4246,8 @@ function zeichneSzene(){
   $("warnbox").innerHTML=warnungenHTML();
   const fehlt = !!(k.braucht && entscheidungOffen(k.braucht));
   const bl = fehlt ? [] : karten(sichtbareBloecke(k));
-  const hilfen = hilfeVerteilen(k, bl), laeufe = vorleseLauf(bl);
+  const ab = abschnittIndex(bl), anzahl = bl.length ? ab[bl.length-1]+1 : 0, offen = Math.min(aufgedeckt(), anzahl);
+  const hilfen = hilfeVerteilen(k, bl), laeufe = vorleseLauf(bl, ab);
   const zB = k.bloecke.find(b=>b.t==="ziel");
   const minuten = BUDGET_MIN[k.titel];
   $("zielband").innerHTML = zB
@@ -4149,8 +4259,21 @@ function zeichneSzene(){
       k.woerter.map(p=>'<dt>'+p[0]+'</dt><dd>'+tr(p[1])+'</dd>').join("")+'</dl></details>' : "";
   $("bloecke").innerHTML = (fehlt
     ? '<div class="hinweisfehlt">'+trf("Auf dieser Seite steht nur, was zu eurem Weg gehört — und <b>{0}</b> ist noch nicht gewählt. Geh zurück und klick die Karte an, für die sich die Gruppe entschieden hat.", tr(ENTSCHEIDUNGEN[k.braucht].name))+'</div>'
-    : bl.map((b,i)=>blockHTML(b, i+1, hilfen[i], laeufe[i])+(i===ersteAufgabe?woerterHTML:"")).join("")+(ersteAufgabe<0?woerterHTML:""));
-  $("aktionen").innerHTML = aktionenHTML(k, fehlt);
+    : szeneHTML());
+  function szeneHTML(){
+    /* Wortstützen nach der ersten Aufforderung — liegt die noch verdeckt, unter dem sichtbaren Teil */
+    const woIdx = (ersteAufgabe>=0 && ab[ersteAufgabe]<offen) ? ersteAufgabe : -1;
+    let html="", jetzt=-1;
+    bl.forEach((b,i)=>{
+      if(ab[i]>=offen) return;
+      if(ab[i]!==jetzt){ if(jetzt>=0) html+='</div>'; jetzt=ab[i];
+        html+='<div class="abschnitt'+(jetzt<offen-1?" alt":"")+'" data-abschnitt="'+jetzt+'">'; }
+      html+=blockHTML(b, i+1, hilfen[i], laeufe[i])+(i===woIdx?woerterHTML:"");
+    });
+    if(jetzt>=0) html+='</div>';
+    return html+(woIdx<0?woerterHTML:"")+(offen<anzahl?abschnittWeiterHTML(bl, ab, offen, anzahl):"");
+  }
+  $("aktionen").innerHTML = aktionenHTML(k, fehlt, new Set(bl.filter((b,i)=>ab[i]<offen)));
   if(Z.imZwischenakt){
     $("kschritt").textContent=tr("Zwischenakt");
     $("zurueck").disabled=false; $("vor").disabled=false;
@@ -4468,6 +4591,9 @@ document.addEventListener("click", e=>{
   if(t.closest("[data-ns-morgen]")) return notstoppZumMorgen();
   const hk=t.closest("[data-hak]"); if(hk){ const k=hk.dataset.hak; aktion(()=>{ if(Z.abgehakt[k]) delete Z.abgehakt[k]; else Z.abgehakt[k]=true; }); zeichneSzene(); sichern(); return; }
   const l=t.closest("[data-laden]"); if(l){ ladeKampf(l.dataset.laden.split(","), l.dataset.extra||null); if(l.dataset.oeffnen) oeffneKampf(); return; }
+  if(t.closest("[data-abschnitt-weiter]")) return abschnittWeiter();
+  if(t.closest("[data-abschnitt-alle]")) return alleAbschnitte();
+  if(t.closest("#abschnittschalter")) return schalteAbschnitte();
   if(t.closest("#sprachschalter")) return schalteSprache();
   if(t.closest("#kurzschalter")) return schalteKurz();
   if(t.closest("#stimmschalter")) return schalteStimmen();
@@ -4522,7 +4648,7 @@ if(typeof window!=="undefined" && window.addEventListener){
     Blut.pause(aus); GefahrFX.pause(aus);
   });
 }
-function alles(){ zeichneUhr(); zeichneRueckgaengig(); zeichneSprachschalter(); zeichneKurzschalter(); zeichneStimmschalter(); zeichneBlutschalter(); zeichneBaro(); zeichneGruppe(); zeichneGegner(); zeichneChronik(); zeichneSzene(); zeichneKampf(); Blut.schalte(ZEIGE_BLUT); }
+function alles(){ zeichneUhr(); zeichneRueckgaengig(); zeichneSprachschalter(); zeichneKurzschalter(); zeichneAbschnittschalter(); zeichneStimmschalter(); zeichneBlutschalter(); zeichneBaro(); zeichneGruppe(); zeichneGegner(); zeichneChronik(); zeichneSzene(); zeichneKampf(); Blut.schalte(ZEIGE_BLUT); }
 /* Jede dieser Funktionen ist ein Spielschritt für „Rückgängig“ — auch, wenn der Prüfstand sie direkt aufruft */
 waehle=aktioniert(waehle); tunAusfuehren=aktioniert(tunAusfuehren); setzeGefahr=aktioniert(setzeGefahr); aendereHP=aktioniert(aendereHP);
 ladeKampf=aktioniert(ladeKampf); kampfVorbei=aktioniert(kampfVorbei); stelleWeiche=aktioniert(stelleWeiche); setzeWissen=aktioniert(setzeWissen);
