@@ -436,20 +436,43 @@ input{font:inherit;color:inherit}
 .abschnitt{display:contents}
 .abschnitt.alt>*{opacity:.58;transition:opacity .2s}
 .abschnitt.alt>*:hover,.abschnitt.alt>*:focus-within{opacity:1}
-.abschnitt>*:first-child{scroll-margin-top:calc(var(--barhoehe) + 24px)}
-.abschnittweiter{grid-column:2;margin:2px 0 36px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;max-width:64ch}
-.abschnittweiter .aw-knopf{display:flex;align-items:center;gap:14px;width:100%;text-align:left;font-family:var(--sans);
-  border:1px solid rgba(201,164,87,.45);border-radius:6px;padding:12px 16px;background:rgba(201,164,87,.06);color:var(--text)}
-.abschnittweiter .aw-knopf:hover:not(:disabled){background:rgba(201,164,87,.13);border-color:var(--gold)}
-.abschnittweiter .aw-knopf:disabled{opacity:.5;cursor:not-allowed;border-style:dashed}
-.abschnittweiter .aw-pfeil{color:var(--gold);font-size:18px;line-height:1}
-.abschnittweiter .aw-text{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
-.abschnittweiter .aw-text b{font-weight:500;font-size:14px}
-.abschnittweiter .aw-text em{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--gold-soft)}
-.abschnittweiter small{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
-.abschnittweiter .aw-sperre{margin:0;font-family:var(--sans);font-size:12.5px;color:var(--gold)}
+.abschnitt>*:first-child{scroll-margin-top:calc(var(--barhoehe) + 34px)}
+/* Einblenden: nur im Moment des Aufdeckens. Der neue Abschnitt steigt Element für Element auf,
+   der vorige tritt im selben Zug zurück. */
+@keyframes ab-ein{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes ab-zurueck{from{opacity:1}to{opacity:.58}}
+@keyframes ab-pfeil{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+.abschnitt.neu>*{animation:ab-ein .6s cubic-bezier(.22,.8,.3,1) both}
+.abschnitt.neu>*:nth-child(n+4){animation-delay:.09s}
+.abschnitt.neu>*:nth-child(n+7){animation-delay:.18s}
+.abschnitt.neu>*:nth-child(n+10){animation-delay:.27s}
+.abschnitt.wirdalt>*{animation:ab-zurueck .5s ease}
+.abschnittweiter.neu{animation:ab-ein .6s cubic-bezier(.22,.8,.3,1) .32s both}
+/* Der Weiter-Knopf: eine eigene Zeile mit Luft darüber und darunter, mittig, von Linien gefasst */
+.abschnittweiter{grid-column:2;max-width:64ch;margin:46px 0 78px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.abschnittweiter .aw-zeile{display:flex;align-items:center;gap:18px;width:100%}
+.abschnittweiter .aw-linie{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,164,87,.45))}
+.abschnittweiter .aw-linie:last-child{background:linear-gradient(90deg,rgba(201,164,87,.45),transparent)}
+.abschnittweiter .aw-knopf{display:flex;align-items:center;gap:16px;min-width:min(320px,100%);max-width:100%;padding:16px 26px;
+  font-family:var(--sans);text-align:left;color:var(--text);border:1px solid rgba(201,164,87,.6);border-radius:10px;
+  background:linear-gradient(180deg,rgba(201,164,87,.13),rgba(201,164,87,.05));
+  box-shadow:0 0 0 1px rgba(0,0,0,.25),0 10px 28px rgba(0,0,0,.35);transition:background .2s,border-color .2s,box-shadow .2s,transform .2s}
+.abschnittweiter .aw-knopf:hover:not(:disabled),.abschnittweiter .aw-knopf:focus-visible{border-color:var(--gold);
+  background:linear-gradient(180deg,rgba(201,164,87,.22),rgba(201,164,87,.09));box-shadow:0 0 0 1px rgba(0,0,0,.25),0 12px 32px rgba(0,0,0,.4),0 0 22px rgba(201,164,87,.18);transform:translateY(-1px)}
+.abschnittweiter .aw-knopf:disabled{opacity:.5;cursor:not-allowed;border-style:dashed;box-shadow:none}
+.abschnittweiter .aw-text{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.abschnittweiter .aw-text b{font-weight:500;font-size:15px;letter-spacing:.02em}
+.abschnittweiter .aw-text em{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--gold-soft);overflow-wrap:anywhere}
+.abschnittweiter .aw-pfeil{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:50%;
+  border:1px solid rgba(201,164,87,.5);color:var(--gold);font-size:17px;line-height:1}
+.abschnittweiter .aw-knopf:not(:disabled) .aw-pfeil span{display:block;animation:ab-pfeil 2.4s ease-in-out infinite}
+.abschnittweiter .aw-zahl{font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.abschnittweiter .aw-sperre{margin:0;font-family:var(--sans);font-size:12.5px;color:var(--gold);text-align:center}
 .abschnittweiter .aw-alle{font-family:var(--sans);font-size:11.5px;color:var(--dim);text-decoration:underline;text-underline-offset:3px}
 .abschnittweiter .aw-alle:hover{color:var(--text)}
+@media (prefers-reduced-motion:reduce){
+  .abschnitt.neu>*,.abschnitt.wirdalt>*,.abschnittweiter.neu,.abschnittweiter .aw-knopf .aw-pfeil span{animation:none!important}
+}
 .hbox.wortschatz dl{margin:0}
 .hbox.wortschatz dt{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--gold-soft);margin-top:6px}
 .hbox.wortschatz dt:first-child{margin-top:0}
@@ -1289,12 +1312,12 @@ const KAPITEL = [
  <p>Oben in der Leiste läuft eine <b>pausierbare 90-Minuten-Uhr</b>. Sie weiss, wie viel Zeit jede Seite haben darf, und wird gelb, wenn ihr hinten liegt. <b>Zehn Minuten vor Schluss holt die Uhr den Grafen selbst</b>, wenn die Gruppe noch nicht bei ihm ist: Es geht ein Fenster auf, du musst nichts auslösen. „später“ schiebt es bis zum nächsten Umblättern auf.</p>`, kurz:`Drei Spielerblätter, das Helfer-Blatt gedruckt, <b>zwei Sechser</b>. Namen unter <b>Charaktere / Kampf</b> eintragen.
  <p>Werte auf Konsole und Spielergeräten sind <b>nicht synchron</b> — beide tragen ein.</p>
  <p>Oben läuft eine <b>90-Minuten-Uhr</b>. <b>10 Minuten vor Schluss holt sie den Grafen von selbst</b>, falls nötig — „später“ verschiebt bis zum nächsten Umblättern.</p>`},
- {t:"regie", titel:"Wer die Gruppe ist", text:`Das ist vorgegeben, das müssen die Schüler nicht erfinden: <b>Sie sind Vampirjäger.</b> Nicht berühmt, noch nicht. Ein Gerücht hat sie hergeführt — in diesen Bergen liege ein Tal, in dem Menschen nach Plan verschwinden. Sie wollen wissen, ob es stimmt.
+ {t:"regie", abschnitt:true, titel:"Wer die Gruppe ist", text:`Das ist vorgegeben, das müssen die Schüler nicht erfinden: <b>Sie sind Vampirjäger.</b> Nicht berühmt, noch nicht. Ein Gerücht hat sie hergeführt — in diesen Bergen liege ein Tal, in dem Menschen nach Plan verschwinden. Sie wollen wissen, ob es stimmt.
  <p>Erfinden dürfen sie: Namen, Herkunft, wie sie sich kennen, was sie können. Der Auftrag steht fest.</p>`, kurz:`<b>Sie sind Vampirjäger</b> — ein Gerücht führte sie her: Menschen verschwinden im Tal, alle zwanzig Jahre. Namen, Herkunft, Fähigkeiten dürfen sie erfinden; der Auftrag steht fest.`},
- {t:"regie", titel:"Wie du diesen Bildschirm liest", text:`<b>1 · Gold lesen.</b> Englische Erzählung und Figurenrede — wörtlich. <b>2 · Grün fragen.</b> Jede Figur äussert eine eigene Absicht oder Frage und danach einen Grund oder eine Reaktion. <b>3 · Ergebnis klicken.</b> Nur markieren, was am Tisch passiert ist — Antworten abhaken, Entscheidungen anklicken.
+ {t:"regie", abschnitt:true, titel:"Wie du diesen Bildschirm liest", text:`<b>1 · Gold lesen.</b> Englische Erzählung und Figurenrede — wörtlich. <b>2 · Grün fragen.</b> Jede Figur äussert eine eigene Absicht oder Frage und danach einen Grund oder eine Reaktion. <b>3 · Ergebnis klicken.</b> Nur markieren, was am Tisch passiert ist — Antworten abhaken, Entscheidungen anklicken.
  <p>Rechts neben dem Text stehen die <b>Tipps</b> auf der Höhe der Stelle, zu der sie gehören: was du dort besser nicht verrätst, wo du Tempo machst, wann du schweigst. Unten steht immer, wann es weitergeht. Die <b>Gefahr</b> stellst du an der Säule rechts ein — die Lasche <b>‹ GEFAHR</b> klappt die Knöpfe heraus: 0–3 ruhig, 4–7 du darfst in einem Kampf einen Gegner dazunehmen, 8–10 eine Patrouille vor dem nächsten Akt.</p>`, kurz:`<b>1 · Gold</b> vorlesen, wörtlich. <b>2 · Grün</b> — jede Figur sagt eine Absicht und einen Grund. <b>3</b> Ergebnis anklicken.
  <p>Rechts stehen <b>Tipps</b> zur jeweiligen Stelle. Die <b>Gefahr</b> stellst du an der Säule ein: 0–3 ruhig, 4–7 ein Gegner mehr möglich, 8–10 Patrouille.</p>`},
- {t:"sagen", text:["Speak English. Mistakes are fine. If you need a word, ask for help. Just don’t speak in full German sentences — who knows what consequences it might have… (evil laugh). Take a moment, then try.","Everyone gets a turn. Listen, and add your own idea. You do not need a special voice."]},
+ {t:"sagen", abschnitt:true, text:["Speak English. Mistakes are fine. If you need a word, ask for help. Just don’t speak in full German sentences — who knows what consequences it might have… (evil laugh). Take a moment, then try.","Everyone gets a turn. Listen, and add your own idea. You do not need a special voice."]},
  {t:"fa", titel:"wenn etwas klemmt", paare:[
    ["Niemand sagt etwas","20 Sekunden Denkzeit. Dann: „What do you notice? What could you do?“ Nur Wörter oder offene Anfänge anbieten, keine ganzen Sätze."],
    ["Ein Beitrag ist sehr kurz","„Why? How would that help?“ Ein eigener Gedanke und eine Begründung genügen — keine Grammatikprüfung."],
@@ -2898,12 +2921,13 @@ function zeichneKurzschalter(){
    sonst die Langfassung — für "vorlesen", "sagen", "gruppe" (Array) und "regie" (String). */
 function kurzText(b){ return (KURZTEST && b.kurz) ? b.kurz : b.text; }
 /* ---- Abschnitte: die Seite Stück für Stück ----
-   Ein Abschnitt ist, was am Tisch in einem Zug passiert: erzählen, dann reden, klicken oder kämpfen.
-   Ein neuer beginnt, sobald nach einer solchen Handlung wieder erzählt wird. Drei Regeln halten
+   Ein Abschnitt ist die kleinste Einheit, die am Tisch für sich steht: ein Vorlesetext mit
+   allem, was direkt dazugehört (Aufforderung, Antwortkasten, Klick, Kampf). Ein neuer beginnt
+   bei jedem weiteren Vorlesetext, bei jeder eigenen Aufforderung, bei den Folgen-Karten nach
+   dem Vorlesen und immer, wenn nach einer Handlung wieder erzählt wird. Drei Regeln halten
    den Zusammenhang:
-   · Was ein Klick auf dieser Seite freischaltet (Weiche, Karte), erscheint im selben Abschnitt —
-     direkt dort, wo geklickt wurde. Erst wenn danach wieder etwas zu tun ist, endet der Abschnitt.
-   · Eine Aufforderung nach einem Antwortkasten ist eine neue Gesprächsrunde: eigener Abschnitt.
+   · Was ein Klick auf dieser Seite (Weiche, Karte) unmittelbar freischaltet, erscheint im selben
+     Abschnitt — direkt dort, wo geklickt wurde. Was danach kommt, folgt wieder den Regeln oben.
    · Ein Abschnitt ohne Vorlesetext und ohne Handlung (nur eine Regie-Notiz) hängt am vorigen.
    Redaktionell gesetzte Schnitte: abschnitt:true am Block. Aus („Text in Abschnitten“) ist alles
    ein Abschnitt — die Seite wie früher. Aufdecken ist kein Spielschritt (zählt nicht für Rückgängig). */
@@ -2934,16 +2958,21 @@ function gebundenAn(b, w){
 /* Je gezeichnetem Block (nach karten()) die Nummer seines Abschnitts, ab 0 */
 function abschnittIndex(bl){
   if(!ABSCHNITTE) return bl.map(()=>0);
-  const roh=[]; let nr=0, zu=false, wahl=null;
+  const roh=[]; let nr=0, zu=false, wahl=null, gelb=false;
   bl.forEach((b,i)=>{
     const u=b.ur||b, gebunden=!!wahl && gebundenAn(b, wahl);
-    const neu = i>0 && (u.abschnitt===true || (zu && ERZAEHLT.has(b.t) && !gebunden)
-                || (b.t==="aufgabe" && (bl[i-1].t==="personen" || bl[i-1].t==="fa")));
-    if(neu){ nr++; zu=false; wahl=null; }
+    const neu = i>0 && (u.abschnitt===true || (!gebunden && (
+          (zu && ERZAEHLT.has(b.t) && (gelb || b.t!=="wenn"))      /* nach einer Handlung wird wieder erzählt (eine Regie-Anweisung samt Knopf behält ihre Kampfkarten) */
+       || (gelb && (b.t==="vorlesen" || b.t==="gruppe"))          /* ein neuer Vorlesetext mit eigenem Titel */
+       || (gelb && b.t==="wenn")                                  /* Folgen-Karten nach dem Vorlesen */
+       || b.t==="aufgabe")));                                     /* eine eigene Aufforderung ist eine eigene Runde */
+    if(neu){ nr++; zu=false; wahl=null; gelb=false; }
     roh.push(nr);
+    if(gebunden) wahl=null;   /* nur das unmittelbare Ergebnis hängt am Klick, danach gelten die Regeln wieder */
+    if(istGelb(b)) gelb=true;
     if(istHandlung(b)){ zu=true; wahl = (b.t==="weiche" || b.t==="optionen") ? b : null; }
   });
-  const kern=[]; bl.forEach((b,i)=>{ if(istGelb(b) || istHandlung(b)) kern[roh[i]]=true; });
+  const kern=[]; bl.forEach((b,i)=>{ if(istGelb(b) || istHandlung(b) || b.t==="wenn" || (b.ur||b).abschnitt===true) kern[roh[i]]=true; });
   const neuNr=[]; let z=-1; for(let a=0;a<=nr;a++){ if(a===0 || kern[a]) z++; neuNr[a]=z; }
   return roh.map(a=>neuNr[a]);
 }
@@ -2956,22 +2985,34 @@ function abschnittSperre(bl, ab, letzter){
   const o=bl.find((b,i)=>ab[i]===letzter && b.t==="optionen" && entscheidungOffen(b.id));
   return o ? tr("Erst oben eine Karte wählen.") : "";
 }
-function abschnittWeiterHTML(bl, ab, offen, anzahl){
-  const naechst=bl.find((b,i)=>ab[i]===offen && b.titel && !/^Hintergrund/.test(b.titel) && b.t!=="weiche" && b.t!=="optionen");
-  const sperre=abschnittSperre(bl, ab, offen-1);
-  return '<div class="abschnittweiter"><button class="aw-knopf" data-abschnitt-weiter="1"'+(sperre?" disabled":"")+'>'+
-    '<span class="aw-pfeil" aria-hidden="true">▾</span><span class="aw-text"><b>'+tr("Weiter im Text")+'</b>'+
-    (naechst?'<em>'+tr(naechst.titel)+'</em>':'')+'</span><small>'+trf("Abschnitt {0} von {1}", offen+1, anzahl)+'</small></button>'+
+/* Was als Nächstes kommt — der Titel des Abschnitts, sonst seine Art */
+function abschnittVorschau(bl, ab, a){
+  const t=bl.find((b,i)=>ab[i]===a && b.titel && !/^Hintergrund/.test(b.titel) && b.t!=="weiche" && b.t!=="optionen");
+  if(t) return tr(t.titel);
+  const b=bl.find((x,i)=>ab[i]===a); if(!b) return "";
+  if(b.t==="aufgabe") return tr(AUFFORDERUNG).replace(/&shy;/g,"");
+  return {personen:tr("Mögliche Antworten"), regie:tr("Hintergrund")}[b.t] || "";
+}
+function abschnittWeiterHTML(bl, ab, offen, anzahl, neu){
+  const vorschau=abschnittVorschau(bl, ab, offen), sperre=abschnittSperre(bl, ab, offen-1);
+  return '<div class="abschnittweiter'+(neu?" neu":"")+'"><div class="aw-zeile"><span class="aw-linie"></span>'+
+    '<button class="aw-knopf" data-abschnitt-weiter="1"'+(sperre?" disabled":"")+'>'+
+    '<span class="aw-text"><b>'+tr("Weiter im Text")+'</b>'+(vorschau?'<em>'+vorschau+'</em>':'')+'</span>'+
+    '<span class="aw-pfeil" aria-hidden="true"><span>↓</span></span></button><span class="aw-linie"></span></div>'+
+    '<small class="aw-zahl">'+trf("Abschnitt {0} von {1}", offen+1, anzahl)+'</small>'+
     (sperre?'<p class="aw-sperre">'+sperre+'</p>':'')+
     '<button class="aw-alle" data-abschnitt-alle="1">'+tr("ganze Seite zeigen")+'</button></div>';
 }
+/* Welcher Abschnitt gerade aufgedeckt wird — nur für das eine Zeichnen, das ihn einblendet */
+let ABSCHNITT_NEU = null;
 /* Den nächsten Abschnitt aufdecken — nicht über eine offene Weiche hinweg */
 function abschnittWeiter(){
   const k=aktuelleSzene(); if(k.braucht && entscheidungOffen(k.braucht)) return;
   const bl=karten(sichtbareBloecke(k)), ab=abschnittIndex(bl), anzahl=bl.length?ab[bl.length-1]+1:0, n=Math.min(aufgedeckt(), anzahl);
   if(n>=anzahl || abschnittSperre(bl, ab, n-1)) return;
   if(!Z.abschnitte) Z.abschnitte={};
-  Z.abschnitte[seitenSchluessel()]=n+1; sichern(); zeichneSzene();
+  Z.abschnitte[seitenSchluessel()]=n+1; sichern();
+  ABSCHNITT_NEU={key:seitenSchluessel(), n}; try{ zeichneSzene(); } finally { ABSCHNITT_NEU=null; }
   if(typeof document.querySelector==="function"){
     const h=document.querySelector('.abschnitt[data-abschnitt="'+n+'"]'), e=h && h.firstElementChild;
     if(e && e.scrollIntoView) e.scrollIntoView({behavior:"smooth", block:"start"});
@@ -4264,14 +4305,15 @@ function zeichneSzene(){
     /* Wortstützen nach der ersten Aufforderung — liegt die noch verdeckt, unter dem sichtbaren Teil */
     const woIdx = (ersteAufgabe>=0 && ab[ersteAufgabe]<offen) ? ersteAufgabe : -1;
     let html="", jetzt=-1;
+    const neuNr = (ABSCHNITT_NEU && ABSCHNITT_NEU.key===seitenSchluessel()) ? ABSCHNITT_NEU.n : -1;
     bl.forEach((b,i)=>{
       if(ab[i]>=offen) return;
       if(ab[i]!==jetzt){ if(jetzt>=0) html+='</div>'; jetzt=ab[i];
-        html+='<div class="abschnitt'+(jetzt<offen-1?" alt":"")+'" data-abschnitt="'+jetzt+'">'; }
+        html+='<div class="abschnitt'+(jetzt<offen-1?" alt":"")+(jetzt===neuNr?" neu":"")+(neuNr>0&&jetzt===neuNr-1?" wirdalt":"")+'" data-abschnitt="'+jetzt+'">'; }
       html+=blockHTML(b, i+1, hilfen[i], laeufe[i])+(i===woIdx?woerterHTML:"");
     });
     if(jetzt>=0) html+='</div>';
-    return html+(woIdx<0?woerterHTML:"")+(offen<anzahl?abschnittWeiterHTML(bl, ab, offen, anzahl):"");
+    return html+(woIdx<0?woerterHTML:"")+(offen<anzahl?abschnittWeiterHTML(bl, ab, offen, anzahl, neuNr>=0):"");
   }
   $("aktionen").innerHTML = aktionenHTML(k, fehlt, new Set(bl.filter((b,i)=>ab[i]<offen)));
   if(Z.imZwischenakt){

@@ -386,20 +386,24 @@ sonst etwas zu ändern — auch Talent-Gelegenheiten funktionieren in beiden Fas
 angekündigter Satz steht wortgleich in der Kurzfassung. Aus schaltet auf die volle Länge.
 
 **Text in Abschnitten.** Eine Seite kommt Stück für Stück — standardmässig an, abschaltbar hinter
-dem Zahnrad. Ein Abschnitt ist, was am Tisch in einem Zug passiert: erzählen, dann reden, klicken
-oder kämpfen. Darunter steht **„Weiter im Text“** mit dem Titel dessen, was als Nächstes kommt;
-was schon gespielt ist, bleibt stehen und tritt nur zurück. Damit nichts auseinanderreisst
-(`abschnittIndex` im Skript):
+dem Zahnrad. Ein Abschnitt ist die kleinste Einheit, die am Tisch für sich steht: ein Vorlesetext
+mit allem, was direkt dazugehört. Darunter steht, mittig und mit Luft, der Knopf **„Weiter im
+Text“** mit dem Titel dessen, was als Nächstes kommt; beim Aufdecken steigt der neue Abschnitt
+sanft auf, der vorige tritt zurück, und die Seite scrollt mit (bei „Bewegung reduzieren“ ohne
+Animation). Die Regeln (`abschnittIndex` im Skript):
 
-- Aufforderung und ihr Antwortkasten bleiben zusammen; eine weitere Aufforderung nach einem
-  Antwortkasten ist eine neue Gesprächsrunde und bekommt einen eigenen Abschnitt.
-- Was ein Klick auf der Seite freischaltet (Weiche, Karte), erscheint im selben Abschnitt, direkt
-  unter dem Klick. Erst wenn danach wieder etwas zu tun ist — etwa ein Kampf —, geht es mit
-  „Weiter“ weiter.
+- Jeder Vorlesetext mit eigenem Titel, jede eigene Aufforderung (etwa „Now each of you rolls“)
+  und die Folgen-Karten nach dem Vorlesen beginnen einen neuen Abschnitt; ebenso jedes Erzählen
+  nach einer Handlung.
+- Zusammen bleibt, was zusammen gespielt wird: Vorlesetext und seine Aufforderung, Aufforderung
+  und Antwortkasten, Text und der Kampf- oder Würfelknopf, den er auslöst; eine Hintergrund-Notiz
+  steht beim Text, zu dem sie gehört, und ist nie allein ein Abschnitt.
+- Was ein Klick auf der Seite (Weiche, Karte) unmittelbar freischaltet, erscheint direkt unter
+  dem Klick; was danach kommt, folgt wieder den Regeln.
 - Ist im sichtbaren Abschnitt eine Weiche oder Karte noch offen, ist „Weiter“ gesperrt und sagt,
   was zuerst anzuklicken ist. „ganze Seite zeigen“ deckt trotzdem alles auf.
-- Eine Regie-Notiz allein ist nie ein eigener Abschnitt; redaktionelle Schnitte setzt
-  `abschnitt:true` am Block (der Graf erscheint, der Weg hinunter im Epilog).
+- Redaktionelle Schnitte setzt `abschnitt:true` am Block (die Anleitung in vier Schritten, der
+  Graf erscheint, der Weg hinunter im Epilog).
 
 Die Knöpfe unten zeigen nur, was schon aufgedeckt ist. Aufdecken ist kein Spielschritt:
 Rückgängig deckt nichts wieder zu, Zurückblättern auch nicht; „Neue Runde“ beginnt jede Seite

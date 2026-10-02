@@ -124,7 +124,11 @@ function pruefeAbschnitte(bl, ab, wo){
   const gelb=b=>b.t==="vorlesen"||b.t==="gruppe"||b.t==="sagen";
   const handlung=b=>["aufgabe","personen","fa","weiche","tun","kampf","optionen"].includes(b.t)||(b.t==="gruppe"&&!!b.aufgabe);
   const n=ab.length?ab[ab.length-1]+1:0;
-  for(let a=0;a<n;a++) pruefe(bl.some((b,j)=>ab[j]===a&&(gelb(b)||handlung(b))), wo+": Abschnitt "+a+" hat weder Vorlesetext noch etwas zu tun");
+  for(let a=0;a<n;a++) pruefe(bl.some((b,j)=>ab[j]===a&&(gelb(b)||handlung(b)||b.t==="wenn"||(b.ur||b).abschnitt===true)) || (bl[ab.indexOf(a+1)] && (bl[ab.indexOf(a+1)].ur||bl[ab.indexOf(a+1)]).abschnitt===true),
+    wo+": Abschnitt "+a+" ist nur eine Regie-Notiz");
+  /* Jeder neue Vorlesetext mit eigenem Titel beginnt einen eigenen Abschnitt — ausser er ist das direkte Ergebnis eines Klicks */
+  bl.forEach((b,j)=>{ if(j && (b.t==="vorlesen"||b.t==="gruppe") && b.titel && gelb(bl[j-1]) && !bl[j-1].aufgabe && bl[j-1].t!=="sagen")
+    pruefe(ab[j]!==ab[j-1], wo+": zwei Vorlesetexte in einem Abschnitt: „"+b.titel+"“"); });
   bl.forEach((b,j)=>{
     if(!j) return;
     const v=bl[j-1];
@@ -688,30 +692,35 @@ el("zuruecksetzen").onclick(); pruefe(T.Z().gefahr===0 && !T.Z().wissen.anneke &
 if(T.abschnittWeiter){
   const offen=()=>(text().match(/<div class="abschnitt[ "]/g)||[]).length;
   const knopf=()=>/data-abschnitt-weiter="1"/.test(text()), gesperrt=()=>/data-abschnitt-weiter="1" disabled/.test(text());
-  /* Strasse: drei Abschnitte; der zweite erst, wenn oben angeklickt ist, was die Wölfe tun */
+  const eingeblendet=()=>(text().match(/<div class="abschnitt[^"]* neu[ "]/g)||[]).length;
+  /* Strasse: Wölfe · Sumpf · Würfeln · Wachen — der zweite erst, wenn angeklickt ist, was die Wölfe tun */
   frisch(); T.waehle("e1",optIdx("e1","weg_a")); T.geheZu(S.berg);
-  pruefe(offen()===1 && knopf(), "Abschnitte: eine neue Seite zeigt nicht genau den ersten Abschnitt mit Weiter-Knopf");
+  pruefe(offen()===1 && knopf() && eingeblendet()===0, "Abschnitte: eine neue Seite zeigt nicht genau den ersten Abschnitt mit Weiter-Knopf");
   pruefe(gesperrt(), "Abschnitte: Weiter ist frei, obwohl die Wolf-Weiche offen ist");
   T.abschnittWeiter(); pruefe(offen()===1, "Abschnitte: Weiter deckt trotz offener Weiche auf");
   T.stelleWeiche("woelfe","geholfen");
   pruefe(offen()===1 && text().includes(D("Die Wölfe ziehen ab")) && !gesperrt(), "Abschnitte: das Ergebnis der Weiche erscheint nicht dort, wo geklickt wurde");
   const v0=T.verlaufLaenge(); T.abschnittWeiter();
-  pruefe(offen()===2 && text().includes('<div class="abschnitt alt" data-abschnitt="0">'), "Abschnitte: zweiter Abschnitt fehlt, oder der erste tritt nicht zurück");
+  pruefe(offen()===2 && /<div class="abschnitt alt[^"]*" data-abschnitt="0">/.test(text()), "Abschnitte: zweiter Abschnitt fehlt, oder der erste tritt nicht zurück");
+  pruefe(/<div class="abschnitt neu" data-abschnitt="1">/.test(text()) && /class="abschnitt alt wirdalt" data-abschnitt="0"/.test(text()) && /class="abschnittweiter neu"/.test(text()),
+    "Abschnitte: der neue Abschnitt wird nicht eingeblendet, oder der vorige tritt nicht sichtbar zurück");
+  T.zeichneSzene(); pruefe(eingeblendet()===0 && !/wirdalt|abschnittweiter neu/.test(text()), "Abschnitte: die Einblendung wiederholt sich bei jedem Neuzeichnen");
   pruefe(T.verlaufLaenge()===v0, "Abschnitte: Aufdecken zählt als Spielschritt für Rückgängig");
-  T.abschnittWeiter(); pruefe(offen()===3 && !knopf(), "Abschnitte: dritter Abschnitt fehlt, oder es geht vor der Wachen-Wahl schon weiter");
-  T.stelleWeiche("wache","vorbei"); pruefe(offen()===3 && !knopf() && text().includes(D("Im Hof")), "Abschnitte: „Im Hof“ erscheint nicht direkt unter der Wachen-Wahl");
+  T.abschnittWeiter(); pruefe(offen()===3 && knopf(), "Abschnitte: das Würfeln im Sumpf ist kein eigener Abschnitt");
+  T.abschnittWeiter(); pruefe(offen()===4 && !knopf(), "Abschnitte: Wachen fehlen, oder es geht vor der Wachen-Wahl schon weiter");
+  T.stelleWeiche("wache","vorbei"); pruefe(offen()===4 && !knopf() && text().includes(D("Im Hof")), "Abschnitte: „Im Hof“ erscheint nicht direkt unter der Wachen-Wahl");
   T.stelleWeiche("wache","vorbei"); T.stelleWeiche("wache","entdeckt");
-  pruefe(offen()===3 && knopf() && !gesperrt(), "Abschnitte: nach dem Wachenkampf fehlt der Weiter-Knopf zum Hof");
-  T.geheZu(S.berg+1); T.geheZu(S.berg); pruefe(offen()===3, "Abschnitte: nach dem Zurückblättern ist wieder zugedeckt");
-  T.rueckgaengig(); pruefe(offen()===3, "Abschnitte: Rückgängig deckt Text wieder zu");
+  pruefe(offen()===4 && knopf() && !gesperrt(), "Abschnitte: nach dem Wachenkampf fehlt der Weiter-Knopf zum Hof");
+  T.geheZu(S.berg+1); T.geheZu(S.berg); pruefe(offen()===4, "Abschnitte: nach dem Zurückblättern ist wieder zugedeckt");
+  T.rueckgaengig(); pruefe(offen()>=4, "Abschnitte: Rückgängig deckt Text wieder zu");
   /* Stollen: Knöpfe unten nur aus aufgedeckten Abschnitten */
   frisch(); T.waehle("e1",optIdx("e1","weg_b")); T.geheZu(S.berg); T.stelleWeiche("wache","entdeckt");
   pruefe(el("aktionen").innerHTML.includes('data-tun="stollen_luft"') && !el("aktionen").innerHTML.includes('data-tun="keller_kampf"'),
     "Abschnitte: die Aktionsleiste zeigt Knöpfe aus verdeckten Abschnitten");
   T.abschnittWeiter(); pruefe(el("aktionen").innerHTML.includes('data-tun="keller_kampf"'), "Abschnitte: Knopf fehlt nach dem Aufdecken in der Aktionsleiste");
-  /* „ganze Seite zeigen“ und der Schalter */
+  /* Wirtshaus: Raum · Gespräche · Karte; „ganze Seite zeigen“ und der Schalter */
   frisch(); T.geheZu(S.inn); pruefe(offen()===1, "Abschnitte: Wirtshaus beginnt nicht beim ersten Abschnitt");
-  T.alleAbschnitte(); pruefe(offen()===2 && !knopf(), "Abschnitte: „ganze Seite zeigen“ deckt nicht alles auf");
+  T.alleAbschnitte(); pruefe(offen()===3 && !knopf() && eingeblendet()===0, "Abschnitte: „ganze Seite zeigen“ deckt nicht alles auf");
   T.geheZu(1); T.schalteAbschnitte(); pruefe(offen()===1 && !knopf() && text().includes(D("Die Ankunft")), "Abschnitte: ausgeschaltet steht nicht die ganze Seite da");
   T.schalteAbschnitte(); pruefe(offen()===1 && knopf(), "Abschnitte: wieder eingeschaltet beginnt die Seite nicht beim ersten Abschnitt");
   T.Z().abschnitte["1"]=3; el("zuruecksetzen").onclick(); T.geheZu(1); pruefe(offen()===1, "Abschnitte: Neue Runde behält aufgedeckte Abschnitte");
