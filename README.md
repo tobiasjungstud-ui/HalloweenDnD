@@ -385,12 +385,16 @@ Code nebeneinander (`text` lang, `kurz` kurz); der Schalter wechselt nur die Anz
 sonst etwas zu ändern — auch Talent-Gelegenheiten funktionieren in beiden Fassungen, ihr
 angekündigter Satz steht wortgleich in der Kurzfassung. Aus schaltet auf die volle Länge.
 
-**Text in Abschnitten.** Eine Seite kommt Stück für Stück — standardmässig an, abschaltbar hinter
-dem Zahnrad. Ein Abschnitt ist die kleinste Einheit, die am Tisch für sich steht: ein Vorlesetext
-mit allem, was direkt dazugehört. Darunter steht, mittig und mit Luft, der Knopf **„Weiter im
-Text“** mit dem Titel dessen, was als Nächstes kommt; beim Aufdecken steigt der neue Abschnitt
-sanft auf, der vorige tritt zurück, und die Seite scrollt mit (bei „Bewegung reduzieren“ ohne
-Animation). Die Regeln (`abschnittIndex` im Skript):
+**Text in Abschnitten.** Eine Seite kommt Abschnitt für Abschnitt — standardmässig an, abschaltbar
+hinter dem Zahnrad. Ein Abschnitt ist die kleinste Einheit, die am Tisch für sich steht: ein
+Vorlesetext mit allem, was direkt dazugehört. Es steht immer **nur einer** da. Unten, mittig und
+mit Luft, stehen **„Zurück“** und **„Weiter im Text“**, jeweils mit dem Titel des Abschnitts, zu dem
+sie führen; oben im Abschnitt stehen der Zähler und ein kurzer Weg zurück. Beim Blättern gleitet
+der alte Abschnitt hinaus und der neue herein — vorwärts von unten, zurück von oben —, und die
+Seite scrollt an seinen Anfang (bei „Bewegung reduzieren“ ohne Animation). „ganze Seite zeigen“
+zeigt alle Abschnitte untereinander, „wieder Abschnitt für Abschnitt“ kehrt dorthin zurück, wo man
+war. Tipps ohne festen Platz und der Wortschatz stehen in jedem Abschnitt, den sie betreffen.
+Die Regeln (`abschnittIndex` im Skript):
 
 - Jeder Vorlesetext mit eigenem Titel, jede eigene Aufforderung (etwa „Now each of you rolls“)
   und die Folgen-Karten nach dem Vorlesen beginnen einen neuen Abschnitt; ebenso jedes Erzählen
@@ -405,9 +409,10 @@ Animation). Die Regeln (`abschnittIndex` im Skript):
 - Redaktionelle Schnitte setzt `abschnitt:true` am Block (die Anleitung in vier Schritten, der
   Graf erscheint, der Weg hinunter im Epilog).
 
-Die Knöpfe unten zeigen nur, was schon aufgedeckt ist. Aufdecken ist kein Spielschritt:
-Rückgängig deckt nichts wieder zu, Zurückblättern auch nicht; „Neue Runde“ beginnt jede Seite
-wieder beim ersten Abschnitt.
+Die Knöpfe unten zeigen, was bis zum sichtbaren Abschnitt vorkam — ein Kampf von eben bleibt
+greifbar, ein späterer nicht. Blättern ist kein Spielschritt: Rückgängig blättert nicht, und wer
+die Seite wechselt und zurückkommt, steht wieder beim selben Abschnitt; „Neue Runde“ beginnt
+jede Seite beim ersten.
 
 **Sprache der Spielleitung.** Der Schalter **„Alles auf Englisch“** hinter dem Zahnrad stellt
 alles, was sonst deutsch ist — Hintergrund, Tipps, Hinweise, Antworten der Figuren, Karten,

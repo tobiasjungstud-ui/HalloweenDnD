@@ -434,44 +434,58 @@ input{font:inherit;color:inherit}
 /* Abschnitte: die Seite kommt Stück für Stück. Die Hülle hat keinen eigenen Kasten (display:contents),
    damit das Raster aus Rand, Text und Tipps unverändert durchläuft. Was schon gespielt ist, tritt zurück. */
 .abschnitt{display:contents}
-.abschnitt.alt>*{opacity:.58;transition:opacity .2s}
-.abschnitt.alt>*:hover,.abschnitt.alt>*:focus-within{opacity:1}
-.abschnitt>*:first-child{scroll-margin-top:calc(var(--barhoehe) + 34px)}
-/* Einblenden: nur im Moment des Aufdeckens. Der neue Abschnitt steigt Element für Element auf,
-   der vorige tritt im selben Zug zurück. */
-@keyframes ab-ein{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-@keyframes ab-zurueck{from{opacity:1}to{opacity:.58}}
+/* Ein Abschnitt zur Zeit. Beim Blättern gleitet der alte hinaus und der neue herein —
+   vorwärts von unten nach oben, zurück von oben nach unten. */
+@keyframes ab-raus-vor{to{opacity:0;transform:translateY(-22px)}}
+@keyframes ab-raus-zurueck{to{opacity:0;transform:translateY(22px)}}
+@keyframes ab-ein-vor{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes ab-ein-zurueck{from{opacity:0;transform:translateY(-26px)}to{opacity:1;transform:none}}
 @keyframes ab-pfeil{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
-.abschnitt.neu>*{animation:ab-ein .6s cubic-bezier(.22,.8,.3,1) both}
-.abschnitt.neu>*:nth-child(n+4){animation-delay:.09s}
-.abschnitt.neu>*:nth-child(n+7){animation-delay:.18s}
-.abschnitt.neu>*:nth-child(n+10){animation-delay:.27s}
-.abschnitt.wirdalt>*{animation:ab-zurueck .5s ease}
-.abschnittweiter.neu{animation:ab-ein .6s cubic-bezier(.22,.8,.3,1) .32s both}
-/* Der Weiter-Knopf: eine eigene Zeile mit Luft darüber und darunter, mittig, von Linien gefasst */
-.abschnittweiter{grid-column:2;max-width:64ch;margin:46px 0 78px;display:flex;flex-direction:column;align-items:center;gap:10px}
-.abschnittweiter .aw-zeile{display:flex;align-items:center;gap:18px;width:100%}
-.abschnittweiter .aw-linie{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,164,87,.45))}
-.abschnittweiter .aw-linie:last-child{background:linear-gradient(90deg,rgba(201,164,87,.45),transparent)}
-.abschnittweiter .aw-knopf{display:flex;align-items:center;gap:16px;min-width:min(320px,100%);max-width:100%;padding:16px 26px;
-  font-family:var(--sans);text-align:left;color:var(--text);border:1px solid rgba(201,164,87,.6);border-radius:10px;
-  background:linear-gradient(180deg,rgba(201,164,87,.13),rgba(201,164,87,.05));
-  box-shadow:0 0 0 1px rgba(0,0,0,.25),0 10px 28px rgba(0,0,0,.35);transition:background .2s,border-color .2s,box-shadow .2s,transform .2s}
-.abschnittweiter .aw-knopf:hover:not(:disabled),.abschnittweiter .aw-knopf:focus-visible{border-color:var(--gold);
+.abschnitt.geht>*,.abschnittnav.geht{animation:ab-raus-vor .22s cubic-bezier(.4,0,.8,.4) both;pointer-events:none}
+.abschnitt.geht.zurueck>*,.abschnittnav.geht.zurueck{animation-name:ab-raus-zurueck}
+.abschnitt.neu>*{animation:ab-ein-vor .58s cubic-bezier(.22,.8,.3,1) both}
+.abschnitt.neu.zurueck>*{animation-name:ab-ein-zurueck}
+.abschnitt.neu>*:nth-child(n+4){animation-delay:.07s}
+.abschnitt.neu>*:nth-child(n+7){animation-delay:.14s}
+.abschnitt.neu>*:nth-child(n+10){animation-delay:.21s}
+.abschnittnav.neu{animation:ab-ein-vor .58s cubic-bezier(.22,.8,.3,1) .26s both}
+.abschnittnav.neu.zurueck{animation-name:ab-ein-zurueck}
+/* Oben im Abschnitt: wo man ist, und der Weg zurück */
+.abschnittkopf{grid-column:2;max-width:64ch;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin:-8px 0 26px;padding-bottom:10px;border-bottom:1px solid var(--line);font-family:var(--sans);font-size:12px;color:var(--dim)}
+.abschnittkopf button{color:var(--muted);font-size:12.5px;padding:4px 0}
+.abschnittkopf button:hover{color:var(--gold)}
+.abschnittkopf .ak-zahl{letter-spacing:.1em;text-transform:uppercase;font-size:10.5px}
+/* Unten: Zurück und Weiter, mittig, von Linien gefasst, mit viel Luft */
+.abschnittnav{grid-column:2;max-width:64ch;margin:46px 0 78px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.abschnittnav .aw-zeile{display:flex;align-items:center;justify-content:center;gap:14px;width:100%}
+.abschnittnav .aw-linie{flex:1;min-width:16px;height:1px;background:linear-gradient(90deg,transparent,rgba(201,164,87,.45))}
+.abschnittnav .aw-linie:last-child{background:linear-gradient(90deg,rgba(201,164,87,.45),transparent)}
+.abschnittnav .aw-knopf,.abschnittnav .aw-zurueck{display:flex;align-items:center;gap:14px;max-width:100%;font-family:var(--sans);text-align:left;
+  color:var(--text);border-radius:10px;transition:background .2s,border-color .2s,box-shadow .2s,transform .2s}
+.abschnittnav .aw-knopf{min-width:min(300px,100%);padding:16px 24px;border:1px solid rgba(201,164,87,.6);
+  background:linear-gradient(180deg,rgba(201,164,87,.13),rgba(201,164,87,.05));box-shadow:0 0 0 1px rgba(0,0,0,.25),0 10px 28px rgba(0,0,0,.35)}
+.abschnittnav .aw-knopf:hover:not(:disabled),.abschnittnav .aw-knopf:focus-visible{border-color:var(--gold);
   background:linear-gradient(180deg,rgba(201,164,87,.22),rgba(201,164,87,.09));box-shadow:0 0 0 1px rgba(0,0,0,.25),0 12px 32px rgba(0,0,0,.4),0 0 22px rgba(201,164,87,.18);transform:translateY(-1px)}
-.abschnittweiter .aw-knopf:disabled{opacity:.5;cursor:not-allowed;border-style:dashed;box-shadow:none}
-.abschnittweiter .aw-text{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
-.abschnittweiter .aw-text b{font-weight:500;font-size:15px;letter-spacing:.02em}
-.abschnittweiter .aw-text em{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--gold-soft);overflow-wrap:anywhere}
-.abschnittweiter .aw-pfeil{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:50%;
+.abschnittnav .aw-knopf:disabled{opacity:.5;cursor:not-allowed;border-style:dashed;box-shadow:none}
+.abschnittnav .aw-zurueck{padding:12px 16px;border:1px solid var(--line-hi);background:rgba(255,255,255,.02);color:var(--muted)}
+.abschnittnav .aw-zurueck:hover,.abschnittnav .aw-zurueck:focus-visible{border-color:rgba(201,164,87,.5);color:var(--text)}
+.abschnittnav .aw-text{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.abschnittnav .aw-text b{font-weight:500;font-size:15px;letter-spacing:.02em}
+.abschnittnav .aw-zurueck .aw-text b{font-size:13px}
+.abschnittnav .aw-text em{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--gold-soft);overflow-wrap:anywhere}
+.abschnittnav .aw-zurueck .aw-text em{font-size:14px;color:var(--muted)}
+.abschnittnav .aw-pfeil{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:50%;
   border:1px solid rgba(201,164,87,.5);color:var(--gold);font-size:17px;line-height:1}
-.abschnittweiter .aw-knopf:not(:disabled) .aw-pfeil span{display:block;animation:ab-pfeil 2.4s ease-in-out infinite}
-.abschnittweiter .aw-zahl{font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
-.abschnittweiter .aw-sperre{margin:0;font-family:var(--sans);font-size:12.5px;color:var(--gold);text-align:center}
-.abschnittweiter .aw-alle{font-family:var(--sans);font-size:11.5px;color:var(--dim);text-decoration:underline;text-underline-offset:3px}
-.abschnittweiter .aw-alle:hover{color:var(--text)}
+.abschnittnav .aw-zurueck .aw-pfeil{width:28px;height:28px;font-size:14px;border-color:var(--line-hi);color:var(--muted)}
+.abschnittnav .aw-knopf:not(:disabled) .aw-pfeil span{display:block;animation:ab-pfeil 2.4s ease-in-out infinite}
+.abschnittnav .aw-zahl{font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.abschnittnav .aw-sperre{margin:0;font-family:var(--sans);font-size:12.5px;color:var(--gold);text-align:center}
+.abschnittnav .aw-alle{font-family:var(--sans);font-size:11.5px;color:var(--dim);text-decoration:underline;text-underline-offset:3px}
+.abschnittnav .aw-alle:hover{color:var(--text)}
+@media (max-width:760px){ .abschnittnav .aw-zeile{flex-wrap:wrap} .abschnittnav .aw-linie{display:none} }
 @media (prefers-reduced-motion:reduce){
-  .abschnitt.neu>*,.abschnitt.wirdalt>*,.abschnittweiter.neu,.abschnittweiter .aw-knopf .aw-pfeil span{animation:none!important}
+  .abschnitt.neu>*,.abschnitt.geht>*,.abschnittnav.neu,.abschnittnav.geht,.abschnittnav .aw-knopf .aw-pfeil span{animation:none!important}
 }
 .hbox.wortschatz dl{margin:0}
 .hbox.wortschatz dt{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--gold-soft);margin-top:6px}
@@ -2696,6 +2710,11 @@ const EN = {
 "Ganze Seite auf einmal zeigen":"Show the whole page at once",
 "Text abschnittweise zeigen":"Show the text section by section",
 "Weiter im Text":"Continue",
+"Zurück":"Back",
+"zurück zu: {0}":"back to: {0}",
+"vorheriger Abschnitt":"previous section",
+"Ende der Seite":"end of page",
+"wieder Abschnitt für Abschnitt":"back to section by section",
 "Abschnitt {0} von {1}":"Section {0} of {1}",
 "ganze Seite zeigen":"show whole page",
 "Erst oben anklicken, was am Tisch passiert ist: {0}":"First click above what happened at the table: {0}",
@@ -2883,9 +2902,10 @@ function gesprochenerText(b){
   return t.join(" ");
 }
 /* Je Block die Wörter, die dort zum ersten Mal auf dieser Seite fallen */
-function wortschatzVerteilen(bl){
+function wortschatzVerteilen(bl, ab){
   const schon=new Set();
-  return bl.map(b=>{
+  return bl.map((b,j)=>{
+    if(ab && j && ab[j]!==ab[j-1]) schon.clear();   /* steht nur ein Abschnitt da, erklärt jeder seine Wörter selbst */
     const txt=gesprochenerText(b);
     return WORTSCHATZ.filter((e,i)=>{ if(schon.has(i) || !WORTSCHATZ_RE[i].test(txt)) return false; schon.add(i); return true; });
   });
@@ -2977,7 +2997,14 @@ function abschnittIndex(bl){
   return roh.map(a=>neuNr[a]);
 }
 function seitenSchluessel(){ return Z.imZwischenakt ? "za" : String(Z.schritt); }
-function aufgedeckt(){ return Math.max(1, (Z.abschnitte||{})[seitenSchluessel()] || 1); }
+/* Gespeichert je Seite: n = Abschnitt n-1 ist zu sehen; 99 = ganze Seite; −n = ganze Seite, zuletzt bei Abschnitt n-1 */
+function abschnittStand(){
+  const v=(Z.abschnitte||{})[seitenSchluessel()];
+  if(typeof v!=="number" || v===0) return {a:0, alle:false};
+  if(v===99) return {a:0, alle:true};
+  return v<0 ? {a:-v-1, alle:true} : {a:v-1, alle:false};
+}
+function setzeAbschnitt(a, alle){ if(!Z.abschnitte) Z.abschnitte={}; Z.abschnitte[seitenSchluessel()] = alle ? -(a+1) : a+1; sichern(); }
 /* Was den nächsten Abschnitt noch sperrt: eine offene Weiche oder Karte im letzten sichtbaren */
 function abschnittSperre(bl, ab, letzter){
   const w=bl.find((b,i)=>ab[i]===letzter && b.t==="weiche" && b.art!=="festhalten" && (Z.weichen||{})[b.id]===undefined);
@@ -2993,32 +3020,63 @@ function abschnittVorschau(bl, ab, a){
   if(b.t==="aufgabe") return tr(AUFFORDERUNG).replace(/&shy;/g,"");
   return {personen:tr("Mögliche Antworten"), regie:tr("Hintergrund")}[b.t] || "";
 }
-function abschnittWeiterHTML(bl, ab, offen, anzahl, neu){
-  const vorschau=abschnittVorschau(bl, ab, offen), sperre=abschnittSperre(bl, ab, offen-1);
-  return '<div class="abschnittweiter'+(neu?" neu":"")+'"><div class="aw-zeile"><span class="aw-linie"></span>'+
-    '<button class="aw-knopf" data-abschnitt-weiter="1"'+(sperre?" disabled":"")+'>'+
-    '<span class="aw-text"><b>'+tr("Weiter im Text")+'</b>'+(vorschau?'<em>'+vorschau+'</em>':'')+'</span>'+
-    '<span class="aw-pfeil" aria-hidden="true"><span>↓</span></span></button><span class="aw-linie"></span></div>'+
-    '<small class="aw-zahl">'+trf("Abschnitt {0} von {1}", offen+1, anzahl)+'</small>'+
+/* Oben im Abschnitt: wo man ist, und ein kurzer Weg zurück */
+function abschnittKopfHTML(bl, ab, a, anzahl){
+  return '<div class="abschnittkopf">'+(a>0?'<button data-abschnitt-zurueck="1">↑ '+trf("zurück zu: {0}", abschnittVorschau(bl, ab, a-1)||tr("vorheriger Abschnitt"))+'</button>':'<span></span>')+
+    '<span class="ak-zahl">'+trf("Abschnitt {0} von {1}", a+1, anzahl)+'</span></div>';
+}
+/* Unten: Zurück und Weiter */
+function abschnittNavHTML(bl, ab, a, anzahl, klasse){
+  const weiter=a<anzahl-1, sperre=weiter?abschnittSperre(bl, ab, a):"", zurueck=abschnittVorschau(bl, ab, a-1), vor=abschnittVorschau(bl, ab, a+1);
+  return '<div class="abschnittnav'+klasse+'"><div class="aw-zeile"><span class="aw-linie"></span>'+
+    (a>0?'<button class="aw-zurueck" data-abschnitt-zurueck="1"><span class="aw-pfeil" aria-hidden="true"><span>↑</span></span>'+
+      '<span class="aw-text"><b>'+tr("Zurück")+'</b>'+(zurueck?'<em>'+zurueck+'</em>':'')+'</span></button>':'')+
+    (weiter?'<button class="aw-knopf" data-abschnitt-weiter="1"'+(sperre?" disabled":"")+'>'+
+      '<span class="aw-text"><b>'+tr("Weiter im Text")+'</b>'+(vor?'<em>'+vor+'</em>':'')+'</span>'+
+      '<span class="aw-pfeil" aria-hidden="true"><span>↓</span></span></button>':'')+
+    '<span class="aw-linie"></span></div>'+
+    '<small class="aw-zahl">'+trf("Abschnitt {0} von {1}", a+1, anzahl)+(weiter?'':' · '+tr("Ende der Seite"))+'</small>'+
     (sperre?'<p class="aw-sperre">'+sperre+'</p>':'')+
     '<button class="aw-alle" data-abschnitt-alle="1">'+tr("ganze Seite zeigen")+'</button></div>';
 }
-/* Welcher Abschnitt gerade aufgedeckt wird — nur für das eine Zeichnen, das ihn einblendet */
-let ABSCHNITT_NEU = null;
+/* Welcher Abschnitt gerade hereingleitet, und aus welcher Richtung — nur für das eine Zeichnen */
+let ABSCHNITT_NEU = null, ABSCHNITT_WECHSEL = false;
 /* Den nächsten Abschnitt aufdecken — nicht über eine offene Weiche hinweg */
-function abschnittWeiter(){
-  const k=aktuelleSzene(); if(k.braucht && entscheidungOffen(k.braucht)) return;
-  const bl=karten(sichtbareBloecke(k)), ab=abschnittIndex(bl), anzahl=bl.length?ab[bl.length-1]+1:0, n=Math.min(aufgedeckt(), anzahl);
-  if(n>=anzahl || abschnittSperre(bl, ab, n-1)) return;
-  if(!Z.abschnitte) Z.abschnitte={};
-  Z.abschnitte[seitenSchluessel()]=n+1; sichern();
-  ABSCHNITT_NEU={key:seitenSchluessel(), n}; try{ zeichneSzene(); } finally { ABSCHNITT_NEU=null; }
-  if(typeof document.querySelector==="function"){
-    const h=document.querySelector('.abschnitt[data-abschnitt="'+n+'"]'), e=h && h.firstElementChild;
-    if(e && e.scrollIntoView) e.scrollIntoView({behavior:"smooth", block:"start"});
-  }
+function abschnittLage(){
+  const k=aktuelleSzene(); if(k.braucht && entscheidungOffen(k.braucht)) return null;
+  const bl=karten(sichtbareBloecke(k)), ab=abschnittIndex(bl), anzahl=bl.length?ab[bl.length-1]+1:0, st=abschnittStand();
+  return {bl, ab, anzahl, a:Math.min(st.a, Math.max(0,anzahl-1)), alle:st.alle};
 }
-function alleAbschnitte(){ if(!Z.abschnitte) Z.abschnitte={}; Z.abschnitte[seitenSchluessel()]=99; sichern(); zeichneSzene(); }
+/* Blättern: der Stand wechselt sofort; im Browser gleitet der alte Abschnitt erst hinaus,
+   dann wird der neue gezeichnet und gleitet herein. Ohne Animation (Prüfstand, „Bewegung
+   reduzieren“) wird gleich gezeichnet. */
+function abschnittWechseln(ziel, richtung){
+  setzeAbschnitt(ziel, false);
+  const zeichne=()=>{ ABSCHNITT_NEU={key:seitenSchluessel(), n:ziel, richtung}; try{ zeichneSzene(); } finally { ABSCHNITT_NEU=null; }
+    const bk=$("bloecke");
+    if(bk && bk.getBoundingClientRect && window.scrollTo){
+      const oben=bk.getBoundingClientRect().top + (window.scrollY||0) - (parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--barhoehe"))||48) - 24;
+      if((window.scrollY||0) > oben) window.scrollTo({top:Math.max(0,oben), behavior:"smooth"});
+    } };
+  const ruhig = typeof document.querySelector!=="function" || (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  const alt = ruhig ? null : document.querySelector(".abschnitt[data-abschnitt]");
+  if(!alt){ zeichne(); return; }
+  ABSCHNITT_WECHSEL=true;
+  const nav=document.querySelector(".abschnittnav");
+  [alt, nav].forEach(e=>{ if(e) e.classList.add("geht", richtung); });
+  setTimeout(()=>{ ABSCHNITT_WECHSEL=false; zeichne(); }, 210);
+}
+function abschnittWeiter(){
+  const l=abschnittLage(); if(!l || ABSCHNITT_WECHSEL || l.alle) return;
+  if(l.a>=l.anzahl-1 || abschnittSperre(l.bl, l.ab, l.a)) return;
+  abschnittWechseln(l.a+1, "vor");
+}
+function abschnittZurueck(){
+  const l=abschnittLage(); if(!l || ABSCHNITT_WECHSEL || l.alle || l.a<=0) return;
+  abschnittWechseln(l.a-1, "zurueck");
+}
+function alleAbschnitte(){ setzeAbschnitt(abschnittStand().a, true); zeichneSzene(); }
+function einzelneAbschnitte(){ setzeAbschnitt(abschnittStand().a, false); zeichneSzene(); }
 function schalteStimmen(){
   ZEIGE_STIMMEN = !ZEIGE_STIMMEN;
   try{ localStorage.setItem(STIMM_SCHLUESSEL, ZEIGE_STIMMEN?"1":"0"); }catch(e){}
@@ -4072,13 +4130,14 @@ function blockText(b){
 }
 function blockAnker(b){ return b.anker || (b.aufgabe&&b.aufgabe.anker) || null; }
 /* Verteilt Regeln und Stärken auf die Blöcke: je Block eine (womöglich leere) Hilfespalte */
-function hilfeVerteilen(k, bl){
+function hilfeVerteilen(k, bl, ab, ziel){
+  ziel = ziel||0;
   const fach = bl.map(()=>({regeln:[], chancen:[]}));
   if(!bl.length) return [];
   const namen={}; Z.gruppe.forEach(h=>{ namen[h.rolle]=h.name||h.rolle; });
   sichtbareChancen(k).forEach(c=>{
     let i = bl.findIndex(b=>blockText(b).indexOf(c.cue)>=0);
-    if(i<0) i = 0;
+    if(i<0) i = ziel;
     fach[i].chancen.push(chanceHTML(c, namen[c.wer]||c.wer));
   });
   const offen=[];
@@ -4086,8 +4145,8 @@ function hilfeVerteilen(k, bl){
     const i = r.bei ? bl.findIndex(b=>blockAnker(b)===r.bei) : -1;
     if(i>=0) fach[i].regeln.push(r); else offen.push(r);
   });
-  if(offen.length) fach[0].regeln = offen.concat(fach[0].regeln);
-  const woerter = wortschatzVerteilen(bl);
+  if(offen.length) fach[ziel].regeln = offen.concat(fach[ziel].regeln);
+  const woerter = wortschatzVerteilen(bl, ab);
   /* vor = neben den Vorlesetext (dort steht die Ankündigung, darunter der Wortschatz), nach = neben die Aufforderung */
   return fach.map((f,i)=>({vor:f.chancen.join("")+wortschatzHTML(woerter[i]), nach:f.regeln.length?regelnHTML(f.regeln):""}));
 }
@@ -4287,8 +4346,11 @@ function zeichneSzene(){
   $("warnbox").innerHTML=warnungenHTML();
   const fehlt = !!(k.braucht && entscheidungOffen(k.braucht));
   const bl = fehlt ? [] : karten(sichtbareBloecke(k));
-  const ab = abschnittIndex(bl), anzahl = bl.length ? ab[bl.length-1]+1 : 0, offen = Math.min(aufgedeckt(), anzahl);
-  const hilfen = hilfeVerteilen(k, bl), laeufe = vorleseLauf(bl, ab);
+  const ab = abschnittIndex(bl), anzahl = bl.length ? ab[bl.length-1]+1 : 0, st = abschnittStand();
+  const einzeln = anzahl>1 && !st.alle, jetztA = Math.min(st.a, Math.max(0, anzahl-1));
+  const zeigt = i => !einzeln || ab[i]===jetztA;
+  /* Tipps ohne festen Platz stehen beim ersten Block, der gerade zu sehen ist */
+  const hilfen = hilfeVerteilen(k, bl, einzeln?ab:null, einzeln?Math.max(0, ab.indexOf(jetztA)):0), laeufe = vorleseLauf(bl, ab);
   const zB = k.bloecke.find(b=>b.t==="ziel");
   const minuten = BUDGET_MIN[k.titel];
   $("zielband").innerHTML = zB
@@ -4302,20 +4364,25 @@ function zeichneSzene(){
     ? '<div class="hinweisfehlt">'+trf("Auf dieser Seite steht nur, was zu eurem Weg gehört — und <b>{0}</b> ist noch nicht gewählt. Geh zurück und klick die Karte an, für die sich die Gruppe entschieden hat.", tr(ENTSCHEIDUNGEN[k.braucht].name))+'</div>'
     : szeneHTML());
   function szeneHTML(){
-    /* Wortstützen nach der ersten Aufforderung — liegt die noch verdeckt, unter dem sichtbaren Teil */
-    const woIdx = (ersteAufgabe>=0 && ab[ersteAufgabe]<offen) ? ersteAufgabe : -1;
+    /* Wortstützen nach der ersten Aufforderung — steht die nicht im sichtbaren Abschnitt, an seinem Ende */
+    const woIdx = (ersteAufgabe>=0 && zeigt(ersteAufgabe)) ? ersteAufgabe : -1;
+    const neu = (ABSCHNITT_NEU && ABSCHNITT_NEU.key===seitenSchluessel()) ? ABSCHNITT_NEU : null;
+    const klasse = neu ? " neu "+neu.richtung : "";
     let html="", jetzt=-1;
-    const neuNr = (ABSCHNITT_NEU && ABSCHNITT_NEU.key===seitenSchluessel()) ? ABSCHNITT_NEU.n : -1;
     bl.forEach((b,i)=>{
-      if(ab[i]>=offen) return;
+      if(!zeigt(i)) return;
       if(ab[i]!==jetzt){ if(jetzt>=0) html+='</div>'; jetzt=ab[i];
-        html+='<div class="abschnitt'+(jetzt<offen-1?" alt":"")+(jetzt===neuNr?" neu":"")+(neuNr>0&&jetzt===neuNr-1?" wirdalt":"")+'" data-abschnitt="'+jetzt+'">'; }
+        html+='<div class="abschnitt'+(einzeln?klasse:"")+'" data-abschnitt="'+jetzt+'">'+(einzeln?abschnittKopfHTML(bl, ab, jetzt, anzahl):""); }
       html+=blockHTML(b, i+1, hilfen[i], laeufe[i])+(i===woIdx?woerterHTML:"");
     });
+    if(woIdx<0) html+=woerterHTML;
     if(jetzt>=0) html+='</div>';
-    return html+(woIdx<0?woerterHTML:"")+(offen<anzahl?abschnittWeiterHTML(bl, ab, offen, anzahl, neuNr>=0):"");
+    if(einzeln) html+=abschnittNavHTML(bl, ab, jetztA, anzahl, klasse);
+    else if(st.alle && anzahl>1) html+='<div class="abschnittnav"><button class="aw-alle" data-abschnitt-einzeln="1">'+tr("wieder Abschnitt für Abschnitt")+'</button></div>';
+    return html;
   }
-  $("aktionen").innerHTML = aktionenHTML(k, fehlt, new Set(bl.filter((b,i)=>ab[i]<offen)));
+  /* Knöpfe unten: alles bis zum sichtbaren Abschnitt — ein Kampf von eben bleibt greifbar */
+  $("aktionen").innerHTML = aktionenHTML(k, fehlt, new Set(bl.filter((b,i)=>!einzeln || ab[i]<=jetztA)));
   if(Z.imZwischenakt){
     $("kschritt").textContent=tr("Zwischenakt");
     $("zurueck").disabled=false; $("vor").disabled=false;
@@ -4635,6 +4702,8 @@ document.addEventListener("click", e=>{
   const l=t.closest("[data-laden]"); if(l){ ladeKampf(l.dataset.laden.split(","), l.dataset.extra||null); if(l.dataset.oeffnen) oeffneKampf(); return; }
   if(t.closest("[data-abschnitt-weiter]")) return abschnittWeiter();
   if(t.closest("[data-abschnitt-alle]")) return alleAbschnitte();
+  if(t.closest("[data-abschnitt-einzeln]")) return einzelneAbschnitte();
+  if(t.closest("[data-abschnitt-zurueck]")) return abschnittZurueck();
   if(t.closest("#abschnittschalter")) return schalteAbschnitte();
   if(t.closest("#sprachschalter")) return schalteSprache();
   if(t.closest("#kurzschalter")) return schalteKurz();
