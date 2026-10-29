@@ -77,7 +77,7 @@ dialog.gross img{width:100%;height:100%;object-fit:contain;display:block}
 .lesen h3{color:var(--gold)}
 .lesen p{font-family:var(--serif);font-size:20px;line-height:1.6;margin:0 0 10px;color:#efe6cf}
 .lesen p:last-child{margin-bottom:0}
-.lesen .wer{font-family:var(--sans);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:0 0 4px}
+.lesen .wer{font-family:var(--sans);font-size:15px;font-weight:600;color:var(--gold);margin:0 0 4px}
 .frage{background:#1e2a22;border-color:#355241}
 .frage h3{color:var(--green)}
 .frage .sag{font-family:var(--serif);font-size:20px;line-height:1.55;color:var(--green-soft);margin:0}
@@ -195,7 +195,7 @@ const SEITEN = [
  {t:"lesen", titel:"The ride", text:[
   "You sit in a carriage. It goes up the mountain for six hours. Outside there are only trees and fog.",
   "Something runs next to the carriage in the trees — fast and low. Then it is gone. The driver does not look. Then he speaks, for the first time."]},
- {t:"lesen", wer:"Marek, the driver", text:["Nobody comes up here in November. So — who are you? And what do you want here?"]},
+ {t:"lesen", wer:"Marek", text:["Nobody comes up here in November. So — who are you? And what do you want here?"]},
  {t:"frage", sag:"Tell Marek who you are. Each of you: your name, what you can do, and why you are here.", hilfe:"Zwei bis drei Sätze pro Figur — die Spielerblätter helfen. Sagt jemand nur einen Satz, brummt Marek: „That’s all? Tell me more.“"},
  {t:"leute", leute:[
   {name:"Marek", wer:"Kutscher", spielt:"Grimmig, sagt wenig. Antwortet kurz.", fragen:[
@@ -239,7 +239,7 @@ const SEITEN = [
 ]},
 
 {titel:"The Way Up", bild:{weg:{strasse:"galgen",stollen:"stollen",kutsche:"kutsche"}, sonst:"karte"}, zeit:6, ziel:"<b>Entscheidung 1.</b> Die Gruppe wählt einen Weg. Alle drei führen in den Schlosshof — sie kosten Verschiedenes.", bloecke:[
- {t:"lesen", wer:"You, the narrator", text:[
+ {t:"lesen", titel:"You, the narrator", text:[
   "There are three ways up the mountain.",
   "One: the old road. It is fast — but everybody can see you.",
   "Two: the old mine, through the mountain. Nobody can see you — but it is very dark, and somebody may be down there.",
@@ -267,7 +267,7 @@ const SEITEN = [
  {t:"lesen", nur:"weg=kutsche", titel:"The coach", text:[
   "At midnight a black coach stops in front of the inn. The driver is very friendly. “Get in, get in! You want to see the castle?”",
   "He drives with no lamp, and he never looks at the road. His hands are ice-cold. In the window you can see your faces — but not his face."]},
- {t:"lesen", nur:"weg=kutsche", wer:"Corvin, the driver", text:["And what are your names? And what do you want up there?"]},
+ {t:"lesen", nur:"weg=kutsche", wer:"Corvin", text:["And what are your names? And what do you want up there?"]},
  {t:"frage", nur:"weg=kutsche", sag:"Answer Corvin. And look at him — do you notice anything strange?", hilfe:"Merken sie etwas (kalte Hände, kein Spiegelbild)? Schön — er meldet sie trotzdem dem Grafen. Die Gefahr ist schon eingetragen."},
  {t:"lesen", nur:"weg=kutsche", text:["Twenty minutes later the coach stops in the courtyard of the castle. Corvin smiles. “Have a nice night.” Then he is gone."]},
  {t:"wort", w:[["a mine","ein Bergwerk, Stollen"],["a guard","ein Wächter"],["to notice","bemerken"]]},
@@ -451,7 +451,7 @@ function block(b, si, bi){
   switch(b.t){
   case "regie": return `<div class="block regie">${b.titel?`<h3>${esc(b.titel)}</h3>`:""}${b.text}</div>`;
   case "knapp": return `<div class="block regie knapp-hinweis"><h3>Zeit knapp?</h3>${b.text}</div>`;
-  case "lesen": return `<div class="block lesen">${titel}${b.wer?`<p class="wer">${esc(b.wer)}</p>`:""}${absaetze(b.text)}</div>`;
+  case "lesen": return `<div class="block lesen">${titel}${b.wer?`<p class="wer">${esc(b.wer)} says:</p>`:""}${absaetze(b.text)}</div>`;
   case "frage": return `<div class="block frage"><h3>Say to the group</h3><p class="sag">${esc(b.sag)}</p>${b.hilfe?`<p class="hilfe">${b.hilfe}</p>`:""}</div>`;
   case "wort": return `<div class="block wort"><h3>Wortschatz — falls jemand fragt</h3><ul>${b.w.map(([e,d])=>`<li><b>${esc(e)}</b> — ${esc(d)}</li>`).join("")}</ul></div>`;
   case "leute": return `<div class="block leute">${b.leute.map((p,pi)=>`<div class="person"><div class="name">${esc(p.name)}<small>${esc(p.wer)}</small></div><div class="spielt">${p.spielt}</div>${
