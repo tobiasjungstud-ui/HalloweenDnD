@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nachtfels Geschichtenblatt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap">
+<style>
+/* Ein A4-Blatt für Zweiergruppen. Oben am Bildschirm wählt die Lehrperson die Anschlussaufgabe; gedruckt wird nur die gewählte. */
+:root{--ink:#1d1b18;--soft:#5b564e;--line:#c9c1b2;--paper:#fffdf8;--farbe:#7a3b2e;--bg:#e9e5dc}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Literata',Georgia,serif;font-size:14.5px;line-height:1.45}
+.lehrer{max-width:210mm;margin:18px auto 0;padding:0 16px;font-family:system-ui,sans-serif;font-size:14px;color:var(--soft);display:flex;flex-direction:column;gap:10px}
+.lehrer h2{font-size:15px;margin:0;color:var(--ink)}
+.wahl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.wahl label{display:flex;flex-direction:column;gap:3px;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:10px 12px;cursor:pointer}
+.wahl label:has(input:checked){border-color:var(--farbe);box-shadow:0 0 0 1px var(--farbe)}
+.wahl b{color:var(--ink)} .wahl span{font-size:13px}
+.wahl input{position:absolute;opacity:0}
+.blatt{width:210mm;min-height:297mm;margin:18px auto;background:var(--paper);padding:13mm 15mm;box-shadow:0 2px 14px #0002;display:flex;flex-direction:column;gap:9px;border-top:8px solid var(--farbe)}
+.oben{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;border-bottom:1px solid var(--line);padding-bottom:7px}
+.oben .spiel{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--soft)}
+h1{font-family:'IM Fell English SC',Georgia,serif;font-weight:400;font-size:38px;line-height:1;margin:2px 0 0;color:var(--farbe)}
+.namen{font-size:13.5px;color:var(--soft);display:flex;flex-direction:column;gap:6px}
+.namen span{display:inline-block;width:55mm;border-bottom:1px solid var(--ink);margin-left:6px}
+h3{font-family:'IM Fell English SC',Georgia,serif;font-weight:400;font-size:20px;margin:0 0 4px;color:var(--farbe)}
+h3 small{font-family:'Literata',Georgia,serif;font-size:12.5px;color:var(--soft);margin-left:6px}
+.feld{border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+.feld p{margin:0 0 5px}.feld p:last-child{margin:0}
+.plan{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.plan div{border:1px solid var(--line);border-radius:6px;padding:6px 9px;min-height:19mm;font-size:13.5px}
+.plan b{display:block;color:var(--farbe)}
+.plan i{color:var(--soft);font-size:12.5px}
+ul.check{list-style:none;margin:0;padding:0;columns:2;column-gap:16px}
+ul.check li{margin:3px 0;break-inside:avoid;padding-left:22px;position:relative}
+ul.check li::before{content:"";position:absolute;left:0;top:3px;width:13px;height:13px;border:1.5px solid var(--ink);border-radius:2px}
+.woerter{font-size:13px;color:var(--soft)}
+.woerter b{color:var(--ink);font-weight:600}
+.linien{flex:1;min-height:60mm;background:repeating-linear-gradient(to bottom,transparent 0 8.4mm,var(--line) 8.4mm calc(8.4mm + 1px))}
+.schreiben{flex:1;display:flex;flex-direction:column}
+.danach ol{margin:4px 0 0;padding-left:20px}
+.danach li{margin:2px 0}
+@page{size:A4;margin:0}
+@media print{
+  body{background:none}
+  .lehrer{display:none}
+  .blatt{margin:0;box-shadow:none;width:210mm;height:297mm;min-height:0;overflow:hidden}
+}
+@media screen and (max-width:230mm){
+  .blatt{width:auto;min-height:0;margin:14px 10px;padding:18px 16px}
+  .plan,.wahl{grid-template-columns:1fr}
+  ul.check{columns:1}
+  .namen span{width:40vw}
+}
+</style>
+</head>
+<body>
+<div class="lehrer">
+  <h2>Was machen sie danach mit ihrer Geschichte? Wählen — gedruckt wird nur die gewählte Aufgabe.</h2>
+  <div class="wahl" id="wahl">
+    <label><input type="radio" name="danach" value="a" checked><b>A · Play it</b><span>Zwei Paare tauschen und spielen sich die Geschichten vor: eines ist DM, das andere entscheidet. Sprechen und Zuhören. 10 Min., kein Material.</span></label>
+    <label><input type="radio" name="danach" value="b"><b>B · Gallery walk</b><span>Geschichten an die Wand, alle lesen drei und hinterlassen eine Rückmeldung. Lesen und Feedback. 10 Min., Klebezettel.</span></label>
+    <label><input type="radio" name="danach" value="c"><b>C · Story doctor</b><span>Zwei Paare tauschen und prüfen mit der Checkliste, dann wird verbessert. Schreibgenauigkeit. 15 Min., kein Material.</span></label>
+  </div>
+  <span>Ablauf: Planen 5 Min. · Schreiben 15 Min. · danach die gewählte Aufgabe. Geschrieben wird auf die Rückseite oder ein liniertes Blatt.</span>
+</div>
+
+<section class="blatt">
+  <div class="oben">
+    <div><div class="spiel">After The Bride of Nachtfels · Work in pairs</div><h1>Your Halloween Story</h1></div>
+    <div class="namen"><div>Name:<span></span></div><div>Name:<span></span></div></div>
+  </div>
+
+  <div class="feld">
+    <h3>1 · Plan your story <small>5 minutes</small></h3>
+    <div class="plan">
+      <div><b>Where?</b><i>a place: a castle, a forest, a ship, a school at night …</i></div>
+      <div><b>Who?</b><i>two heroes — their names and what they can do</i></div>
+      <div><b>What is scary?</b><i>a creature or a secret</i></div>
+      <div><b>What does it want?</b><i>a deal, a promise, help, revenge …</i></div>
+    </div>
+  </div>
+
+  <div class="feld">
+    <h3>2 · Write your story <small>15 minutes · 120–180 words</small></h3>
+    <p>Like our game: your heroes must make a <b>decision</b>. Write the story up to the decision, then two short endings.</p>
+    <ul class="check">
+      <li>a title</li>
+      <li>the story is in the past (<i>walked, saw, said</i>)</li>
+      <li>one person speaks: “…”</li>
+      <li>a decision: <b>A</b> or <b>B</b>?</li>
+      <li>Ending A — and Ending B</li>
+      <li>three words from the game (below)</li>
+    </ul>
+    <p class="woerter">Words from the game: <b>a count</b> · <b>a deal</b> · <b>to promise</b> · <b>instead of</b> · <b>an offer</b> · <b>to escape</b> · <b>a servant</b> · <b>to scream</b> · <b>fog</b> · <b>a courtyard</b> · <b>disappointed</b> · <b>dust</b></p>
+  </div>
+
+  <div class="feld schreiben"><h3>Notes <small>write the story on the back</small></h3><div class="linien"></div></div>
+
+  <div class="feld danach" data-danach="a">
+    <h3>3 · Play it! <small>10 minutes</small></h3>
+    <ol><li>Find another pair.</li><li>You are the DM: read your story to them — stop at the decision and ask: <i>“What do you do?”</i></li><li>They choose A or B. Read that ending.</li><li>Then switch: now they are the DM.</li></ol>
+  </div>
+  <div class="feld danach" data-danach="b" hidden>
+    <h3>3 · Gallery walk <small>10 minutes</small></h3>
+    <ol><li>Put your story on the wall.</li><li>Read three other stories.</li><li>On each one, leave a sticky note: <i>one thing you liked</i> + <i>one question</i> (“Why did … ?”).</li><li>At the end, vote: the scariest monster and the best decision.</li></ol>
+  </div>
+  <div class="feld danach" data-danach="c" hidden>
+    <h3>3 · Story doctor <small>15 minutes</small></h3>
+    <ol><li>Swap stories with another pair.</li><li>Check their story with the list in part 2. Tick what is there.</li><li>Underline two mistakes and write one tip under the story.</li><li>Get your story back and make it better.</li></ol>
+  </div>
+</section>
+<script>
+document.getElementById("wahl").addEventListener("change", e => {
+  document.querySelectorAll("[data-danach]").forEach(el => { el.hidden = el.dataset.danach !== e.target.value; });
+});
+</script>
+</body>
+</html>
