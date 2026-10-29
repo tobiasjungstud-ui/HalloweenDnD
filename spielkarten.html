@@ -48,14 +48,15 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 <div class="seite">
   <header>
     <div class="dach">The Bride of Nachtfels · Bildprompts</div>
-    <h1>Spielkarten</h1>
-    <p>Pro Figur zwei Karten mit denselben Werten, einmal als Mann, einmal als Frau. Dazu die Gegnerkarte von Graf Vaskir. Die Werte stimmen mit dem Charakterblatt der Kurzfassung überein.</p>
+    <h1>Charakterbilder</h1>
+    <p>Prompts für ChatGPT, nur für das Bild der Figur — ohne Text, ohne Rahmen. Pro Figur zwei Fassungen, einmal als Mann, einmal als Frau, mit gleicher Kleidung und Ausrüstung. Dazu Graf Vaskir zum Herzeigen im Endkampf.</p>
     <ol>
       <li>„Prompt kopieren“ klicken.</li>
       <li>In ChatGPT einen neuen Chat öffnen, einfügen, abschicken.</li>
-      <li>Für die nächste Karte im selben Chat weitermachen — so bleibt der Stil gleich.</li>
+      <li>Für das nächste Bild im selben Chat weitermachen — so bleibt der Stil gleich.</li>
+      <li>Das fertige Bild speichern und im <b>Charakterblatt</b> aufs Bildfeld der passenden Seite ziehen (männlich oder weiblich). Name, HP und Attacken stehen dort schon.</li>
     </ol>
-    <p class="hinweis"><b>Text auf der Karte:</b> Bildmodelle verschreiben sich manchmal. Stimmt ein Wort nicht, im selben Chat nachschieben: „Same card, but fix the spelling: …“. Die Namenszeile bleibt absichtlich leer zum Ausfüllen.</p>
+    <p class="hinweis"><b>Passt etwas nicht?</b> Im selben Chat nachschieben, zum Beispiel: „Same character, but older“ oder „Same picture, without the hood“.</p>
   </header>
   <div id="karten"></div>
 </div>
@@ -63,15 +64,8 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 <script>
 const STIL = `ART STYLE: dark gothic fantasy illustration, painterly digital painting with visible brush texture, semi-realistic proportions (not cartoon, not anime, not photo). Moody cold palette of blue-grey, slate and fog-white; the only warm light is amber candle or lantern light. Setting: the Carpathian-style mountains around 1800, Central European folklore, pine forests and mist. Cinematic rim light, soft shadows, calm and serious mood. No gore, no blood — suitable for 14-year-old students.`;
 
-const LAYOUT = (f) => `CARD FORMAT: one single printable game card, portrait orientation, 2:3 aspect ratio (1024 x 1536 px), shown flat and straight on, filling the whole image — no table, no hands, no background around the card.
-CARD DESIGN: aged parchment card with a thin ornamental ${f.rahmen} border and slightly rounded corners. Accent colour of this card: ${f.akzent}.
-LAYOUT FROM TOP TO BOTTOM:
-1. A banner at the top with the title “${f.titel}” in large, elegant serif capitals.
-2. Directly under the banner, on the parchment: the word “Name:” followed by an EMPTY handwriting line (long enough to write a name by hand — leave it blank).
-3. The portrait (about 55 % of the card height) in a framed window: ${f.bildausschnitt}
-4. A parchment panel with the stats, dark ink, clean serif font:
-${f.textzeilen.map(z => "   " + z).join("\n")}
-TEXT RULES: render ONLY the text given above, spelled exactly like that, crisp and legible. Small empty squares (☐) must be real empty boxes to tick with a pen. No other words, no numbers that are not listed, no logo, no watermark, no signature.`;
+const BILD = `IMAGE: one single character portrait, portrait orientation, 3:4 aspect ratio (1024 x 1365 px). Waist-up, three-quarter view, the character fills most of the picture. Atmospheric background that fits the scene, softly blurred so the character stands out.
+NO TEXT anywhere in the image: no title, no name, no letters, no numbers, no frame, no card border, no logo, no watermark.`;
 
 const FIGUREN = [
  {k:"m", name:"The Arcanist", kurz:"Gelehrte·r mit Magie", hp:12,
@@ -118,17 +112,17 @@ const VASKIR = {k:"v", name:"Count Vaskir", kurz:"Gegner · Endkampf",
   textzeilen:["“HP:” followed by an EMPTY box to write a number in by hand",
    "“Claw — 1d6 + 2 — every round”",
    "“Bite — 2d6, he heals the same — once ☐”"],
-  bildausschnitt:"waist-up portrait of the vampire Count Vaskir. He is NOT tall and NOT pale: he looks like a tired, polite man of about fifty, neat grey-streaked hair, deep-set tired eyes, a faint kind but unsettling smile, an old-fashioned dark green velvet coat with a high collar from around 1800, a ring with a dark red stone. Behind him a warm tower room with a fire, a teapot and an armchair; through the window the sky is just getting light. No fangs visible, no blood, no cape."};
+  bildausschnitt:"the vampire Count Vaskir. He is NOT tall and NOT pale: he looks like a tired, polite man of about fifty, neat grey-streaked hair, deep-set tired eyes, a faint kind but unsettling smile, an old-fashioned dark green velvet coat with a high collar from around 1800, a ring with a dark red stone. Behind him a warm tower room with a fire, a teapot and an armchair; through the window the sky is just getting light. No fangs visible, no blood, no cape."};
 
 function prompt(f, v){
-  const bildausschnitt = f.bildausschnitt || `${v.wer} — ${f.koerper}; ${v.extra}. ${f.bild}.`;
-  return `Create a fantasy game card for a school role-playing game.
+  const wer = f.bildausschnitt || `${v.wer} — ${f.koerper}; ${v.extra}. ${f.bild}.`;
+  return `Create a character illustration for a school role-playing game.
 
 ${STIL}
 
-${LAYOUT({...f, bildausschnitt})}
+CHARACTER: ${wer}
 
-The card must look like one finished, print-ready playing card.`;
+${BILD}`;
 }
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
