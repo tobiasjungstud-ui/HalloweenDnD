@@ -83,7 +83,7 @@ const FIGUREN = [
   wer:"You help people who are hurt or afraid. You see what people feel — even when they don’t say it.",
   attacken:[["Silver light","Hit an enemy.","1d6","unlimited",0],["Heal","A friend gets HP back.","2d6","2 times",2],["Sunbeam","Light of the sun. Against a vampire: double damage.","2d6","only once",1]]}
 ];
-const WOERTER = [["to attack","angreifen"],["to roll the dice","würfeln"],["damage","Schaden"],["hit points (HP)","Lebenspunkte"],["to heal","heilen"],["once","einmal"],["a deal","eine Abmachung"],["instead of","an Stelle von"],["to promise","versprechen"],["an offer","ein Angebot"]];
+const WOERTER = [["a count","ein Graf"],["to attack","angreifen"],["to roll the dice","würfeln"],["damage","Schaden"],["hit points (HP)","Lebenspunkte"],["to heal","heilen"],["a deal","eine Abmachung"],["instead of","an Stelle von"],["to promise","versprechen"],["an offer","ein Angebot"]];
 const kaestchen = n => Array.from({length:n}, () => "<i></i>").join("");
 document.getElementById("blaetter").innerHTML = FIGUREN.map(f => `
 <section class="blatt ${f.k}">

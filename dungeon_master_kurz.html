@@ -116,6 +116,12 @@ dialog.gross img{width:100%;height:100%;object-fit:contain;display:block}
 .treffer{display:flex;gap:6px}
 .treffer input{width:6.5em;font:inherit;font-size:16px;padding:6px 8px;border-radius:6px;border:1px solid var(--line-hi);background:#0f1013;color:var(--text)}
 .treffer button{padding:6px 10px}
+.mitglosse{display:grid;grid-template-columns:1fr 190px;gap:18px;align-items:start}
+.glosse{border-left:1px solid #ffffff1f;padding-left:14px;font-size:14px;line-height:1.35;display:flex;flex-direction:column;gap:7px;color:var(--muted)}
+.glosse b{display:block;font-weight:600;color:var(--text)}
+.person .glosse{float:right;border-left:0;padding:0 0 6px 14px;flex-direction:row;flex-wrap:wrap;gap:4px 14px;max-width:55%}
+.person .glosse div{white-space:nowrap}.person .glosse b{display:inline;margin-right:5px}
+@media(max-width:700px){.mitglosse{grid-template-columns:1fr}.glosse{border-left:0;border-top:1px solid #ffffff1f;padding:10px 0 0;flex-direction:row;flex-wrap:wrap;gap:4px 16px}.glosse b{display:inline;margin-right:5px}.person .glosse{float:none;max-width:none;padding:0 0 6px}}
 .weiter{display:flex;justify-content:space-between;gap:12px;margin-top:28px}
 .weiter button{padding:12px 20px;font-size:16px}
 .weiter .vor{border-color:var(--gold);color:var(--gold-soft);margin-left:auto}
@@ -313,7 +319,7 @@ const SEITEN = [
 
 {titel:"Count Vaskir", bild:"graf", zeit:8, bloecke:[
  {t:"lesen", text:[
-  "The door opens. A man comes in. He is not tall. He is not pale. He looks like a tired man of fifty.",
+  "The door opens. A man comes in: Count Vaskir. He is not tall. He is not pale. He looks like a tired man of fifty.",
   "“Four hundred years,” he says, “and I never took anybody. They came to me. Every twenty years, with a bag. Ask her who packed hers.”"]},
  {t:"frage", sag:"He is waiting. What do you say to him?"},
  {t:"leute", leute:[
@@ -424,6 +430,26 @@ function gegnerHTML(g){
   </div>`;
 }
 
+
+/* Wörter, die nicht alle kennen: [Muster, englisch, deutsch]. Steht neben dem Text, beim ersten Vorkommen auf der Seite. */
+const GLOSSE = [
+ [/\bcount\b/i,"count","Graf"],[/\bfamous\b/i,"famous","berühmt"],[/\bhunters?\b/i,"hunter","Jäger/in"],[/\bdisappear/i,"to disappear","verschwinden"],
+ [/\bcarriage\b/i,"carriage","Kutsche"],[/\bcoach\b/i,"coach","Kutsche"],[/\bfog\b/i,"fog","Nebel"],[/\bmud\b/i,"mud","Schlamm"],
+ [/\binn\b/i,"inn","Gasthaus"],[/\bsign\b/i,"sign","Schild"],[/\bboard\b/i,"board","Brett"],[/\bbar\b/i,"bar","Theke"],
+ [/\bgallows\b/i,"gallows","Galgen"],[/\bteeth\b/i,"teeth","Zähne"],[/\bthin\b/i,"thin","dünn"],[/\bmine\b/i,"mine","Bergwerk"],
+ [/\bcellar\b/i,"cellar","Keller"],[/\bguard\b/i,"guard","Wächter"],[/\bice-cold\b/i,"ice-cold","eiskalt"],[/\bcourtyard\b/i,"courtyard","Schlosshof"],
+ [/\bchapel\b/i,"chapel","Kapelle"],[/\bcandles?\b/i,"candle","Kerze"],[/\bbowl\b/i,"bowl","Schale, Becken"],[/\bscreams?\b/i,"to scream","schreien"],
+ [/\bnarrow\b/i,"narrow","eng, schmal"],[/\bstair\b/i,"stair","Treppe"],[/\barmchair\b/i,"armchair","Sessel"],[/\btied up\b/i,"tied up","gefesselt"],
+ [/\bpale\b/i,"pale","bleich"],[/\bdeal\b/i,"deal","Abmachung"],[/\bsickness\b/i,"sickness","Krankheit"],[/\binstead\b/i,"instead","stattdessen"],
+ [/\bpromise\b/i,"to promise","versprechen"],[/\bservants?\b/i,"servant","Diener"],[/\bdisappointed\b/i,"disappointed","enttäuscht"],[/\bdust\b/i,"dust","Staub"],
+ [/\bprotection\b/i,"protection","Schutz"],[/\bsigns? it\b|\bsigned\b/i,"to sign","unterschreiben"],[/\bcompany\b/i,"company","Gesellschaft"],[/\bquietly\b/i,"quietly","leise"],
+ [/\bfair\b/i,"fair","gerecht"],[/\boffer\b/i,"offer","Angebot"],[/\bknocked out\b/i,"knocked out","bewusstlos"],[/\bpacked\b/i,"to pack","packen"]];
+let GLOSSE_SCHON = new Set();
+function glossen(texte){
+  const t = texte.join(" "), neu = [];
+  for(const [re,en,de] of GLOSSE){ if(!GLOSSE_SCHON.has(en) && re.test(t)){ GLOSSE_SCHON.add(en); neu.push([en,de]); } }
+  return neu.length ? `<aside class="glosse">${neu.map(([en,de]) => `<div><b>${esc(en)}</b> ${esc(de)}</div>`).join("")}</aside>` : "";
+}
 /* ---------- Bausteine ---------- */
 function absaetze(t){ return (Array.isArray(t)?t:[t]).map(p => `<p>${esc(p)}</p>`).join(""); }
 function block(b, si, bi){
@@ -432,9 +458,11 @@ function block(b, si, bi){
   const titel = b.titel ? `<h3>${esc(b.titel)}</h3>` : "";
   switch(b.t){
   case "regie": return `<div class="block regie">${titel}${b.text}</div>`;
-  case "lesen": return `<div class="block lesen">${titel}${b.wer?`<p class="wer">${esc(b.wer)} says:</p>`:""}${absaetze(b.text)}</div>`;
-  case "frage": return `<div class="block frage"><h3>Say to the group</h3><p class="sag">${esc(b.sag)}</p>${b.hilfe?`<p class="hilfe">${b.hilfe}</p>`:""}</div>`;
-  case "leute": return `<div class="block leute">${b.leute.map((p,pi)=>`<div class="person"><div class="name">${esc(p.name)}<small>${esc(p.wer)}</small></div>${
+  case "lesen": { const g = glossen([].concat(b.text));
+      return `<div class="block lesen${g?" mitglosse":""}"><div>${titel}${b.wer?`<p class="wer">${esc(b.wer)} says:</p>`:""}${absaetze(b.text)}</div>${g}</div>`; }
+  case "frage": { const g = glossen([b.sag]);
+      return `<div class="block frage${g?" mitglosse":""}"><div><h3>Say to the group</h3><p class="sag">${esc(b.sag)}</p>${b.hilfe?`<p class="hilfe">${b.hilfe}</p>`:""}</div>${g}</div>`; }
+  case "leute": return `<div class="block leute">${b.leute.map((p,pi)=>`<div class="person"><div class="name">${esc(p.name)}<small>${esc(p.wer)}</small></div>${glossen(p.fragen.map(f=>f[1]))}${
       p.fragen.map(([q,a],qi)=>{ const k=`${si}.${bi}.${pi}.${qi}`; return `<div class="qa${Z.gefragt[k]?" ja":""}" data-gefragt="${k}"><i></i><span class="q">${esc(q)}</span><span class="a">${esc(a)}</span></div>`; }).join("")}</div>`).join("")}</div>`;
   case "wahl": return `<div class="block wahl"><h3>${esc(b.titel)}</h3><div class="optionen">${b.optionen.map(o=>{
       const an = Z.wahl[b.id]===o.k, aus = Z.wahl[b.id]!=null && !an;
@@ -456,6 +484,7 @@ function bildVon(s){
 /* ---------- Zeichnen ---------- */
 function zeichne(){
   const s = SEITEN[Z.seite];
+  GLOSSE_SCHON = new Set();
   let summe = 0;
   $("#seiten").innerHTML = SEITEN.map((x,i)=>{ const von = summe; summe += x.zeit;
       return `<button class="${i===Z.seite?"an":i<Z.seite?"fertig":""}" data-seite="${i}"><span>${i?`${von}–${summe}′`:""}</span>${esc(x.kurztitel||x.titel)}</button>`; }).join("")
