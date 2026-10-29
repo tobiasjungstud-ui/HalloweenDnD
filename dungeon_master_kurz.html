@@ -275,7 +275,13 @@ const SEITEN = [
   {k:"erkannt", name:"Yes", gefahr:0},
   {k:"nicht", name:"No", gefahr:2}]},
  {t:"lesen", nur:"anneke=erkannt", text:[
-  "She stops. “Nobody has said my name for twenty years.” Then, very quietly: “Is Greta still alive?”",
+  "She stops. “Nobody has said my name for twenty years.” Then, very quietly: “Is Greta still alive?”"]},
+ {t:"lesen", nur:"anneke=erkannt", wer:"Anneke", text:["Take me to her. Please. When you go down the mountain — take me with you. Promise me."]},
+ {t:"frage", nur:"anneke=erkannt", sag:"Do you promise? Decide together."},
+ {t:"wahl", id:"versprechen", nur:"anneke=erkannt", titel:"Versprechen sie es?", optionen:[
+  {k:"ja", name:"We promise", gefahr:0},
+  {k:"nein", name:"No", gefahr:0}]},
+ {t:"lesen", nur:"versprechen", text:[
   "She points to a small door behind the altar. “That is the way to the tower. Go quietly.”"]},
  {t:"lesen", nur:"anneke=nicht", text:[
   "She jumps out of the water and screams. The scream goes through the whole castle. Then she runs into the dark, and she is gone."]},
@@ -355,10 +361,14 @@ const SEITEN = [
  {t:"lesen", nur:"ausgang=weg", text:[
   "Fog goes out through the window, and he is gone. Nobody signed anything.",
   "In twenty years — or sooner — somebody will see a light in that window again."]},
- {t:"lesen", nur:"anneke=erkannt", text:[
+ {t:"lesen", nur:"versprechen=nein", text:[
   "At the chapel door, Anneke watches you go. “Tell Greta,” she says, “that I am still here.”"]},
+ {t:"lesen", nur:"versprechen=ja", text:[
+  "Anneke is waiting at the chapel door. She does not say anything. She just walks with you."]},
  {t:"lesen", text:[
   "You walk down the mountain with Mirela. The sun comes up. The village is awake. Greta stands at the door of the inn with a cup in her hand. Tobias runs to you."]},
+ {t:"lesen", nur:"versprechen=ja", text:[
+  "Then Greta sees who is walking behind you. The cup falls out of her hand. “Anneke?”"]},
  {t:"lesen", nur:"ende=flucht", text:[
   "Mirela has not said a word all the way down. Now she looks at the village and asks: “So who is going instead of me?”"]},
  {t:"lesen", text:["At the bottom of the hill there is a carriage. Marek."]},
