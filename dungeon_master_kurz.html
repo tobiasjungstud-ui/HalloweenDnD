@@ -177,6 +177,8 @@ const VASKIR_PLUS = [
   [() => Z.wahl.weg === "kutsche", "Corvin hat ihn gewarnt", 8],
   [() => Z.wahl.wache === "nein", "der Wächter hat Alarm geschlagen", 5],
   [() => Z.wahl.anneke === "nicht", "Annekes Schrei", 5]];
+/* Ist im Hof schon Alarm? (Wächter hat gerufen oder Corvin hat sie gebracht) */
+function hofLaut(){ return Z.wahl.wache === "nein" || Z.wahl.weg === "kutsche"; }
 function vaskirMax(){ return VASKIR_GRUND + VASKIR_PLUS.reduce((s,[w,,n]) => s + (w() ? n : 0), 0); }
 
 const WOLF = {name:"Wolf", hp:6, angriffe:["Bite: 2 damage"]};
@@ -281,8 +283,11 @@ const SEITEN = [
 ]},
 
 {titel:"The Chapel", bild:"anneke", zeit:5, bloecke:[
+ {t:"lesen", wenn:() => !hofLaut(), text:["The courtyard is cold and silent. Nobody knows you are here — not yet."]},
+ {t:"lesen", nur:"wache=nein", text:["In the courtyard, the bell is still ringing. You hear voices and running feet somewhere in the castle. You have to be quick."]},
+ {t:"lesen", nur:"weg=kutsche", text:["The courtyard is cold. High above you, a window opens. Somebody is watching you."]},
  {t:"lesen", text:[
-  "The courtyard is cold and silent. You look for a way into the castle. Only one door is open: the old chapel.",
+  "You look for a way into the castle. Only one door is open: the old chapel.",
   "Inside there are hundreds of old candles. In a big stone bowl of water, someone is sleeping: a girl, about nineteen, in an old white dress. Her skin is grey. She opens her eyes."]},
  {t:"lesen", wer:"The girl", text:["Twenty years. And nobody came. Why now?"]},
  {t:"frage", sag:"Answer her. Who are you? Do you know who she is?", hilfe:"Den Namen nicht vorsagen."},
@@ -310,7 +315,8 @@ const SEITEN = [
  {t:"lesen", text:[
   "Behind the small door there is a narrow stair. You go up for a long time. At the top there is a door, with light under it.",
   "The room is warm. There is a fire and a pot of tea. Mirela Vance sits in an armchair and reads a book. She is not tied up. She is not hurt. Next to her stands a small bag."]},
- {t:"lesen", wer:"Mirela", text:["Hello. I knew somebody would come one day. Tea?"]},
+ {t:"lesen", wer:"Mirela", wenn:() => vaskirMax() > VASKIR_GRUND, text:["Hello. I knew somebody would come one day. But you were loud. He knows you are here. We don’t have much time."]},
+ {t:"lesen", wer:"Mirela", wenn:() => vaskirMax() === VASKIR_GRUND, text:["Hello. I knew somebody would come one day. And you were quiet — good. He does not know you are here. Not yet. Tea?"]},
  {t:"frage", sag:"Ask her. Why is she here?", hilfe:"Sie erzählt nichts von selbst."},
  {t:"leute", leute:[
   {name:"Mirela", wer:"ruhig, will nicht gerettet werden", fragen:[
@@ -329,6 +335,10 @@ const SEITEN = [
   "“Four hundred years,” he says, “and I never took anybody. They came to me. Every twenty years, with a bag. Ask her who packed hers.”"]},
  {t:"lesen", wenn:() => vaskirMax() > VASKIR_GRUND, text:["He looks at you. “I knew you were coming. Everybody in this house knew.”"]},
  {t:"lesen", wenn:() => vaskirMax() === VASKIR_GRUND, text:["He looks at you, surprised. “Nobody heard you come. Nobody. That has not happened for a long time.”"]},
+ {t:"lesen", nur:"weg=kutsche", text:["Behind him, in the door, stands Corvin. He smiles and waves at you."]},
+ {t:"lesen", nur:"wache=nein", text:["Behind him stands the guard from the cellar, with a new lamp. He does not look at you."]},
+ {t:"lesen", nur:"versprechen=ja", text:["“You spoke to Anneke,” Vaskir says. “You made her a promise. In this house, we keep our promises.”"]},
+ {t:"lesen", nur:"anneke=nicht", text:["“You frightened Anneke,” he says. “She is crying in the chapel. Why?”"]},
  {t:"frage", sag:"He is waiting. What do you say to him?"},
  {t:"leute", leute:[
   {name:"Vaskir", wer:"leise, freundlich", fragen:[
@@ -379,6 +389,8 @@ const SEITEN = [
   "Anneke is waiting at the chapel door. She does not say anything. She just walks with you."]},
  {t:"lesen", nur:"versprechen=ja", wenn:() => Z.wahl.ausgang === "verloren", text:[
   "Anneke stands at the chapel door. “You promised,” she says quietly. You cannot take her with you now."]},
+ {t:"lesen", nur:"weg=kutsche", text:["In the courtyard, the black coach stands empty. Corvin is nowhere."]},
+ {t:"lesen", nur:"weg=strasse", text:["On the old road, two wolves watch you from the trees. This time they do not come closer."]},
  {t:"lesen", nicht:"ausgang=verloren", text:[
   "You walk down the mountain with Mirela. The sun comes up. The village is awake. Greta stands at the door of the inn with a cup in her hand. Tobias runs to you."]},
  {t:"lesen", nur:"ausgang=verloren", text:[
