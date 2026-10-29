@@ -62,9 +62,9 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 </div>
 
 <script>
-const STIL = `ART STYLE: dark gothic fantasy illustration, painterly digital painting with visible brush texture, semi-realistic proportions (not cartoon, not anime, not photo). Moody cold palette of blue-grey, slate and fog-white; the only warm light is amber candle or lantern light. Setting: the Carpathian-style mountains around 1800, Central European folklore, pine forests and mist. Cinematic rim light, soft shadows, calm and serious mood. No gore, no blood — suitable for 14-year-old students.`;
+const STIL = `ART STYLE: heroic dark fantasy illustration in the style of a high-quality fantasy book cover or tabletop RPG character art: painterly digital painting, visible brush texture, semi-realistic and grounded (not cartoon, not anime, not a photo). Dramatic, cinematic lighting with strong rim light; cold blue-grey night and mist all around, cut by warm amber firelight or glowing magic. Setting: wild Carpathian-style mountains around 1800, Central European folklore. The character is a capable, experienced adventurer and vampire hunter — confident, athletic, ready for action, cool and memorable, the kind of hero a 14-year-old wants to play. Gear looks used and practical: leather, straps, buckles, weathered metal, travel dirt. No gore, no blood, nothing sexualised.`;
 
-const BILD = `IMAGE: one single character portrait, portrait orientation, 3:4 aspect ratio (1024 x 1365 px). Waist-up, three-quarter view, the character fills most of the picture. Atmospheric background that fits the scene, softly blurred so the character stands out.
+const BILD = `IMAGE: one single character portrait, portrait orientation, 3:4 aspect ratio (1024 x 1365 px). From the knees or waist up, dynamic three-quarter view, slightly low camera angle so the character looks strong and heroic. The character fills most of the picture. Atmospheric background that fits the scene, softly blurred so the character stands out.
 NO TEXT anywhere in the image: no title, no name, no letters, no numbers, no frame, no card border, no logo, no watermark.`;
 
 const FIGUREN = [
@@ -75,11 +75,11 @@ const FIGUREN = [
    "“Staff — 1d6 — unlimited”",
    "“Fireball — 3d6 — once ☐”",
    "“Magic Hand — move a small thing — any time — once ☐”"],
-  koerper:"tall and thin, about 25 years old, sharp clever eyes, ink-stained fingers, round wire spectacles, a long dark-grey travelling coat with many pockets full of old books and rolled papers, a worn leather satchel, holding a wooden staff topped with a glowing blue stone that lights the face from below",
-  bild:"waist-up, three-quarter view, standing in a misty pine forest at night, the blue stone glowing, one hand lifted as if about to cast a spell",
+  koerper:"lean, quick and sharp-eyed, about 25 years old, an intense, fearless look, a long dark leather battle-coat with a high collar, belts with pouches, glass vials and a small chained spellbook at the hip, fingerless gloves with ink stains, a hunter's silver dagger, holding a tall carved wooden staff whose blue crystal blazes with crackling arcane light that lights the face from below",
+  bild:"striding forward through a misty pine forest at night, coat flowing in the wind, one hand raised with blue sparks and runes swirling around the fingers, ready to cast",
   varianten:{
-   mann:{label:"männlich", wer:"a young man", extra:"short dark beard, messy black hair"},
-   frau:{label:"weiblich", wer:"a young woman", extra:"dark hair in a loose side braid, a few strands falling into the face"}}},
+   mann:{label:"männlich", wer:"a young man", extra:"short dark beard, black hair swept back, a sharp jaw"},
+   frau:{label:"weiblich", wer:"a young woman", extra:"dark hair in a long braid over one shoulder, a sharp, focused face"}}},
  {k:"k", name:"The Blade", kurz:"Kämpfer·in", hp:18,
   titel:"THE BLADE", akzent:"rust red", rahmen:"dark iron",
   werte:[["HP","18"],["Sword","1d6 + 2"],["Shield","2×"],["Strength","1×"]],
@@ -87,11 +87,11 @@ const FIGUREN = [
    "“Sword — 1d6 + 2 — unlimited”",
    "“Shield — protect a friend — 2 times ☐ ☐”",
    "“Strength — lift, push, break — any time — once ☐”"],
-  koerper:"broad-shouldered and strong, about 28 years old, calm and determined look, a pale scar across the left cheek, a dented steel breastplate over a dark red padded jacket, a fur-lined travelling cloak, a heavy longsword and a round wooden shield with an iron rim",
-  bild:"waist-up, three-quarter view, at the foot of a snowy mountain road at dusk, sword resting on the shoulder, shield on the other arm, fog behind",
+  koerper:"tall, muscular and powerful, about 28 years old, a hard, battle-tested look, a scar across the left cheek, a dented steel breastplate and pauldrons over dark red leather, a fur-lined cloak, leather bracers, a heavy longsword with a worn grip and a round iron-rimmed shield painted with a silver sun",
+  bild:"standing firm on a snowy mountain road at dusk, sword raised in a ready stance, shield up, snow and wind swirling, a wolf howling somewhere far behind in the fog",
   varianten:{
-   mann:{label:"männlich", wer:"a young man", extra:"short cropped hair, short stubble"},
-   frau:{label:"weiblich", wer:"a young woman", extra:"hair pulled back tightly in a short braid, strong jaw"}}},
+   mann:{label:"männlich", wer:"a young man", extra:"short cropped hair, short stubble, a strong jaw"},
+   frau:{label:"weiblich", wer:"a young woman", extra:"strong and athletic like a warrior, hair pulled back in a tight braid, a fierce look"}}},
  {k:"h", name:"The Lightbearer", kurz:"Heiler·in", hp:15,
   titel:"THE LIGHTBEARER", akzent:"soft sea green", rahmen:"pale silver",
   werte:[["HP","15"],["Silver light","1d6"],["Heal","2d6 · 2×"],["Sunbeam","2d6 · 1×"]],
@@ -99,11 +99,11 @@ const FIGUREN = [
    "“Silver light — 1d6 — unlimited”",
    "“Heal — a friend gets 2d6 HP — any time — 2 times ☐ ☐”",
    "“Sunbeam — 2d6, double against a vampire — once ☐”"],
-  koerper:"calm and kind, about 23 years old, warm steady eyes, a white wool hooded cloak over simple grey clothes, a small silver sun pendant, a pouch of herbs at the belt, holding up a silver lantern on a chain that shines with warm golden sunlight",
-  bild:"waist-up, three-quarter view, in a dark stone chapel full of old candles, the lantern light falling warmly on the face, gentle expression",
+  koerper:"graceful and calm, about 23 years old, steady eyes full of quiet courage, a white hooded travelling cloak over light silver-grey armour, a silver sun amulet, a belt with herb pouches and a short silver blade, holding up a silver lantern that blazes with golden sunlight and pushes back the darkness",
+  bild:"standing in a dark stone chapel full of old candles, lantern held high, golden light falling on the face and cloak, shadows pulling back from the light, a calm but determined expression",
   varianten:{
-   mann:{label:"männlich", wer:"a young man", extra:"soft curly brown hair, clean-shaven"},
-   frau:{label:"weiblich", wer:"a young woman", extra:"long light-brown hair partly under the hood"}}}
+   mann:{label:"männlich", wer:"a young man", extra:"curly brown hair, clean-shaven, a kind but brave face"},
+   frau:{label:"weiblich", wer:"a young woman", extra:"long light-brown hair partly under the hood, an elegant, brave face"}}}
 ];
 
 const VASKIR = {k:"v", name:"Count Vaskir", kurz:"Gegner · Endkampf",
@@ -138,9 +138,9 @@ function karteHTML(f, v, label, aussehen){
   </article>`;
 }
 const DEUTSCH = {
-  m:{mann:"Junger Mann, gross und dünn, Bart, Brille, Mantel voller Bücher, Stab mit blauem Stein.", frau:"Junge Frau, gross und dünn, Zopf, Brille, Mantel voller Bücher, Stab mit blauem Stein."},
-  k:{mann:"Junger Mann, breit und stark, kurze Haare, Narbe, Brustpanzer, Schwert und Rundschild.", frau:"Junge Frau, breit und stark, geflochtenes Haar, Narbe, Brustpanzer, Schwert und Rundschild."},
-  h:{mann:"Junger Mann, ruhig, braune Locken, weisser Kapuzenumhang, silberne Laterne.", frau:"Junge Frau, ruhig, lange Haare, weisser Kapuzenumhang, silberne Laterne."}};
+  m:{mann:"Junger Mann, schlank und schnell, kurzer Bart. Langer Ledermantel, Fläschchen, Zauberbuch, Stab mit blau leuchtendem Kristall — mitten im Zauber.", frau:"Junge Frau, schlank und schnell, langer Zopf. Langer Ledermantel, Fläschchen, Zauberbuch, Stab mit blau leuchtendem Kristall — mitten im Zauber."},
+  k:{mann:"Junger Mann, gross und kräftig, Stoppelbart, Narbe. Brustpanzer, Pelzumhang, Langschwert und Rundschild — kampfbereit im Schneesturm.", frau:"Junge Frau, gross und kräftig, straffer Zopf, Narbe. Brustpanzer, Pelzumhang, Langschwert und Rundschild — kampfbereit im Schneesturm."},
+  h:{mann:"Junger Mann, anmutig und ruhig, braune Locken. Weisser Umhang über silbriger Rüstung, Laterne mit Sonnenlicht hoch erhoben.", frau:"Junge Frau, anmutig und ruhig, lange Haare. Weisser Umhang über silbriger Rüstung, Laterne mit Sonnenlicht hoch erhoben."}};
 
 document.getElementById("karten").innerHTML =
   FIGUREN.map(f => `<section class="figur ${f.k}">
