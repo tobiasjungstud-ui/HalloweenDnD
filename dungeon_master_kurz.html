@@ -175,7 +175,7 @@ const BILDER = {
 const VASKIR_GRUND = 25;
 const VASKIR_PLUS = [
   [() => Z.wahl.weg === "kutsche", "Corvin hat ihn gewarnt", 8],
-  [() => !!Z.knopf.wache_ruft, "der Wächter hat gerufen", 5],
+  [() => Z.wahl.wache === "nein", "der Wächter hat Alarm geschlagen", 5],
   [() => Z.wahl.anneke === "nicht", "Annekes Schrei", 5]];
 function vaskirMax(){ return VASKIR_GRUND + VASKIR_PLUS.reduce((s,[w,,n]) => s + (w() ? n : 0), 0); }
 
@@ -263,17 +263,21 @@ const SEITEN = [
   "Then you come up into a cellar under the castle. A man with a lamp stands there. He looks at you."]},
  {t:"regie", nur:"weg=stollen", text:"Alle streichen <b>2 HP</b> auf dem Blatt."},
  {t:"lesen", nur:"weg=stollen", wer:"The guard", text:["Who are you? What are you doing down here?"]},
- {t:"frage", nur:"weg=stollen", sag:"Talk to the guard. Why are you here?", hilfe:"Gute Geschichte → er lässt sie durch."},
- {t:"knopf", nur:"weg=stollen", id:"wache_ruft", text:"Er glaubt ihnen nicht und ruft — Vaskir +5 HP"},
- {t:"lesen", nur:"weg=stollen", text:["You go up a long stair. At the top is a door — and behind it, the courtyard of the castle."]},
+ {t:"frage", nur:"weg=stollen", sag:"Talk to the guard. Why are you here?"},
+ {t:"wahl", id:"wache", nur:"weg=stollen", titel:"Glaubt er ihnen?", optionen:[
+  {k:"ja", name:"Yes"},
+  {k:"nein", name:"No"}]},
+ {t:"lesen", nur:"wache=ja", text:["The guard looks at you for a long time. Then he steps aside. “Up the stairs. And be quiet.”"]},
+ {t:"lesen", nur:"wache=nein", text:["The guard drops his lamp and runs up the stairs. “Intruders! Intruders!” Somewhere above you, a bell starts to ring."]},
+ {t:"lesen", nur:"wache", text:["You go up a long stair. At the top is a door — and behind it, the courtyard of the castle."]},
 
  {t:"lesen", nur:"weg=kutsche", text:[
   "At midnight a black coach stops in front of the inn. The driver is very friendly. “Get in, get in! You want to see the castle?”",
   "He drives with no lamp, and he never looks at the road. His hands are ice-cold. In the window you can see your faces — but not his face."]},
  {t:"lesen", nur:"weg=kutsche", wer:"Corvin", text:["And what are your names? And what do you want up there?"]},
  {t:"frage", nur:"weg=kutsche", sag:"Answer Corvin."},
- {t:"lesen", nur:"weg=kutsche", text:["Twenty minutes later the coach stops in the courtyard of the castle. Corvin smiles. “Have a nice night.” Then he is gone."]},
- {t:"regie", nur:"weg=kutsche", text:"Corvin warnt den Grafen: <b>Vaskir +8 HP</b> (rechnet sich von selbst)."}
+ {t:"lesen", nur:"weg=kutsche", text:["Twenty minutes later the coach stops in the courtyard of the castle. Corvin smiles. “Have a nice night.”",
+  "Then he walks quickly into the castle — to tell somebody that you are here."]}
 ]},
 
 {titel:"The Chapel", bild:"anneke", zeit:5, bloecke:[
@@ -292,11 +296,13 @@ const SEITEN = [
  {t:"wahl", id:"versprechen", nur:"anneke=erkannt", titel:"Versprechen sie es?", optionen:[
   {k:"ja", name:"We promise"},
   {k:"nein", name:"No"}]},
- {t:"lesen", nur:"versprechen", text:[
-  "She points to a small door behind the altar. “That is the way to the tower. Go quietly.”"]},
+ {t:"lesen", nur:"versprechen=ja", text:[
+  "For the first time, she smiles. She points to a small door behind the altar. “That is the way to the tower. Go quietly. I will wait here.”"]},
+ {t:"lesen", nur:"versprechen=nein", text:[
+  "She turns away. Then she points to a small door behind the altar. “That is the way to the tower. Go.”"]},
  {t:"lesen", nur:"anneke=nicht", text:[
-  "She jumps out of the water and screams. The scream goes through the whole castle. Then she runs into the dark, and she is gone."]},
- {t:"regie", nur:"anneke=nicht", text:"Das ganze Schloss ist wach: <b>Vaskir +5 HP</b> (rechnet sich von selbst)."},
+  "She jumps out of the water and screams. The scream goes through the whole castle. Then she runs into the dark, and she is gone.",
+  "Somewhere above you, doors open. The castle is awake now."]},
  {t:"frage", nur:"anneke=nicht", sag:"Where is the way to the tower? What do you do?", hilfe:"Sie suchen → kleine Tür hinter dem Altar."}
 ]},
 
@@ -321,6 +327,8 @@ const SEITEN = [
  {t:"lesen", text:[
   "The door opens. A man comes in: Count Vaskir. He is not tall. He is not pale. He looks like a tired man of fifty.",
   "“Four hundred years,” he says, “and I never took anybody. They came to me. Every twenty years, with a bag. Ask her who packed hers.”"]},
+ {t:"lesen", wenn:() => vaskirMax() > VASKIR_GRUND, text:["He looks at you. “I knew you were coming. Everybody in this house knew.”"]},
+ {t:"lesen", wenn:() => vaskirMax() === VASKIR_GRUND, text:["He looks at you, surprised. “Nobody heard you come. Nobody. That has not happened for a long time.”"]},
  {t:"frage", sag:"He is waiting. What do you say to him?"},
  {t:"leute", leute:[
   {name:"Vaskir", wer:"leise, freundlich", fragen:[
@@ -342,39 +350,42 @@ const SEITEN = [
  {t:"lesen", nur:"ende=flucht", text:[
   "Mirela looks at you. “You are not asking me. You are carrying me.” Then she screams — once, very loud.",
   "Vaskir does not move. He only smiles. “Go, then. If you can.” Two of his servants stand in the door. Their eyes are open, but they see nothing."]},
- {t:"kampf", nur:"ende=flucht", gegner:[{id:"diener1", ...DIENER, name:"Servant 1"},{id:"diener2", ...DIENER, name:"Servant 2"}], regel:"Beide auf 0 → die Gruppe ist draussen. Vaskir folgt nicht."},
+ {t:"kampf", nur:"ende=flucht", gegner:[{id:"diener1", ...DIENER, name:"Servant 1"},{id:"diener2", ...DIENER, name:"Servant 2"}], regel:"Beide auf 0 → Ausgang „Out with Mirela“. Alle Figuren bewusstlos → „Lost“."},
 
  {t:"lesen", nur:"ende=kampf", text:[
   "Vaskir takes off his coat. He does not look angry. He looks disappointed — like a teacher when nobody did the homework.",
   "Behind him, through the window, the sky is getting light."]},
  {t:"kampf", nur:"ende=kampf", gegner:[{id:"vaskir", ...VASKIR}], regel:"Unter 6 HP hört er auf und sagt: „Enough. Let us talk.“ — die Gruppe entscheidet: Angebot oder weiterkämpfen. Bei 0 HP wird er zu Staub. Sind alle Figuren bewusstlos: Ausgang „Lost“."},
 
- {t:"wahl", id:"ausgang", nur:["ende=angebot","ende=kampf"], titel:"Ausgang", optionen:[
+ {t:"wahl", id:"ausgang", nur:"ende", titel:"Ausgang", optionen:[
   {k:"vertrag", name:"New deal"},
   {k:"tot", name:"Dust"},
+  {k:"raus", name:"Out with Mirela"},
   {k:"verloren", name:"Lost"}]}
 ]},
 
 {titel:"Six O’Clock", bild:"morgen", zeit:2, bloecke:[
  {t:"lesen", nur:"ausgang=vertrag", text:[
-  "On a single sheet of paper there is a new deal. No more guests every twenty years. Vaskir reads it twice. “This is worse for me than the old one,” he says — and he signs it."]},
+  "Vaskir sits down and writes. On a single sheet of paper there is a new deal. No more guests every twenty years. Vaskir reads it twice. “This is worse for me than the old one,” he says — and he signs it."]},
  {t:"lesen", nur:"ausgang=tot", text:[
   "In the first sunlight, Vaskir turns to grey dust. The old deal is over. Mirela is free — and Lene is free.",
   "But the valley has no protection now. In February, the wolves will come back."]},
  {t:"lesen", nur:"ausgang=verloren", text:[
-  "You wake up in the snow in the courtyard. The sun is up. Your bags are next to you — somebody packed them.",
+  "You wake up in the snow in the courtyard. The sun is up. Somebody carried you out here and put your bags next to you. Vaskir does not kill hunters. He only sends them home.",
   "High above you, the tower window is dark. Mirela stayed."]},
  {t:"lesen", nur:"versprechen=nein", text:[
   "At the chapel door, Anneke watches you go. “Tell Greta,” she says, “that I am still here.”"]},
- {t:"lesen", nur:"versprechen=ja", text:[
+ {t:"lesen", nur:"versprechen=ja", nicht:"ausgang=verloren", text:[
   "Anneke is waiting at the chapel door. She does not say anything. She just walks with you."]},
+ {t:"lesen", nur:"versprechen=ja", wenn:() => Z.wahl.ausgang === "verloren", text:[
+  "Anneke stands at the chapel door. “You promised,” she says quietly. You cannot take her with you now."]},
  {t:"lesen", nicht:"ausgang=verloren", text:[
   "You walk down the mountain with Mirela. The sun comes up. The village is awake. Greta stands at the door of the inn with a cup in her hand. Tobias runs to you."]},
  {t:"lesen", nur:"ausgang=verloren", text:[
   "You walk down the mountain alone. The village is awake. Greta stands at the door of the inn. She looks at you — and then up at the castle."]},
- {t:"lesen", nur:"versprechen=ja", text:[
+ {t:"lesen", nur:"versprechen=ja", nicht:"ausgang=verloren", text:[
   "Then Greta sees who is walking behind you. The cup falls out of her hand. “Anneke?”"]},
- {t:"lesen", nur:"ende=flucht", text:[
+ {t:"lesen", nur:"ausgang=raus", text:[
   "Mirela has not said a word all the way down. Now she looks at the village and asks: “So who is going instead of me?”"]},
  {t:"lesen", text:["At the bottom of the hill there is a carriage. Marek."]},
  {t:"lesen", wer:"Marek", text:["I don’t wait for people. I know. Well — here I am. So: where to?"]},
@@ -455,6 +466,7 @@ function absaetze(t){ return (Array.isArray(t)?t:[t]).map(p => `<p>${esc(p)}</p>
 function block(b, si, bi){
   if(b.nur && !gilt(b.nur)) return "";
   if(b.nicht && gilt(b.nicht)) return "";
+  if(b.wenn && !b.wenn()) return "";
   const titel = b.titel ? `<h3>${esc(b.titel)}</h3>` : "";
   switch(b.t){
   case "regie": return `<div class="block regie">${titel}${b.text}</div>`;
