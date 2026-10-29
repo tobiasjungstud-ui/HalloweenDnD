@@ -41,11 +41,15 @@ ul.check li::before{content:"";position:absolute;left:0;top:3px;width:13px;heigh
 .linien{flex:1;min-height:60mm;background:repeating-linear-gradient(to bottom,transparent 0 8.4mm,var(--line) 8.4mm calc(8.4mm + 1px))}
 .schreiben{flex:1;display:flex;flex-direction:column}
 .danach ol{margin:4px 0 0;padding-left:20px}
+.ki pre{margin:4px 0 6px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;line-height:1.4;white-space:pre-wrap;background:#f5f0e5;border:1px solid var(--line);border-radius:6px;padding:8px 10px}
+.knopfzeile{display:flex;gap:10px;align-items:center;font-family:system-ui,sans-serif;font-size:13px;color:var(--soft)}
+.knopfzeile button{font:inherit;padding:6px 12px;border:1px solid var(--farbe);background:var(--paper);border-radius:6px;cursor:pointer;color:var(--ink)}
+.klein{font-size:12.5px;color:var(--soft)}
 .danach li{margin:2px 0}
 @page{size:A4;margin:0}
 @media print{
   body{background:none}
-  .lehrer{display:none}
+  .lehrer,.knopfzeile{display:none}
   .blatt{margin:0;box-shadow:none;width:210mm;height:297mm;min-height:0;overflow:hidden}
 }
 @media screen and (max-width:230mm){
@@ -64,7 +68,7 @@ ul.check li::before{content:"";position:absolute;left:0;top:3px;width:13px;heigh
     <label><input type="radio" name="danach" value="b"><b>B · Gallery walk</b><span>Geschichten an die Wand, alle lesen drei und hinterlassen eine Rückmeldung. Lesen und Feedback. 10 Min., Klebezettel.</span></label>
     <label><input type="radio" name="danach" value="c"><b>C · Story doctor</b><span>Zwei Paare tauschen und prüfen mit der Checkliste, dann wird verbessert. Schreibgenauigkeit. 15 Min., kein Material.</span></label>
   </div>
-  <span>Ablauf: Planen 5 Min. · Schreiben 15 Min. · danach die gewählte Aufgabe. Geschrieben wird auf die Rückseite oder ein liniertes Blatt.</span>
+  <span>Ablauf: Planen 5 Min. · Schreiben am Laptop 15 Min. · KI-Prüfung und Verbessern 10 Min. (Teil 3) · danach die gewählte Aufgabe. Den Prompt kopieren sie mit dem Knopf in Teil 3 — oder du schickst ihn ihnen.</span>
 </div>
 
 <section class="blatt">
@@ -84,7 +88,7 @@ ul.check li::before{content:"";position:absolute;left:0;top:3px;width:13px;heigh
   </div>
 
   <div class="feld">
-    <h3>2 · Write your story <small>15 minutes · 120–180 words</small></h3>
+    <h3>2 · Write your story <small>15 minutes · 120–180 words · on the laptop</small></h3>
     <p>Like our game: your heroes must make a <b>decision</b>. Write the story up to the decision, then two short endings.</p>
     <ul class="check">
       <li>a title</li>
@@ -97,22 +101,48 @@ ul.check li::before{content:"";position:absolute;left:0;top:3px;width:13px;heigh
     <p class="woerter">Words from the game: <b>a count</b> · <b>a deal</b> · <b>to promise</b> · <b>instead of</b> · <b>an offer</b> · <b>to escape</b> · <b>a servant</b> · <b>to scream</b> · <b>fog</b> · <b>a courtyard</b> · <b>disappointed</b> · <b>dust</b></p>
   </div>
 
-  <div class="feld schreiben"><h3>Notes <small>write the story on the back</small></h3><div class="linien"></div></div>
 
+  <div class="feld ki">
+    <h3>3 · Check your story with AI <small>copy, paste your story at the end, send</small></h3>
+    <pre id="kiprompt">You are a friendly English teacher. We are two students, 14 years old, English level B1. Below is our Halloween story.
+
+Do NOT rewrite our story and do NOT give us a corrected version. We want to correct it ourselves.
+
+1. SPELLING: Find the 5 most important spelling mistakes. Make a table with 3 columns: the wrong word in its sentence | the correct spelling | a short tip to remember it.
+
+2. GRAMMAR: Find the 2–3 most important grammar topics we must improve (for example: past simple, word order, he/she/it -s, articles, plural). For each topic:
+- explain the rule in 1–2 easy sentences, with a short German explanation in brackets,
+- show ONE example from our text: what we wrote → how it should be,
+- then quote the other places in our text with the same mistake, but do NOT correct them. We will do that.
+
+3. At the end, tell us one thing we did really well.
+
+Use simple English and keep your answer short.
+
+OUR STORY:
+[paste your story here]</pre>
+    <div class="knopfzeile"><button type="button" id="kopieren">Copy prompt</button><span id="kistatus" aria-live="polite"></span></div>
+    <p class="klein">Then correct your story yourself: first the 5 spelling mistakes, then the grammar places the AI found.</p>
+  </div>
   <div class="feld danach" data-danach="a">
-    <h3>3 · Play it! <small>10 minutes</small></h3>
+    <h3>4 · Play it! <small>10 minutes</small></h3>
     <ol><li>Find another pair.</li><li>You are the DM: read your story to them — stop at the decision and ask: <i>“What do you do?”</i></li><li>They choose A or B. Read that ending.</li><li>Then switch: now they are the DM.</li></ol>
   </div>
   <div class="feld danach" data-danach="b" hidden>
-    <h3>3 · Gallery walk <small>10 minutes</small></h3>
+    <h3>4 · Gallery walk <small>10 minutes</small></h3>
     <ol><li>Put your story on the wall.</li><li>Read three other stories.</li><li>On each one, leave a sticky note: <i>one thing you liked</i> + <i>one question</i> (“Why did … ?”).</li><li>At the end, vote: the scariest monster and the best decision.</li></ol>
   </div>
   <div class="feld danach" data-danach="c" hidden>
-    <h3>3 · Story doctor <small>15 minutes</small></h3>
+    <h3>4 · Story doctor <small>15 minutes</small></h3>
     <ol><li>Swap stories with another pair.</li><li>Check their story with the list in part 2. Tick what is there.</li><li>Underline two mistakes and write one tip under the story.</li><li>Get your story back and make it better.</li></ol>
   </div>
 </section>
 <script>
+document.getElementById("kopieren").addEventListener("click", () => {
+  const pre = document.getElementById("kiprompt"), st = document.getElementById("kistatus");
+  const markieren = () => { const r = document.createRange(); r.selectNodeContents(pre); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); st.textContent = "Selected — press Ctrl+C."; };
+  try{ navigator.clipboard.writeText(pre.textContent).then(() => { st.textContent = "Copied."; }, markieren); }catch(e){ markieren(); }
+});
 document.getElementById("wahl").addEventListener("change", e => {
   document.querySelectorAll("[data-danach]").forEach(el => { el.hidden = el.dataset.danach !== e.target.value; });
 });
