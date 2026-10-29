@@ -41,6 +41,8 @@ li{margin:2px 0}
 .att .haken{display:block;margin-top:3px}
 .att .haken i{display:inline-block;width:14px;height:14px;border:1.5px solid var(--ink);border-radius:2px;margin-right:4px}
 .notiz{display:flex;flex-direction:column}
+.wann{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--soft);margin-top:2px}
+.wann.immer{color:var(--farbe);font-weight:600}
 .blatt > .zwei:last-child{flex:1}
 .wort{font-size:14.5px!important}
 .regeln{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -73,15 +75,15 @@ const FIGUREN = [
  {k:"m", rolle:"The Arcanist", hp:12,
   aussehen:"Tall and thin. A long dark coat full of old books. A wooden staff with a blue stone.",
   wer:"You know old books, old languages and a little magic. You ask the questions that others forget.",
-  attacken:[["Staff","Hit an enemy.","1d6","unlimited",0],["Fireball","A ball of fire.","3d6","only once",1],["Magic Hand","Move a small thing from far away: a key, a candle, a cup.","—","only once",1]]},
+  attacken:[["Staff","Hit an enemy.","1d6","unlimited",0,"fight"],["Fireball","A ball of fire.","3d6","only once",1,"fight"],["Magic Hand","Move a small thing from far away: a key, a candle, a cup.","—","only once",1,"any time"]]},
  {k:"k", rolle:"The Blade", hp:18,
   aussehen:"Big and strong. Short hair, a scar on the face. A heavy sword and a round shield.",
   wer:"You stand in front when there is danger. You don’t talk much — but people listen.",
-  attacken:[["Sword","Hit an enemy.","1d6 + 2","unlimited",0],["Shield","Protect a friend: this round, they get no damage.","—","2 times",2],["Strength","Lift, push or break something very heavy.","—","only once",1]]},
+  attacken:[["Sword","Hit an enemy.","1d6 + 2","unlimited",0,"fight"],["Shield","Protect a friend: this round, they get no damage.","—","2 times",2,"fight"],["Strength","Lift, push or break something very heavy: a door, a wall, a big man.","—","only once",1,"any time"]]},
  {k:"h", rolle:"The Lightbearer", hp:15,
   aussehen:"Calm eyes. A white cloak. A silver lantern that never goes out.",
   wer:"You help people who are hurt or afraid. You see what people feel — even when they don’t say it.",
-  attacken:[["Silver light","Hit an enemy.","1d6","unlimited",0],["Heal","A friend gets HP back.","2d6","2 times",2],["Sunbeam","Light of the sun. Against a vampire: double damage.","2d6","only once",1]]}
+  attacken:[["Silver light","Hit an enemy.","1d6","unlimited",0,"fight"],["Heal","A friend gets HP back.","2d6","2 times",2,"any time"],["Sunbeam","Light of the sun. Against a vampire: double damage.","2d6","only once",1,"fight"]]}
 ];
 const WOERTER = [["a count","ein Graf"],["to attack","angreifen"],["to roll the dice","würfeln"],["damage","Schaden"],["hit points (HP)","Lebenspunkte"],["to heal","heilen"],["a deal","eine Abmachung"],["instead of","an Stelle von"],["to promise","versprechen"],["an offer","ein Angebot"]];
 const kaestchen = n => Array.from({length:n}, () => "<i></i>").join("");
@@ -94,9 +96,9 @@ document.getElementById("blaetter").innerHTML = FIGUREN.map(f => `
   </div>
   <div class="feld"><h2>What you can do</h2>
     <table class="att"><thead><tr><th>Name</th><th>What it does</th><th>Roll</th><th>How often</th></tr></thead><tbody>
-    ${f.attacken.map(([n,w,r,o,x]) => `<tr><td><b>${n}</b></td><td>${w}</td><td class="wurf">${r}</td><td class="oft">${o}${x?`<span class="haken">${kaestchen(x)}</span>`:""}</td></tr>`).join("")}
+    ${f.attacken.map(([n,w,r,o,x,wann]) => `<tr><td><b>${n}</b><span class="wann ${wann==="fight"?"":"immer"}">${wann==="fight"?"in a fight":"any time"}</span></td><td>${w}</td><td class="wurf">${r}</td><td class="oft">${o}${x?`<span class="haken">${kaestchen(x)}</span>`:""}</td></tr>`).join("")}
     </tbody></table></div>
-  <div class="feld"><h2>In a fight</h2><p><b>1.</b> Say what you do — in English. <b>2.</b> Choose one thing from your list. <b>3.</b> Roll the dice and say the number. Then the enemy attacks.</p></div>
+  <div class="feld"><h2>In a fight</h2><p><b>1.</b> Say what you do — in English. <b>2.</b> Choose one thing from your list. <b>3.</b> Roll the dice and say the number. Then the enemy attacks.</p><p class="klein">Things marked <b>any time</b> also work outside a fight — for example to open a door or to get a key.</p></div>
   <div class="zwei">
     <div class="feld"><h2>Words</h2><div class="wort">${WOERTER.map(([e,d])=>`<div><b>${e}</b> — ${d}</div>`).join("")}</div></div>
     <div class="feld notiz"><h2>Notes</h2><div class="linien"></div></div>

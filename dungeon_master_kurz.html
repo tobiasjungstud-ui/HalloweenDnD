@@ -100,6 +100,12 @@ dialog.gross img{width:100%;height:100%;object-fit:contain;display:block}
 .schalter button.an{border-color:var(--green);color:var(--green-soft)}
 .schalter span{color:var(--muted);font-size:15px}
 
+.loesungen{background:var(--panel);border-left:3px solid var(--line-hi)}
+.loesungen h3{color:var(--muted)}
+.lz{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;padding:7px 0;border-top:1px solid var(--line);font-size:14.5px}
+.lz:first-of-type{border-top:0}
+.lz b{font-weight:500;color:var(--text)}.lz span{color:var(--muted)}
+@media(max-width:700px){.lz{grid-template-columns:1fr}}
 .kampf{background:#2a1d1c;border-color:#5a2a24}
 .kampf h3{color:var(--red)}
 .kampf .hilfe{font-size:14px;color:var(--muted);margin:10px 0 0}
@@ -255,16 +261,24 @@ const SEITEN = [
   {k:"kutsche", name:"The coach"}]},
 
  {t:"lesen", nur:"weg=strasse", text:[
-  "You walk up the old road in the dark. At an old gallows, two big wolves wait. They are thin and hungry. They show their teeth."]},
- {t:"frage", nur:"weg=strasse", sag:"What do you do?", hilfe:"Gute Idee (Essen hinwerfen, Feuer, Magic Hand, Strength …) → sie ziehen ab. Sonst Kampf — der erste, nimm dir Zeit."},
- {t:"kampf", nur:"weg=strasse", gegner:[{id:"wolf1", ...WOLF, name:"Wolf 1"},{id:"wolf2", ...WOLF, name:"Wolf 2"}], regel:"Ein Wolf unter 3 HP rennt weg."},
+  "You walk up the old road in the dark. At an old gallows, two big wolves wait. They are thin and hungry. They show their teeth.",
+  "Next to the gallows there is an old fireplace with dry wood. In your bags you have bread and dried meat."]},
+ {t:"frage", nur:"weg=strasse", sag:"What do you do?"},
+ {t:"loesungen", nur:"weg=strasse", zeilen:[
+  ["They throw the meat or bread","Die Wölfe fressen und laufen weg. Kein Kampf."],
+  ["They make a fire, use Fireball or the lantern","Die Wölfe haben Angst vor dem Feuer und laufen weg. Kein Kampf."],
+  ["They attack, or try to walk past","Kampf (unten). Der erste — nimm dir Zeit."]]},
+ {t:"kampf", nur:"weg=strasse", gegner:[{id:"wolf1", ...WOLF, name:"Wolf 1"},{id:"wolf2", ...WOLF, name:"Wolf 2"}], regel:"Nur wenn es zum Kampf kommt. Ein Wolf unter 3 HP rennt weg."},
  {t:"lesen", nur:"weg=strasse", text:["The wolves run into the trees. One hour later you climb over a low wall — and you are in the courtyard of the castle."]},
 
  {t:"lesen", nur:"weg=stollen", text:[
   "The mine is cold and black. You walk for four hours. The air is old and bad. Everybody loses 2 HP.",
   "Then you come up into a cellar under the castle. A man with a lamp stands there. He looks at you."]},
- {t:"lesen", nur:"weg=stollen", wer:"The guard", text:["Who are you? What are you doing down here?"]},
- {t:"frage", nur:"weg=stollen", sag:"Talk to the guard. Why are you here?"},
+ {t:"lesen", nur:"weg=stollen", wer:"The guard", text:["Who are you? What are you doing down here? … Wait. Are you the new kitchen helpers? You are three days late."]},
+ {t:"frage", nur:"weg=stollen", sag:"Talk to the guard."},
+ {t:"loesungen", nur:"weg=stollen", zeilen:[
+  ["They say yes, or tell a calm story (new servants, a message for the count …)","Er glaubt ihnen → „Yes“ anklicken."],
+  ["They tell the truth (vampire hunters), threaten him or attack","Er glaubt ihnen nicht → „No“ anklicken."]]},
  {t:"wahl", id:"wache", nur:"weg=stollen", titel:"Glaubt er ihnen?", optionen:[
   {k:"ja", name:"Yes"},
   {k:"nein", name:"No"}]},
@@ -308,7 +322,13 @@ const SEITEN = [
  {t:"lesen", nur:"anneke=nicht", text:[
   "She jumps out of the water and screams. The scream goes through the whole castle. Then she runs into the dark, and she is gone.",
   "Somewhere above you, doors open. The castle is awake now."]},
- {t:"frage", nur:"anneke=nicht", sag:"Where is the way to the tower? What do you do?", hilfe:"Kleine Tür hinter dem Altar, verschlossen. Strength oder Magic Hand öffnet sie sofort — sonst suchen sie den Schlüssel."}
+ {t:"lesen", nur:"anneke=nicht", text:["Behind the altar there is a small iron door. It is locked. High up on the wall, near the ceiling, an old key hangs on a nail."]},
+ {t:"frage", nur:"anneke=nicht", sag:"How do you open the door?"},
+ {t:"loesungen", nur:"anneke=nicht", zeilen:[
+  ["They climb up, or stand on someone’s shoulders","Sie holen den Schlüssel. Die Tür geht auf."],
+  ["Magic Hand (Arcanist)","Der Schlüssel fliegt herunter."],
+  ["Strength (Blade)","Die Tür bricht auf."],
+  ["Another sensible idea","Klappt auch."]]}
 ]},
 
 {titel:"The Tower Room", bild:"mirela", zeit:6, bloecke:[
@@ -355,7 +375,10 @@ const SEITEN = [
 
  {t:"lesen", nur:"ende=angebot", text:[
   "Vaskir sits down. “An offer? Good. Say it slowly. I will write it down.”"]},
- {t:"frage", nur:"ende=angebot", sag:"What does the village get? What does Vaskir get? And what do you give?", hilfe:"Es kostet die Gruppe etwas → er unterschreibt. Nur Forderungen → „That is not a deal.“ Dann neu entscheiden."},
+ {t:"frage", nur:"ende=angebot", sag:"What does the village get? What does Vaskir get? And what do you give?"},
+ {t:"loesungen", nur:"ende=angebot", zeilen:[
+  ["They give something that costs them: a visit every year, letters, one night a year, one of them stays for a year …","Er unterschreibt → Ausgang „New deal“."],
+  ["Only demands (“Let her go!”) or threats","Er sagt: „That is not a deal.“ Dann neu entscheiden: run or fight."]]},
 
  {t:"lesen", nur:"ende=flucht", text:[
   "Mirela looks at you. “You are not asking me. You are carrying me.” Then she screams — once, very loud.",
@@ -493,6 +516,7 @@ function block(b, si, bi){
       return `<button class="option${an?" an":""}${aus?" aus":""}" data-wahl="${b.id}" data-k="${o.k}"><span class="titel">${esc(o.name)}</span></button>`; }).join("")}</div></div>`;
   case "knopf": { const an = !!Z.knopf[b.id];
       return `<div class="block schalter"><button class="${an?"an":""}" data-knopf="${b.id}">${an?"✓ ja":"nein"}</button><span>${esc(b.text)}</span></div>`; }
+  case "loesungen": return `<div class="block loesungen"><h3>Mögliche Lösungen</h3>${b.zeilen.map(([w,f]) => `<div class="lz"><b>${esc(w)}</b><span>${esc(f)}</span></div>`).join("")}</div>`;
   case "kampf": return `<div class="block kampf"><h3>Kampf</h3><div class="gegnerliste">${b.gegner.map(gegnerHTML).join("")}</div>${b.regel?`<p class="hilfe">${b.regel}</p>`:""}</div>`;
   }
   return "";
