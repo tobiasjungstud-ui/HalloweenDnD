@@ -13,7 +13,7 @@
 body{margin:0;background:#e9e5dc;color:var(--ink);font-family:'Literata',Georgia,serif;font-size:14.5px;line-height:1.45}
 .leiste{max-width:210mm;margin:18px auto 0;padding:0 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-family:system-ui,sans-serif;font-size:14px;color:var(--soft)}
 .leiste button{font:inherit;padding:8px 14px;border:1px solid var(--ink);background:var(--paper);border-radius:6px;cursor:pointer}
-.blatt{width:210mm;min-height:297mm;margin:18px auto;background:var(--paper);padding:14mm 15mm;box-shadow:0 2px 14px #0002;
+.blatt{width:210mm;min-height:297mm;margin:18px auto;background:var(--paper);padding:12mm 14mm;box-shadow:0 2px 14px #0002;
   display:flex;flex-direction:column;gap:10px;border-top:8px solid var(--farbe)}
 .m{--farbe:#5d52b5}.k{--farbe:#a8582a}.h{--farbe:#3f8a74}
 .oben{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;border-bottom:1px solid var(--line);padding-bottom:8px}
@@ -30,18 +30,18 @@ h2{font-family:'IM Fell English SC',Georgia,serif;font-weight:400;font-size:20px
 ul{margin:0;padding-left:18px}
 li{margin:2px 0}
 .klein{font-size:12.5px;color:var(--soft)}
-.boxen{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-top:4px}
+.boxen{display:grid;grid-template-columns:repeat(auto-fill,7.5mm);gap:4px;margin-top:4px}
 .boxen i{aspect-ratio:1;border:1.5px solid var(--ink);border-radius:3px}
 .att{width:100%;border-collapse:collapse;font-size:14px}
 .att th{text-align:left;font-weight:600;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);border-bottom:1px solid var(--line);padding:4px 6px}
-.att td{border-bottom:1px solid var(--line);padding:7px 6px;vertical-align:top}
+.att td{border-bottom:1px solid var(--line);padding:5px 6px;vertical-align:top}
 .att tr:last-child td{border-bottom:0}
 .att .wurf{font-weight:600;white-space:nowrap;color:var(--farbe);font-size:16px}
 .att .oft{white-space:nowrap;font-size:13px;color:var(--soft)}
 .att .haken{display:block;margin-top:3px}
 .att .haken i{display:inline-block;width:14px;height:14px;border:1.5px solid var(--ink);border-radius:2px;margin-right:4px}
 .notiz{display:flex;flex-direction:column}
-.kopfzone{display:grid;grid-template-columns:52mm 1fr;gap:10px}
+.kopfzone{display:grid;grid-template-columns:46mm 1fr;gap:10px}
 .rechts{display:flex;flex-direction:column;gap:10px;min-width:0}
 .portrait{position:relative;aspect-ratio:3/4;border:1px solid var(--line);border-radius:8px;overflow:hidden;cursor:pointer;display:grid;place-items:center;background:repeating-linear-gradient(135deg,#f3eee3 0 6px,#ece5d6 6px 12px)}
 .portrait.voll{background:var(--paper);border-color:var(--farbe)}
@@ -54,12 +54,12 @@ li{margin:2px 0}
 .wann{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--soft);margin-top:2px}
 .wann.immer{color:var(--farbe);font-weight:600}
 .blatt > .zwei:last-child{flex:1}
-.wort{font-size:14.5px!important}
+.wort{font-size:13px!important}
 .regeln{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .regel{border:1px solid var(--line);border-radius:8px;padding:8px 10px;text-align:center}
 .regel b{display:block;font-size:22px;color:var(--farbe);font-family:'IM Fell English SC',Georgia,serif;font-weight:400}
 .regel span{font-size:13px;color:var(--soft)}
-.linien{flex:1;min-height:18mm;background:repeating-linear-gradient(to bottom,transparent 0 8.4mm,var(--line) 8.4mm calc(8.4mm + 1px))}
+.linien{flex:1;min-height:10mm;background:repeating-linear-gradient(to bottom,transparent 0 8.4mm,var(--line) 8.4mm calc(8.4mm + 1px))}
 .wort{columns:2;column-gap:14px;font-size:13.5px}
 .wort div{break-inside:avoid}
 .wort b{font-weight:600}

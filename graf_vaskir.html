@@ -17,7 +17,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Literata',Georg
 .spiel{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--soft)}
 h1{font-family:'IM Fell English SC',Georgia,serif;font-weight:400;font-size:40px;line-height:1;margin:2px 0 0;color:var(--farbe)}
 h2{font-family:'IM Fell English SC',Georgia,serif;font-weight:400;font-size:19px;margin:0 0 4px;color:var(--farbe)}
-.kopf{display:grid;grid-template-columns:54mm 1fr;gap:10px}
+.kopf{display:grid;grid-template-columns:48mm 1fr;gap:10px}
 .kopf img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:8px;border:1px solid var(--farbe);display:block}
 .rechts{display:flex;flex-direction:column;gap:9px;min-width:0}
 .feld{border:1px solid var(--line);border-radius:8px;padding:8px 12px}
@@ -28,12 +28,12 @@ td{padding:4px 4px;border-bottom:1px solid var(--line);vertical-align:top}
 tr:last-child td{border-bottom:0}
 td.n{white-space:nowrap;font-weight:600;color:var(--farbe);text-align:right}
 .hk{display:inline-block;width:12px;height:12px;border:1.5px solid var(--ink);border-radius:2px;vertical-align:-1px;margin-right:6px}
-.boxen{display:grid;grid-template-columns:repeat(15,1fr);gap:3px;margin-top:5px}
+.boxen{display:grid;grid-template-columns:repeat(auto-fill,5.5mm);gap:2px;margin-top:4px}
 .boxen i{aspect-ratio:1;border:1.2px solid var(--ink);border-radius:2px}
 .att li{margin:2px 0}.att{margin:0;padding-left:18px}
-.qa p{margin:0 0 3px}.qa b{font-weight:600}
+.qa p{margin:0 0 2px;font-size:12.5px}.qa b{font-weight:600}
 .klein{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.mini .boxen{grid-template-columns:repeat(6,14px)}
+.mini .boxen{grid-template-columns:repeat(6,5.5mm)}
 @page{size:A4;margin:0}
 @media print{body{background:none}.blatt{margin:0;box-shadow:none;height:297mm;min-height:0;overflow:hidden}}
 @media screen and (max-width:230mm){.blatt{width:auto;min-height:0;margin:14px 10px;padding:18px 16px}.kopf,.klein{grid-template-columns:1fr}.kopf img{max-width:70mm}}
@@ -71,11 +71,11 @@ td.n{white-space:nowrap;font-weight:600;color:var(--farbe);text-align:right}
     <p><b>What happens to the village without you?</b> — “Hunger. And in February the wolves come back.”</p>
     <p><b>Will you hurt her?</b> — “Hurt? No. They stay. They are never hungry, never cold — and never old.”</p>
     <p><b>What about Anneke?</b> — “She is still here. She sleeps in the chapel. She is never cold — and never old.”</p>
-    <p><b>An offer that costs them something</b> (a visit every year, letters, one night a year …) → he signs. <b>Only demands or threats</b> → “That is not a deal.”</p>
   </div>
+  <h2 style="margin:4px 0 -4px">Other enemies <span class="de" style="font-size:12px">— die anderen Gegner der Kurzfassung</span></h2>
   <div class="klein">
-    <div class="feld mini"><h2>Wolves × 2 <span class="de">(the old road)</span></h2><p>6 HP each · Bite: 2 damage, every round, at one hunter. Under 3 HP a wolf runs away.</p><p class="de">Wolf 1</p><div class="boxen"><i></i><i></i><i></i><i></i><i></i><i></i></div><p class="de" style="margin-top:4px">Wolf 2</p><div class="boxen"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
-    <div class="feld mini"><h2>Servants × 2 <span class="de">(run with Mirela)</span></h2><p>6 HP each · Punch: 2 damage, every round, at one hunter. Both at 0 → the group is out.</p><p class="de">Servant 1</p><div class="boxen"><i></i><i></i><i></i><i></i><i></i><i></i></div><p class="de" style="margin-top:4px">Servant 2</p><div class="boxen"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+    <div class="feld mini"><h2>Wolves × 2</h2><p class="de">Nicht beim Grafen! Nur auf der Seite „The Way Up“, wenn die Gruppe die alte Strasse nimmt und kämpft.</p><p>6 HP each · Bite: 2 damage, every round, at one hunter. Under 3 HP a wolf runs away.</p><p class="de">Wolf 1</p><div class="boxen"><i></i><i></i><i></i><i></i><i></i><i></i></div><p class="de" style="margin-top:4px">Wolf 2</p><div class="boxen"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+    <div class="feld mini"><h2>Servants × 2</h2><p class="de">Nur im Endkampf, wenn die Gruppe mit Mirela flieht („Take Mirela and run“).</p><p>6 HP each · Punch: 2 damage, every round, at one hunter. Both at 0 → the group is out.</p><p class="de">Servant 1</p><div class="boxen"><i></i><i></i><i></i><i></i><i></i><i></i></div><p class="de" style="margin-top:4px">Servant 2</p><div class="boxen"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
   </div>
 </section>
 </body>
