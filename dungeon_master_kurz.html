@@ -226,7 +226,6 @@ const SEITEN = [
    ["Why did she go?","“She said: it is for Lene. Lene is my sister. She is nine.”"],
    ["Can you come with us?","“Yes! … Please?” — Er bleibt im Dorf."]]}]},
  {t:"regie", text:"Fragt niemand Pieter: Er ruft von selbst <b>„Ask Greta about Anneke!“</b>"},
- {t:"schalter", id:"anneke", text:"Name <b>Anneke</b> gefallen?", ja:"Ja"},
  {t:"lesen", titel:"The map", text:[
   "Greta puts an old map on the table. She does not say a word.",
   "There are three ways up to the castle: an old road, a dark mine through the mountain — and a coach at midnight."]}
@@ -262,13 +261,13 @@ const SEITEN = [
   "At midnight a black coach stops in front of the inn. The driver is very friendly. “Get in, get in! You want to see the castle?”",
   "He drives with no lamp, and he never looks at the road. His hands are ice-cold. In the window you can see your faces — but not his face."]},
  {t:"lesen", nur:"weg=kutsche", wer:"Corvin", text:["And what are your names? And what do you want up there?"]},
- {t:"frage", nur:"weg=kutsche", sag:"Answer Corvin. Do you notice anything strange?"},
+ {t:"frage", nur:"weg=kutsche", sag:"Answer Corvin."},
  {t:"lesen", nur:"weg=kutsche", text:["Twenty minutes later the coach stops in the courtyard of the castle. Corvin smiles. “Have a nice night.” Then he is gone."]}
 ]},
 
 {titel:"The Chapel", bild:"anneke", zeit:5, bloecke:[
  {t:"lesen", text:[
-  "The courtyard is cold and silent. There are three doors — but two of them are locked. Only one door is open: the old chapel.",
+  "The courtyard is cold and silent. You look for a way into the castle. Only one door is open: the old chapel.",
   "Inside there are hundreds of old candles. In a big stone bowl of water, someone is sleeping: a girl, about nineteen, in an old white dress. Her skin is grey. She opens her eyes."]},
  {t:"lesen", wer:"The girl", text:["Twenty years. And nobody came. Why now?"]},
  {t:"frage", sag:"Answer her. Who are you? Do you know who she is?", hilfe:"Den Namen nicht vorsagen."},
@@ -277,18 +276,17 @@ const SEITEN = [
   {k:"nicht", name:"No", gefahr:2}]},
  {t:"lesen", nur:"anneke=erkannt", text:[
   "She stops. “Nobody has said my name for twenty years.” Then, very quietly: “Is Greta still alive?”",
-  "She points to a small door behind the altar. “The tower has no stairs. At the end of the hall there is a tall mirror. Walk through it backwards — and don’t look into it.”"]},
+  "She points to a small door behind the altar. “That is the way to the tower. Go quietly.”"]},
  {t:"lesen", nur:"anneke=nicht", text:[
-  "She jumps out of the water and screams. The scream goes through the whole castle. Somewhere, a door opens.",
-  "Behind the altar there is a small door, and a long, dark hall. At the end stands a tall mirror. Somebody has written on it in white chalk: WALK BACKWARDS. DON’T LOOK."]},
- {t:"frage", nur:"anneke", sag:"How do you go through the mirror?"}
+  "She jumps out of the water and screams. The scream goes through the whole castle. Then she runs into the dark, and she is gone."]},
+ {t:"frage", nur:"anneke=nicht", sag:"Where is the way to the tower? What do you do?", hilfe:"Sie suchen → kleine Tür hinter dem Altar."}
 ]},
 
 {titel:"The Tower Room", bild:"mirela", zeit:6, bloecke:[
  {t:"lesen", text:[
-  "Behind the mirror there is a narrow stair. You go up for a long time. At the top there is a door, with light under it.",
+  "Behind the small door there is a narrow stair. You go up for a long time. At the top there is a door, with light under it.",
   "The room is warm. There is a fire and a pot of tea. Mirela Vance sits in an armchair and reads a book. She is not tied up. She is not hurt. Next to her stands a small bag."]},
- {t:"lesen", wer:"Mirela", text:["You are late. Hello. Do you want some tea?"]},
+ {t:"lesen", wer:"Mirela", text:["Hello. I knew somebody would come one day. Tea?"]},
  {t:"frage", sag:"Ask her. Why is she here?", hilfe:"Sie erzählt nichts von selbst."},
  {t:"leute", leute:[
   {name:"Mirela", wer:"ruhig, will nicht gerettet werden", fragen:[
@@ -296,7 +294,7 @@ const SEITEN = [
    ["Why are you here?","“Because of the deal. Every twenty years, one person from the village comes to him.”"],
    ["What deal?","“In 1604 the winter was terrible. Wolves, hunger, sickness. Vaskir helped. Since then, nobody is hungry and the wolves stay away.”"],
    ["Why you?","“This year the village chose Lene. She is nine. So I packed my bag and came instead.”"],
-   ["What does he do with you?","“I don’t know. Nobody ever came back to tell.”"],
+   ["What does he do with you?","“I don’t know. Twenty years ago it was Anneke. Nobody saw her again.”"],
    ["Do you want to go home?","“Of course I do. But then who goes instead of me?”"]]}]},
  {t:"frage", sag:"What do you think of this deal? Is it fair?"}
 ]},
@@ -312,7 +310,8 @@ const SEITEN = [
    ["What do you want?","“Company. Somebody to talk to. Four hundred years is a long time alone.”"],
    ["Let her go!","“And what do you give me? Nothing? That is not a deal.”"],
    ["What happens to the village without you?","“Hunger. And in February the wolves come back.”"],
-   ["Will you hurt her?","“I have never hurt anybody. I only talk. Every night.”"]]}]},
+   ["Will you hurt her?","“Hurt? No. They stay. They are never hungry, never cold — and never old.”"],
+   ["What about Anneke?","“She is still here. She sleeps in the chapel. She is never cold — and never old.”"]]}]},
  {t:"frage", sag:"Now decide. What do you do — and why? Mirela is listening."},
  {t:"wahl", id:"ende", titel:"Entscheidung", optionen:[
   {k:"angebot", name:"An offer", gefahr:0},
@@ -325,15 +324,16 @@ const SEITEN = [
 
  {t:"lesen", nur:"ende=flucht", text:[
   "Mirela looks at you. “You are not asking me. You are carrying me.” Then she screams — once, very loud.",
-  "Vaskir does not move. He only says: “Go, then. If you can.”"]},
+  "Vaskir does not move. He only smiles. “Go, then. If you can.”"]},
  {t:"frage", nur:"ende=flucht", sag:"Run! How do you get down?"},
  {t:"gefahr", nur:"ende=flucht", titel:"Ausgang", stufen:[
   [0,5,"Gute Idee → draussen."],
   [6,8,"Zwei Diener im Weg. Eine Kraft bringt sie vorbei."],
-  [9,10,"Er steht vor der Tür. Nur mit Angebot oder zwei Kräften."]]},
+  [9,10,"Die Diener halten die Tür zu. Nur mit Angebot oder zwei Kräften."]]},
 
  {t:"lesen", nur:"ende=kampf", text:[
-  "Vaskir takes off his coat. He does not look angry. He looks disappointed — like a teacher when nobody did the homework."]},
+  "Vaskir takes off his coat. He does not look angry. He looks disappointed — like a teacher when nobody did the homework.",
+  "Behind him, through the window, the sky is getting light."]},
  {t:"frage", nur:"ende=kampf", sag:"What do you do?"},
  {t:"gefahr", nur:"ende=kampf", titel:"Ausgang", stufen:[
   [0,3,"Eine gute Runde → er wird zu Staub."],
@@ -348,22 +348,21 @@ const SEITEN = [
 
 {titel:"Six O’Clock", bild:"morgen", zeit:2, bloecke:[
  {t:"lesen", nur:"ausgang=vertrag", text:[
-  "On a single sheet of paper there is a new deal. No more guests every twenty years. Vaskir reads it twice. “This is worse for me than the old one,” he says — and he signs it.",
-  "Mirela walks down the mountain with you."]},
+  "On a single sheet of paper there is a new deal. No more guests every twenty years. Vaskir reads it twice. “This is worse for me than the old one,” he says — and he signs it."]},
  {t:"lesen", nur:"ausgang=tot", text:[
   "In the armchair there is only a little grey dust. The old deal is over. Mirela is free — and Lene is free.",
   "But the valley has no protection now. In February, the wolves will come back."]},
  {t:"lesen", nur:"ausgang=weg", text:[
-  "Fog goes out through the window, and he is gone. Mirela walks down with you. Nobody signed anything.",
+  "Fog goes out through the window, and he is gone. Nobody signed anything.",
   "In twenty years — or sooner — somebody will see a light in that window again."]},
- {t:"lesen", nur:"ende=flucht", text:[
-  "Mirela does not say a word on the way down. In the village, Tobias runs to her. And she asks the question that nobody can answer: “So who is going instead of me?”"]},
  {t:"lesen", nur:"anneke=erkannt", text:[
-  "At the chapel door, Anneke stands in the morning light. “Tell Greta,” she says, “that I am still here.”"]},
+  "At the chapel door, Anneke watches you go. “Tell Greta,” she says, “that I am still here.”"]},
  {t:"lesen", text:[
-  "The sun comes up. The village is awake. Greta stands at the door of the inn with a cup in her hand. Tobias runs to you.",
-  "And at the bottom of the hill there is a carriage. Marek."]},
- {t:"lesen", wer:"Marek", text:["I said I would drive home. Well. I only got to the bottom of the hill. So — where to?"]},
+  "You walk down the mountain with Mirela. The sun comes up. The village is awake. Greta stands at the door of the inn with a cup in her hand. Tobias runs to you."]},
+ {t:"lesen", nur:"ende=flucht", text:[
+  "Mirela has not said a word all the way down. Now she looks at the village and asks: “So who is going instead of me?”"]},
+ {t:"lesen", text:["At the bottom of the hill there is a carriage. Marek."]},
+ {t:"lesen", wer:"Marek", text:["I don’t wait for people. I know. Well — here I am. So: where to?"]},
  {t:"frage", sag:"What do you do now — and why? Tell Marek where to drive."}
 ]}
 ];
