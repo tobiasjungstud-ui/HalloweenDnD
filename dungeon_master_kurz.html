@@ -181,9 +181,9 @@ const VASKIR_PLUS = [
 function hofLaut(){ return Z.wahl.wache === "nein" || Z.wahl.weg === "kutsche"; }
 function vaskirMax(){ return VASKIR_GRUND + VASKIR_PLUS.reduce((s,[w,,n]) => s + (w() ? n : 0), 0); }
 
-const WOLF = {name:"Wolf", hp:6, angriffe:["Bite: 2 damage"]};
-const DIENER = {name:"Servant", hp:6, angriffe:["Punch: 2 damage"]};
-const VASKIR = {name:"Count Vaskir", hp:"vaskir", angriffe:["Claw: 1d6 — every round, at one hunter","Bite: 2d6 — only once. He gets the same number of HP back."]};
+const WOLF = {name:"Wolf", hp:6, angriffe:["Bite: 2 damage — every round, at one hunter"]};
+const DIENER = {name:"Servant", hp:6, angriffe:["Punch: 2 damage — every round, at one hunter"]};
+const VASKIR = {name:"Count Vaskir", hp:"vaskir", angriffe:["Claw: 1d6 + 2 — every round, at one hunter","Bite: 2d6 — only once. He gets the same number of HP back."]};
 
 /* Blocktypen: regie (deutsch, für dich) · lesen (gold, vorlesen) · frage (grün, an die Gruppe)
    leute (Figuren mit Fragen/Antworten) · wahl (Entscheidung) · knopf (merken) · kampf (Gegner mit HP) */
@@ -256,14 +256,13 @@ const SEITEN = [
 
  {t:"lesen", nur:"weg=strasse", text:[
   "You walk up the old road in the dark. At an old gallows, two big wolves wait. They are thin and hungry. They show their teeth."]},
- {t:"frage", nur:"weg=strasse", sag:"What do you do?", hilfe:"Eine sehr gute Idee (Essen hinwerfen, Feuer) → sie ziehen ab. Sonst: Kampf — der erste, nimm dir Zeit."},
+ {t:"frage", nur:"weg=strasse", sag:"What do you do?", hilfe:"Gute Idee (Essen hinwerfen, Feuer, Magic Hand, Strength …) → sie ziehen ab. Sonst Kampf — der erste, nimm dir Zeit."},
  {t:"kampf", nur:"weg=strasse", gegner:[{id:"wolf1", ...WOLF, name:"Wolf 1"},{id:"wolf2", ...WOLF, name:"Wolf 2"}], regel:"Ein Wolf unter 3 HP rennt weg."},
  {t:"lesen", nur:"weg=strasse", text:["The wolves run into the trees. One hour later you climb over a low wall — and you are in the courtyard of the castle."]},
 
  {t:"lesen", nur:"weg=stollen", text:[
   "The mine is cold and black. You walk for four hours. The air is old and bad. Everybody loses 2 HP.",
   "Then you come up into a cellar under the castle. A man with a lamp stands there. He looks at you."]},
- {t:"regie", nur:"weg=stollen", text:"Alle streichen <b>2 HP</b> auf dem Blatt."},
  {t:"lesen", nur:"weg=stollen", wer:"The guard", text:["Who are you? What are you doing down here?"]},
  {t:"frage", nur:"weg=stollen", sag:"Talk to the guard. Why are you here?"},
  {t:"wahl", id:"wache", nur:"weg=stollen", titel:"Glaubt er ihnen?", optionen:[
@@ -296,7 +295,8 @@ const SEITEN = [
   {k:"nicht", name:"No"}]},
  {t:"lesen", nur:"anneke=erkannt", text:[
   "She stops. “Nobody has said my name for twenty years.” Then, very quietly: “Is Greta still alive?”"]},
- {t:"lesen", nur:"anneke=erkannt", wer:"Anneke", text:["Take me to her. Please. When you go down the mountain — take me with you. Promise me."]},
+ {t:"frage", nur:"anneke=erkannt", sag:"Answer her."},
+ {t:"lesen", nur:"anneke=erkannt", wer:"Anneke", text:["Then take me to her. Please. When you go down the mountain — take me with you. Promise me."]},
  {t:"frage", nur:"anneke=erkannt", sag:"Do you promise? Decide together."},
  {t:"wahl", id:"versprechen", nur:"anneke=erkannt", titel:"Versprechen sie es?", optionen:[
   {k:"ja", name:"We promise"},
@@ -308,7 +308,7 @@ const SEITEN = [
  {t:"lesen", nur:"anneke=nicht", text:[
   "She jumps out of the water and screams. The scream goes through the whole castle. Then she runs into the dark, and she is gone.",
   "Somewhere above you, doors open. The castle is awake now."]},
- {t:"frage", nur:"anneke=nicht", sag:"Where is the way to the tower? What do you do?", hilfe:"Sie suchen → kleine Tür hinter dem Altar."}
+ {t:"frage", nur:"anneke=nicht", sag:"Where is the way to the tower? What do you do?", hilfe:"Kleine Tür hinter dem Altar, verschlossen. Strength oder Magic Hand öffnet sie sofort — sonst suchen sie den Schlüssel."}
 ]},
 
 {titel:"The Tower Room", bild:"mirela", zeit:6, bloecke:[
@@ -360,11 +360,11 @@ const SEITEN = [
  {t:"lesen", nur:"ende=flucht", text:[
   "Mirela looks at you. “You are not asking me. You are carrying me.” Then she screams — once, very loud.",
   "Vaskir does not move. He only smiles. “Go, then. If you can.” Two of his servants stand in the door. Their eyes are open, but they see nothing."]},
- {t:"kampf", nur:"ende=flucht", gegner:[{id:"diener1", ...DIENER, name:"Servant 1"},{id:"diener2", ...DIENER, name:"Servant 2"}], regel:"Beide auf 0 → Ausgang „Out with Mirela“. Alle Figuren bewusstlos → „Lost“."},
+ {t:"kampf", nur:"ende=flucht", gegner:[{id:"diener1", ...DIENER, name:"Servant 1"},{id:"diener2", ...DIENER, name:"Servant 2"}], regel:"Beide auf 0 → Ausgang „Out with Mirela“. Alle Figuren bewusstlos → „Lost“. Wer Mirela trägt (Strength), kann in dieser Runde nicht angreifen."},
 
  {t:"lesen", nur:"ende=kampf", text:[
   "Vaskir takes off his coat. He does not look angry. He looks disappointed — like a teacher when nobody did the homework.",
-  "Behind him, through the window, the sky is getting light."]},
+  "Behind him, through the window, the sky is getting light. Nobody else moves. This is between you and him."]},
  {t:"kampf", nur:"ende=kampf", gegner:[{id:"vaskir", ...VASKIR}], regel:"Unter 6 HP hört er auf und sagt: „Enough. Let us talk.“ — die Gruppe entscheidet: Angebot oder weiterkämpfen. Bei 0 HP wird er zu Staub. Sind alle Figuren bewusstlos: Ausgang „Lost“."},
 
  {t:"wahl", id:"ausgang", nur:"ende", titel:"Ausgang", optionen:[

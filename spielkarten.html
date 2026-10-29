@@ -1,0 +1,169 @@
+<title>Nachtfels Spielkarten</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Layout: eine Spalte je Figur, darin zwei Karten nebeneinander (männlich · weiblich), jede mit ihrem Prompt. Bewusst nur dunkel, wie das Spiel. */
+:root{
+  color-scheme: dark;
+  --nacht:#101116; --stein:#181a21; --stein2:#20232c; --linie:#2e313b;
+  --pergament:#e9dfc8; --tinte:#cfc8b8; --asche:#8d8a83; --gold:#c9a457;
+  --m:#8f86e0; --k:#d08a5a; --h:#6fbfa6; --v:#d06a5f;
+  --display:'IM Fell English SC',Georgia,serif; --body:'Literata',Georgia,serif; --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{background:var(--nacht);color:var(--tinte);font-family:var(--body);font-size:16px;line-height:1.55;margin:0}
+.seite{max-width:1180px;margin:0 auto;padding-block:40px 80px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:44px}
+header{display:flex;flex-direction:column;gap:10px;max-width:70ch}
+.dach{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(36px,6vw,58px);line-height:1;margin:0;color:var(--pergament);text-wrap:balance}
+header p{margin:0;color:var(--asche)}
+header ol{margin:4px 0 0;padding-left:20px;color:var(--tinte);display:flex;flex-direction:column;gap:4px}
+.hinweis{border-left:2px solid var(--gold);padding:6px 0 6px 14px;color:var(--asche);font-size:15px}
+.hinweis b{color:var(--tinte);font-weight:600}
+
+section.figur{display:flex;flex-direction:column;gap:16px}
+.figurkopf{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--linie);padding-bottom:10px}
+.figurkopf h2{font-family:var(--display);font-weight:400;font-size:34px;margin:0;color:var(--farbe)}
+.figurkopf span{color:var(--asche);font-size:15px}
+.paar{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:18px}
+.karte{background:var(--stein);border:1px solid var(--linie);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.kkopf{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.kkopf b{font-family:var(--display);font-weight:400;font-size:22px;color:var(--pergament)}
+.marke{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--farbe);border:1px solid var(--farbe);border-radius:999px;padding:3px 10px;white-space:nowrap}
+.aussehen{margin:0;font-size:15px;color:var(--tinte)}
+.werte{display:flex;flex-wrap:wrap;gap:6px 14px;font-family:var(--mono);font-size:12.5px;color:var(--asche)}
+.werte span b{color:var(--farbe);font-weight:400}
+pre{margin:0;background:var(--nacht);border:1px solid var(--linie);border-radius:8px;padding:14px;font-family:var(--mono);font-size:12.5px;line-height:1.6;color:var(--tinte);white-space:pre-wrap;word-break:break-word;max-height:340px;overflow:auto}
+.knopfzeile{display:flex;align-items:center;gap:12px}
+button{font:inherit;font-size:14px;cursor:pointer;border-radius:7px;border:1px solid var(--farbe);background:transparent;color:var(--pergament);padding:8px 14px}
+button:hover{background:var(--stein2)}
+button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.status{font-size:13px;color:var(--asche)}
+.m{--farbe:var(--m)}.k{--farbe:var(--k)}.h{--farbe:var(--h)}.v{--farbe:var(--v)}
+@media (prefers-reduced-motion:no-preference){button{transition:background .15s}}
+</style>
+
+<div class="seite">
+  <header>
+    <div class="dach">The Bride of Nachtfels · Bildprompts</div>
+    <h1>Spielkarten</h1>
+    <p>Pro Figur zwei Karten mit denselben Werten, einmal als Mann, einmal als Frau. Dazu die Gegnerkarte von Graf Vaskir. Die Werte stimmen mit dem Charakterblatt der Kurzfassung überein.</p>
+    <ol>
+      <li>„Prompt kopieren“ klicken.</li>
+      <li>In ChatGPT einen neuen Chat öffnen, einfügen, abschicken.</li>
+      <li>Für die nächste Karte im selben Chat weitermachen — so bleibt der Stil gleich.</li>
+    </ol>
+    <p class="hinweis"><b>Text auf der Karte:</b> Bildmodelle verschreiben sich manchmal. Stimmt ein Wort nicht, im selben Chat nachschieben: „Same card, but fix the spelling: …“. Die Namenszeile bleibt absichtlich leer zum Ausfüllen.</p>
+  </header>
+  <div id="karten"></div>
+</div>
+
+<script>
+const STIL = `ART STYLE: dark gothic fantasy illustration, painterly digital painting with visible brush texture, semi-realistic proportions (not cartoon, not anime, not photo). Moody cold palette of blue-grey, slate and fog-white; the only warm light is amber candle or lantern light. Setting: the Carpathian-style mountains around 1800, Central European folklore, pine forests and mist. Cinematic rim light, soft shadows, calm and serious mood. No gore, no blood — suitable for 14-year-old students.`;
+
+const LAYOUT = (f) => `CARD FORMAT: one single printable game card, portrait orientation, 2:3 aspect ratio (1024 x 1536 px), shown flat and straight on, filling the whole image — no table, no hands, no background around the card.
+CARD DESIGN: aged parchment card with a thin ornamental ${f.rahmen} border and slightly rounded corners. Accent colour of this card: ${f.akzent}.
+LAYOUT FROM TOP TO BOTTOM:
+1. A banner at the top with the title “${f.titel}” in large, elegant serif capitals.
+2. Directly under the banner, on the parchment: the word “Name:” followed by an EMPTY handwriting line (long enough to write a name by hand — leave it blank).
+3. The portrait (about 55 % of the card height) in a framed window: ${f.bildausschnitt}
+4. A parchment panel with the stats, dark ink, clean serif font:
+${f.textzeilen.map(z => "   " + z).join("\n")}
+TEXT RULES: render ONLY the text given above, spelled exactly like that, crisp and legible. Small empty squares (☐) must be real empty boxes to tick with a pen. No other words, no numbers that are not listed, no logo, no watermark, no signature.`;
+
+const FIGUREN = [
+ {k:"m", name:"The Arcanist", kurz:"Gelehrte·r mit Magie", hp:12,
+  titel:"THE ARCANIST", akzent:"deep violet", rahmen:"dark silver",
+  werte:[["HP","12"],["Staff","1d6"],["Fireball","3d6 · 1×"],["Magic Hand","1×"]],
+  textzeilen:["“HP 12” followed by 12 small empty squares in two rows of six",
+   "“Staff — 1d6 — unlimited”",
+   "“Fireball — 3d6 — once ☐”",
+   "“Magic Hand — move a small thing — once ☐”"],
+  koerper:"tall and thin, about 25 years old, sharp clever eyes, ink-stained fingers, round wire spectacles, a long dark-grey travelling coat with many pockets full of old books and rolled papers, a worn leather satchel, holding a wooden staff topped with a glowing blue stone that lights the face from below",
+  bild:"waist-up, three-quarter view, standing in a misty pine forest at night, the blue stone glowing, one hand lifted as if about to cast a spell",
+  varianten:{
+   mann:{label:"männlich", wer:"a young man", extra:"short dark beard, messy black hair"},
+   frau:{label:"weiblich", wer:"a young woman", extra:"dark hair in a loose side braid, a few strands falling into the face"}}},
+ {k:"k", name:"The Blade", kurz:"Kämpfer·in", hp:18,
+  titel:"THE BLADE", akzent:"rust red", rahmen:"dark iron",
+  werte:[["HP","18"],["Sword","1d6 + 2"],["Shield","2×"],["Strength","1×"]],
+  textzeilen:["“HP 18” followed by 18 small empty squares in three rows of six",
+   "“Sword — 1d6 + 2 — unlimited”",
+   "“Shield — protect a friend — 2 times ☐ ☐”",
+   "“Strength — lift, push, break — once ☐”"],
+  koerper:"broad-shouldered and strong, about 28 years old, calm and determined look, a pale scar across the left cheek, a dented steel breastplate over a dark red padded jacket, a fur-lined travelling cloak, a heavy longsword and a round wooden shield with an iron rim",
+  bild:"waist-up, three-quarter view, at the foot of a snowy mountain road at dusk, sword resting on the shoulder, shield on the other arm, fog behind",
+  varianten:{
+   mann:{label:"männlich", wer:"a young man", extra:"short cropped hair, short stubble"},
+   frau:{label:"weiblich", wer:"a young woman", extra:"hair pulled back tightly in a short braid, strong jaw"}}},
+ {k:"h", name:"The Lightbearer", kurz:"Heiler·in", hp:15,
+  titel:"THE LIGHTBEARER", akzent:"soft sea green", rahmen:"pale silver",
+  werte:[["HP","15"],["Silver light","1d6"],["Heal","2d6 · 2×"],["Sunbeam","2d6 · 1×"]],
+  textzeilen:["“HP 15” followed by 15 small empty squares in three rows of five",
+   "“Silver light — 1d6 — unlimited”",
+   "“Heal — a friend gets 2d6 HP — 2 times ☐ ☐”",
+   "“Sunbeam — 2d6, double against a vampire — once ☐”"],
+  koerper:"calm and kind, about 23 years old, warm steady eyes, a white wool hooded cloak over simple grey clothes, a small silver sun pendant, a pouch of herbs at the belt, holding up a silver lantern on a chain that shines with warm golden sunlight",
+  bild:"waist-up, three-quarter view, in a dark stone chapel full of old candles, the lantern light falling warmly on the face, gentle expression",
+  varianten:{
+   mann:{label:"männlich", wer:"a young man", extra:"soft curly brown hair, clean-shaven"},
+   frau:{label:"weiblich", wer:"a young woman", extra:"long light-brown hair partly under the hood"}}}
+];
+
+const VASKIR = {k:"v", name:"Count Vaskir", kurz:"Gegner · Endkampf",
+  titel:"COUNT VASKIR", akzent:"dark wine red", rahmen:"blackened iron",
+  werte:[["HP","von Hand"],["Claw","1d6 + 2"],["Bite","2d6 · 1×"]],
+  textzeilen:["“HP:” followed by an EMPTY box to write a number in by hand",
+   "“Claw — 1d6 + 2 — every round”",
+   "“Bite — 2d6, he heals the same — once ☐”"],
+  bildausschnitt:"waist-up portrait of the vampire Count Vaskir. He is NOT tall and NOT pale: he looks like a tired, polite man of about fifty, neat grey-streaked hair, deep-set tired eyes, a faint kind but unsettling smile, an old-fashioned dark green velvet coat with a high collar from around 1800, a ring with a dark red stone. Behind him a warm tower room with a fire, a teapot and an armchair; through the window the sky is just getting light. No fangs visible, no blood, no cape."};
+
+function prompt(f, v){
+  const bildausschnitt = f.bildausschnitt || `${v.wer} — ${f.koerper}; ${v.extra}. ${f.bild}.`;
+  return `Create a fantasy game card for a school role-playing game.
+
+${STIL}
+
+${LAYOUT({...f, bildausschnitt})}
+
+The card must look like one finished, print-ready playing card.`;
+}
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let nr = 0;
+function karteHTML(f, v, label, aussehen){
+  const id = "p" + (nr++);
+  return `<article class="karte">
+    <div class="kkopf"><b>${esc(f.name)}</b><span class="marke">${esc(label)}</span></div>
+    <p class="aussehen">${esc(aussehen)}</p>
+    <div class="werte">${f.werte.map(([a,b]) => `<span>${esc(a)} <b>${esc(b)}</b></span>`).join("")}</div>
+    <pre id="${id}">${esc(prompt(f, v))}</pre>
+    <div class="knopfzeile"><button type="button" data-kopie="${id}">Prompt kopieren</button><span class="status" aria-live="polite"></span></div>
+  </article>`;
+}
+const DEUTSCH = {
+  m:{mann:"Junger Mann, gross und dünn, Bart, Brille, Mantel voller Bücher, Stab mit blauem Stein.", frau:"Junge Frau, gross und dünn, Zopf, Brille, Mantel voller Bücher, Stab mit blauem Stein."},
+  k:{mann:"Junger Mann, breit und stark, kurze Haare, Narbe, Brustpanzer, Schwert und Rundschild.", frau:"Junge Frau, breit und stark, geflochtenes Haar, Narbe, Brustpanzer, Schwert und Rundschild."},
+  h:{mann:"Junger Mann, ruhig, braune Locken, weisser Kapuzenumhang, silberne Laterne.", frau:"Junge Frau, ruhig, lange Haare, weisser Kapuzenumhang, silberne Laterne."}};
+
+document.getElementById("karten").innerHTML =
+  FIGUREN.map(f => `<section class="figur ${f.k}">
+    <div class="figurkopf"><h2>${esc(f.name)}</h2><span>${esc(f.kurz)} · ${f.hp} HP</span></div>
+    <div class="paar">${karteHTML(f, f.varianten.mann, f.varianten.mann.label, DEUTSCH[f.k].mann)}${karteHTML(f, f.varianten.frau, f.varianten.frau.label, DEUTSCH[f.k].frau)}</div>
+  </section>`).join("")
+  + `<section class="figur v">
+    <div class="figurkopf"><h2>${esc(VASKIR.name)}</h2><span>${esc(VASKIR.kurz)} · HP schreibst du von Hand ein (25 + Zuschläge)</span></div>
+    <div class="paar">${karteHTML(VASKIR, {}, "Gegner", "Müder, höflicher Mann um die fünfzig, grüner Samtrock um 1800, Ring mit rotem Stein. Nicht gross, nicht bleich, keine Zähne zu sehen.")}</div>
+  </section>`;
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-kopie]"); if(!b) return;
+  const pre = document.getElementById(b.dataset.kopie), st = b.nextElementSibling;
+  const markieren = () => { const r = document.createRange(); r.selectNodeContents(pre); const s = getSelection(); s.removeAllRanges(); s.addRange(r); st.textContent = "Markiert — mit Ctrl+C kopieren."; };
+  try{
+    navigator.clipboard.writeText(pre.textContent).then(() => { st.textContent = "Kopiert."; }, markieren);
+  }catch(err){ markieren(); }
+});
+</script>
