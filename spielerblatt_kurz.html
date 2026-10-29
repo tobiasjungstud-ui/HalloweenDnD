@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nachtfels Spielerblatt</title>
+<title>Nachtfels Charakterblatt</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap">
@@ -24,24 +24,33 @@ h1{font-family:'IM Fell English SC',Georgia,serif;font-weight:400;font-size:40px
 h2{font-family:'IM Fell English SC',Georgia,serif;font-weight:400;font-size:20px;margin:0 0 4px;color:var(--farbe)}
 .feld{border:1px solid var(--line);border-radius:8px;padding:9px 12px}
 .feld p{margin:0 0 5px}.feld p:last-child{margin:0}
-.kraft{border:2px solid var(--farbe);background:color-mix(in srgb,var(--farbe) 6%,white)}
-.kraft .kopf{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
-.kraft .kopf b{font-size:18px}
 .haken{font-family:system-ui,sans-serif;font-size:12.5px;color:var(--soft);white-space:nowrap}
 .haken i{display:inline-block;width:15px;height:15px;border:1.5px solid var(--ink);vertical-align:-3px;margin-right:4px;border-radius:2px}
 .zwei{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 ul{margin:0;padding-left:18px}
 li{margin:2px 0}
-.saetze li{font-style:italic}
+.klein{font-size:12.5px;color:var(--soft)}
+.boxen{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-top:4px}
+.boxen i{aspect-ratio:1;border:1.5px solid var(--ink);border-radius:3px}
+.att{width:100%;border-collapse:collapse;font-size:14px}
+.att th{text-align:left;font-weight:600;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);border-bottom:1px solid var(--line);padding:4px 6px}
+.att td{border-bottom:1px solid var(--line);padding:7px 6px;vertical-align:top}
+.att tr:last-child td{border-bottom:0}
+.att .wurf{font-weight:600;white-space:nowrap;color:var(--farbe);font-size:16px}
+.att .oft{white-space:nowrap;font-size:13px;color:var(--soft)}
+.att .haken{display:block;margin-top:3px}
+.att .haken i{display:inline-block;width:14px;height:14px;border:1.5px solid var(--ink);border-radius:2px;margin-right:4px}
+.notiz{display:flex;flex-direction:column}
+.blatt > .zwei:last-child{flex:1}
+.wort{font-size:14.5px!important}
 .regeln{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .regel{border:1px solid var(--line);border-radius:8px;padding:8px 10px;text-align:center}
 .regel b{display:block;font-size:22px;color:var(--farbe);font-family:'IM Fell English SC',Georgia,serif;font-weight:400}
 .regel span{font-size:13px;color:var(--soft)}
-.linien{flex:1;min-height:40mm;background:repeating-linear-gradient(to bottom,transparent 0 8.4mm,var(--line) 8.4mm calc(8.4mm + 1px))}
+.linien{flex:1;min-height:28mm;background:repeating-linear-gradient(to bottom,transparent 0 8.4mm,var(--line) 8.4mm calc(8.4mm + 1px))}
 .wort{columns:2;column-gap:14px;font-size:13.5px}
 .wort div{break-inside:avoid}
 .wort b{font-weight:600}
-.fuss{font-size:11px;color:var(--soft);text-align:center}
 @page{size:A4;margin:0}
 @media print{
   body{background:none}
@@ -57,37 +66,41 @@ li{margin:2px 0}
 </style>
 </head>
 <body>
-<div class="leiste"><button onclick="window.print()">Drucken</button><span>Drei Seiten — eine pro Figur. A4, ohne Ränder. Gruppen dürfen sich eine Figur teilen.</span></div>
+<div class="leiste"><button onclick="window.print()">Drucken</button><span>Drei Seiten — eine pro Figur. Dazu Sechser-Würfel.</span></div>
 <div id="blaetter"></div>
 <script>
 const FIGUREN = [
- {k:"m", rolle:"The Arcanist", wer:[
-   "You know old books, old languages and a little magic.",
-   "You are clever and curious. You ask the questions that others forget."],
-  kraft:"Magic Hand", was:"Move a small thing without touching it — a key, a candle, a cup, a lock. You can do it from across the room."},
- {k:"k", rolle:"The Blade", wer:[
-   "You are strong and brave. You stand in front when there is danger.",
-   "You do not talk much — but when you talk, people listen."],
-  kraft:"Strength", was:"Lift, push, break or hold something very heavy — a door, a wall, a big man, a wolf."},
- {k:"h", rolle:"The Lightbearer", wer:[
-   "You are kind and calm. You help people who are hurt or afraid.",
-   "You see what other people feel — even when they don’t say it."],
-  kraft:"Healing Touch", was:"Touch someone who is hurt, angry or afraid. They feel better and calm down — people and animals."}
+ {k:"m", rolle:"The Arcanist", hp:12,
+  aussehen:"Tall and thin. A long dark coat full of old books. A wooden staff with a blue stone.",
+  wer:"You know old books, old languages and a little magic. You ask the questions that others forget.",
+  attacken:[["Staff","Hit an enemy.","1d6","unlimited",0],["Fireball","A ball of fire.","3d6","only once",1],["Magic Hand","Move a small thing from far away: a key, a candle, a cup.","—","only once",1]]},
+ {k:"k", rolle:"The Blade", hp:18,
+  aussehen:"Big and strong. Short hair, a scar on the face. A heavy sword and a round shield.",
+  wer:"You stand in front when there is danger. You don’t talk much — but people listen.",
+  attacken:[["Sword","Hit an enemy.","1d6 + 2","unlimited",0],["Shield","Protect a friend: this round, they get no damage.","—","2 times",2],["Strength","Lift, push or break something very heavy.","—","only once",1]]},
+ {k:"h", rolle:"The Lightbearer", hp:15,
+  aussehen:"Calm eyes. A white cloak. A silver lantern that never goes out.",
+  wer:"You help people who are hurt or afraid. You see what people feel — even when they don’t say it.",
+  attacken:[["Silver light","Hit an enemy.","1d6","unlimited",0],["Heal","A friend gets HP back.","2d6","2 times",2],["Sunbeam","Light of the sun. Against a vampire: double damage.","2d6","only once",1]]}
 ];
-const SAETZE = ["I think we should … because …","What about …?","I don’t agree. I think …","Can I try to …?","I use my special power: …","Who are you? / Why are you here?","Can you tell us more about …?"];
-const WOERTER = [["a vampire hunter","Vampirjäger/in"],["a castle","ein Schloss"],["to disappear","verschwinden"],["a deal","eine Abmachung"],["instead of","an Stelle von"],["to escape","fliehen"],["an offer","ein Angebot"],["to promise","versprechen"]];
+const WOERTER = [["to attack","angreifen"],["to roll the dice","würfeln"],["damage","Schaden"],["hit points (HP)","Lebenspunkte"],["to heal","heilen"],["once","einmal"],["a deal","eine Abmachung"],["instead of","an Stelle von"],["to promise","versprechen"],["an offer","ein Angebot"]];
+const kaestchen = n => Array.from({length:n}, () => "<i></i>").join("");
 document.getElementById("blaetter").innerHTML = FIGUREN.map(f => `
 <section class="blatt ${f.k}">
-  <div class="oben"><div><div class="spiel">The Bride of Nachtfels · Player sheet</div><h1>${f.rolle}</h1></div><div class="name">My name:<span></span></div></div>
-  <div class="feld"><h2>Who you are</h2><p>You are a <b>vampire hunter</b> — not famous, not yet. You travel with two other hunters. In a village in the mountains, a young woman is gone. You want to find out why.</p>${f.wer.map(w=>`<p>${w}</p>`).join("")}</div>
-  <div class="feld kraft"><div class="kopf"><b>Special power: ${f.kraft}</b><span class="haken"><i></i>used</span></div><p>${f.was}</p><p><b>Only once</b> in the game. Say: <i>“I use my special power: …”</i> — and say what you do.</p></div>
-  <div class="regeln"><div class="regel"><b>1</b><span>Speak English. Short sentences are okay.</span></div><div class="regel"><b>2</b><span>Say what you do: “I open the door.”</span></div><div class="regel"><b>3</b><span>Decide together. Everybody says one sentence.</span></div></div>
+  <div class="oben"><div><div class="spiel">The Bride of Nachtfels · Character sheet</div><h1>${f.rolle}</h1></div><div class="name">My name:<span></span></div></div>
   <div class="zwei">
-    <div class="feld"><h2>Useful sentences</h2><ul class="saetze">${SAETZE.map(s=>`<li>${s}</li>`).join("")}</ul></div>
-    <div class="feld"><h2>Words</h2><div class="wort">${WOERTER.map(([e,d])=>`<div><b>${e}</b> — ${d}</div>`).join("")}</div></div>
+    <div class="feld"><h2>You look like this</h2><p>${f.aussehen}</p><p>${f.wer}</p></div>
+    <div class="feld hp"><h2>Hit points: ${f.hp}</h2><p class="klein">Cross out one box for every point of damage. At 0 you are knocked out — not dead.</p><div class="boxen">${kaestchen(f.hp)}</div></div>
   </div>
-  <div class="feld" style="flex:1;display:flex;flex-direction:column"><h2>My notes — names, clues, ideas</h2><div class="linien"></div></div>
-  <div class="fuss">No dice. A good idea is better than luck.</div>
+  <div class="feld"><h2>What you can do</h2>
+    <table class="att"><thead><tr><th>Name</th><th>What it does</th><th>Roll</th><th>How often</th></tr></thead><tbody>
+    ${f.attacken.map(([n,w,r,o,x]) => `<tr><td><b>${n}</b></td><td>${w}</td><td class="wurf">${r}</td><td class="oft">${o}${x?`<span class="haken">${kaestchen(x)}</span>`:""}</td></tr>`).join("")}
+    </tbody></table></div>
+  <div class="feld"><h2>In a fight</h2><p><b>1.</b> Say what you do — in English. <b>2.</b> Choose one thing from your list. <b>3.</b> Roll the dice and say the number. Then the enemy attacks.</p></div>
+  <div class="zwei">
+    <div class="feld"><h2>Words</h2><div class="wort">${WOERTER.map(([e,d])=>`<div><b>${e}</b> — ${d}</div>`).join("")}</div></div>
+    <div class="feld notiz"><h2>Notes</h2><div class="linien"></div></div>
+  </div>
 </section>`).join("");
 </script>
 </body>
