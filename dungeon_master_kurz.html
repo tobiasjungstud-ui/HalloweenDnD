@@ -180,7 +180,7 @@ const SEITEN = [
 {titel:"Before you play", kurztitel:"Vor dem Spiel", zeit:0, ziel:"Nur für dich. Lies das einmal, bevor die Klasse kommt.", bloecke:[
  {t:"regie", titel:"Was du brauchst", text:`Dieses Fenster, <b>ein Spielerblatt pro Figur</b> (Papier, Datei <b>spielerblatt_kurz.html</b>) und einen Stift pro Gruppe. <b>Keine Würfel, keine Geräte, keine Lebenspunkte.</b>`},
  {t:"regie", titel:"So liest du den Bildschirm", text:`<b style="color:var(--gold)">Gold</b> = wörtlich vorlesen. <b style="color:var(--green)">Grün</b> = Auftrag an die Gruppe, auf Englisch sagen. <b>Grau</b> = nur für dich. Bei den Figuren: Frage antippen, wenn sie gestellt wurde.`},
- {t:"regie", titel:"Die drei Regeln für die Schüler (2 Minuten erklären)", text:`<ol style="margin:6px 0 0;padding-left:20px"><li><b>Speak English.</b> Kurze Sätze sind okay.</li><li><b>Say what you do.</b> „I open the door.“ — „I talk to the boy.“ Ich sage dann, was passiert.</li><li><b>Decide together.</b> Bei jeder Entscheidung sagt jede Figur einen Satz: „I want … because …“. Dann wird abgestimmt.</li></ol><p style="margin:10px 0 0">Dazu die <b>Spezialkraft</b>: Jede Figur darf sie <b>einmal</b> im Spiel einsetzen („I use my special power: …“). Eine gute Idee klappt — gewürfelt wird nicht. Verbrauchte Kräfte oben antippen.</p>`},
+ {t:"regie", titel:"Die drei Regeln für die Schüler (2 Minuten erklären)", text:`<ol style="margin:6px 0 0;padding-left:20px"><li><b>Speak English.</b> Kurze Sätze sind okay.</li><li><b>Say what you do.</b> „I open the door.“ — „I talk to the boy.“ Ich sage dann, was passiert.</li><li><b>Decide together.</b> Bei jeder Entscheidung reden alle mit, dann wird abgestimmt.</li></ol><p style="margin:10px 0 0">Dazu die <b>Spezialkraft</b>: Jede Figur darf sie <b>einmal</b> im Spiel einsetzen („I use my special power: …“). Eine gute Idee klappt — gewürfelt wird nicht. Verbrauchte Kräfte oben antippen.</p>`},
  {t:"regie", titel:"Die Gefahr-Zahl", text:`Oben rechts. Sie steigt durch laute Entscheidungen von selbst (die Knöpfe tragen sie ein). Sie entscheidet am Schluss, wie stark Graf Vaskir ist. <b>0–3</b> leise · <b>4–7</b> bemerkt · <b>8–10</b> das ganze Haus ist wach. Den Schülern nicht verraten — nur am Ende sagen, woran es lag.`},
  {t:"regie", titel:"Was gegenüber der langen Fassung fehlt", text:`Keine Spielergeräte, kein Würfeln, keine Kämpfe mit Lebenspunkten, keine Patrouille, keine drei Türen im Hof (nur die Kapelle ist offen), kein eigenes Blutbuch-Kapitel (die letzte Wahl fällt direkt vor dem Grafen). Die Sprache ist einfacher.`},
  {t:"regie", titel:"Zeitplan", text:`Kutsche 4 · Wirtshaus 6 · Der Weg 6 · Kapelle 5 · Turm 6 · Graf 6 · Morgen 2 = <b>35 Minuten</b>. Starte die Uhr oben, wenn die Kutsche losfährt. Jede Seite hat einen gestrichelten Kasten <b>„Zeit knapp?“</b> — dort steht, was du weglassen kannst.`}
@@ -191,12 +191,12 @@ const SEITEN = [
   "You are vampire hunters. Not famous ones. Not yet.",
   "In a small village in the mountains, people disappear. Once every twenty years. Always one person.",
   "Three nights ago it happened again. A young woman, Mirela Vance, is gone. And nobody in the village is looking for her."]},
- {t:"frage", sag:"Why is nobody looking for her? Each of you: one idea. Start with “Maybe …” or “I think …”.", hilfe:"Eine Idee pro Figur. Nichts bestätigen — die Antwort kommt im Wirtshaus."},
+ {t:"frage", sag:"Why is nobody looking for her? What do you think?", hilfe:"Nichts bestätigen — die Antwort kommt im Wirtshaus."},
  {t:"lesen", titel:"The ride", text:[
   "You sit in a carriage. It goes up the mountain for six hours. Outside there are only trees and fog.",
   "Something runs next to the carriage in the trees — fast and low. Then it is gone. The driver does not look. Then he speaks, for the first time."]},
  {t:"lesen", wer:"Marek", text:["Nobody comes up here in November. So — who are you? And what do you want here?"]},
- {t:"frage", sag:"Tell Marek who you are. Each of you: your name, what you can do, and why you are here.", hilfe:"Zwei bis drei Sätze pro Figur — die Spielerblätter helfen. Sagt jemand nur einen Satz, brummt Marek: „That’s all? Tell me more.“"},
+ {t:"frage", sag:"Tell Marek who you are. Each of you: your name, what you can do, and why you are here.", hilfe:"Sagt jemand nur einen Satz, brummt Marek: „That’s all? Tell me more.“"},
  {t:"leute", leute:[
   {name:"Marek", wer:"Kutscher", spielt:"Grimmig, sagt wenig. Antwortet kurz.", fragen:[
    ["What is up there?","“A castle. Nachtfels. It is older than the village.”"],
@@ -244,7 +244,7 @@ const SEITEN = [
   "One: the old road. It is fast — but everybody can see you.",
   "Two: the old mine, through the mountain. Nobody can see you — but it is very dark, and somebody may be down there.",
   "Three: the coach at midnight. It is easy and quick — but the driver works for the count."]},
- {t:"frage", sag:"Which way do you take? Everybody: one sentence — “I want to take … because …”. Then decide together.", hilfe:"Reihum, dann abstimmen. Nichts empfehlen. Fragen sie dich: „I’m only the narrator.“"},
+ {t:"frage", sag:"Which way do you take — and why? Decide together.", hilfe:"Reihum, dann abstimmen. Nichts empfehlen. Fragen sie dich: „I’m only the narrator.“"},
  {t:"wahl", id:"weg", titel:"Welchen Weg nehmen sie?", optionen:[
   {k:"strasse", name:"The old road", was:"Wölfe am Weg. Die Gruppe muss sich etwas einfallen lassen.", gefahr:2},
   {k:"stollen", name:"The mine", was:"Dunkel und still. Unten im Keller steht ein Wächter mit Lampe.", gefahr:0},
@@ -252,7 +252,7 @@ const SEITEN = [
 
  {t:"lesen", nur:"weg=strasse", titel:"The road", text:[
   "You walk up the old road in the dark. At an old gallows, two big wolves wait. They are thin and hungry. They do not move. They look at you."]},
- {t:"frage", nur:"weg=strasse", sag:"What do you do? Each of you: say one thing. You can use your special power.", hilfe:"Gute Idee = es klappt: Essen hinwerfen, Feuer/Licht, die Blade verscheucht sie, der Lightbearer beruhigt sie, der Arcanist lenkt sie ab … Wird gekämpft oder geschrien: unten +1."},
+ {t:"frage", nur:"weg=strasse", sag:"What do you do?", hilfe:"Gute Idee = es klappt: Essen hinwerfen, Feuer/Licht, die Blade verscheucht sie, der Lightbearer beruhigt sie, der Arcanist lenkt sie ab … Wird gekämpft oder geschrien: unten +1."},
  {t:"knopf", nur:"weg=strasse", id:"woelfe_laut", text:"Es wurde laut (Kampf, Geschrei)", gefahr:1},
  {t:"lesen", nur:"weg=strasse", text:["The wolves run into the trees. One hour later you climb over a low wall — and you are in the courtyard of the castle."]},
 
@@ -292,10 +292,10 @@ const SEITEN = [
   "Anneke points to a small door behind the altar. “The tower has no stairs. At the end of the hall there is a tall mirror. Walk through it backwards — and don’t look into it.”"]},
  {t:"lesen", nur:"anneke=nicht", text:[
   "She jumps out of the water and screams. The scream goes through the whole castle. Somewhere, a door opens."]},
- {t:"frage", nur:"anneke=nicht", sag:"Quick! What do you do? Each of you: one thing.", hilfe:"Beruhigt sie jemand (z. B. Lightbearer mit der Spezialkraft) → sie hört auf und fragt: „Is Greta still alive?“ Sonst rennen sie an ihr vorbei durch die kleine Tür hinter dem Altar."},
+ {t:"frage", nur:"anneke=nicht", sag:"Quick! What do you do?", hilfe:"Beruhigt sie jemand (z. B. Lightbearer mit der Spezialkraft) → sie hört auf und fragt: „Is Greta still alive?“ Sonst rennen sie an ihr vorbei durch die kleine Tür hinter dem Altar."},
  {t:"lesen", nur:"anneke=nicht", text:[
   "Behind the altar there is a long, dark hall. At the end stands a tall mirror. Somebody has written on it in white chalk: WALK BACKWARDS. DON’T LOOK."]},
- {t:"frage", nur:"anneke", sag:"How do you go through the mirror? Say it — and do it.", hilfe:"Wer hineinschaut, sieht kurz sich selbst als alten Menschen. Nur ein Schreck — keine Folgen."},
+ {t:"frage", nur:"anneke", sag:"How do you go through the mirror?", hilfe:"Wer hineinschaut, sieht kurz sich selbst als alten Menschen. Nur ein Schreck — keine Folgen."},
  {t:"wort", w:[["a chapel","eine Kapelle"],["to scream","schreien"],["backwards","rückwärts"]]},
  {t:"knapp", text:"Den Spiegel nicht spielen lassen: „You walk backwards through the mirror. Behind it is a stair.“ — und weiter."}
 ]},
@@ -306,7 +306,7 @@ const SEITEN = [
   "Behind the mirror there is a narrow stair. You go up for a long time. At the top there is a door, with light under it.",
   "The room is warm. There is a fire and a pot of tea. Mirela Vance sits in an armchair and reads a book. She is not tied up. She is not hurt. Next to her stands a small bag."]},
  {t:"lesen", wer:"Mirela", text:["You are late. Hello. Do you want some tea?"]},
- {t:"frage", sag:"She will not explain. Ask her — each of you at least one question. Why is she here?", hilfe:"Tippe gestellte Fragen an."},
+ {t:"frage", sag:"She will not explain. Ask her. Why is she here?", hilfe:"Tippe gestellte Fragen an."},
  {t:"leute", leute:[
   {name:"Mirela", wer:"die Frau im Turm", spielt:"Ruhig, klar, freundlich. Sie will nicht gerettet werden. „We are here to save you!“ — sie lächelt nur.", fragen:[
    ["Who lives here?","“Count Vaskir. He has lived here for four hundred years.”"],
@@ -332,14 +332,14 @@ const SEITEN = [
   [0,3,"Er ist allein — und beeindruckt: „You came up my mountain and nobody heard you. Nobody has done that for a long time.“"],
   [4,7,"Er ist allein. Er hat gewartet."],
   [8,10,"Zwei seiner Diener stehen an der Tür, mit leeren Augen. Lies vor: „Two people stand at the door. Their eyes are open, but they see nothing.“"]]},
- {t:"frage", sag:"He is waiting. Each of you: say one thing to him — a question, a demand, or an offer.", hilfe:"Er antwortet auf alles, leise und freundlich. Er droht nie."},
+ {t:"frage", sag:"He is waiting. What do you say to him?", hilfe:"Er antwortet auf alles, leise und freundlich. Er droht nie."},
  {t:"leute", leute:[
   {name:"Vaskir", wer:"der Graf", spielt:"Leise, langsam, freundlich. Das macht ihn unheimlich.", fragen:[
    ["What do you want? / Why do you do this?","“Company. Somebody to talk to. Four hundred years is a long time alone.”"],
    ["Let her go!","“And what do you give me? Nothing? That is not a deal.”"],
    ["What happens to the village without you?","“Hunger. And in February the wolves come back.”"],
    ["Will you hurt her?","“I have never hurt anybody. I only talk. Every night.”"]]}]},
- {t:"frage", sag:"Now decide. Everybody: one sentence — “I want to … because …”. Mirela is listening.", hilfe:"Wenn sie fragen, was möglich ist: einen Vertrag anbieten, Mirela mitnehmen und fliehen, oder kämpfen. Mirela darf widersprechen."},
+ {t:"frage", sag:"Now decide. What do you do — and why? Mirela is listening.", hilfe:"Wenn sie fragen, was möglich ist: einen Vertrag anbieten, Mirela mitnehmen und fliehen, oder kämpfen. Mirela darf widersprechen."},
  {t:"wahl", id:"ende", titel:"Was tut die Gruppe?", optionen:[
   {k:"angebot", name:"Make him an offer", was:"Ein neuer Vertrag. Klappt nur, wenn sie etwas geben, das sie selbst etwas kostet.", gefahr:0},
   {k:"flucht", name:"Take Mirela and run", was:"Mirela will nicht. Sie schreit einmal — das ganze Haus hört es.", gefahr:2},
@@ -347,12 +347,12 @@ const SEITEN = [
 
  {t:"lesen", nur:"ende=angebot", text:[
   "Vaskir sits down. “An offer? Good. Say it slowly. I will write it down.”"]},
- {t:"frage", nur:"ende=angebot", sag:"Say the deal, one part each: What does the village get? What does Vaskir get? And what do you give?", hilfe:"Echtes Angebot = es kostet die Gruppe etwas: jedes Jahr ein Besuch, Briefe, eine Nacht im Jahr, jemand bleibt ein Jahr … → er unterschreibt. Nur Forderungen („Just let her go!“) → „That is not a deal.“ Ein zweiter Versuch; dann wählen sie oben Flucht oder Kampf."},
+ {t:"frage", nur:"ende=angebot", sag:"What is the deal? What does the village get? What does Vaskir get? And what do you give?", hilfe:"Echtes Angebot = es kostet die Gruppe etwas: jedes Jahr ein Besuch, Briefe, eine Nacht im Jahr, jemand bleibt ein Jahr … → er unterschreibt. Nur Forderungen („Just let her go!“) → „That is not a deal.“ Ein zweiter Versuch; dann wählen sie oben Flucht oder Kampf."},
 
  {t:"lesen", nur:"ende=flucht", text:[
   "Mirela looks at you. “You are not asking me. You are carrying me.” Then she screams — once, very loud.",
   "Vaskir does not move. He only says: “Go, then. If you can.”"]},
- {t:"frage", nur:"ende=flucht", sag:"Run! How do you get down? Each of you: one thing. You can use your special power.", hilfe:"Ausgang nach Gefahr — siehe Kasten darunter."},
+ {t:"frage", nur:"ende=flucht", sag:"Run! How do you get down?", hilfe:"Ausgang nach Gefahr — siehe Kasten darunter."},
  {t:"gefahr", nur:"ende=flucht", titel:"Kommen sie hinaus?", stufen:[
   [0,5,"Ja. Mit einer guten Idee sind sie draussen. Er folgt ihnen nicht."],
   [6,8,"Zwei Diener stehen im Weg. Eine Spezialkraft oder eine wirklich gute Idee bringt sie vorbei — sonst kostet es Zeit, aber sie schaffen es."],
@@ -360,7 +360,7 @@ const SEITEN = [
 
  {t:"lesen", nur:"ende=kampf", text:[
   "Vaskir takes off his coat. He does not look angry. He looks disappointed — like a teacher when nobody did the homework."]},
- {t:"frage", nur:"ende=kampf", sag:"What do you do? Each of you: one or two sentences. Use your special power if you still have it.", hilfe:"Kein Würfeln, keine Lebenspunkte. Höre auf gute Ideen und eingesetzte Kräfte. Eine Runde reicht meist, höchstens zwei."},
+ {t:"frage", nur:"ende=kampf", sag:"What do you do?", hilfe:"Kein Würfeln, keine Lebenspunkte. Höre auf gute Ideen und eingesetzte Kräfte. Eine Runde reicht meist, höchstens zwei."},
  {t:"gefahr", nur:"ende=kampf", titel:"Wie stark ist er?", stufen:[
   [0,3,"Schwach — sie haben ihn überrascht. Nach der ersten guten Runde gibt er auf und wird im ersten Sonnenlicht zu Staub."],
   [4,7,"Normal. Nach zwei Runden mit mindestens zwei eingesetzten Kräften: zu Staub. Sonst wird er zu Nebel und flieht durchs Fenster."],
@@ -392,7 +392,7 @@ const SEITEN = [
   "The sun comes up. The village is awake. Greta stands at the door of the inn with a cup in her hand. Tobias runs to you.",
   "And at the bottom of the hill there is a carriage. Marek."]},
  {t:"lesen", wer:"Marek", text:["I said I would drive home. Well. I only got to the bottom of the hill. So — where to?"]},
- {t:"frage", sag:"Last question, for everybody: What do you do now — and why? Tell Marek where to drive.", hilfe:"Jede Figur ein Satz. Wer nur „Home“ sagt: „Where is home? What do you do there?“"},
+ {t:"frage", sag:"What do you do now — and why? Tell Marek where to drive.", hilfe:"Jede Figur ein Satz. Wer nur „Home“ sagt: „Where is home? What do you do there?“"},
  {t:"gefahr", titel:"Sag ihnen am Schluss, woran es lag", stufen:[
   [0,3,"„Nobody in the castle heard you coming. That is the best way to win this game.“"],
   [4,7,"„They knew you were there — but you made it.“"],
